@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Syntax check
+        run: for f in js/*.js tools/*.mjs tests/*.mjs vorlagen/app/js/*.js vorlagen/app/sw.js vorlagen/app/tools/*.mjs vorlagen/app/tests/*.mjs; do node --check "$f"; done
+      - name: Tests
+        run: node --test tests/*.test.mjs
+      # Die Vorlage muss mit dem aktuellen Stand zusammenpassen (z. B. Offline-Liste, Einbindung der Stylesheets)
+      - name: Vorlage mit den gemeinsamen Dateien testen
+        run: |
+          node tools/sync.mjs vorlagen/app
+          cd vorlagen/app && node --test tests/*.test.mjs
