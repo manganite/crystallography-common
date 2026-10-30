@@ -9,7 +9,7 @@ Gemeinsame Grundlage einer Familie von Lern-Apps zur Kristallographie, entstande
 | App | Inhalt | Repository |
 |---|---|---|
 | [Stereographische Projektion](https://manganite.github.io/stereography/) | Punktgruppen, Kristallformen, Stereogramme | [manganite/stereography](https://github.com/manganite/stereography) |
-| 2D (in Arbeit) | Gitter und Ebenengruppen | – |
+| Symmetrie in der Ebene (in Arbeit) | Gitter, Elementarzelle, 17 Ebenengruppen | [manganite/plane-groups](https://github.com/manganite/plane-groups) |
 | 3D (geplant) | Raumgitter und Raumgruppen | – |
 
 Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADEN.md)**. Dieses Repository enthält den Teil davon, der sich als Code teilen lässt.
