@@ -1,0 +1,5 @@
+# Abhängigkeiten der Werkzeuge (Playwright für skript-pdf.mjs)
+node_modules/
+# lokal mit node tools/sync.mjs vorlagen/app erzeugt
+vorlagen/app/lib/common/
+vorlagen/app/tools/common/
