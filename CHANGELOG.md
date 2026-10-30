@@ -6,6 +6,12 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-30
+
+### Behoben
+
+- **`tools/server.mjs`:** Die Prüfung, ob eine angefragte Datei im Ordner liegt, verglich nur den Anfang des Pfads. Eine Anfrage wie `/%5c../app-privat/datei` konnte so eine Datei aus einem Nachbarordner mit gleichem Namensanfang liefern. Jetzt zählt der relative Pfad (Hinweis aus dem Code-Review in manganite/stereography#44). Der Server läuft nur lokal für die PDF-Erzeugung; neuer Test `tests/server.test.mjs`.
+
 ## [0.1.0] - 2026-10-30
 
 Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.10.0). Die App sieht mit diesen Dateien genau so aus wie vorher.
@@ -18,5 +24,6 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.1
 [0.1.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.0
