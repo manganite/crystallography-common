@@ -97,6 +97,23 @@ mit Playwright, dazu Skript-PDF (Text) und Moodle-Export (bytegleich). Eigenscha
 sortieren (Reihenfolge variiert zwischen Browserstarts); einige Pixel Abweichung in WebGL-Ansichten
 treten auch beim Wiederholen auf.
 
+## Quiz: Prüfung und Rückmeldungen
+
+Eine gemeinsame **Fragenliste** für alle Apps: Artifact https://claude.ai/artifact/YJBVwk6njpoyi48nPMUowt
+(Speicher `befunde` und `rueckmeldungen`, Dokument je Frage bzw. Generator mit Schlüssel `<app>:<id>`,
+z. B. `plane-groups:gl-2-03`). Filter nach App, Kapitel, Stufe, Status und offenen Punkten.
+
+- Nur Thomas gibt Fragen frei: Urteil „In Ordnung“ bei einem Entwurf (`befunde`: `urteil`
+  ok|aendern|offen, `notiz`, `zeit`). Danach setzt Claude in der Fragenbank `status: 'geprüft'`.
+- Jede neue oder geänderte Frage geht auf `status: 'entwurf'` und in `befunde` auf `urteil: 'offen'`
+  mit Notiz „Claude: …“ (was geändert, warum).
+- Rückmeldungen zu geprüften Fragen stehen in `rueckmeldungen` (`notiz`, `von`, `stand` neu|erledigt,
+  `antwort`, `zeit`). Nach dem Einarbeiten `stand: erledigt` und in `antwort`, was geändert wurde.
+- Neu erzeugen, sobald sich Fragen geändert haben: im Arbeitsbereich mit allen Apps
+  `node fragenliste/extract.mjs`, dann `fragenliste/fragenliste.html` mit der Adresse oben als `url`
+  veröffentlichen (Fähigkeit `db` bleibt erhalten). Jede App liefert ihre Fragen über
+  `tools/quiz-quelle.mjs`; eine neue App ergänzt die Liste der Ordner in `extract.mjs`.
+
 ## Neue App
 
 Ablauf in `LEITFADEN.md` Abschn. 10 (inkl. `CLAUDE.md` und Tag-Regel für GitHub Pages; Letztere
