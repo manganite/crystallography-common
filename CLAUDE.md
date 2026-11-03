@@ -51,7 +51,8 @@ In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/mangani
 
 - Tag-Push und Tag-API scheitern (403); Tags und Releases legt Thomas an.
 - GraphQL ist gesperrt, also kein `gh pr create`. Über REST: PR anlegen
-  `gh api repos/manganite/<repo>/pulls`, mergen `gh api -X PUT …/pulls/N/merge`, Review-Threads
+  `gh api repos/manganite/<repo>/pulls -f title=… -f head=<branch> -f base=main -f body=…`
+  (mit `-f` sendet `gh api` POST), mergen `gh api -X PUT …/pulls/N/merge`, Review-Threads
   auflösen `…/pulls/N/ccr/comments/ID/resolve`. Nur Repo-Endpunkte sind erlaubt.
 - github.io ist nicht erreichbar; die Live-Seite lässt sich nicht selbst prüfen. Deploy-Status über
   `repos/…/deployments?environment=github-pages`.
