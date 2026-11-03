@@ -1,9 +1,10 @@
 # CLAUDE.md – App-Familie Kristallographie
 
 Gilt für alle Repositories der Familie: `crystallography-common` (dieses Repository) und die Apps
-(`stereography`, `plane-groups`, weitere). Jede App hat eine eigene `CLAUDE.md`, die zuerst auf diese
-Datei verweist. Regeln für Inhalt, Gestaltung, Skript und Quiz stehen in [LEITFADEN.md](LEITFADEN.md),
-Aufbau und Werkzeuge im README; was dort steht, wird hier nicht wiederholt.
+(`stereography`, `plane-groups`, weitere). Jede App hat eine eigene `CLAUDE.md`, die diese Datei
+einbindet. Regeln für Inhalt, Gestaltung, Skript und Quiz stehen im Leitfaden, Aufbau und Werkzeuge
+im README; was dort steht, wird hier nicht wiederholt. Der Leitfaden wird mit dieser Datei geladen:
+@LEITFADEN.md
 
 ## Pflege dieser Dateien
 
@@ -40,6 +41,12 @@ Repo-Name = Pfad auf GitHub Pages:
 - **VS Code:** `crystallography-common/kristallographie.code-workspace` öffnen (alle Repos in einem
   Fenster, Kopien des gemeinsamen Codes schreibgeschützt). Liegt in common, damit sie versioniert und
   überall gleich ist; eine neue App ergänzt dort ihren Ordner.
+- **Welche `CLAUDE.md` Claude Code lädt:** die des Startordners und der Ordner darüber, samt
+  `@`-Verweisen; die der Nachbarordner nicht. Die VS-Code-Erweiterung startet im Arbeitsbereich im
+  ersten Ordner (common) und lädt nur diese Datei (mit `/context` geprüft, 3.11.2026). **Vor Arbeit an
+  einer App deshalb deren `CLAUDE.md` lesen** (`../<app>/CLAUDE.md`). Startet Claude Code in einer App
+  (App-Ordner allein öffnen oder `claude` dort), lädt deren `CLAUDE.md` diese Datei und den Leitfaden
+  mit.
 - **Lokal wie GitHub Pages:** `node crystallography-common/tools/server.mjs` bedient den Arbeitsordner
   unter http://127.0.0.1:8000/ (`/stereography/`, `/plane-groups/`; Links zwischen den Apps
   funktionieren).
