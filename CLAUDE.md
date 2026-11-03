@@ -9,8 +9,19 @@ Aufbau und Werkzeuge im README; was dort steht, wird hier nicht wiederholt.
 
 - Ändert ein PR eine Entscheidung, eine Konvention oder einen Ablauf, wird `CLAUDE.md` (bzw.
   `LEITFADEN.md`) **im selben PR** nachgeführt. Die PR-Vorlage fragt das ab.
-- Hierher gehört, was dauerhaft gilt. Offene Aufgaben und der Stand laufender Arbeit gehören in GitHub
-  Issues bzw. `LEITFADEN.md` Abschn. 11, nicht in `CLAUDE.md`.
+- **Jede Art von Information hat genau einen Ort**, damit nichts auseinanderläuft:
+
+  | Was | Wo |
+  |---|---|
+  | Regeln für Inhalt, Gestaltung, Skript, Quiz, Technik (alle Apps) | `LEITFADEN.md` (common) |
+  | Arbeitsweise, Abläufe, Entscheidungen mit Grund, Fallstricke, Literatur | `CLAUDE.md` (common bzw. App) |
+  | Aufbau, Link-Adressen, Werkzeuge einer App | `README.md` der App |
+  | Offene Aufgaben, Ideen, offene Fragen, Stand laufender Arbeit | GitHub Issues des betroffenen Repos (Label `idee` für nicht Beauftragtes) |
+  | Konzepte (ausführliche Begründungen, Entwürfe) | `docs/` des betroffenen Repos |
+  | Änderungen je Version | `CHANGELOG.md` |
+
+  Steht etwas schon an seinem Ort, wird anderswo nur darauf verwiesen (z. B. „Issue #35“), nicht
+  wiederholt. Wird ein Issue erledigt, verschwindet der Verweis im selben PR.
 - Die Repositories sind öffentlich; diese Dateien also auch.
 
 ## Arbeitsbereich
