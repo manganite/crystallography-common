@@ -1,0 +1,456 @@
+<title>Quiz-Fragenliste Kristallographie</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: eine Lesespalte wie im Quiz der Apps; oben eine haftende Leiste mit Stand und Filtern
+   (App, Stufe, Kapitel, Status, Bearbeitung, Suche), darunter je App und Kapitel die Fragen als Karten.
+   Entwürfe tragen die Prüfung (Urteil und Notiz), geprüfte Fragen die Rückmeldungen.
+   Farben und Schriften wie in den Apps (LEITFADEN.md Abschn. 4). */
+:root {
+  --bg: #eceff2; --surface: #f8f9fb; --paper: #ffffff; --ink: #15202b; --muted: #586472; --line: #d2d9e0;
+  --accent: #0b63b6; --ok: #2f7a4f; --ok-bg: #e3f1e8; --fix: #b4530f; --fix-bg: #fbeadd; --right-bg: #e8f2ea;
+  --figure: #ffffff; --on-accent: #ffffff;
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-ui: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', SFMono-Regular, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1318; --surface: #151c23; --paper: #1a222b; --ink: #e5ebf1; --muted: #98a6b4; --line: #2a3541;
+    --accent: #4fa3ff; --ok: #5cc48a; --ok-bg: #173226; --fix: #ff9a5c; --fix-bg: #3a2416; --right-bg: #18301f;
+    --figure: #ffffff; --on-accent: #0e1318; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1318; --surface: #151c23; --paper: #1a222b; --ink: #e5ebf1; --muted: #98a6b4; --line: #2a3541;
+  --accent: #4fa3ff; --ok: #5cc48a; --ok-bg: #173226; --fix: #ff9a5c; --fix-bg: #3a2416; --right-bg: #18301f;
+  --figure: #ffffff; --on-accent: #0e1318; color-scheme: dark;
+}
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-ui); font-size: 15px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 860px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.ov { position: relative; }
+.ov::before { content: ''; position: absolute; left: 0.06em; right: 0.06em; top: 0.17em; border-top: max(1px, 0.07em) solid currentColor; }
+.serif .ov::before { top: 0.22em; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, textarea:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; flex-direction: column; gap: 9px; padding-block: 14px 12px; }
+.titel { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: 1.45rem; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.stand { font-size: 0.88rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.stand b { color: var(--ink); font-weight: 600; }
+.leiste { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.gruppe { display: inline-flex; align-items: center; gap: 6px; }
+.gruppe > .lab { font: 600 0.68rem var(--font-ui); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--paper); }
+.seg button { font: 500 0.82rem var(--font-ui); color: var(--ink); background: none; border: 0; padding: 5px 10px; cursor: pointer; font-variant-numeric: tabular-nums; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+select.kapwahl { font: 500 0.82rem var(--font-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; max-width: 100%; min-width: 0; }
+.suche { flex: 1 1 200px; min-width: 0; font: 0.86rem var(--font-ui); color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 7px; padding: 5px 10px; }
+.hinweis-db { font-size: 0.82rem; color: var(--fix); }
+
+main { padding-block: 18px 60px; }
+.intro { color: var(--muted); font-size: 0.92rem; max-width: 70ch; margin: 0 0 18px; }
+h2.app { font-family: var(--font-display); font-weight: 600; font-size: 1.35rem; margin: 34px 0 4px; padding-bottom: 6px; border-bottom: 2px solid var(--ink); text-wrap: balance; }
+h2.app small { font: 500 0.78rem var(--font-ui); color: var(--muted); margin-left: 8px; font-variant-numeric: tabular-nums; }
+h3.kapitel { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; margin: 22px 0 10px; scroll-margin-top: 170px; text-wrap: balance; }
+h3.kapitel small { font: 500 0.72rem var(--font-ui); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 2px; }
+.nichts { color: var(--muted); font-style: italic; margin: 24px 0; }
+
+.karte { background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 8px; padding: 14px 16px 12px; margin: 0 0 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.karte[data-mark="ok"], .karte[data-mark="erledigt"] { border-left-color: var(--ok); }
+.karte[data-mark="aendern"], .karte[data-mark="neu"] { border-left-color: var(--fix); }
+.kopf { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.kopf .id { font: 500 0.85rem var(--font-mono); overflow-wrap: anywhere; }
+.kopf .meta { font-size: 0.78rem; color: var(--muted); }
+.kopf .pillen { display: inline-flex; gap: 6px; margin-left: auto; }
+.pille { font: 600 0.68rem var(--font-ui); text-transform: uppercase; letter-spacing: 0.07em; border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+.pille.geprueft, .pille.ok, .pille.erledigt { color: var(--ok); background: var(--ok-bg); }
+.pille.entwurf, .pille.offen { color: var(--muted); border: 1px solid var(--line); }
+.pille.aendern, .pille.neu { color: var(--fix); background: var(--fix-bg); }
+.lernziel { font-size: 0.82rem; color: var(--muted); margin: -4px 0 0; }
+.lernziel b { font-weight: 600; }
+.frage { font-family: var(--font-display); font-size: 1.08rem; line-height: 1.45; margin: 0; }
+figure.bild { margin: 0; align-self: flex-start; width: min(260px, 100%); background: var(--figure); border: 1px solid var(--line); border-radius: 6px; padding: 4px; }
+figure.bild svg { display: block; width: 100%; height: auto; }
+ol.antw { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+ol.antw.bilder { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+ol.antw li { border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; min-width: 0; }
+ol.antw li.richtig { background: var(--right-bg); border-color: var(--ok); }
+ol.antw .zeile { display: flex; gap: 8px; align-items: baseline; }
+ol.antw .bu { font: 600 0.78rem var(--font-mono); color: var(--muted); flex: none; }
+ol.antw .text { font-family: var(--font-display); flex: 1; min-width: 0; }
+ol.antw .marke { font: 600 0.68rem var(--font-ui); text-transform: uppercase; letter-spacing: 0.07em; color: var(--ok); flex: none; }
+ol.antw .hw { font-size: 0.82rem; color: var(--muted); margin: 3px 0 0 22px; }
+ol.antw .fig { background: var(--figure); border-radius: 4px; margin-top: 4px; }
+ol.antw .fig svg { display: block; width: 100%; height: auto; }
+.erkl { font-size: 0.92rem; margin: 0; }
+.erkl b { font-weight: 600; }
+.links { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.84rem; }
+.quelle { font-size: 0.8rem; color: var(--muted); margin: 0; }
+.beispiel { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.beispiel .bid { font: 500 0.78rem var(--font-mono); color: var(--muted); }
+.leer { color: var(--muted); font-style: italic; }
+
+/* Prüfung (Entwürfe) und Rückmeldung (geprüfte Fragen) */
+.block { display: flex; flex-direction: column; gap: 6px; border-top: 1px dashed var(--line); padding-top: 10px; }
+.block .ueber { font: 600 0.68rem var(--font-ui); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.block .zeile2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.block textarea { width: 100%; box-sizing: border-box; min-height: 38px; font: 0.88rem/1.4 var(--font-ui); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 7px 9px; resize: vertical; }
+.block input { flex: 0 1 230px; min-width: 0; font: 0.84rem var(--font-ui); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px 9px; }
+.block button { font: 600 0.82rem var(--font-ui); border-radius: 6px; padding: 5px 11px; cursor: pointer; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+.block button.b-ok[aria-pressed="true"], .block button.b-erl[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: var(--on-accent); }
+.block button.b-fix[aria-pressed="true"] { background: var(--fix); border-color: var(--fix); color: var(--on-accent); }
+.block button:disabled { opacity: .45; cursor: default; }
+.block .gespeichert, .block .zeit { font-size: 0.75rem; color: var(--muted); }
+.block .antwort { font-size: 0.84rem; margin: 0; background: var(--surface); border-radius: 6px; padding: 6px 9px; }
+.block .antwort b { font-weight: 600; }
+details.archiv { font-size: 0.8rem; color: var(--muted); }
+details.archiv summary { cursor: pointer; }
+details.archiv p { margin: 4px 0 0; white-space: pre-wrap; }
+@media (max-width: 600px) { header.top { position: static; } h1 { font-size: 1.2rem; } .frage { font-size: 1rem; } .kopf .pillen { margin-left: 0; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="titel">
+      <h1>Quiz-Fragenliste</h1>
+      <span class="stand" id="stand">Lädt …</span>
+    </div>
+    <div class="leiste">
+      <div class="gruppe"><span class="lab">App</span><div class="seg" role="group" aria-label="App" id="f-app"></div></div>
+      <div class="gruppe"><span class="lab">Stufe</span><div class="seg" role="group" aria-label="Stufe" id="f-stufe"></div></div>
+      <select class="kapwahl" id="f-kap" aria-label="Kapitel"></select>
+    </div>
+    <div class="leiste">
+      <div class="gruppe"><span class="lab">Status</span><div class="seg" role="group" aria-label="Status" id="f-status"></div></div>
+      <div class="gruppe"><span class="lab">Zu tun</span><div class="seg" role="group" aria-label="Bearbeitung" id="f-tun"></div></div>
+    </div>
+    <div class="leiste">
+      <input type="search" class="suche" id="suche" placeholder="Suchen: Kennung oder Text" aria-label="Fragen durchsuchen">
+    </div>
+    <div class="hinweis-db" id="dbhinweis" hidden></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="intro">Alle Quizfragen und Fragengeneratoren der App-Familie, nach App und Kapitel geordnet. <b>Entwürfe</b> tragen die Prüfung: „In Ordnung“ gibt eine Frage frei, „Ändern“ mit Notiz schickt sie zurück. <b>Geprüfte</b> Fragen tragen ein Feld für Rückmeldungen, eigene oder von Dritten. Alles wird sofort gespeichert; sag Claude danach, dass etwas Neues da ist. Die richtige Antwort ist grün markiert, unter den falschen steht der Hinweis, den das Quiz zeigt. Links führen auf den Stand dieser Liste (<span id="commits"></span>).</p>
+  <div id="liste"></div>
+  <p class="nichts" id="nichts" hidden>Keine Frage passt zu dieser Auswahl.</p>
+</main>
+
+<script type="application/json" id="daten">__DATEN__</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById('daten').textContent);
+  const TYP = { einfach: 'eine Antwort', mehrfach: 'mehrere Antworten', 'bild-text': 'Bild, Antworten als Text', 'text-bild': 'Antworten als Bilder', 'bild-bild': 'Bild, Antworten als Bilder' };
+  const BU = 'ABCDEFGH';
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const zeitText = (iso) => { try { return new Date(iso).toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' }); } catch { return ''; } };
+  const APP = Object.fromEntries(D.apps.map((a) => [a.app, a]));
+  document.getElementById('commits').textContent = D.apps.map((a) => `${a.kurz} ${a.commit.slice(0, 7)}`).join(', ');
+
+  // Einträge: je App Bankfragen und Generatoren, nach Kapitel, Stufe, Kennung. Schlüssel „app:id“.
+  const eintraege = [];
+  for (const a of D.apps) {
+    const liste = [
+      ...a.fragen.map((q) => ({ app: a.app, id: q.id, kapitel: q.kapitel, stufen: [q.stufe], status: q.status, q })),
+      ...a.gens.map((g) => ({ app: a.app, id: g.id, kapitel: g.kapitel, stufen: g.stufen, status: g.status, g })),
+    ].sort((x, y) => x.kapitel - y.kapitel || Math.min(...x.stufen) - Math.min(...y.stufen) || x.id.localeCompare(y.id));
+    for (const e of liste) { e.key = `${a.app}:${e.id}`; eintraege.push(e); }
+  }
+
+  const befunde = {};   // key -> {urteil: offen|ok|aendern, notiz, zeit}
+  const rm = {};        // key -> {notiz, von, stand: neu|erledigt, antwort, zeit}
+  const urteilVon = (k) => (befunde[k] && befunde[k].urteil) || 'offen';
+  const rmVon = (k) => (rm[k] && rm[k].notiz && rm[k].notiz.trim()) ? (rm[k].stand || 'neu') : '';
+  const entwurf = (e) => e.status !== 'geprüft';
+
+  // Filter (je Betrachter im Browser gemerkt)
+  const F = { app: 'alle', stufe: 'alle', kap: 'alle', status: 'alle', tun: 'alle', suche: '' };
+  try { Object.assign(F, JSON.parse(localStorage.getItem('fragenliste-filter') || '{}'), { suche: '' }); } catch { /* ohne Speicher */ }
+  const merke = () => { try { localStorage.setItem('fragenliste-filter', JSON.stringify({ ...F, suche: '' })); } catch { /* ohne Speicher */ } };
+
+  function frageHTML(a, q, mitKopf) {
+    const BASE = `https://raw.githack.com/manganite/${a.app}/${a.commit}/`;
+    const bilder = q.typ === 'text-bild' || q.typ === 'bild-bild';
+    const antw = q.antworten.map((x, i) => {
+      const r = q.richtig.includes(i);
+      const hw = !r && q.hinweise[i] ? `<div class="hw">Hinweis: ${q.hinweise[i]}</div>` : '';
+      const inhalt = x.svg ? `<div class="fig">${x.svg}</div>` : `<span class="text">${x.html}</span>`;
+      return `<li class="${r ? 'richtig' : ''}"><div class="zeile"><span class="bu">${BU[i]}</span>${bilder ? '' : inhalt}${r ? '<span class="marke">richtig</span>' : ''}</div>${bilder ? inhalt : ''}${hw}</li>`;
+    }).join('');
+    const links = [];
+    if (q.skript) links.push(`<a href="${BASE}skript.html#${esc(q.skript)}" target="_blank" rel="noopener">Im Skript: #${esc(q.skript)}</a>`);
+    if (q.bildHash) links.push(`<a href="${BASE}index.html${esc(q.bildHash)}" target="_blank" rel="noopener">Bild in der App</a>`);
+    if (q.app) links.push(`<a href="${BASE}index.html${esc(q.app)}" target="_blank" rel="noopener">In der App öffnen</a>`);
+    else links.push('<span class="leer">kein App-Link</span>');
+    return `
+      ${mitKopf ? '' : `<div class="bid">${esc(q.id)} · Stufe ${q.stufe} · ${TYP[q.typ] || q.typ}</div>`}
+      ${q.lernziel ? `<p class="lernziel"><b>Lernziel:</b> ${q.lernziel}</p>` : ''}
+      <p class="frage serif">${q.frage}</p>
+      ${q.bild ? `<figure class="bild">${q.bild}</figure>` : ''}
+      <ol class="antw serif${bilder ? ' bilder' : ''}">${antw}</ol>
+      ${q.erklaerung ? `<p class="erkl"><b>Erklärung:</b> ${q.erklaerung}</p>` : ''}
+      <div class="links">${links.join('')}</div>
+      <p class="quelle">Quelle: ${q.quelle || '–'}${q.nachgerechnet ? ` · Antwort im Test nachgerechnet (${esc(q.nachgerechnet)})` : ''}</p>`;
+  }
+
+  function karteHTML(e) {
+    const a = APP[e.app], k = e.key;
+    let meta, rumpf;
+    if (e.q) {
+      meta = `Stufe ${e.q.stufe} · ${TYP[e.q.typ] || e.q.typ}`;
+      rumpf = frageHTML(a, e.q, true);
+    } else {
+      const g = e.g;
+      meta = `Fragengenerator · ${g.anzahl} Varianten in Stufe ${g.stufen.join(', ')} · ${g.beispiele.length} Beispiele`;
+      rumpf = `<p class="lernziel">Eine Prüfung bzw. Rückmeldung für den ganzen Generator; bei einzelnen Beispielen bitte deren Kennung nennen.</p>` +
+        g.beispiele.map((b) => `<div class="beispiel" data-stufe="${b.stufe}">${frageHTML(a, b, false)}</div>`).join('');
+    }
+    const kid = esc(k).replace(/[^A-Za-z0-9_-]/g, '_');
+    const block = entwurf(e) ? `
+      <div class="block pruefung">
+        <span class="ueber">Prüfung</span>
+        <div class="zeile2">
+          <button type="button" class="b-ok" aria-pressed="false">In Ordnung</button>
+          <button type="button" class="b-fix" aria-pressed="false">Ändern</button>
+          <span class="zeit"></span><span class="gespeichert" aria-live="polite"></span>
+        </div>
+        <textarea id="p-${kid}" rows="1" placeholder="Notiz: was zu ändern ist" aria-label="Notiz zur Prüfung von ${esc(k)}"></textarea>
+      </div>` : `
+      <div class="block rueck">
+        <span class="ueber">Rückmeldung</span>
+        <textarea id="r-${kid}" rows="1" placeholder="Rückmeldung: Problem, Vorschlag oder Feedback von Dritten" aria-label="Rückmeldung zu ${esc(k)}"></textarea>
+        <div class="zeile2">
+          <input type="text" class="von" id="v-${kid}" placeholder="Von (optional), z. B. Studierende" aria-label="Von wem stammt die Rückmeldung zu ${esc(k)}">
+          <button type="button" class="b-erl" aria-pressed="false" disabled>Erledigt</button>
+          <span class="zeit"></span><span class="gespeichert" aria-live="polite"></span>
+        </div>
+        <p class="antwort" hidden></p>
+        <details class="archiv" hidden><summary>Frühere Prüfung</summary><p></p></details>
+      </div>`;
+    return `<article class="karte" data-key="${esc(k)}" data-mark="">
+      <div class="kopf"><span class="id">${esc(e.id)}</span><span class="meta">${meta}</span><span class="pillen"><span class="pille p-tun" hidden></span><span class="pille ${entwurf(e) ? 'entwurf' : 'geprueft'}">${entwurf(e) ? 'Entwurf' : 'geprüft'}</span></span></div>
+      ${rumpf}
+      ${block}
+    </article>`;
+  }
+
+  // Aufbau: App-Überschrift, Kapitelüberschriften, Karten
+  const listeEl = document.getElementById('liste');
+  let html = '', appAlt = null, kapAlt = null;
+  for (const e of eintraege) {
+    const a = APP[e.app];
+    if (e.app !== appAlt) { html += `<h2 class="app" data-app="${a.app}">${esc(a.titel)}<small></small></h2>`; appAlt = e.app; kapAlt = null; }
+    if (e.kapitel !== kapAlt) {
+      const kk = a.kapitel.find((x) => x.nr === e.kapitel) || { titel: '' };
+      html += `<h3 class="kapitel" data-app="${a.app}" data-kap="${e.kapitel}"><small>Kapitel ${e.kapitel}</small>${esc(kk.titel)}</h3>`;
+      kapAlt = e.kapitel;
+    }
+    html += karteHTML(e);
+  }
+  listeEl.innerHTML = html;
+  const karten = {}, texte = {};
+  listeEl.querySelectorAll('.karte').forEach((el) => {
+    karten[el.dataset.key] = el;
+    texte[el.dataset.key] = (el.dataset.key + ' ' + el.textContent).toLowerCase();
+  });
+  const E = Object.fromEntries(eintraege.map((e) => [e.key, e]));
+
+  // Filterleisten
+  function seg(id, feld, optionen) {
+    const el = document.getElementById(id);
+    el.innerHTML = optionen.map(([w, t]) => `<button type="button" data-w="${w}" aria-pressed="${F[feld] === w}">${t}</button>`).join('');
+    el.onclick = (ev) => {
+      const b = ev.target.closest('button'); if (!b) return;
+      F[feld] = b.dataset.w;
+      if (feld === 'app') { F.kap = 'alle'; kapOptionen(); }
+      el.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      merke(); alles();
+    };
+    return el;
+  }
+  seg('f-app', 'app', [['alle', 'Alle'], ...D.apps.map((a) => [a.app, a.kurz])]);
+  seg('f-stufe', 'stufe', [['alle', 'Alle'], ['1', '1'], ['2', '2'], ['3', '3']]);
+  seg('f-status', 'status', [['alle', 'Alle'], ['entwurf', 'Entwurf'], ['geprueft', 'geprüft']]);
+  seg('f-tun', 'tun', [['alle', 'Alle'], ['urteil', 'Urteil offen'], ['aendern', 'Ändern'], ['neu', 'Rückmeldung offen'], ['erledigt', 'Erledigt']]);
+  const kapSel = document.getElementById('f-kap');
+  function kapOptionen() {
+    const apps = F.app === 'alle' ? D.apps : [APP[F.app]];
+    kapSel.innerHTML = '<option value="alle">Alle Kapitel</option>' + apps.map((a) =>
+      `<optgroup label="${esc(a.titel)}">${a.kapitel.map((k) => `<option value="${a.app}:${k.nr}">${a.kurz} · Kap. ${k.nr} ${esc(k.titel)}</option>`).join('')}</optgroup>`).join('');
+    if (![...kapSel.options].some((o) => o.value === F.kap)) F.kap = 'alle';
+    kapSel.value = F.kap;
+  }
+  kapOptionen();
+  kapSel.onchange = () => { F.kap = kapSel.value; merke(); alles(); };
+
+  function tunVon(e) {
+    if (entwurf(e)) { const u = urteilVon(e.key); return u === 'offen' ? 'urteil' : u; }
+    return rmVon(e.key);
+  }
+  function passt(e) {
+    if (F.app !== 'alle' && e.app !== F.app) return false;
+    if (F.stufe !== 'alle' && !e.stufen.includes(Number(F.stufe))) return false;
+    if (F.kap !== 'alle' && F.kap !== `${e.app}:${e.kapitel}`) return false;
+    if (F.status === 'entwurf' && !entwurf(e)) return false;
+    if (F.status === 'geprueft' && entwurf(e)) return false;
+    if (F.tun !== 'alle' && tunVon(e) !== F.tun) return false;
+    return !F.suche || texte[e.key].includes(F.suche);
+  }
+
+  const entwuerfe = {};   // Felder, in denen gerade geschrieben wird
+  function zeigeKarte(k) {
+    const el = karten[k], e = E[k]; if (!el) return;
+    const p = el.querySelector('.p-tun');
+    if (entwurf(e)) {
+      const b = befunde[k] || {}, u = urteilVon(k);
+      el.dataset.mark = u === 'offen' ? '' : u;
+      p.hidden = false; p.className = `pille p-tun ${u}`;
+      p.textContent = u === 'ok' ? 'In Ordnung' : u === 'aendern' ? 'Ändern' : 'Urteil offen';
+      el.querySelector('.b-ok').setAttribute('aria-pressed', String(u === 'ok'));
+      el.querySelector('.b-fix').setAttribute('aria-pressed', String(u === 'aendern'));
+      const ta = el.querySelector('textarea');
+      if (!entwuerfe[k] && document.activeElement !== ta) ta.value = b.notiz || '';
+      el.querySelector('.zeit').textContent = b.zeit ? zeitText(b.zeit) : '';
+    } else {
+      const s = rmVon(k), r = rm[k] || {};
+      el.dataset.mark = s;
+      p.hidden = !s; p.className = `pille p-tun ${s}`;
+      p.textContent = s === 'neu' ? 'Rückmeldung offen' : s === 'erledigt' ? 'Rückmeldung erledigt' : '';
+      const ta = el.querySelector('textarea'), von = el.querySelector('.von');
+      if (!entwuerfe[k]) {
+        if (document.activeElement !== ta) ta.value = r.notiz || '';
+        if (document.activeElement !== von) von.value = r.von || '';
+      }
+      const b = el.querySelector('.b-erl');
+      b.disabled = !s; b.setAttribute('aria-pressed', String(s === 'erledigt'));
+      el.querySelector('.zeit').textContent = r.zeit && s ? zeitText(r.zeit) : '';
+      const an = el.querySelector('.antwort');
+      an.hidden = !r.antwort; an.innerHTML = r.antwort ? `<b>Claude:</b> ${esc(r.antwort)}` : '';
+      const ar = el.querySelector('.archiv'), bf = befunde[k];
+      ar.hidden = !(bf && bf.notiz);
+      if (bf && bf.notiz) ar.querySelector('p').textContent = `${bf.urteil === 'ok' ? 'In Ordnung' : bf.urteil === 'aendern' ? 'Ändern' : 'offen'}${bf.zeit ? ', ' + zeitText(bf.zeit) : ''}: ${bf.notiz}`;
+    }
+    if (e.g) el.querySelectorAll('.beispiel').forEach((b) => { b.hidden = F.stufe !== 'alle' && b.dataset.stufe !== F.stufe; });
+    // Die Karte, in der gerade geschrieben wird, bleibt sichtbar; der Filter greift beim Verlassen
+    el.hidden = !(passt(e) || el.contains(document.activeElement));
+  }
+  function zeigeStand() {
+    let urteil = 0, aendern = 0, neu = 0, erl = 0, entw = 0, sicht = 0;
+    for (const e of eintraege) {
+      const t = tunVon(e);
+      if (t === 'urteil') urteil++; else if (t === 'aendern') aendern++; else if (t === 'neu') neu++; else if (t === 'erledigt') erl++;
+      if (entwurf(e)) entw++;
+      if (!karten[e.key].hidden) sicht++;
+    }
+    const nq = D.apps.reduce((n, a) => n + a.fragen.length, 0), ng = D.apps.reduce((n, a) => n + a.gens.length, 0);
+    document.getElementById('stand').innerHTML = `${nq} Fragen · ${ng} Generatoren · <b>${entw}</b> Entwürfe · <b>${neu}</b> Rückmeldung${neu === 1 ? '' : 'en'} offen · ${sicht} angezeigt`;
+    const zahl = { urteil, aendern, neu, erledigt: erl };
+    document.querySelectorAll('#f-tun button').forEach((b) => { const n = zahl[b.dataset.w]; b.textContent = b.textContent.replace(/ \d+$/, '') + (n === undefined ? '' : ` ${n}`); });
+    // Überschriften nur, wenn darunter etwas sichtbar ist
+    const kids = [...listeEl.children];
+    kids.forEach((h, i) => {
+      if (!h.matches('h3')) return;
+      let s = h.nextElementSibling, sichtbar = false;
+      while (s && !s.matches('h2, h3')) { if (!s.hidden) sichtbar = true; s = s.nextElementSibling; }
+      h.hidden = !sichtbar;
+    });
+    listeEl.querySelectorAll('h2.app').forEach((h) => {
+      let s = h.nextElementSibling, n = 0;
+      while (s && !s.matches('h2')) { if (s.matches('.karte') && !s.hidden) n++; s = s.nextElementSibling; }
+      h.hidden = n === 0;
+      h.querySelector('small').textContent = `${n} angezeigt`;
+    });
+    document.getElementById('nichts').hidden = sicht > 0;
+  }
+  function alles() { for (const e of eintraege) zeigeKarte(e.key); zeigeStand(); }
+
+  // Speichern: eine Schreiboperation je Dokument nach der anderen
+  let db = null;
+  const ketten = {};
+  const lokal = { befunde: 'fragenliste-befunde', rueckmeldungen: 'fragenliste-rueckmeldungen' };
+  function schreibe(sammlung, k, body) {
+    const info = karten[k].querySelector('.gespeichert');
+    if (!db) { try { localStorage.setItem(lokal[sammlung], JSON.stringify(sammlung === 'befunde' ? befunde : rm)); } catch { /* ohne Speicher */ } info.textContent = 'nur lokal'; return; }
+    info.textContent = 'speichert …';
+    const key = sammlung + '/' + k;
+    ketten[key] = (ketten[key] || Promise.resolve()).then(() => db.collection(sammlung).doc(k).set(body))
+      .then(() => { info.textContent = 'gespeichert'; })
+      .catch((err) => { info.textContent = err && (err.code === 'not_granted' || err.code === 'invalid_argument') ? 'keine Schreibrechte' : 'nicht gespeichert'; });
+  }
+  function speichereBefund(k) {
+    const ta = karten[k].querySelector('textarea');
+    befunde[k] = { urteil: urteilVon(k), notiz: ta.value, zeit: new Date().toISOString() };
+    zeigeKarte(k); zeigeStand();
+    schreibe('befunde', k, befunde[k]);
+  }
+  function speichereRm(k) {
+    const el = karten[k], alt = rm[k] || {};
+    rm[k] = { notiz: el.querySelector('textarea').value, von: el.querySelector('.von').value.trim(), stand: alt.stand || 'neu', antwort: alt.antwort || '', zeit: new Date().toISOString() };
+    zeigeKarte(k); zeigeStand();
+    schreibe('rueckmeldungen', k, rm[k]);
+  }
+
+  const timer = {};
+  listeEl.addEventListener('input', (ev) => {
+    const f = ev.target.closest('textarea, input.von'); if (!f) return;
+    const k = f.closest('.karte').dataset.key, e = E[k];
+    entwuerfe[k] = true;
+    if (entwurf(e)) {
+      befunde[k] = { ...(befunde[k] || {}), notiz: f.value, urteil: f.value.trim() && urteilVon(k) === 'offen' ? 'aendern' : urteilVon(k) };
+    } else if (f.matches('textarea')) rm[k] = { ...(rm[k] || {}), notiz: f.value, stand: 'neu' };
+    clearTimeout(timer[k]);
+    timer[k] = setTimeout(() => { entwuerfe[k] = false; entwurf(e) ? speichereBefund(k) : speichereRm(k); }, 900);
+  });
+  listeEl.addEventListener('focusout', (ev) => {
+    const f = ev.target.closest && ev.target.closest('textarea, input.von'); if (!f) return;
+    const k = f.closest('.karte').dataset.key;
+    if (entwuerfe[k]) { clearTimeout(timer[k]); entwuerfe[k] = false; entwurf(E[k]) ? speichereBefund(k) : speichereRm(k); }
+    setTimeout(() => { zeigeKarte(k); zeigeStand(); }, 0);
+  });
+  listeEl.addEventListener('click', (ev) => {
+    const b = ev.target.closest('.b-ok, .b-fix, .b-erl'); if (!b || b.disabled) return;
+    const k = b.closest('.karte').dataset.key;
+    if (b.matches('.b-erl')) { rm[k] = { ...(rm[k] || {}), stand: rmVon(k) === 'erledigt' ? 'neu' : 'erledigt' }; speichereRm(k); return; }
+    const neu = b.matches('.b-ok') ? 'ok' : 'aendern';
+    befunde[k] = { ...(befunde[k] || {}), urteil: urteilVon(k) === neu ? 'offen' : neu };
+    speichereBefund(k);
+  });
+  let sTimer;
+  document.getElementById('suche').addEventListener('input', (ev) => {
+    clearTimeout(sTimer);
+    sTimer = setTimeout(() => { F.suche = ev.target.value.trim().toLowerCase(); alles(); }, 150);
+  });
+
+  // Ohne Speicher sichtbar; mit db live
+  alles();
+  const hinweis = document.getElementById('dbhinweis');
+  const zeigeHinweis = (t) => { hinweis.hidden = false; hinweis.textContent = t; };
+  (async () => {
+    try { db = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch { db = null; }
+    if (!db) {
+      try { Object.assign(befunde, JSON.parse(localStorage.getItem(lokal.befunde) || '{}')); Object.assign(rm, JSON.parse(localStorage.getItem(lokal.rueckmeldungen) || '{}')); } catch { /* ohne Speicher */ }
+      alles();
+      zeigeHinweis('Gemeinsamer Speicher nicht verfügbar: Urteile und Rückmeldungen bleiben nur in diesem Browser und erreichen Claude nicht. Bitte die Seite in claude.ai angemeldet öffnen.');
+      return;
+    }
+    const fehler = () => zeigeHinweis('Verbindung zum Speicher unterbrochen; bitte die Seite neu laden.');
+    db.collection('befunde').limit(1000).onSnapshot((snap) => {
+      for (const d of snap.docs) if (d.exists && !entwuerfe[d.id]) befunde[d.id] = { ...d.data() };
+      alles();
+    }, fehler);
+    db.collection('rueckmeldungen').limit(1000).onSnapshot((snap) => {
+      for (const d of snap.docs) if (d.exists && !entwuerfe[d.id]) rm[d.id] = { ...d.data() };
+      alles();
+    }, fehler);
+  })();
+})();
+</script>

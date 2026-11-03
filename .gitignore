@@ -3,3 +3,5 @@ node_modules/
 # lokal mit node tools/sync.mjs vorlagen/app erzeugt
 vorlagen/app/lib/common/
 vorlagen/app/tools/common/
+# erzeugt von fragenliste/extract.mjs
+fragenliste/fragenliste.html
