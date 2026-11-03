@@ -1,0 +1,21 @@
+{
+  // Alle Repositories der Familie in einem VS-Code-Fenster. Die Repositories liegen nebeneinander im
+  // Arbeitsordner (CLAUDE.md, Abschnitt „Arbeitsbereich“). Eine neue App ergänzt hier ihren Ordner.
+  "folders": [
+    { "path": "." },
+    { "path": "../stereography" },
+    { "path": "../plane-groups" }
+  ],
+  "settings": {
+    // Kopien des gemeinsamen Codes in den Apps nur über tools/sync.mjs ändern, nie von Hand
+    "files.readonlyInclude": {
+      "**/lib/common/**": true,
+      "**/tools/common/**": true
+    },
+    // erzeugte Dateien nicht durchsuchen
+    "search.exclude": {
+      "**/fragenliste/fragenliste.html": true,
+      "**/skript.pdf": true
+    }
+  }
+}

@@ -119,6 +119,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 6. `CLAUDE.md` und `.github/pull_request_template.md` nach dem Muster der bestehenden Apps anlegen; die `CLAUDE.md` verweist zuerst auf die `CLAUDE.md` dieses Repositories.
 7. `tools/quiz-quelle.mjs` nach dem Muster der bestehenden Apps anlegen (Fragen für die gemeinsame Fragenliste, `fragenliste/extract.mjs`) und die App dort in die Liste der Ordner aufnehmen.
 8. GitHub Pages: unter Settings → Environments → github-pages eine Tag-Regel `v*.*.*` anlegen, sonst scheitert der Deploy aus Tags.
+9. Den Ordner der App in `kristallographie.code-workspace` dieses Repositories ergänzen.
 
 ## 11. Offene Punkte
 

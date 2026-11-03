@@ -34,9 +34,10 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `check.mjs` | Kopie in einer App gegen ihr Manifest prüfen |
 | | `moodle.mjs` | Quizfragen als Moodle-XML |
 | | `skript-pdf.mjs` | Skript als PDF (A4) mit Playwright |
-| | `server.mjs` | kleiner statischer Webserver für Werkzeuge und Tests |
+| | `server.mjs` | kleiner statischer Webserver für Werkzeuge und Tests; direkt gestartet bedient er den Arbeitsordner wie GitHub Pages |
 | `vorlagen/` | | Ausgangspunkt für eine neue App (Seiten, Service Worker, Workflows, Tests) |
 | `fragenliste/` | `extract.mjs`, `vorlage.html` | Gemeinsame Fragenliste aller Apps (Artifact in claude.ai): Fragen aus `tools/quiz-quelle.mjs` jeder App, Prüfung der Entwürfe, Rückmeldungen. Wird nicht in die Apps kopiert. |
+| (oberste Ebene) | `kristallographie.code-workspace` | VS-Code-Arbeitsbereich mit allen Repositories der Familie |
 
 Nicht hier, sondern in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Anordnung der Tafeln, Texte der Hilfen, Fragen und Kapitel.
 
