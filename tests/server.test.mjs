@@ -8,11 +8,11 @@ import { join } from 'node:path';
 import { server } from '../tools/server.mjs';
 
 // Rohe Anfrage (fetch würde ../ in der Adresse selbst auflösen)
-const holen = (port, pfad) => new Promise((ok, fehler) => {
+const holen = (port, pfad, mitKopf = false) => new Promise((ok, fehler) => {
   const req = request({ host: '127.0.0.1', port, path: pfad }, (res) => {
     let body = '';
     res.on('data', (d) => { body += d; });
-    res.on('end', () => ok({ status: res.statusCode, body }));
+    res.on('end', () => ok(mitKopf ? { status: res.statusCode, body, location: res.headers.location } : { status: res.statusCode, body }));
   });
   req.on('error', fehler);
   req.end();
@@ -50,7 +50,10 @@ test('Server: Ordner liefern index.html, ohne Schrägstrich Umleitung', async ()
   try {
     assert.deepEqual(await holen(port, '/'), { status: 200, body: 'dach' });
     assert.deepEqual(await holen(port, '/app/'), { status: 200, body: 'app' });
-    assert.equal((await holen(port, '/app')).status, 301);
+    assert.equal((await holen(port, '/app', true)).location, '/app/');
+    const um = await holen(port, '/app?sw=1&blick=2', true);
+    assert.equal(um.status, 301);
+    assert.equal(um.location, '/app/?sw=1&blick=2');
     assert.equal((await holen(port, '/fehlt/')).status, 404);
   } finally {
     srv.close();

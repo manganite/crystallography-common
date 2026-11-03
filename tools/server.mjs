@@ -21,7 +21,7 @@ export const MIME = {
 export function server(root, port = 0) {
   root = resolve(root);
   const srv = createServer(async (req, res) => {
-    const pfad = new URL(req.url, 'http://x').pathname;
+    const adresse = new URL(req.url, 'http://x'), pfad = adresse.pathname;
     const path = normalize(decodeURIComponent(pfad)).replace(/^([/\\])+/, '');
     let file = resolve(root, path || 'index.html');
     // nur Dateien innerhalb von root (auch kein Nachbarordner mit gleichem Namensanfang wie root-privat)
@@ -30,7 +30,7 @@ export function server(root, port = 0) {
     try {
       if ((await stat(file)).isDirectory()) {
         // relative Links der Seite brauchen den Schrägstrich am Ende
-        if (!pfad.endsWith('/')) { res.writeHead(301, { Location: pfad + '/' }).end(); return; }
+        if (!pfad.endsWith('/')) { res.writeHead(301, { Location: pfad + '/' + adresse.search }).end(); return; }
         file = join(file, 'index.html');
       }
       const data = await readFile(file);
