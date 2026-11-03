@@ -97,7 +97,6 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Innerhalb einer App:** App → Skript (Kopfzeile, Begriffe in der Infobox), Skript → App (jede Abbildung), Skript → Quiz („Lernziele prüfen“), Quiz → Skript und App (Rückmeldung). Links aus dem Quiz öffnen einen neuen Tab, damit das Quiz offen bleibt.
 - **Zwischen den Apps:** über Link-Adressen, z. B. von einer Ebenen- oder Raumgruppe zu ihrer Punktgruppe im Stereogramm. Die Link-Adressen einer App sind damit eine **Schnittstelle**: Ihr Format steht im README der App, bleibt stabil (alte Links werden umgerechnet, nie ungültig) und ist durch Tests abgesichert.
 - **Querverweise im Skript** auf Skripte anderer Apps mit voller Adresse und Anker.
-- Geplant: ein Umschalter zwischen den Apps in der Kopfzeile, sobald es die zweite App gibt.
 
 ## 9. Technik
 
@@ -122,6 +121,4 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 
 ## 11. Offene Punkte
 
-- **Anordnung der Tafeln** (`.layout`) und 3D-Ansicht teilen, sobald die zweite App zeigt, wie viel davon gemeinsam ist.
-- **Umschalter zwischen den Apps** und eine gemeinsame Startseite (manganite.github.io).
-- **Musterseite** mit allen Bausteinen in hell und dunkel, zum Prüfen von Änderungen an den gemeinsamen Stilen.
+Offene Punkte der Familie stehen als [Issues in crystallography-common](https://github.com/manganite/crystallography-common/issues), die einer App in deren Issues, nicht in diesem Leitfaden.
