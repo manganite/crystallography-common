@@ -17,9 +17,10 @@ Aufbau und Werkzeuge im README; was dort steht, wird hier nicht wiederholt.
   | Arbeitsweise, Abläufe, Entscheidungen mit Grund, Fallstricke, Literatur | `CLAUDE.md` (common bzw. App) |
   | Aufbau, Link-Adressen, Werkzeuge einer App | `README.md` der App |
   | Offene Aufgaben, Ideen, offene Fragen, Stand laufender Arbeit | GitHub Issues des betroffenen Repos (Label `idee` für nicht Beauftragtes) |
-  | Konzepte (ausführliche Begründungen, Entwürfe) | `docs/` des betroffenen Repos |
+  | Konzepte (ausführliche Begründungen, Entwürfe) | `docs/` des betroffenen Repos; nach der Umsetzung mit Statuskopf (was umgesetzt, was überholt, wo es jetzt steht) und nicht mehr nachgeführt |
   | Änderungen je Version | `CHANGELOG.md` |
 
+  Bei Widerspruch zwischen einem Konzept und `CLAUDE.md` bzw. `LEITFADEN.md` gelten Letztere.
   Steht etwas schon an seinem Ort, wird anderswo nur darauf verwiesen (z. B. „Issue #35“), nicht
   wiederholt. Wird ein Issue erledigt, verschwindet der Verweis im selben PR.
 - Die Repositories sind öffentlich; diese Dateien also auch.
