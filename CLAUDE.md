@@ -27,15 +27,26 @@ Aufbau und Werkzeuge im README; was dort steht, wird hier nicht wiederholt.
 
 ## Arbeitsbereich
 
-Die Repositories liegen nebeneinander in einem Ordner, damit eine Sitzung alle sieht:
+Die Repositories liegen nebeneinander in einem Arbeitsordner, damit eine Sitzung alle sieht. Der
+Arbeitsordner ist selbst kein Repository (keine verschachtelten Repos, keine Submodule); Ordnername =
+Repo-Name = Pfad auf GitHub Pages:
 
 ```
-<ordner>/crystallography-common
-<ordner>/stereography
-<ordner>/plane-groups
+<arbeitsordner>/crystallography-common
+<arbeitsordner>/stereography
+<arbeitsordner>/plane-groups
 ```
 
-In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/manganite/<name>`).
+- **VS Code:** `crystallography-common/kristallographie.code-workspace` öffnen (alle Repos in einem
+  Fenster, Kopien des gemeinsamen Codes schreibgeschützt). Liegt in common, damit sie versioniert und
+  überall gleich ist; eine neue App ergänzt dort ihren Ordner.
+- **Lokal wie GitHub Pages:** `node crystallography-common/tools/server.mjs` bedient den Arbeitsordner
+  unter http://127.0.0.1:8000/ (`/stereography/`, `/plane-groups/`; Links zwischen den Apps
+  funktionieren).
+- Den Arbeitsordner nicht in einen synchronisierten Ordner legen (iCloud, OneDrive, Dropbox): verträgt
+  sich nicht mit Git.
+- In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/manganite/<name>`).
+- Eine Einstiegsseite für die Familie ist geplant (Issue #12); sie käme als weiteres Repo daneben.
 
 ## Arbeitsweise mit Thomas
 

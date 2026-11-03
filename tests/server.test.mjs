@@ -39,3 +39,21 @@ test('Server: Dateien im Ordner ja, ausserhalb und im Nachbarordner nein', async
     rmSync(basis, { recursive: true, force: true });
   }
 });
+
+test('Server: Ordner liefern index.html, ohne Schrägstrich Umleitung', async () => {
+  const basis = mkdtempSync(join(tmpdir(), 'srv-'));
+  mkdirSync(join(basis, 'app'));
+  writeFileSync(join(basis, 'index.html'), 'dach');
+  writeFileSync(join(basis, 'app', 'index.html'), 'app');
+  const srv = await server(basis);
+  const port = srv.address().port;
+  try {
+    assert.deepEqual(await holen(port, '/'), { status: 200, body: 'dach' });
+    assert.deepEqual(await holen(port, '/app/'), { status: 200, body: 'app' });
+    assert.equal((await holen(port, '/app')).status, 301);
+    assert.equal((await holen(port, '/fehlt/')).status, 404);
+  } finally {
+    srv.close();
+    rmSync(basis, { recursive: true, force: true });
+  }
+});
