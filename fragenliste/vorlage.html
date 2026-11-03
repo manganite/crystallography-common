@@ -373,30 +373,53 @@ details.archiv p { margin: 4px 0 0; white-space: pre-wrap; }
   }
   function alles() { for (const e of eintraege) zeigeKarte(e.key); zeigeStand(); }
 
-  // Speichern: eine Schreiboperation je Dokument nach der anderen
-  let db = null;
-  const ketten = {};
+  // Speichern: eine Schreiboperation je Dokument nach der anderen.
+  // Bis der Speicher bereit ist, werden Änderungen vorgemerkt und danach übertragen.
+  // Solange für ein Dokument Schreibaufträge ausstehen, übergehen die Snapshots es.
+  let db = null, bereit = false;
+  const ketten = {}, ausstehend = {}, vorgemerkt = new Set();
   const lokal = { befunde: 'fragenliste-befunde', rueckmeldungen: 'fragenliste-rueckmeldungen' };
-  function schreibe(sammlung, k, body) {
-    const info = karten[k].querySelector('.gespeichert');
-    if (!db) { try { localStorage.setItem(lokal[sammlung], JSON.stringify(sammlung === 'befunde' ? befunde : rm)); } catch { /* ohne Speicher */ } info.textContent = 'nur lokal'; return; }
+  const schuetzt = (sammlung, id) => entwuerfe[id] || ausstehend[sammlung + '/' + id] > 0;
+  function schreibe(sammlung, k) {
+    const info = karten[k].querySelector('.gespeichert'), key = sammlung + '/' + k;
+    if (!bereit) { vorgemerkt.add(key); info.textContent = 'wartet auf Speicher …'; return; }
+    if (!db) {
+      try { localStorage.setItem(lokal[sammlung], JSON.stringify(sammlung === 'befunde' ? befunde : rm)); info.textContent = 'nur lokal'; } catch { info.textContent = 'nicht gespeichert'; }
+      return;
+    }
+    // Befunde gehören ganz der Seite; bei Rückmeldungen schreibt Claude `antwort`, die Seite lässt das Feld aus
+    const r = sammlung === 'befunde' ? befunde[k] : rm[k];
+    const body = sammlung === 'befunde' ? { urteil: r.urteil, notiz: r.notiz, zeit: r.zeit }
+      : { notiz: r.notiz || '', von: r.von || '', stand: r.stand || 'neu', zeit: r.zeit };
+    const ref = db.collection(sammlung).doc(k);
+    const schreiben = sammlung === 'befunde' ? () => ref.set(body)
+      : () => ref.update(body).catch((err) => { if (err && err.code === 'invalid_argument') return ref.set({ ...body, antwort: '' }); throw err; });
     info.textContent = 'speichert …';
-    const key = sammlung + '/' + k;
-    ketten[key] = (ketten[key] || Promise.resolve()).then(() => db.collection(sammlung).doc(k).set(body))
-      .then(() => { info.textContent = 'gespeichert'; })
-      .catch((err) => { info.textContent = err && (err.code === 'not_granted' || err.code === 'invalid_argument') ? 'keine Schreibrechte' : 'nicht gespeichert'; });
+    ausstehend[key] = (ausstehend[key] || 0) + 1;
+    ketten[key] = (ketten[key] || Promise.resolve()).then(schreiben)
+      .then(() => { if (ausstehend[key] === 1) info.textContent = 'gespeichert'; })
+      .catch((err) => { info.textContent = err && (err.code === 'not_granted' || err.code === 'invalid_argument') ? 'keine Schreibrechte' : 'nicht gespeichert'; })
+      .finally(() => {
+        ausstehend[key]--;
+        // Übergangene Snapshots nachholen (z. B. eine Antwort, die während der Eingabe eintraf)
+        if (ausstehend[key] === 0 && !entwuerfe[k]) ref.get().then((d) => {
+          if (!d.exists || schuetzt(sammlung, k)) return;
+          (sammlung === 'befunde' ? befunde : rm)[k] = { ...d.data() };
+          zeigeKarte(k); zeigeStand();
+        }).catch(() => { /* der nächste Snapshot bringt den Stand */ });
+      });
   }
   function speichereBefund(k) {
     const ta = karten[k].querySelector('textarea');
     befunde[k] = { urteil: urteilVon(k), notiz: ta.value, zeit: new Date().toISOString() };
     zeigeKarte(k); zeigeStand();
-    schreibe('befunde', k, befunde[k]);
+    schreibe('befunde', k);
   }
   function speichereRm(k) {
     const el = karten[k], alt = rm[k] || {};
-    rm[k] = { notiz: el.querySelector('textarea').value, von: el.querySelector('.von').value.trim(), stand: alt.stand || 'neu', antwort: alt.antwort || '', zeit: new Date().toISOString() };
+    rm[k] = { ...alt, notiz: el.querySelector('textarea').value, von: el.querySelector('.von').value.trim(), stand: alt.stand || 'neu', zeit: new Date().toISOString() };
     zeigeKarte(k); zeigeStand();
-    schreibe('rueckmeldungen', k, rm[k]);
+    schreibe('rueckmeldungen', k);
   }
 
   const timer = {};
@@ -436,19 +459,27 @@ details.archiv p { margin: 4px 0 0; white-space: pre-wrap; }
   const zeigeHinweis = (t) => { hinweis.hidden = false; hinweis.textContent = t; };
   (async () => {
     try { db = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch { db = null; }
+    bereit = true;
+    const nachholen = () => { for (const key of vorgemerkt) { const i = key.indexOf('/'); schreibe(key.slice(0, i), key.slice(i + 1)); } vorgemerkt.clear(); };
     if (!db) {
-      try { Object.assign(befunde, JSON.parse(localStorage.getItem(lokal.befunde) || '{}')); Object.assign(rm, JSON.parse(localStorage.getItem(lokal.rueckmeldungen) || '{}')); } catch { /* ohne Speicher */ }
-      alles();
+      // Lokal gespeicherte Stände laden, ohne inzwischen gemachte Änderungen zu überschreiben
+      try {
+        const lb = JSON.parse(localStorage.getItem(lokal.befunde) || '{}'), lr = JSON.parse(localStorage.getItem(lokal.rueckmeldungen) || '{}');
+        for (const k in lb) if (!vorgemerkt.has('befunde/' + k) && !entwuerfe[k]) befunde[k] = lb[k];
+        for (const k in lr) if (!vorgemerkt.has('rueckmeldungen/' + k) && !entwuerfe[k]) rm[k] = lr[k];
+      } catch { /* ohne Speicher */ }
+      nachholen(); alles();
       zeigeHinweis('Gemeinsamer Speicher nicht verfügbar: Urteile und Rückmeldungen bleiben nur in diesem Browser und erreichen Claude nicht. Bitte die Seite in claude.ai angemeldet öffnen.');
       return;
     }
+    nachholen();
     const fehler = () => zeigeHinweis('Verbindung zum Speicher unterbrochen; bitte die Seite neu laden.');
     db.collection('befunde').limit(1000).onSnapshot((snap) => {
-      for (const d of snap.docs) if (d.exists && !entwuerfe[d.id]) befunde[d.id] = { ...d.data() };
+      for (const d of snap.docs) if (d.exists && !schuetzt('befunde', d.id)) befunde[d.id] = { ...d.data() };
       alles();
     }, fehler);
     db.collection('rueckmeldungen').limit(1000).onSnapshot((snap) => {
-      for (const d of snap.docs) if (d.exists && !entwuerfe[d.id]) rm[d.id] = { ...d.data() };
+      for (const d of snap.docs) if (d.exists && !schuetzt('rueckmeldungen', d.id)) rm[d.id] = { ...d.data() };
       alles();
     }, fehler);
   })();
