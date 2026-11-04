@@ -12,7 +12,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Leitfaden** Abschn. 5.3: Erste Schritte je Modus; neu eine Hilfeseite in der App mit 5–8 Anleitungen nach Aufgaben. Die Regel „keine ausführlichen Erklärseiten in der App“ entfällt (Issue #24).
+- **Leitfaden** Abschn. 5.1 und 5.3: Erste Schritte je Modus, nur beim ersten Aufruf eines Modus; neu eine Hilfeseite `hilfe.html` mit Anleitungen nach Aufgaben, „?“ führt dorthin. Die Regel „keine ausführlichen Erklärseiten in der App“ entfällt (Issue #24).
 - **Leitfaden** Abschn. 9: Ausnahmen von der Typprüfung während der Umstellung einer App als `// @ts-nocheck` am Dateianfang (statt in der `tsconfig.json`), damit neue Dateien von selbst geprüft werden.
 
 ## [0.3.0] - 2026-11-04

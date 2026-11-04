@@ -43,7 +43,7 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 
 ### 5.1 Aufbau
 
-- **Kopfzeile:** Titel (Source Serif) und Untertitel, Umschalter der Modi (`.tabs`), rechts „Skript“, „Quiz“, „Link kopieren“ und „?“ (Erste Schritte).
+- **Kopfzeile:** Titel (Source Serif) und Untertitel, Umschalter der Modi (`.tabs`), rechts „Skript“, „Quiz“, „Link kopieren“ und „?“ (Hilfeseite).
 - **Seitenleiste** (`.side`), auf Laptop und iPad quer angeheftet mit eigenem Scrollbereich: Karten (`.card`) mit Überschrift in Kapitälchen-Stil. Auswahl und Standardanzeige oben; alles Weitere in einklappbaren Abschnitten (`.sect`), die unter ihrer Überschrift nennen, was sie enthalten (`.sumhint`).
 - **Tafeln** (`.panel`) mit Kopf (Titel, Werkzeuge, Export), Darstellung, Legende (`.legend`) und Fusszeile.
 - **Kenndaten** (`.info`) unter den Tafeln: grosses Symbol (`.hm-big`), Eckdaten (`.facts`), Erläuterungen einklappbar (`.explain`), Links ins Skript (`.skript-term`).
@@ -60,9 +60,9 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 
 ### 5.3 Hilfen
 
-- **Erste Schritte:** Karte oben in der Seitenleiste beim ersten Besuch, drei bis vier Schritte mit Knopf **je Modus** (die Karte zeigt die Schritte des aktiven Modus), wegklickbar, über „?“ wieder zu öffnen; nicht bei Aufruf über einen Link.
+- **Erste Schritte:** Karte oben in der Seitenleiste beim ersten Aufruf eines Modus, drei bis vier Schritte mit Knopf **je Modus**, wegklickbar; nicht bei Aufruf über einen Link. Wieder zu sehen nach „Alle Einstellungen zurücksetzen“; dieselben Schritte stehen als erste Anleitungen auf der Hilfeseite.
 - **Tooltips** am Laptop (Maus verzögert, Tastaturfokus), **ⓘ-Erklärungen** je Abschnitt auf Touch-Geräten. Mechanik in `help.js`, Texte in der App (`hilfetexte.js`). Kurz, Begriffe wie im Skript.
-- **Hilfeseite in der App:** zeigt, was man mit der App machen kann und wie, in 5–8 Anleitungen, jede eine konkrete Aufgabe Schritt für Schritt mit Bildern der Bedienung. Sie erklärt die Bedienung, nicht die Fachinhalte; umgekehrt ist das Skript keine Bedienungsanleitung. Grund (4.11.2026): Tooltips erklären einzelne Bedienelemente, das Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst. Form, Zugang und Bilder: Issue #24.
+- **Hilfeseite** `hilfe.html` neben Skript und Quiz, über „?“ in der Kopfzeile; Aufbau und Aussehen wie das Skript (hell und dunkel). Sie zeigt, was man mit der App machen kann und wie: wenige Anleitungen (höchstens etwa acht), jede eine konkrete Aufgabe Schritt für Schritt mit Bildern der Bedienung und einem Knopf, der die Aufgabe in der App öffnet (Link-Adresse). Die Bilder erzeugt ein Werkzeug mit Playwright im hellen Modus; ein Test prüft, dass die abgebildeten Bedienelemente noch existieren. Die Hilfeseite erklärt die Bedienung, nicht die Fachinhalte; umgekehrt ist das Skript keine Bedienungsanleitung. Grund (4.11.2026): Tooltips erklären einzelne Bedienelemente, das Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst. Umsetzung: Issue #24.
 
 ## 6. Das Skript
 
