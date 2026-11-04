@@ -88,7 +88,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Fragetypen:** Einfachauswahl, Mehrfachauswahl, Frage mit Bild, Bilder als Antworten, Bild mit Bildern als Antworten. Bilder kommen aus dem Code der App.
 - **Ablenker** bilden typische Fehler ab; die Rückmeldung benennt den Fehler der gewählten Antwort.
 - **Rückmeldung sofort:** richtig/falsch, Erklärung, Lernziel, „Im Skript nachlesen“ und, wo sinnvoll, „In der App öffnen“. Link und Frage müssen zusammenpassen.
-- **Fragenbank** `js/quiz-bank.js` als ES-Modul, nicht als JSON: So sind Kommentare und Formatierungshelfer möglich (z. B. `mat()`, Querstrich), und App, Tests, Fragenliste und Moodle-Export laden dieselbe Datei ohne Build-Schritt. Die Datei bleibt dennoch reine Daten: nur Literale und reine Formatierungshelfer (Text → HTML), keine Programmlogik. Berechnete Fragen gehören in die Generatoren (`js/quiz-gen.js`).
+- **Fragenbank** `js/quiz-bank.js` nach Abschn. 9 (Daten getrennt vom Code); berechnete Fragen gehören in die Generatoren (`js/quiz-gen.js`).
 - **Erzeugte Fragen** aus den Daten der App sind erlaubt: höchstens 50 % eines Quiz, je Generator höchstens 30 %.
 - **Freigabe:** Nur Fragen mit `status: 'geprüft'` erscheinen; „Auch ungeprüfte Fragen zeigen“ (`?entwurf`) nimmt Entwürfe dazu. „Geprüft“ heisst fachlich korrekt; die Formulierung darf danach noch besser werden.
 - **Fortschritt** nur lokal im Browser (kein Konto, kein Server). Der Name des Speichers einer App wird nie geändert.
@@ -104,6 +104,9 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 
 - **Statische Web-App ohne Build-Schritt**, gehostet auf GitHub Pages. Ordner: `index.html`, `skript.html`, `quiz.html`, `js/`, `lib/` (Fremdcode und `lib/common/`), `icons/`, `tests/`, `tools/`.
 - **Gemeinsame Dateien** als Kopie mit fester Version in `lib/common/` und `tools/common/` (siehe README). Nie in der App ändern.
+- **Daten getrennt vom Code.** Fachliche Inhalte und Texte (Fragen, Beispiele, Hilfetexte, Tabellen wie Punkt- oder Ebenengruppen, Bezeichnungen) stehen in eigenen Datendateien unter `js/`; Logik, Oberfläche und Zeichnung holen sie von dort. So lassen sich Inhalte prüfen und ändern, ohne den Code anzufassen, und Tests, Fragenliste und Moodle-Export nutzen dieselbe Quelle. Kleine Zuordnungen, die nur der Umsetzung dienen (z. B. Achse → Buchstabe), bleiben im Code.
+  - Datendateien sind ES-Module, nicht JSON: So sind Kommentare und Formatierungshelfer möglich (z. B. `mat()`, Querstrich), und alle Verbraucher laden dieselbe Datei ohne Build-Schritt. Sie enthalten nur Literale und reine Formatierungshelfer (Text → HTML), keine Programmlogik.
+  - Bestehender Code wird schrittweise umgestellt, wenn die Dateien ohnehin angefasst werden (stereography#75, plane-groups#55).
 - **Offline:** Service Worker mit eigener Cache-Kennung je App; die Offline-Liste deckt alle Dateien ab (Test). Neue Version beim nächsten Öffnen mit Netz.
 - **Als Web-App** auf dem Homescreen installierbar (Manifest, Icons).
 - **Tests** mit `node --test`, ohne Abhängigkeiten; Browser-Durchläufe mit Playwright, wo nötig.
