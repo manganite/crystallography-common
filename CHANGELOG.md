@@ -12,7 +12,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Leitfaden** Abschn. 9: Die Übergangsregel mit `// @ts-nocheck` entfällt, alle Dateien in `js/`, `tools/` und `tests/` sind strikt typisiert (in common und beiden Apps umgesetzt). Abschn. 10, Schritt 6: Die PR-Vorlage kommt mit der Vorlage. Begründungen zu Hilfeseite und ESLint stehen jetzt in `CLAUDE.md`, Abschnitt „Entscheidungen der Familie“.
+- **Leitfaden** Abschn. 9: Die Übergangsregel mit `// @ts-nocheck` entfällt, alle Dateien in `js/`, `tools/` und `tests/` sind strikt typisiert (in common und beiden Apps umgesetzt). Abschn. 10, Schritt 6: Die PR-Vorlage kommt mit der Vorlage. Begründungen zu Hilfeseite und ESLint stehen jetzt in `CLAUDE.md`, Abschnitt „Entscheidungen der Familie“. Abschn. 9: In Datendateien ist eine reine Kennzeichnung der Typen erlaubt (eine Umwandlung, die keinen Wert verändert, an einer Stelle und nicht in jedem Eintrag).
 
 ## [0.4.0] - 2026-11-04
 
