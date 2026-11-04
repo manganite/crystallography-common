@@ -106,7 +106,11 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Als Web-App** auf dem Homescreen installierbar (Manifest, Icons).
 - **Tests** mit `node --test`, ohne Abhängigkeiten; Browser-Durchläufe mit Playwright, wo nötig.
 - **Versionen** nach Semantic Versioning, CHANGELOG nach *Keep a Changelog*. Die Live-Seite ändert sich **nur bei einem Release-Tag** `vX.Y.Z`, der zu `js/version.js` passt; `main` sammelt geprüfte Änderungen. Der Tag wird lokal gesetzt (mit der Noreply-Adresse des GitHub-Kontos), nach `git fetch` und Prüfung des Commits.
-- **GitHub-Auftritt:** README mit Badges, Beschreibung und Themen (About), `CITATION.cff`, Lizenz MIT.
+- **GitHub-Auftritt** gleich in allen Repositories der Familie:
+  - **README** nach der Gliederung von `vorlagen/app/README.md`: Badges, Einleitung mit Herkunft, Link zur App, Bildschirmfoto, Funktionen, Nutzung (Browser, Homescreen, offline, lokal), Link-Adressen, Konventionen, Entwicklung (Aufbau, gemeinsame Grundlage, Tests, Releases), Quellen, Entstehung (Hinweis, dass die App mit Hilfe von Claude Code entstanden ist, und wer fachlich freigibt), Rückmeldungen, Zitieren, Lizenz. Abschnitte, die nicht passen, entfallen; die Reihenfolge bleibt.
+  - **About:** Beschreibung (ein Satz, Deutsch), Website (Live-Seite), Themen (`crystallography`, `education`, `teaching`, `eth-zurich` und fachliche). **Vorschaubild** für geteilte Links (`docs/social-preview.png`, 1280 × 640 px, von Hand unter Settings → General → Social preview hochgeladen).
+  - **Dateien:** `CITATION.cff` mit Kurzfassung (`abstract`), `SECURITY.md`, Vorlagen für Issues (`.github/ISSUE_TEMPLATE/`: Fehler, fachlicher Hinweis, Vorschlag), Lizenz MIT.
+  - **Einstellungen:** Regel „main schützen“ (Änderungen nur über Pull Request, CI-Prüfungen müssen grün sein, kein Force-Push), CodeQL (Standardeinrichtung), Dependabot-Alerts, Secret Scanning mit Push-Schutz, private Meldung von Sicherheitslücken; Wiki und Projects aus (Dokumentation im Repository, Aufgaben in Issues).
 - **Datenschutz:** keine Daten an Dritte, keine externen Schriften oder Skripte zur Laufzeit.
 
 ## 10. Eine neue App anlegen
@@ -118,7 +122,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 5. Die neue App in die Tabelle im README dieses Repositories und in die Verzahnung (Abschnitt 8) aufnehmen.
 6. `CLAUDE.md` und `.github/pull_request_template.md` nach dem Muster der bestehenden Apps anlegen; die `CLAUDE.md` bindet die `CLAUDE.md` dieses Repositories mit `@../crystallography-common/CLAUDE.md` ein (so lädt Claude Code beide).
 7. `tools/quiz-quelle.mjs` nach dem Muster der bestehenden Apps anlegen (Fragen für die gemeinsame Fragenliste, `fragenliste/extract.mjs`) und die App dort in die Liste der Ordner aufnehmen.
-8. GitHub Pages: unter Settings → Environments → github-pages eine Tag-Regel `v*.*.*` anlegen, sonst scheitert der Deploy aus Tags.
+8. GitHub Pages: unter Settings → Environments → github-pages eine Tag-Regel `v*.*.*` anlegen, sonst scheitert der Deploy aus Tags. Die übrigen Einstellungen und der Auftritt nach Abschnitt 9 (About, Vorschaubild, Regel „main schützen“ mit den Prüfungen `test` und `pdf`, CodeQL, Wiki und Projects aus, Label `inhalt` für die Vorlage „Fachlicher Hinweis“).
 9. Den Ordner der App in `kristallographie.code-workspace` dieses Repositories ergänzen.
 
 ## 11. Offene Punkte
