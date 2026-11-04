@@ -73,6 +73,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären
   die Umwandlung beim Verbraucher (der Typ der Daten bliebe ungekennzeichnet) oder eine Typangabe je Eintrag
   (schwer lesbar).
+- **Geprüfte Helfer für Elemente der Seite** (4.11.2026, Leitfaden Abschn. 9): Die Typprüfung kennt das HTML
+  nicht; eine blosse Umwandlung verschiebt einen Fehler im HTML an eine spätere, schwer zu findende Stelle. Mit
+  Prüfung fällt er beim ersten Zugriff auf und nennt die ID. Einheitliche Namen, weil dieselbe Aufgabe in
+  jeder App sonst anders heisst (z. B. `auswahl` und `liste`).
 - **ESLint** (4.11.2026, Leitfaden Abschn. 9): ein Prüfer ohne Kosten und Limit, seit das Copilot-Review
   ausfällt; ergänzt die Typprüfung um Befunde wie ungenutzte Namen, unerreichbaren Code oder versehentliche
   Zuweisungen.

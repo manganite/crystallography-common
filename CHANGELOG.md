@@ -8,10 +8,12 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
+- **`js/seite.js`: geprüfte Helfer für Elemente der Seite** (#30): `nachId(id, Art)` und die Kurzformen `$`, `eingabe`, `auswahl`, `knopf`, `abschnitt`, `grafik`, dazu `element` und `elemente` für Selektoren. Sie werfen einen Fehler mit der ID, wenn das Element fehlt oder eine andere Art hat. Test `tests/seite.test.mjs`. Regel im Leitfaden Abschn. 9.
 - **`vorlagen/app/.github/pull_request_template.md`:** PR-Vorlage für neue Apps, mit dem Punkt „Review durch einen unabhängigen Agenten“; derselbe Punkt in der PR-Vorlage dieses Repositorys.
 
 ### Geändert
 
+- **`js/quiz-seite.js`** und die Vorlage (`vorlagen/app/js/main.js`) nutzen die Helfer aus `seite.js` statt eigener Umwandlungen. Für die Apps: Fehlt ein Element der Quiz-Seite oder hat es eine andere Art, meldet das Quiz jetzt beim ersten Zugriff einen Fehler mit der ID. Beim Übernehmen die eigenen Kopien der Helfer durch die gemeinsamen ersetzen (Leitfaden Abschn. 9).
 - **Leitfaden** Abschn. 9: Die Übergangsregel mit `// @ts-nocheck` entfällt, alle Dateien in `js/`, `tools/` und `tests/` sind strikt typisiert (in common und beiden Apps umgesetzt). Abschn. 10, Schritt 6: Die PR-Vorlage kommt mit der Vorlage. Begründungen zu Hilfeseite und ESLint stehen jetzt in `CLAUDE.md`, Abschnitt „Entscheidungen der Familie“.
 - **Leitfaden** Abschn. 9: In Datendateien ist eine Kennzeichnung der Typen erlaubt, als reine Typangabe ohne Laufzeitcode, je Tabelle einmal. Begründung in `CLAUDE.md`, „Entscheidungen der Familie“.
 

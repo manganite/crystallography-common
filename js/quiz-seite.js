@@ -6,6 +6,7 @@ import {
   STUFEN, kandidaten, zaehlen, ziehen, stellen, pruefen,
   fortschrittAus, leererFortschritt, vermerken, stand,
 } from './quiz-core.js';
+import { $, knopf } from './seite.js';
 
 /** @import { Frage, Generator, Kapitel, Stufe, GestellteFrage, BildOptionen, Bildantwort, Fortschritt } from './quiz-core.js' */
 /**
@@ -34,11 +35,7 @@ const ALLE_STUFEN = [1, 2, 3];
 export function initQuiz({ bank, generatoren = [], kapitel, speicher, bild, app = 'index.html', skript = 'skript.html' }) {
   const KAPITEL = kapitel;
   const FORTSCHRITT = `${speicher}-v1`;
-  // Elemente der Seite (Aufbau wie in vorlagen/app/quiz.html; sie sind immer da)
-  /** @param {string} id */
-  const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));
-  /** @param {string} id */
-  const knopf = (id) => /** @type {HTMLButtonElement} */ ($(id));
+  // Elemente der Seite (Aufbau wie in vorlagen/app/quiz.html): $, knopf aus seite.js, geprüft
   /** @param {string} id @param {string} sel */
   const eingaben = (id, sel) => /** @type {NodeListOf<HTMLInputElement>} */ ($(id).querySelectorAll(sel));
   const antwortKnoepfe = () => /** @type {NodeListOf<HTMLButtonElement>} */ ($('antworten').querySelectorAll('.antwort'));

@@ -3,16 +3,11 @@
 
 import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
-import { offline } from '../lib/common/js/seite.js';
+import { offline, $, eingabe, abschnitt, grafik } from '../lib/common/js/seite.js';
 import { TIPS, SECTIONS, LABELS } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
-// Elemente der Seite (index.html). Die Typprüfung kennt die Seite nicht: Die Art des Elements wird hier
-// festgelegt, nicht geprüft.
-/** @param {string} id */
-const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));
-/** @param {string} id */
-const eingabe = (id) => /** @type {HTMLInputElement} */ (document.getElementById(id));
+// Elemente der Seite (index.html) über die geprüften Helfer aus seite.js ($, eingabe, abschnitt, grafik)
 const REPO = 'https://github.com/manganite/crystallography-common';
 
 /** Die 17 Ebenengruppen nach Kristallsystem (ITA, Vol. A, Tab. 2.2.1.1; Kurzsymbole). @type {[string, string[]][]} */
@@ -36,7 +31,7 @@ function zeichneA() {
   const pts = [];
   for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) pts.push(`<circle cx="${260 + 70 * i}" cy="${260 + 70 * j}" r="5" fill="${farbe('ink')}"/>`);
   const zelle = eingabe('opt-zelle').checked ? `<rect x="260" y="260" width="70" height="70" fill="${farbe('crystal')}" fill-opacity="0.35" stroke="${farbe('accent')}" stroke-width="2"/>` : '';
-  $('bild-a').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zelle}${pts.join('')}`;
+  grafik('bild-a').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zelle}${pts.join('')}`;
   $('legend').innerHTML = `<span class="lg"><span class="sw" style="background:${farbe('ink')}"></span>Gitterpunkt</span><span class="lg"><span class="sw" style="background:${farbe('accent')}"></span>Elementarzelle</span><span class="lg hint">Hinweis in der Legende</span>`;
 }
 
@@ -46,7 +41,7 @@ function zeichneB() {
     const x = 40 + 240 * Math.floor(i / 9), y = 50 + 50 * (i % 9);
     return `<rect x="${x}" y="${y - 16}" width="28" height="28" rx="6" fill="${farbe(n)}"/><text x="${x + 40}" y="${y + 4}" font-family="IBM Plex Sans" font-size="16" fill="${farbe('ink')}">--${n}</text>`;
   });
-  $('bild-b').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zeilen.join('')}`;
+  grafik('bild-b').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zeilen.join('')}`;
 }
 
 function zeigeInfo() {
@@ -103,7 +98,7 @@ function init() {
   $('intro-close').addEventListener('click', () => { intro(false); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
   $('help-open').addEventListener('click', () => intro(Boolean($('intro').hidden)));
   document.querySelector('[data-step="1"]')?.addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
-  document.querySelector('[data-step="2"]')?.addEventListener('click', () => { /** @type {HTMLDetailsElement} */ ($('sec-view')).open = true; });
+  document.querySelector('[data-step="2"]')?.addEventListener('click', () => { abschnitt('sec-view').open = true; });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', alles);

@@ -1,4 +1,50 @@
-// Kleine Helfer für alle Seiten einer App (App, Skript, Quiz): Versionsnummer eintragen, Offline-Betrieb.
+// Kleine Helfer für alle Seiten einer App (App, Skript, Quiz): Elemente der Seite, Versionsnummer eintragen,
+// Offline-Betrieb.
+
+// ------------------------------------------------------------------ Elemente der Seite
+// Die Typprüfung kennt das HTML nicht. Die Helfer prüfen deshalb zur Laufzeit, ob das Element da ist und die
+// erwartete Art hat, und werfen sonst einen Fehler, der die ID bzw. den Selektor nennt: Ein Fehler im HTML fällt
+// so beim ersten Zugriff auf und nicht erst später an anderer Stelle. Gleiche Aufgabe, gleicher Name in allen Apps.
+
+/**
+ * Element der Seite nach ID, geprüft auf die erwartete Art.
+ * @template {Element} T
+ * @param {string} id
+ * @param {{ new (): T }} art erwartete Art, z. B. HTMLInputElement
+ * @returns {T}
+ */
+export function nachId(id, art) {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Element #${id} fehlt`);
+  if (!(el instanceof art)) throw new Error(`Element #${id} ist ${el.constructor.name}, erwartet ${art.name}`);
+  return el;
+}
+/** HTML-Element nach ID. @param {string} id */
+export const $ = (id) => nachId(id, HTMLElement);
+/** Eingabefeld (input) nach ID. @param {string} id */
+export const eingabe = (id) => nachId(id, HTMLInputElement);
+/** Auswahlfeld (select) nach ID. @param {string} id */
+export const auswahl = (id) => nachId(id, HTMLSelectElement);
+/** Knopf (button) nach ID. @param {string} id */
+export const knopf = (id) => nachId(id, HTMLButtonElement);
+/** Aufklappbarer Abschnitt (details) nach ID. @param {string} id */
+export const abschnitt = (id) => nachId(id, HTMLDetailsElement);
+/** SVG-Grafik (svg) nach ID. @param {string} id */
+export const grafik = (id) => nachId(id, SVGSVGElement);
+
+/** Erstes HTML-Element zum Selektor, geprüft. @param {string} sel */
+export function element(sel) {
+  const el = document.querySelector(sel);
+  if (!el) throw new Error(`Kein Element zu ${sel}`);
+  if (!(el instanceof HTMLElement)) throw new Error(`Element zu ${sel} ist ${el.constructor.name}, erwartet HTMLElement`);
+  return el;
+}
+/** Alle Elemente zum Selektor (auch keins), jedes geprüft als HTML-Element. @param {string} sel */
+export function elemente(sel) {
+  const liste = document.querySelectorAll(sel);
+  for (const el of liste) if (!(el instanceof HTMLElement)) throw new Error(`Element zu ${sel} ist ${el.constructor.name}, erwartet HTMLElement`);
+  return /** @type {NodeListOf<HTMLElement>} */ (liste);
+}
 
 /** Versionsnummer in alle Elemente mit data-version schreiben. @param {string} version */
 export function versionEintragen(version) {

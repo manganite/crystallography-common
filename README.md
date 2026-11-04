@@ -28,7 +28,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `quiz-core.js` | Quiz-Logik ohne Seite: Kandidaten, Ziehen nach Stufen und Vorrang, Mischen, Auswerten, Fortschritt |
 | | `quiz-seite.js` | Quiz-Seite: Auswahl, Fragen mit sofortiger Rückmeldung, Auswertung, Fortschritt im Browser |
 | | `skript-kern.js` | Skript: Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
-| | `seite.js` | Versionsnummer eintragen, Offline-Betrieb (Service Worker) |
+| | `seite.js` | Elemente der Seite mit Prüfung der Art (`$`, `eingabe`, `auswahl`, `knopf`, `abschnitt`, `grafik`, `element`, `elemente`), Versionsnummer eintragen, Offline-Betrieb (Service Worker) |
 | | `version.js` | Version dieses Repositories |
 | | `typen.js` | Gemeinsame Typen für die Typprüfung, ohne Laufzeitcode: Vektoren, Matrizen und gekennzeichnete Typen (Richtung/Normale, Grad/Bogenmass, fraktional/kartesisch). Die Typen des Quiz stehen in `quiz-core.js`. |
 | `tools/` | `sync.mjs` | Kopie mit fester Version in eine App übernehmen |
