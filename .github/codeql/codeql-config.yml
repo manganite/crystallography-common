@@ -1,0 +1,4 @@
+# Was CodeQL nicht prüft (Begründung im Leitfaden, Abschn. 9): Tests.
+paths-ignore:
+  - tests
+  - vorlagen/app/tests

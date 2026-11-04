@@ -267,7 +267,7 @@ details.archiv p { margin: 4px 0 0; white-space: pre-wrap; }
   // Filterleisten
   function seg(id, feld, optionen) {
     const el = document.getElementById(id);
-    el.innerHTML = optionen.map(([w, t]) => `<button type="button" data-w="${w}" aria-pressed="${F[feld] === w}">${t}</button>`).join('');
+    el.innerHTML = optionen.map(([w, t]) => `<button type="button" data-w="${esc(w)}" aria-pressed="${F[feld] === w}">${esc(t)}</button>`).join('');
     el.onclick = (ev) => {
       const b = ev.target.closest('button'); if (!b) return;
       F[feld] = b.dataset.w;
@@ -285,7 +285,7 @@ details.archiv p { margin: 4px 0 0; white-space: pre-wrap; }
   function kapOptionen() {
     const apps = F.app === 'alle' ? D.apps : [APP[F.app]];
     kapSel.innerHTML = '<option value="alle">Alle Kapitel</option>' + apps.map((a) =>
-      `<optgroup label="${esc(a.titel)}">${a.kapitel.map((k) => `<option value="${a.app}:${k.nr}">${a.kurz} · Kap. ${k.nr} ${esc(k.titel)}</option>`).join('')}</optgroup>`).join('');
+      `<optgroup label="${esc(a.titel)}">${a.kapitel.map((k) => `<option value="${esc(a.app)}:${esc(k.nr)}">${esc(a.kurz)} · Kap. ${esc(k.nr)} ${esc(k.titel)}</option>`).join('')}</optgroup>`).join('');
     if (![...kapSel.options].some((o) => o.value === F.kap)) F.kap = 'alle';
     kapSel.value = F.kap;
   }

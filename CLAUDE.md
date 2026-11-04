@@ -70,13 +70,20 @@ Repo-Name = Pfad auf GitHub Pages:
 - `main` ist in allen Repos durch die Regel „main schützen“ gesperrt: nur über PR, die Prüfungen `test` (Apps
   auch `pdf`) müssen grün sein, kein Force-Push (eingerichtet 4.11.2026). Admins können im PR übergehen;
   nur auf Thomas' Anweisung. Übrige Einstellungen der Repos: `LEITFADEN.md` Abschn. 9.
+- **CodeQL** läuft als Workflow (erweiterte Einrichtung, 4.11.2026), weil nur so Tests und Fremdcode
+  ausgenommen werden können. Die Standardeinrichtung muss aus sein, sonst scheitert der Workflow.
+  Befunde verwerfen nur mit Begründung im Kommentar des Alerts.
 - Releases über einen eigenen Release-PR: Version und CHANGELOG, in den Apps zusätzlich `sw.js` und
   `CITATION.cff` (`tests/release.test.mjs` prüft `js/version.js`, `sw.js` und CHANGELOG, nicht
   `CITATION.cff`).
-- **Tags setzt Thomas lokal**, mit der Noreply-Adresse, sonst lehnt GitHub den Push ab (GH007,
+- **Tags setzt Thomas von Hand oder Claude Code** (lokal mit `git`; in Claude Code geprüft 4.11.2026).
+  Dass früher nur Thomas taggte, hatte rein technische Gründe: In der Cloud-Sitzung scheitert der
+  Tag-Push (siehe unten). Claude Code setzt einen Release-Tag erst, wenn Thomas den Release freigegeben
+  hat und der Release-PR gemergt ist. Mit der Noreply-Adresse, sonst lehnt GitHub den Push ab (GH007,
   „email privacy restrictions“). Vorher `git fetch` und `git log --oneline -1 origin/main` prüfen
   (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit vor dem Release-PR):
-  `git -c user.email=6277652+manganite@users.noreply.github.com tag -a vX.Y.Z -m "…" origin/main`
+  `git -c user.email=6277652+manganite@users.noreply.github.com tag -a vX.Y.Z -m "…" origin/main`,
+  dann `git push origin vX.Y.Z` und prüfen, dass `release.yml` (in Apps auch `deploy.yml`) grün ist.
 - **Commits mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den Push sonst ab
   (GH007). Deshalb in jedem Klon einmal
   `git config user.email 6277652+manganite@users.noreply.github.com` (lokal gesetzt 4.11.2026).
@@ -85,7 +92,7 @@ Repo-Name = Pfad auf GitHub Pages:
 
 ## Grenzen der Cloud-Sitzung (claude.ai)
 
-- Tag-Push und Tag-API scheitern (403); Tags und Releases legt Thomas an.
+- Tag-Push und Tag-API scheitern (403); Tags und Releases legt dort Thomas an.
 - GraphQL ist gesperrt, also kein `gh pr create`. Über REST: PR anlegen
   `gh api repos/manganite/<repo>/pulls -f title=… -f head=<branch> -f base=main -f body=…`
   (mit `-f` sendet `gh api` POST), mergen `gh api -X PUT …/pulls/N/merge`, Review-Threads
@@ -98,7 +105,8 @@ Repo-Name = Pfad auf GitHub Pages:
 
 1. Änderung hier in `crystallography-common` (Branch, PR, Tests). Nie in `lib/common/` oder
    `tools/common/` einer App.
-2. Release von common: Version in `js/version.js` und CHANGELOG, Release-PR, Thomas setzt den Tag.
+2. Release von common: Version in `js/version.js` und CHANGELOG, Release-PR, nach dem Merge der Tag
+   (Thomas oder Claude Code, siehe oben).
 3. Je App ein PR: `git checkout vX.Y.Z` in common, dann in der App
    `node tools/common/sync.mjs ../crystallography-common`; Tests der App laufen lassen
    (`tests/common.test.mjs` prüft die Kopie gegen das Manifest).
