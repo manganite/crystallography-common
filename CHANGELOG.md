@@ -6,9 +6,9 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
-### Geändert
+## [0.3.1] - 2026-11-04
 
-- **`js/quiz-core.js`:** Im Typ `Frageinhalt` ist `pruefung.art` freiwillig, wie es `fragenliste/extract.mjs` schon behandelt (ein Generator in plane-groups liefert Prüfangaben ohne `art`).
+Leitfaden („Daten getrennt vom Code“, Ausnahmen von der Typprüfung) und eine kleine Korrektur an den Typen des Quiz. Für die Apps ändert sich zur Laufzeit nichts.
 
 ### Hinzugefügt
 
@@ -17,6 +17,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
+- **`js/quiz-core.js`:** Im Typ `Frageinhalt` ist `pruefung.art` freiwillig, wie es `fragenliste/extract.mjs` schon behandelt (ein Generator in plane-groups liefert Prüfangaben ohne `art`).
 - **Leitfaden** Abschn. 9: Ausnahmen von der Typprüfung während der Umstellung einer App als `// @ts-nocheck` am Dateianfang (statt in der `tsconfig.json`), damit neue Dateien von selbst geprüft werden.
 
 ## [0.3.0] - 2026-11-04
@@ -75,7 +76,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.1
 [0.3.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.0
 [0.2.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.2.0
 [0.1.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.1
