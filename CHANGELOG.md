@@ -6,6 +6,8 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-04
+
 Typprüfung mit TypeScript über JSDoc-Typen (Issue #19, Schritt 1). Am Verhalten ändert sich nichts. Eine App muss beim Übernehmen `lib/common/js/typen.js` in die Offline-Liste von `sw.js` aufnehmen.
 
 ### Hinzugefügt
@@ -20,7 +22,6 @@ Typprüfung mit TypeScript über JSDoc-Typen (Issue #19, Schritt 1). Am Verhalte
 
 - **Alle Dateien in `js/` und `tools/`** sind mit JSDoc strikt typisiert. Wo die Typprüfung `null` nicht ausschliessen kann, stehen Umwandlungen oder Abfragen, die das Verhalten nicht ändern.
 - **`tests/quiz-core.test.mjs`:** Parameter des Test-Generators als Zeichenketten, wie in den Apps.
-
 - **`vorlagen/app/README.md`:** Abschnitt „Links auf Ansichten“ heisst „Link-Adressen“, wie im Leitfaden.
 
 ## [0.2.0] - 2026-11-04
@@ -61,7 +62,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.0
 [0.2.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.2.0
 [0.1.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.1
 [0.1.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.0
