@@ -56,7 +56,7 @@ So bleibt jede App eigenständig veröffentlichbar und offline nutzbar. Eine Än
 
 ```bash
 cd crystallography-common
-git fetch --tags && git checkout v0.4.0      # gewünschter Release-Tag
+git fetch --tags && git checkout v0.5.0      # gewünschter Release-Tag
 cd ../stereography
 node tools/common/sync.mjs ../crystallography-common
 node --test tests/*.test.mjs                 # u. a. tests/common.test.mjs prüft die Kopie
@@ -102,7 +102,7 @@ npx eslint .                  # ohne die Vorlage
 
 `tests/typen.typen.js` belegt, dass die gekennzeichneten Typen aus `js/typen.js` Vertauschungen melden; die Datei läuft nur in der Typprüfung. Mit den installierten Paketen zeigt VS Code die Meldungen in geöffneten Dateien, ohne weitere Einstellung.
 
-Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt; Ablauf wie in den Apps ([Vorlage, „Versionen und Releases“](vorlagen/app/README.md#versionen-und-releases)), mit drei Unterschieden: kein `sw.js` und kein `CITATION.cff`; der Tag startet nur `release.yml`, das GitHub-Release ohne PDF (es gibt keine Live-Seite und kein Skript). Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.
+Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt; Ablauf wie in den Apps ([Vorlage, „Versionen und Releases“](vorlagen/app/README.md#versionen-und-releases)), mit drei Unterschieden: kein `sw.js` und kein `CITATION.cff`; der Tag startet nur `release.yml`, das GitHub-Release ohne PDF (es gibt keine Live-Seite und kein Skript). Im Release-PR auch die Version in „Neue Version übernehmen“ (oben) und im Beispiel von `.github/ISSUE_TEMPLATE/fehler.yml` nachführen. Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.
 
 ## Entstehung
 

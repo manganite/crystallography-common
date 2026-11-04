@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [0.5.0] - 2026-11-04
 
-Geprüfte Helfer für Elemente der Seite in `js/seite.js` und Leitfaden zur Kennzeichnung der Typen in Datendateien. Für die Apps: Die Quiz-Seite und das Skript melden ein fehlendes Element oder eines der falschen Art jetzt beim ersten Zugriff mit der ID; beim Übernehmen die eigenen Kopien der Helfer durch die gemeinsamen ersetzen (Leitfaden Abschn. 9).
+Geprüfte Helfer für Elemente der Seite in `js/seite.js` und Leitfaden zur Kennzeichnung der Typen in Datendateien. Für die Apps: Die Quiz-Seite meldet ein fehlendes Element oder eines der falschen Art jetzt beim ersten Zugriff mit der ID, das Skript Elemente der falschen Art mit dem Selektor; beim Übernehmen die eigenen Kopien der Helfer durch die gemeinsamen ersetzen (Leitfaden Abschn. 9).
 
 ### Hinzugefügt
 
