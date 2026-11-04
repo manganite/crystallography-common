@@ -87,6 +87,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Fragetypen:** Einfachauswahl, Mehrfachauswahl, Frage mit Bild, Bilder als Antworten, Bild mit Bildern als Antworten. Bilder kommen aus dem Code der App.
 - **Ablenker** bilden typische Fehler ab; die Rückmeldung benennt den Fehler der gewählten Antwort.
 - **Rückmeldung sofort:** richtig/falsch, Erklärung, Lernziel, „Im Skript nachlesen“ und, wo sinnvoll, „In der App öffnen“. Link und Frage müssen zusammenpassen.
+- **Fragenbank** `js/quiz-bank.js` als ES-Modul, nicht als JSON: So sind Kommentare und Formatierungshelfer möglich (z. B. `mat()`, Querstrich), und App, Tests, Fragenliste und Moodle-Export laden dieselbe Datei ohne Build-Schritt. Die Datei bleibt dennoch reine Daten: nur Literale und reine Formatierungshelfer (Text → HTML), keine Programmlogik. Berechnete Fragen gehören in die Generatoren (`js/quiz-gen.js`).
 - **Erzeugte Fragen** aus den Daten der App sind erlaubt: höchstens 50 % eines Quiz, je Generator höchstens 30 %.
 - **Freigabe:** Nur Fragen mit `status: 'geprüft'` erscheinen; „Auch ungeprüfte Fragen zeigen“ (`?entwurf`) nimmt Entwürfe dazu. „Geprüft“ heisst fachlich korrekt; die Formulierung darf danach noch besser werden.
 - **Fortschritt** nur lokal im Browser (kein Konto, kein Server). Der Name des Speichers einer App wird nie geändert.
