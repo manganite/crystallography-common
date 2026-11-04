@@ -79,7 +79,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   jeder App sonst anders heisst (z. B. `auswahl` und `liste`).
 - **ESLint** (4.11.2026, Leitfaden Abschn. 9): ein Prüfer ohne Kosten und Limit, seit das Copilot-Review
   ausfällt; ergänzt die Typprüfung um Befunde wie ungenutzte Namen, unerreichbaren Code oder versehentliche
-  Zuweisungen.
+  Zuweisungen. In allen Repos ist `lint` Pflicht-Check für `main`.
+- **Kein Review durch Claude Code in GitHub Actions** (Thomas, 5.11.2026): Das Review durch einen
+  unabhängigen Agenten in der Sitzung (Abschnitt „Git, PRs und Releases“) bleibt der Weg; ESLint ergänzt es.
 
 ## Git, PRs und Releases
 
