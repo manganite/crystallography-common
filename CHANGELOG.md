@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-04
+
+ESLint als neue Prüfung `lint` (gemeinsame Regeln in `tools/eslint-basis.mjs`) und Leitfaden zu Erste Schritte und Hilfeseite. Für die Apps ändert sich zur Laufzeit nichts; beim Übernehmen kommen `eslint.config.mjs` und der Job `lint` hinzu (siehe „Hinzugefügt“).
+
 ### Hinzugefügt
 
 - **ESLint** (empfohlene Regeln) als CI-Job `lint` (#27): gemeinsame Regeln in `tools/eslint-basis.mjs`, `eslint.config.mjs` in common und in der Vorlage, Job `lint` auch in der Vorlage. Die Pakete für ESLint werden auch im Job `typen` installiert, damit `tsc` die Konfiguration prüft. Eine App muss beim Übernehmen `eslint.config.mjs` anlegen, die Jobs `typen` und `lint` wie in der Vorlage einrichten und ihre Befunde beheben; Thomas ergänzt `lint` in der Regel „main schützen“.
@@ -87,7 +91,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.4.0
 [0.3.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.1
 [0.3.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.0
 [0.2.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.2.0
