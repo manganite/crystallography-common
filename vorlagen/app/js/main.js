@@ -3,11 +3,11 @@
 
 import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
-import { offline, $, eingabe, abschnitt, grafik } from '../lib/common/js/seite.js';
+import { offline, $, eingabe, abschnitt, grafik, element, elemente } from '../lib/common/js/seite.js';
 import { TIPS, SECTIONS, LABELS } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
-// Elemente der Seite (index.html) über die geprüften Helfer aus seite.js ($, eingabe, abschnitt, grafik)
+// Elemente der Seite (index.html) über die geprüften Helfer aus seite.js ($, eingabe, abschnitt, grafik, element, elemente)
 const REPO = 'https://github.com/manganite/crystallography-common';
 
 /** Die 17 Ebenengruppen nach Kristallsystem (ITA, Vol. A, Tab. 2.2.1.1; Kurzsymbole). @type {[string, string[]][]} */
@@ -77,13 +77,13 @@ function init() {
     if (why) why.textContent = an ? '' : 'nur mit „Motiv in allgemeiner Lage“';
   });
   $('lat-ba').addEventListener('input', () => { $('lat-ba-out').textContent = Number(eingabe('lat-ba').value).toFixed(2); });
-  document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
+  elemente('.seg button', HTMLButtonElement).forEach((b) => b.addEventListener('click', () => {
     b.parentElement?.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   }));
   // Modi
   for (const t of ['tab-a', 'tab-b']) $(t).addEventListener('click', () => { for (const u of ['tab-a', 'tab-b']) $(u).setAttribute('aria-selected', String(u === t)); });
   // Telefon: eine Tafel oben, Umschalter
-  const figKnoepfe = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.figswitch button'));
+  const figKnoepfe = elemente('.figswitch button', HTMLButtonElement);
   figKnoepfe.forEach((b) => b.addEventListener('click', () => {
     document.body.dataset.fig = b.dataset.fig;
     figKnoepfe.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.fig === b.dataset.fig)));
@@ -97,8 +97,8 @@ function init() {
   intro(!gesehen && !location.hash);
   $('intro-close').addEventListener('click', () => { intro(false); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
   $('help-open').addEventListener('click', () => intro(Boolean($('intro').hidden)));
-  document.querySelector('[data-step="1"]')?.addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
-  document.querySelector('[data-step="2"]')?.addEventListener('click', () => { abschnitt('sec-view').open = true; });
+  element('[data-step="1"]').addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
+  element('[data-step="2"]').addEventListener('click', () => { abschnitt('sec-view').open = true; });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', alles);

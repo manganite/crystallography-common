@@ -5,6 +5,15 @@
 // Die Typprüfung kennt das HTML nicht. Die Helfer prüfen deshalb zur Laufzeit, ob das Element da ist und die
 // erwartete Art hat, und werfen sonst einen Fehler, der die ID bzw. den Selektor nennt: Ein Fehler im HTML fällt
 // so beim ersten Zugriff auf und nicht erst später an anderer Stelle. Gleiche Aufgabe, gleicher Name in allen Apps.
+// Die Helfer suchen in der ganzen Seite; Suchen innerhalb eines Elements (z. B. einer Abbildung) bleiben in der Datei.
+
+/**
+ * Fehler für ein Element der falschen Art. Gleicher Name, aber andere Art: das Element stammt aus einem anderen
+ * Fenster oder Dokument (z. B. einem iframe), dort gelten eigene Arten.
+ * @param {string} wo @param {Element} el @param {Function} art
+ */
+const falscheArt = (wo, el, art) => new Error(`${wo} ist ${el.constructor.name}, erwartet ${art.name}`
+  + (el.constructor.name === art.name ? ' (aus einem anderen Fenster oder Dokument)' : ''));
 
 /**
  * Element der Seite nach ID, geprüft auf die erwartete Art.
@@ -16,7 +25,7 @@
 export function nachId(id, art) {
   const el = document.getElementById(id);
   if (!el) throw new Error(`Element #${id} fehlt`);
-  if (!(el instanceof art)) throw new Error(`Element #${id} ist ${el.constructor.name}, erwartet ${art.name}`);
+  if (!(el instanceof art)) throw falscheArt(`Element #${id}`, el, art);
   return el;
 }
 /** HTML-Element nach ID. @param {string} id */
@@ -32,18 +41,30 @@ export const abschnitt = (id) => nachId(id, HTMLDetailsElement);
 /** SVG-Grafik (svg) nach ID. @param {string} id */
 export const grafik = (id) => nachId(id, SVGSVGElement);
 
-/** Erstes HTML-Element zum Selektor, geprüft. @param {string} sel */
-export function element(sel) {
+/**
+ * Erstes Element der Seite zum Selektor, geprüft auf die erwartete Art (ohne Angabe: HTML-Element).
+ * @template {Element} [T=HTMLElement]
+ * @param {string} sel
+ * @param {{ new (): T }} [art]
+ * @returns {T}
+ */
+export function element(sel, art = /** @type {{ new (): T }} */ (/** @type {unknown} */ (HTMLElement))) {
   const el = document.querySelector(sel);
   if (!el) throw new Error(`Kein Element zu ${sel}`);
-  if (!(el instanceof HTMLElement)) throw new Error(`Element zu ${sel} ist ${el.constructor.name}, erwartet HTMLElement`);
+  if (!(el instanceof art)) throw falscheArt(`Element zu ${sel}`, el, art);
   return el;
 }
-/** Alle Elemente zum Selektor (auch keins), jedes geprüft als HTML-Element. @param {string} sel */
-export function elemente(sel) {
-  const liste = document.querySelectorAll(sel);
-  for (const el of liste) if (!(el instanceof HTMLElement)) throw new Error(`Element zu ${sel} ist ${el.constructor.name}, erwartet HTMLElement`);
-  return /** @type {NodeListOf<HTMLElement>} */ (liste);
+/**
+ * Alle Elemente der Seite zum Selektor (auch keins), jedes geprüft auf die erwartete Art (ohne Angabe: HTML-Element).
+ * @template {Element} [T=HTMLElement]
+ * @param {string} sel
+ * @param {{ new (): T }} [art]
+ * @returns {T[]}
+ */
+export function elemente(sel, art = /** @type {{ new (): T }} */ (/** @type {unknown} */ (HTMLElement))) {
+  const liste = [...document.querySelectorAll(sel)];
+  for (const el of liste) if (!(el instanceof art)) throw falscheArt(`Element zu ${sel}`, el, art);
+  return /** @type {T[]} */ (liste);
 }
 
 /** Versionsnummer in alle Elemente mit data-version schreiben. @param {string} version */
