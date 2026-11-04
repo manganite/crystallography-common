@@ -13,6 +13,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
+- **Leitfaden** Abschn. 5.1 und 5.3: Erste Schritte je Modus, nur beim ersten Aufruf eines Modus; neu eine Hilfeseite `hilfe.html` mit Anleitungen nach Aufgaben, „?“ führt dorthin. Die Regel „keine ausführlichen Erklärseiten in der App“ entfällt (Issue #24).
 - **`tools/skript-pdf.mjs`:** `anzahl` ohne unnötigen Startwert (Befund von ESLint, Verhalten gleich).
 - **Vorlage, `tools/moodle-export.mjs`:** ungenutzter Parameter als `_angabe` gekennzeichnet.
 
