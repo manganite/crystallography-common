@@ -64,7 +64,7 @@ Repo-Name = Pfad auf GitHub Pages:
 
 ## Git, PRs und Releases
 
-- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, in Apps auch `pdf`)
+- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in Apps auch `pdf`)
   abwarten, das Review (nächster Punkt) einholen, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Review durch einen unabhängigen Agenten:** Vor dem Bericht prüft ein eigener Agent, der die Arbeit nicht
   kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche

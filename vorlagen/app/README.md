@@ -106,16 +106,17 @@ node tools/common/sync.mjs ../crystallography-common
 node --test tests/*.test.mjs
 ```
 
-Geprüft werden … (was die Tests der App absichern), dazu die Quizfragen, die Release-Konsistenz (Version, Changelog, Offline-Liste), die Kopie der gemeinsamen Dateien und dass App, Skript und README für sich verständlich sind (keine Verweise auf Lehrveranstaltungen). Dieselben Tests laufen bei jedem Pull Request in GitHub Actions, zusammen mit der Typprüfung und der PDF-Fassung des Skripts.
+Geprüft werden … (was die Tests der App absichern), dazu die Quizfragen, die Release-Konsistenz (Version, Changelog, Offline-Liste), die Kopie der gemeinsamen Dateien und dass App, Skript und README für sich verständlich sind (keine Verweise auf Lehrveranstaltungen). Dieselben Tests laufen bei jedem Pull Request in GitHub Actions, zusammen mit Typprüfung, ESLint und der PDF-Fassung des Skripts.
 
-Typprüfung (die Typen stehen als JSDoc-Kommentare im Code; Versionen wie im Job `typen` in `.github/workflows/ci.yml`, alle Pakete in einem Befehl, sonst entfernt npm die zuvor installierten):
+Typprüfung und ESLint (die Typen stehen als JSDoc-Kommentare im Code, die Regeln für ESLint in `tools/common/eslint-basis.mjs`; Versionen wie in den Jobs `typen` und `lint` in `.github/workflows/ci.yml`, alle Pakete in einem Befehl, sonst entfernt npm die zuvor installierten):
 
 ```bash
-npm install --no-save typescript@7.0.2 @types/node@22.20.5 playwright@1.52.0
+npm install --no-save typescript@7.0.2 @types/node@22.20.5 playwright@1.52.0 eslint@10.14.0 @eslint/js@10.0.1 globals@17.14.0
 npx tsc -p .
+npx eslint .
 ```
 
-Mit diesen Paketen zeigt auch VS Code die Meldungen in geöffneten Dateien.
+Mit diesen Paketen zeigt auch VS Code die Meldungen der Typprüfung in geöffneten Dateien (die von ESLint mit der Erweiterung „ESLint“).
 
 - Skript als PDF: `node tools/skript-pdf.mjs [Ausgabedatei]` (braucht Playwright mit Chromium)
 - Quiz für Moodle: `node tools/moodle-export.mjs quiz.xml` (mit `--entwurf` auch die ungeprüften Fragen)

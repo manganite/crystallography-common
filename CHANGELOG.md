@@ -6,9 +6,16 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **ESLint** (empfohlene Regeln) als CI-Job `lint` (#27): gemeinsame Regeln in `tools/eslint-basis.mjs`, `eslint.config.mjs` in common und in der Vorlage, Job `lint` auch in der Vorlage. Die Pakete für ESLint werden auch im Job `typen` installiert, damit `tsc` die Konfiguration prüft. Eine App muss beim Übernehmen `eslint.config.mjs` anlegen, die Jobs `typen` und `lint` wie in der Vorlage einrichten und ihre Befunde beheben; Thomas ergänzt `lint` in der Regel „main schützen“.
+- **Leitfaden** Abschn. 9: Regel zu ESLint; Abschn. 10: Prüfung `lint` in der Regel „main schützen“.
+
 ### Geändert
 
 - **Leitfaden** Abschn. 5.1 und 5.3: Erste Schritte je Modus, nur beim ersten Aufruf eines Modus; neu eine Hilfeseite `hilfe.html` mit Anleitungen nach Aufgaben, „?“ führt dorthin. Die Regel „keine ausführlichen Erklärseiten in der App“ entfällt (Issue #24).
+- **`tools/skript-pdf.mjs`:** `anzahl` ohne unnötigen Startwert (Befund von ESLint, Verhalten gleich).
+- **Vorlage, `tools/moodle-export.mjs`:** ungenutzter Parameter als `_angabe` gekennzeichnet.
 
 ## [0.3.1] - 2026-11-04
 

@@ -11,8 +11,8 @@ import { helleFarben, mitSchrift, moodleXML as moodleXMLCommon } from './common/
 const FONTS = fileURLToPath(new URL('../lib/common/fonts/', import.meta.url));
 const col = helleFarben(fileURLToPath(new URL('../lib/common/css/base.css', import.meta.url)));
 
-/** Eigenständige SVG-Datei zu einer Bildangabe (ohne Browser, Farben des hellen Modus). @param {string} angabe */
-function bildSVG(angabe) {
+/** Eigenständige SVG-Datei zu einer Bildangabe (ohne Browser, Farben des hellen Modus). @param {string} _angabe in der Vorlage nicht ausgewertet */
+function bildSVG(_angabe) {
   const pts = [];
   for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) pts.push(`<circle cx="${260 + 70 * i}" cy="${260 + 70 * j}" r="6" fill="${col.ink}"/>`);
   return mitSchrift(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520"><rect width="520" height="520" fill="${col.paper}"/>${pts.join('')}</svg>`, FONTS);
