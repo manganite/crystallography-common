@@ -10,7 +10,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 - **`kristallographie.code-workspace`:** VS-Code-Arbeitsbereich mit allen Repositories der Familie; Kopien des gemeinsamen Codes in den Apps sind darin schreibgeschützt.
 - **Vorlagen:** `vorlagen/app/README.md` mit der gemeinsamen Gliederung der READMEs (wie in der App „Stereographische Projektion“), `SECURITY.md`, Vorlagen für Issues (Fehler, fachlicher Hinweis, Vorschlag), Kurzfassung und Stichwörter in `CITATION.cff`.
-- **Leitfaden:** GitHub-Auftritt und Einstellungen der Repositories (Abschn. 9 und 10).
+- **Leitfaden:** GitHub-Auftritt und Einstellungen der Repositories (Abschn. 9 und 10); jedes README nennt im Abschnitt „Entstehung“, dass das Projekt mit Hilfe von Claude Code entstanden ist.
 - **`SECURITY.md`** und Vorlagen für Issues auch in diesem Repository.
 - **`tools/server.mjs`:** Ordner liefern ihre `index.html` (ohne Schrägstrich am Ende Umleitung). Direkt gestartet (`node tools/server.mjs [ordner] [port]`) bedient der Server den Arbeitsordner wie GitHub Pages, Standard Port 8000.
 

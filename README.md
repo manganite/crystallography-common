@@ -91,6 +91,10 @@ node --test tests/*.test.mjs
 
 Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt. Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.
 
+## Entstehung
+
+Code, Leitfaden und Vorlagen sind mit Hilfe von [Claude Code](https://claude.com/claude-code), einem KI-Werkzeug von Anthropic, entstanden. Die Entscheidungen und die fachliche Freigabe der Inhalte liegen bei Thomas Lottermoser (ETH Zürich).
+
 ## Rückmeldungen
 
 Fehler, fachliche Hinweise und Vorschläge zu einer App bitte im Repository der App (Tabelle oben), was alle Apps gleich betrifft hier als [Issue](https://github.com/manganite/crystallography-common/issues/new/choose). Sicherheitslücken nicht öffentlich melden, sondern wie in [SECURITY.md](SECURITY.md) beschrieben.
