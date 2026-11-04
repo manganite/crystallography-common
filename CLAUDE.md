@@ -16,7 +16,7 @@ im README; was dort steht, wird hier nicht wiederholt. Der Leitfaden wird mit di
   |---|---|
   | Regeln für Inhalt, Gestaltung, Skript, Quiz, Technik (alle Apps) | `LEITFADEN.md` (common) |
   | Arbeitsweise, Abläufe, Entscheidungen mit Grund, Fallstricke, Literatur | `CLAUDE.md` (common bzw. App) |
-  | Aufbau, Link-Adressen, Werkzeuge einer App | `README.md` der App |
+  | Aufbau, Link-Adressen, Werkzeuge, Release-Ablauf einer App | `README.md` der App |
   | Offene Aufgaben, Ideen, offene Fragen, Stand laufender Arbeit | GitHub Issues des betroffenen Repos (Label `idee` für nicht Beauftragtes) |
   | Konzepte (ausführliche Begründungen, Entwürfe) | `docs/` des betroffenen Repos; nach der Umsetzung mit Statuskopf (was umgesetzt, was überholt, wo es jetzt steht) und nicht mehr nachgeführt |
   | Änderungen je Version | `CHANGELOG.md` |
@@ -67,28 +67,23 @@ Repo-Name = Pfad auf GitHub Pages:
 - Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, in Apps auch `pdf`) und
   Copilot-Review abwarten, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Mergen nur auf ausdrückliches OK von Thomas.**
-- `main` ist in allen Repos durch die Regel „main schützen“ gesperrt: nur über PR, die Prüfungen `test` (Apps
-  auch `pdf`) müssen grün sein, kein Force-Push (eingerichtet 4.11.2026). Admins können im PR übergehen;
-  nur auf Thomas' Anweisung. Übrige Einstellungen der Repos: `LEITFADEN.md` Abschn. 9.
-- **CodeQL** läuft als Workflow (erweiterte Einrichtung, 4.11.2026), weil nur so Tests und Fremdcode
-  ausgenommen werden können. Die Standardeinrichtung muss aus sein, sonst scheitert der Workflow.
-  Befunde verwerfen nur mit Begründung im Kommentar des Alerts.
-- Releases über einen eigenen Release-PR: Version und CHANGELOG, in den Apps zusätzlich `sw.js` und
-  `CITATION.cff` (`tests/release.test.mjs` prüft `js/version.js`, `sw.js` und CHANGELOG, nicht
-  `CITATION.cff`).
-- **Tags setzt Thomas von Hand oder Claude Code** (lokal mit `git`; in Claude Code geprüft 4.11.2026).
-  Dass früher nur Thomas taggte, hatte rein technische Gründe: In der Cloud-Sitzung scheitert der
-  Tag-Push (siehe unten). Claude Code setzt einen Release-Tag erst, wenn Thomas den Release freigegeben
-  hat und der Release-PR gemergt ist. Mit der Noreply-Adresse, sonst lehnt GitHub den Push ab (GH007,
-  „email privacy restrictions“). Vorher `git fetch` und `git log --oneline -1 origin/main` prüfen
-  (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit vor dem Release-PR):
-  `git -c user.email=6277652+manganite@users.noreply.github.com tag -a vX.Y.Z -m "…" origin/main`,
-  dann `git push origin vX.Y.Z` und prüfen, dass `release.yml` (in Apps auch `deploy.yml`) grün ist.
-- **Commits mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den Push sonst ab
-  (GH007). Deshalb in jedem Klon einmal
+- **Einstellungen der Repos** (Regel „main schützen“, CodeQL in der erweiterten Einrichtung, About,
+  Vorschaubild): `LEITFADEN.md` Abschn. 9. Den Schutz von `main` als Admin übergehen nur auf Thomas'
+  Anweisung.
+- **Release-Ablauf** (Release-PR, Tag, Workflows): README der App, Abschnitt „Versionen und
+  Releases“. In common ohne `sw.js` und `CITATION.cff`. `tests/release.test.mjs` prüft
+  `js/version.js`, `sw.js` und CHANGELOG, nicht `CITATION.cff`.
+- **Wer die Release-Arbeit macht, setzt auch den Tag** (Vorgabe Thomas, 4.11.2026): in einer
+  Cloud-Sitzung Thomas von Hand, weil dort der Tag-Push scheitert; in Claude Code lokal Claude Code,
+  erst nach Thomas' Freigabe des Release und dem Merge des Release-PR. Vorher prüfen, dass
+  `origin/main` der Release-PR ist (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit davor),
+  danach, dass `release.yml` (in Apps auch `deploy.yml`) grün ist.
+- **Commits und Tags mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den
+  Push sonst ab (GH007). Deshalb in jedem Klon einmal
   `git config user.email 6277652+manganite@users.noreply.github.com` (lokal gesetzt 4.11.2026).
-- Commits enden mit `Co-Authored-By: …` und `Claude-Session: …`; PR-Texte mit
-  „🤖 Generated with Claude Code“ und dem Sitzungslink.
+- Commits enden mit `Co-Authored-By: …`, in Sitzungen mit Link (claude.ai) zusätzlich mit
+  `Claude-Session: …`; PR-Texte mit „🤖 Generated with Claude Code“ und, falls vorhanden, dem
+  Sitzungslink.
 
 ## Grenzen der Cloud-Sitzung (claude.ai)
 
@@ -106,7 +101,7 @@ Repo-Name = Pfad auf GitHub Pages:
 1. Änderung hier in `crystallography-common` (Branch, PR, Tests). Nie in `lib/common/` oder
    `tools/common/` einer App.
 2. Release von common: Version in `js/version.js` und CHANGELOG, Release-PR, nach dem Merge der Tag
-   (Thomas oder Claude Code, siehe oben).
+   (siehe „Git, PRs und Releases“).
 3. Je App ein PR: `git checkout vX.Y.Z` in common, dann in der App
    `node tools/common/sync.mjs ../crystallography-common`; Tests der App laufen lassen
    (`tests/common.test.mjs` prüft die Kopie gegen das Manifest).
