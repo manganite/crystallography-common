@@ -1,0 +1,17 @@
+{
+  // Typprüfung (LEITFADEN.md, Abschn. 9; README, „Entwicklung“): npx tsc -p .  (in der CI der Job „typen“)
+  // Die Vorlage hat eine eigene tsconfig.json (vorlagen/app/), geprüft nach node tools/sync.mjs vorlagen/app.
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "include": ["js/**/*.js", "tools/**/*.mjs", "fragenliste/**/*.mjs", "tests/**/*.mjs", "tests/**/*.typen.js"]
+}

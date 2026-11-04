@@ -8,6 +8,10 @@ import { join } from 'node:path';
 import { server } from '../tools/server.mjs';
 
 // Rohe Anfrage (fetch würde ../ in der Adresse selbst auflösen)
+/**
+ * @param {number} port @param {string} pfad @param {boolean} [mitKopf]
+ * @returns {Promise<{ status?: number, body: string, location?: string }>}
+ */
 const holen = (port, pfad, mitKopf = false) => new Promise((ok, fehler) => {
   const req = request({ host: '127.0.0.1', port, path: pfad }, (res) => {
     let body = '';
@@ -26,7 +30,7 @@ test('Server: Dateien im Ordner ja, ausserhalb und im Nachbarordner nein', async
   writeFileSync(join(privat, 'geheim.txt'), 'geheim');
   writeFileSync(join(basis, 'aussen.txt'), 'aussen');
   const srv = await server(app);
-  const port = srv.address().port;
+  const port = /** @type {import('node:net').AddressInfo} */ (srv.address()).port;
   try {
     assert.deepEqual(await holen(port, '/'), { status: 200, body: 'start' });
     for (const p of ['/%5c../app-privat/geheim.txt', '/../app-privat/geheim.txt', '/..%2fapp-privat/geheim.txt', '/%5c../aussen.txt', '/..%2f..%2fetc/passwd']) {
@@ -46,7 +50,7 @@ test('Server: Ordner liefern index.html, ohne Schrägstrich Umleitung', async ()
   writeFileSync(join(basis, 'index.html'), 'dach');
   writeFileSync(join(basis, 'app', 'index.html'), 'app');
   const srv = await server(basis);
-  const port = srv.address().port;
+  const port = /** @type {import('node:net').AddressInfo} */ (srv.address()).port;
   try {
     assert.deepEqual(await holen(port, '/'), { status: 200, body: 'dach' });
     assert.deepEqual(await holen(port, '/app/'), { status: 200, body: 'app' });

@@ -7,10 +7,15 @@ import { offline } from '../lib/common/js/seite.js';
 import { TIPS, SECTIONS, LABELS } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
-const $ = (id) => document.getElementById(id);
+// Elemente der Seite (index.html). Die Typprüfung kennt die Seite nicht: Die Art des Elements wird hier
+// festgelegt, nicht geprüft.
+/** @param {string} id */
+const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));
+/** @param {string} id */
+const eingabe = (id) => /** @type {HTMLInputElement} */ (document.getElementById(id));
 const REPO = 'https://github.com/manganite/crystallography-common';
 
-/** Die 17 Ebenengruppen nach Kristallsystem (ITA, Vol. A, Tab. 2.2.1.1; Kurzsymbole). */
+/** Die 17 Ebenengruppen nach Kristallsystem (ITA, Vol. A, Tab. 2.2.1.1; Kurzsymbole). @type {[string, string[]][]} */
 const SYSTEME = [
   ['schiefwinklig', ['p1', 'p2']],
   ['rechtwinklig', ['pm', 'pg', 'cm', 'p2mm', 'p2mg', 'p2gg', 'c2mm']],
@@ -24,13 +29,13 @@ function zeigePicker() {
     gs.map((g) => `<button class="pgb" type="button" data-g="${g}" aria-pressed="${g === gruppe}">${hmHTML(g)}</button>`).join('')}</div></div>`).join('');
 }
 
-/** Farbe einer Variablen aus base.css (für SVG). */
+/** Farbe einer Variablen aus base.css (für SVG). @param {string} name */
 const farbe = (name) => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
 
 function zeichneA() {
   const pts = [];
   for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) pts.push(`<circle cx="${260 + 70 * i}" cy="${260 + 70 * j}" r="5" fill="${farbe('ink')}"/>`);
-  const zelle = $('opt-zelle').checked ? `<rect x="260" y="260" width="70" height="70" fill="${farbe('crystal')}" fill-opacity="0.35" stroke="${farbe('accent')}" stroke-width="2"/>` : '';
+  const zelle = eingabe('opt-zelle').checked ? `<rect x="260" y="260" width="70" height="70" fill="${farbe('crystal')}" fill-opacity="0.35" stroke="${farbe('accent')}" stroke-width="2"/>` : '';
   $('bild-a').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zelle}${pts.join('')}`;
   $('legend').innerHTML = `<span class="lg"><span class="sw" style="background:${farbe('ink')}"></span>Gitterpunkt</span><span class="lg"><span class="sw" style="background:${farbe('accent')}"></span>Elementarzelle</span><span class="lg hint">Hinweis in der Legende</span>`;
 }
@@ -49,7 +54,7 @@ function zeigeInfo() {
     <div class="info-head"><span class="hm-big">${hmHTML(gruppe)}</span>
       <div class="hm-meta"><span>Ebenengruppe</span><span>Beispiel für die Kenndaten</span></div></div>
     <dl class="facts">
-      <div><dt>Kristallsystem</dt><dd>${SYSTEME.find(([, gs]) => gs.includes(gruppe))[0]}</dd></div>
+      <div><dt>Kristallsystem</dt><dd>${SYSTEME.find(([, gs]) => gs.includes(gruppe))?.[0]}</dd></div>
       <div><dt>Begriff mit Link ins Skript</dt><dd><a class="skript-term" href="skript.html#kapitel1">Gitter</a></dd></div>
       <div><dt>Zahl</dt><dd class="num">4</dd></div>
     </dl>
@@ -65,33 +70,40 @@ function alles() { zeigePicker(); zeichneA(); zeichneB(); zeigeInfo(); }
 function init() {
   alles();
   $('picker').addEventListener('click', (e) => {
-    const b = e.target.closest('.pgb');
-    if (b) { gruppe = b.dataset.g; alles(); }
+    const b = /** @type {HTMLElement | null} */ (/** @type {Element} */ (e.target).closest('.pgb'));
+    if (b?.dataset.g) { gruppe = b.dataset.g; alles(); }
   });
   for (const id of ['opt-zelle']) $(id).addEventListener('change', zeichneA);
   // abhängiger Schalter: gesperrt statt abgewählt, Grund sichtbar (kein versteckter Zustand)
-  $('opt-motiv').addEventListener('change', () => { $('opt-beschr').disabled = !$('opt-motiv').checked; $('row-beschr').querySelector('.why').textContent = $('opt-motiv').checked ? '' : 'nur mit „Motiv in allgemeiner Lage“'; });
-  $('lat-ba').addEventListener('input', () => { $('lat-ba-out').textContent = Number($('lat-ba').value).toFixed(2); });
+  $('opt-motiv').addEventListener('change', () => {
+    const an = eingabe('opt-motiv').checked;
+    eingabe('opt-beschr').disabled = !an;
+    const why = $('row-beschr').querySelector('.why');
+    if (why) why.textContent = an ? '' : 'nur mit „Motiv in allgemeiner Lage“';
+  });
+  $('lat-ba').addEventListener('input', () => { $('lat-ba-out').textContent = Number(eingabe('lat-ba').value).toFixed(2); });
   document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => {
-    b.parentElement.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    b.parentElement?.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   }));
   // Modi
   for (const t of ['tab-a', 'tab-b']) $(t).addEventListener('click', () => { for (const u of ['tab-a', 'tab-b']) $(u).setAttribute('aria-selected', String(u === t)); });
   // Telefon: eine Tafel oben, Umschalter
-  document.querySelectorAll('.figswitch button').forEach((b) => b.addEventListener('click', () => {
+  const figKnoepfe = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.figswitch button'));
+  figKnoepfe.forEach((b) => b.addEventListener('click', () => {
     document.body.dataset.fig = b.dataset.fig;
-    document.querySelectorAll('.figswitch button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.fig === b.dataset.fig)));
+    figKnoepfe.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.fig === b.dataset.fig)));
   }));
   // Erste Schritte: beim ersten Besuch, wegklickbar, über „?“ wieder
   const INTRO = 'muster-intro';
   let gesehen = false;
   try { gesehen = localStorage.getItem(INTRO) === '1'; } catch { /* ohne Speicher weiter */ }
+  /** @param {boolean} an */
   const intro = (an) => { $('intro').hidden = !an; $('help-open').setAttribute('aria-expanded', String(an)); };
   intro(!gesehen && !location.hash);
   $('intro-close').addEventListener('click', () => { intro(false); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
-  $('help-open').addEventListener('click', () => intro($('intro').hidden));
-  document.querySelector('[data-step="1"]').addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
-  document.querySelector('[data-step="2"]').addEventListener('click', () => { $('sec-view').open = true; });
+  $('help-open').addEventListener('click', () => intro(Boolean($('intro').hidden)));
+  document.querySelector('[data-step="1"]')?.addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
+  document.querySelector('[data-step="2"]')?.addEventListener('click', () => { /** @type {HTMLDetailsElement} */ ($('sec-view')).open = true; });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', alles);

@@ -4,7 +4,9 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 
 const css = readFileSync(new URL('../css/base.css', import.meta.url), 'utf8');
+/** @param {string} block */
 const vars = (block) => Object.fromEntries([...block.matchAll(/--([\w-]+):\s*([^;]+);/g)].map((m) => [m[1], m[2].trim()]));
+/** @param {string} marker */
 const blockAfter = (marker) => {
   const i = css.indexOf(marker);
   assert.ok(i >= 0, marker);
