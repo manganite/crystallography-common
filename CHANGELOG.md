@@ -12,7 +12,15 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 - **Vorlagen:** `vorlagen/app/README.md` mit der gemeinsamen Gliederung der READMEs (wie in der App „Stereographische Projektion“), `SECURITY.md`, Vorlagen für Issues (Fehler, fachlicher Hinweis, Vorschlag), Kurzfassung und Stichwörter in `CITATION.cff`.
 - **Leitfaden:** GitHub-Auftritt und Einstellungen der Repositories (Abschn. 9 und 10).
 - **`SECURITY.md`** und Vorlagen für Issues auch in diesem Repository.
+- **CodeQL** in der erweiterten Einrichtung (`.github/workflows/codeql.yml`, `.github/codeql/codeql-config.yml`), ohne Tests; dieselben Dateien für die Apps in `vorlagen/app/` (ohne Tests und die Kopie der gemeinsamen Dateien).
+- **`tests/moodle.test.mjs`:** Maskierung im Moodle-Export.
 - **`tools/server.mjs`:** Ordner liefern ihre `index.html` (ohne Schrägstrich am Ende Umleitung). Direkt gestartet (`node tools/server.mjs [ordner] [port]`) bedient der Server den Arbeitsordner wie GitHub Pages, Standard Port 8000.
+
+### Behoben
+
+- **`tools/moodle.mjs`:** Alternativtexte von Bildern (`alt="…"`) maskierten keine doppelten Anführungszeichen; ein solcher Text hätte das Attribut im Moodle-XML abgebrochen. Neu `attrEsc` (Befund von CodeQL).
+- **`js/help.js`:** In den ⓘ-Erklärungen wurde der Text eines Bedienelements als HTML wieder eingesetzt; ein `<` oder `&` darin wäre als Markup gelesen worden. Er wird jetzt maskiert (Befund von CodeQL).
+- **Fragenliste:** Kennungen und Kurznamen der Apps in Filterknöpfen und Kapitelauswahl maskiert.
 
 ## [0.1.1] - 2026-10-30
 

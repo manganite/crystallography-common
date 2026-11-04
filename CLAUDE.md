@@ -70,6 +70,9 @@ Repo-Name = Pfad auf GitHub Pages:
 - `main` ist in allen Repos durch die Regel „main schützen“ gesperrt: nur über PR, die Prüfungen `test` (Apps
   auch `pdf`) müssen grün sein, kein Force-Push (eingerichtet 4.11.2026). Admins können im PR übergehen;
   nur auf Thomas' Anweisung. Übrige Einstellungen der Repos: `LEITFADEN.md` Abschn. 9.
+- **CodeQL** läuft als Workflow (erweiterte Einrichtung, 4.11.2026), weil nur so Tests und Fremdcode
+  ausgenommen werden können. Die Standardeinrichtung muss aus sein, sonst scheitert der Workflow.
+  Befunde verwerfen nur mit Begründung im Kommentar des Alerts.
 - Releases über einen eigenen Release-PR: Version und CHANGELOG, in den Apps zusätzlich `sw.js` und
   `CITATION.cff` (`tests/release.test.mjs` prüft `js/version.js`, `sw.js` und CHANGELOG, nicht
   `CITATION.cff`).

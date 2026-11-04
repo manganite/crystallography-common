@@ -1,6 +1,6 @@
 # Vorlage für eine neue App
 
-`vorlagen/app/` ist eine lauffähige **Muster-App** mit allen gemeinsamen Bausteinen: Werkbank (Kopfzeile, Seitenleiste, Tafeln, Kenndaten, Erste Schritte, Hilfen, Telefon), Skript (Inhaltsverzeichnis, alle Kastentypen, Vertiefungskapitel, Abbildung mit „In der App öffnen“), Quiz (zwei Beispielfragen als Entwurf), Service Worker, Tests, Workflows, README (Gliederung für alle Apps), CHANGELOG, CITATION, SECURITY, Vorlagen für Issues. Sie dient zugleich als **Musterseite**, um Änderungen an den gemeinsamen Stilen hell und dunkel anzusehen.
+`vorlagen/app/` ist eine lauffähige **Muster-App** mit allen gemeinsamen Bausteinen: Werkbank (Kopfzeile, Seitenleiste, Tafeln, Kenndaten, Erste Schritte, Hilfen, Telefon), Skript (Inhaltsverzeichnis, alle Kastentypen, Vertiefungskapitel, Abbildung mit „In der App öffnen“), Quiz (zwei Beispielfragen als Entwurf), Service Worker, Tests, Workflows, README (Gliederung für alle Apps), CHANGELOG, CITATION, SECURITY, Vorlagen für Issues, CodeQL (erweiterte Einrichtung). Sie dient zugleich als **Musterseite**, um Änderungen an den gemeinsamen Stilen hell und dunkel anzusehen.
 
 ## Ansehen
 
