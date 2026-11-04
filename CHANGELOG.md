@@ -10,13 +10,24 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 - **ESLint** (empfohlene Regeln) als CI-Job `lint` (#27): gemeinsame Regeln in `tools/eslint-basis.mjs`, `eslint.config.mjs` in common und in der Vorlage, Job `lint` auch in der Vorlage. Die Pakete für ESLint werden auch im Job `typen` installiert, damit `tsc` die Konfiguration prüft. Eine App muss beim Übernehmen `eslint.config.mjs` anlegen, die Jobs `typen` und `lint` wie in der Vorlage einrichten und ihre Befunde beheben; Thomas ergänzt `lint` in der Regel „main schützen“.
 - **Leitfaden** Abschn. 9: Regel zu ESLint; Abschn. 10: Prüfung `lint` in der Regel „main schützen“.
-- **Leitfaden** Abschn. 7: Fragenbank als ES-Modul mit Begründung; sie enthält nur Literale und reine Formatierungshelfer, berechnete Fragen gehören in die Generatoren.
-- **Leitfaden** Abschn. 9: Grundsatz „Daten getrennt vom Code“ für alle fachlichen Inhalte und Texte (Datendateien als ES-Module); Abschn. 7 verweist für die Fragenbank darauf.
 
 ### Geändert
 
 - **`tools/skript-pdf.mjs`:** `anzahl` ohne unnötigen Startwert (Befund von ESLint, Verhalten gleich).
 - **Vorlage, `tools/moodle-export.mjs`:** ungenutzter Parameter als `_angabe` gekennzeichnet.
+
+## [0.3.1] - 2026-11-04
+
+Leitfaden („Daten getrennt vom Code“, Ausnahmen von der Typprüfung) und eine kleine Korrektur an den Typen des Quiz. Für die Apps ändert sich zur Laufzeit nichts.
+
+### Hinzugefügt
+
+- **Leitfaden** Abschn. 7: Fragenbank als ES-Modul mit Begründung; sie enthält nur Literale und reine Formatierungshelfer, berechnete Fragen gehören in die Generatoren.
+- **Leitfaden** Abschn. 9: Grundsatz „Daten getrennt vom Code“ für alle fachlichen Inhalte und Texte (Datendateien als ES-Module); Abschn. 7 verweist für die Fragenbank darauf.
+
+### Geändert
+
+- **`js/quiz-core.js`:** Im Typ `Frageinhalt` ist `pruefung.art` freiwillig, wie es `fragenliste/extract.mjs` schon behandelt (ein Generator in plane-groups liefert Prüfangaben ohne `art`).
 - **Leitfaden** Abschn. 9: Ausnahmen von der Typprüfung während der Umstellung einer App als `// @ts-nocheck` am Dateianfang (statt in der `tsconfig.json`), damit neue Dateien von selbst geprüft werden.
 
 ## [0.3.0] - 2026-11-04
@@ -75,7 +86,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.1
 [0.3.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.0
 [0.2.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.2.0
 [0.1.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.1
