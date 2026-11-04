@@ -64,8 +64,15 @@ Repo-Name = Pfad auf GitHub Pages:
 
 ## Git, PRs und Releases
 
-- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, in Apps auch `pdf`) und
-  Copilot-Review abwarten, Befunde prüfen und beantworten, dann Bericht an Thomas.
+- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, in Apps auch `pdf`)
+  abwarten, das Review (nächster Punkt) einholen, Befunde prüfen und beantworten, dann Bericht an Thomas.
+- **Review durch einen unabhängigen Agenten:** Vor dem Bericht prüft ein eigener Agent, der die Arbeit nicht
+  kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche
+  Aussagen gegen Code und Quellen. Er bekommt nur Repo, Branch und Zweck des PR, nicht die Begründungen
+  der Sitzung. Befunde wie die eines Reviewers behandeln (nachprüfen, beheben oder begründen) und im Bericht
+  nennen. Grund (4.11.2026): Das Copilot-Review ersetzt dies nicht mehr, weil dessen Nutzungslimit bei der
+  Grösse der Familie nach wenigen Tagen aufgebraucht ist. Kommt trotzdem eines, wird es gleich behandelt;
+  abgewartet wird es nicht.
 - **Mergen nur auf ausdrückliches OK von Thomas.**
 - **Einstellungen der Repos** (Regel „main schützen“, CodeQL in der erweiterten Einrichtung, About,
   Vorschaubild): `LEITFADEN.md` Abschn. 9. Den Schutz von `main` als Admin übergehen nur auf Thomas'
