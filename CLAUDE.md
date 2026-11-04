@@ -78,8 +78,9 @@ Repo-Name = Pfad auf GitHub Pages:
   Vorschaubild): `LEITFADEN.md` Abschn. 9. Den Schutz von `main` als Admin übergehen nur auf Thomas'
   Anweisung.
 - **Release-Ablauf** (Release-PR, Tag, Workflows): README der App, Abschnitt „Versionen und
-  Releases“. Unterschiede in common: README, Abschnitt „Entwicklung“. `tests/release.test.mjs` prüft
-  `js/version.js`, `sw.js` und CHANGELOG, nicht `CITATION.cff`.
+  Releases“. Unterschiede in common: README, Abschnitt „Entwicklung“. In den Apps prüft
+  `tests/release.test.mjs` `js/version.js`, `sw.js` und CHANGELOG, nicht `CITATION.cff`; in common prüft
+  `tests/sync.test.mjs` Version und CHANGELOG.
 - **Wer die Release-Arbeit macht, setzt auch den Tag** (Vorgabe Thomas, 4.11.2026): in einer
   Cloud-Sitzung Thomas von Hand, weil dort der Tag-Push scheitert; in Claude Code lokal Claude Code,
   erst nach Thomas' Freigabe des Release und dem Merge des Release-PR. Vorher prüfen, dass
