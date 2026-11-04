@@ -79,8 +79,10 @@ Repo-Name = Pfad auf GitHub Pages:
   `origin/main` der Release-PR ist (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit davor),
   danach, dass `release.yml` (in Apps auch `deploy.yml`) grün ist.
 - **Commits und Tags mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den
-  Push sonst ab (GH007). Deshalb in jedem Klon einmal
-  `git config user.email 6277652+manganite@users.noreply.github.com` (lokal gesetzt 4.11.2026).
+  Push sonst ab (GH007). Deshalb in jedem Klon auf Thomas' Computer einmal
+  `git config user.email 6277652+manganite@users.noreply.github.com` (lokal gesetzt 4.11.2026). Nicht in
+  der Cloud-Sitzung: Dort committet Claude mit eigener, signierter Adresse; eine andere macht die Commits
+  auf GitHub „Unverified“.
 - Commits enden mit `Co-Authored-By: …`, in Sitzungen mit Link (claude.ai) zusätzlich mit
   `Claude-Session: …`; PR-Texte mit „🤖 Generated with Claude Code“ und, falls vorhanden, dem
   Sitzungslink.
