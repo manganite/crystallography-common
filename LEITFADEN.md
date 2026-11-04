@@ -87,6 +87,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Fragetypen:** Einfachauswahl, Mehrfachauswahl, Frage mit Bild, Bilder als Antworten, Bild mit Bildern als Antworten. Bilder kommen aus dem Code der App.
 - **Ablenker** bilden typische Fehler ab; die Rückmeldung benennt den Fehler der gewählten Antwort.
 - **Rückmeldung sofort:** richtig/falsch, Erklärung, Lernziel, „Im Skript nachlesen“ und, wo sinnvoll, „In der App öffnen“. Link und Frage müssen zusammenpassen.
+- **Fragenbank** `js/quiz-bank.js` als ES-Modul, nicht als JSON: So sind Kommentare und Formatierungshelfer möglich (z. B. `mat()`, Querstrich), und App, Tests, Fragenliste und Moodle-Export laden dieselbe Datei ohne Build-Schritt. Die Datei bleibt dennoch reine Daten: nur Literale und reine Formatierungshelfer (Text → HTML), keine Programmlogik. Berechnete Fragen gehören in die Generatoren (`js/quiz-gen.js`).
 - **Erzeugte Fragen** aus den Daten der App sind erlaubt: höchstens 50 % eines Quiz, je Generator höchstens 30 %.
 - **Freigabe:** Nur Fragen mit `status: 'geprüft'` erscheinen; „Auch ungeprüfte Fragen zeigen“ (`?entwurf`) nimmt Entwürfe dazu. „Geprüft“ heisst fachlich korrekt; die Formulierung darf danach noch besser werden.
 - **Fortschritt** nur lokal im Browser (kein Konto, kein Server). Der Name des Speichers einer App wird nie geändert.
@@ -106,7 +107,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Als Web-App** auf dem Homescreen installierbar (Manifest, Icons).
 - **Tests** mit `node --test`, ohne Abhängigkeiten; Browser-Durchläufe mit Playwright, wo nötig.
 - **Typprüfung** mit TypeScript über JSDoc-Typen und `checkJs` (`tsconfig.json`, CI-Job `typen`); keine `.ts`-Dateien, kein Build-Schritt. TypeScript wird nur für die Prüfung installiert, wie Playwright.
-  - Neue Dateien strikt (`strict`), ohne Ausnahmen. Bestehende Dateien einer App werden schrittweise strikt; bis dahin stehen die Ausnahmen in ihrer `tsconfig.json`.
+  - Neue Dateien strikt (`strict`), ohne Ausnahmen. Bestehende Dateien einer App werden schrittweise strikt; bis dahin beginnen die übrigen mit `// @ts-nocheck` (so ist jede neue Datei von selbst geprüft), und Ordner, die noch nicht geprüft werden (z. B. `tests/`), fehlen in `include` der `tsconfig.json`.
   - Typen der Familie nicht in der App neu definieren: Vektoren, Matrizen und gekennzeichnete Typen aus `lib/common/js/typen.js`, Fragen, Generatoren und Kapitel aus `lib/common/js/quiz-core.js`.
   - Wo Werte gleicher Form leicht vertauscht werden, gekennzeichnete Typen verwenden: Richtung [uvw] und Normale (hkl), Grad und Bogenmass, fraktionale und kartesische Koordinaten. Die Umwandlung steht dort, wo die Bedeutung feststeht.
   - Die Typprüfung ersetzt keine Tests: Formeln, Vorzeichen und Toleranzen sichern weiterhin die Tests ab.
