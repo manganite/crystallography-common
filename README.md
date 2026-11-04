@@ -89,7 +89,7 @@ Ohne Abhängigkeiten; Tests mit Node 22:
 node --test tests/*.test.mjs
 ```
 
-Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt. Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.
+Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt; Ablauf wie in den Apps ([Vorlage, „Versionen und Releases“](vorlagen/app/README.md#versionen-und-releases)), mit drei Unterschieden: kein `sw.js` und kein `CITATION.cff`; der Tag startet nur `release.yml`, das GitHub-Release ohne PDF (es gibt keine Live-Seite und kein Skript). Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.
 
 ## Entstehung
 

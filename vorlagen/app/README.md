@@ -59,7 +59,7 @@ Die App ist eine statische Webseite ohne Build-Schritt und ohne Abhängigkeiten.
 
 Ein Doppelklick auf `index.html` genügt nicht: Browser laden die JavaScript-Module der App nicht von `file://`-Adressen.
 
-## Links auf Ansichten
+## Link-Adressen
 
 Der Zustand steht lesbar in der Adresse, z. B. `#m=a&g=p4mm`. Geschrieben wird nur, was vom Startzustand abweicht. Die Link-Adressen sind eine Schnittstelle (Skript, Quiz, andere Apps der Familie) und bleiben stabil; alte Links werden umgerechnet (Test `tests/zustand.test.mjs`):
 

@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **`vorlagen/app/README.md`:** Abschnitt „Links auf Ansichten“ heisst „Link-Adressen“, wie im Leitfaden.
+
 ## [0.2.0] - 2026-11-04
 
 Arbeitsbereich mit allen Repositories, gemeinsamer GitHub-Auftritt (README-Gliederung, SECURITY, Vorlagen für Issues, CodeQL) und zwei Korrekturen aus CodeQL, die die Apps betreffen: Maskierung in `help.js` und im Moodle-Export. Für die Apps ändert sich an der Schnittstelle nichts.
