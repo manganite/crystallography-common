@@ -2,7 +2,7 @@
 // Die Texte liefert die App (initHelp); hier steht nur die Mechanik. Stile in css/app.css (.tip, .infobtn, .helpbox).
 
 let cfg = { tips: {}, sections: [], labels: {} };
-const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let tipEl = null, tipFor = null, tipDesc = null, showTimer = 0;
 const hoverMQ = window.matchMedia('(hover: hover) and (pointer: fine)');
 
