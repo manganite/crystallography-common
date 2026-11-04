@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-04
+
+Arbeitsbereich mit allen Repositories, gemeinsamer GitHub-Auftritt (README-Gliederung, SECURITY, Vorlagen für Issues, CodeQL) und zwei Korrekturen aus CodeQL, die die Apps betreffen: Maskierung in `help.js` und im Moodle-Export. Für die Apps ändert sich an der Schnittstelle nichts.
+
 ### Hinzugefügt
 
 - **`kristallographie.code-workspace`:** VS-Code-Arbeitsbereich mit allen Repositories der Familie; Kopien des gemeinsamen Codes in den Apps sind darin schreibgeschützt.
@@ -40,6 +44,7 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.2.0
 [0.1.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.1
 [0.1.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.1.0
