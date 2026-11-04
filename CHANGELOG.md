@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Leitfaden** Abschn. 9: Ausnahmen von der Typprüfung während der Umstellung einer App als `// @ts-nocheck` am Dateianfang (statt in der `tsconfig.json`), damit neue Dateien von selbst geprüft werden.
+
 ## [0.3.0] - 2026-11-04
 
 Typprüfung mit TypeScript über JSDoc-Typen (Issue #19, Schritt 1). Am Verhalten ändert sich nichts. Eine App muss beim Übernehmen `lib/common/js/typen.js` in die Offline-Liste von `sw.js` aufnehmen.
