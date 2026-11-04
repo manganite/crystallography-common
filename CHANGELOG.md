@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [0.4.0] - 2026-11-04
 
-ESLint als neue Prüfung `lint` (gemeinsame Regeln in `tools/eslint-basis.mjs`) und Leitfaden zu Erste Schritte und Hilfeseite. Für die Apps ändert sich zur Laufzeit nichts; beim Übernehmen kommen `eslint.config.mjs` und der Job `lint` hinzu (siehe „Hinzugefügt“).
+ESLint als neue Prüfung `lint` (gemeinsame Regeln in `tools/eslint-basis.mjs`) und Leitfaden zu den „Erste Schritte“ je Modus und zur Hilfeseite. Für die Apps ändert sich zur Laufzeit nichts; beim Übernehmen muss eine App `eslint.config.mjs` anlegen und den Job `lint` einrichten (siehe „Hinzugefügt“).
 
 ### Hinzugefügt
 
