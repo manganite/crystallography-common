@@ -111,7 +111,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Als Web-App** auf dem Homescreen installierbar (Manifest, Icons).
 - **Tests** mit `node --test`, ohne Abhängigkeiten; Browser-Durchläufe mit Playwright, wo nötig.
 - **Typprüfung** mit TypeScript über JSDoc-Typen und `checkJs` (`tsconfig.json`, CI-Job `typen`); keine `.ts`-Dateien, kein Build-Schritt. TypeScript wird nur für die Prüfung installiert, wie Playwright.
-  - Alle Dateien strikt (`strict`), ohne `// @ts-nocheck`; `include` der `tsconfig.json` umfasst den eigenen Code in `js/`, `tools/` und `tests/`.
+  - Alle Dateien in `js/`, `tools/` und `tests/` strikt (`strict`), ohne `// @ts-nocheck`; diese Ordner stehen in `include` der `tsconfig.json`.
   - Typen der Familie nicht in der App neu definieren: Vektoren, Matrizen und gekennzeichnete Typen aus `lib/common/js/typen.js`, Fragen, Generatoren und Kapitel aus `lib/common/js/quiz-core.js`.
   - Wo Werte gleicher Form leicht vertauscht werden, gekennzeichnete Typen verwenden: Richtung [uvw] und Normale (hkl), Grad und Bogenmass, fraktionale und kartesische Koordinaten. Die Umwandlung steht dort, wo die Bedeutung feststeht.
   - Die Typprüfung ersetzt keine Tests: Formeln, Vorzeichen und Toleranzen sichern weiterhin die Tests ab.

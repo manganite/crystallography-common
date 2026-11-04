@@ -69,7 +69,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 - **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
   Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
 - **ESLint** (4.11.2026, Leitfaden Abschn. 9): ein Prüfer ohne Kosten und Limit, seit das Copilot-Review
-  ausfällt; ergänzt die Typprüfung um Befunde wie unerreichbaren Code oder versehentliche Zuweisungen.
+  ausfällt; ergänzt die Typprüfung um Befunde wie ungenutzte Namen, unerreichbaren Code oder versehentliche
+  Zuweisungen.
 
 ## Git, PRs und Releases
 
@@ -79,7 +80,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche
   Aussagen gegen Code und Quellen. Er bekommt nur Repo, Branch und Zweck des PR, nicht die Begründungen
   der Sitzung. Befunde wie die eines Reviewers behandeln (nachprüfen, beheben oder begründen), im Bericht
-  nennen und im PR festhalten (Punkt „Review“ der PR-Vorlage), damit sie nachvollziehbar bleiben. Grund (4.11.2026): Das Copilot-Review ersetzt dies nicht mehr, weil dessen Nutzungslimit bei der
+  nennen und im PR festhalten (Punkt „Review“ der PR-Vorlage), damit sie nachvollziehbar bleiben.
+  Grund (4.11.2026): Das Copilot-Review ersetzt dies nicht mehr, weil dessen Nutzungslimit bei der
   Grösse der Familie nach wenigen Tagen aufgebraucht ist. Kommt trotzdem eines, wird es gleich behandelt;
   abgewartet wird es nicht.
 - **Mergen nur auf ausdrückliches OK von Thomas.**

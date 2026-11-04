@@ -8,11 +8,11 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **`vorlagen/app/.github/pull_request_template.md`:** PR-Vorlage für neue Apps, mit dem Punkt „Review durch einen unabhängigen Agenten“.
+- **`vorlagen/app/.github/pull_request_template.md`:** PR-Vorlage für neue Apps, mit dem Punkt „Review durch einen unabhängigen Agenten“; derselbe Punkt in der PR-Vorlage dieses Repositorys.
 
 ### Geändert
 
-- **Leitfaden** Abschn. 9: Die Übergangsregel mit `// @ts-nocheck` entfällt, alle Dateien sind strikt typisiert (in common und beiden Apps umgesetzt). Begründungen zu Hilfeseite und ESLint stehen jetzt in `CLAUDE.md`, Abschnitt „Entscheidungen der Familie“.
+- **Leitfaden** Abschn. 9: Die Übergangsregel mit `// @ts-nocheck` entfällt, alle Dateien in `js/`, `tools/` und `tests/` sind strikt typisiert (in common und beiden Apps umgesetzt). Abschn. 10, Schritt 6: Die PR-Vorlage kommt mit der Vorlage. Begründungen zu Hilfeseite und ESLint stehen jetzt in `CLAUDE.md`, Abschnitt „Entscheidungen der Familie“.
 
 ## [0.4.0] - 2026-11-04
 
