@@ -62,6 +62,16 @@ Repo-Name = Pfad auf GitHub Pages:
   erwünscht.
 - Thomas ist Fachautor und gibt Skript und Quiz fachlich frei.
 
+## Entscheidungen der Familie (mit Grund)
+
+Die Regeln selbst stehen im Leitfaden; hier, warum.
+
+- **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
+  Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
+- **ESLint** (4.11.2026, Leitfaden Abschn. 9): ein Prüfer ohne Kosten und Limit, seit das Copilot-Review
+  ausfällt; ergänzt die Typprüfung um Befunde wie ungenutzte Namen, unerreichbaren Code oder versehentliche
+  Zuweisungen.
+
 ## Git, PRs und Releases
 
 - Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in Apps auch `pdf`)
@@ -69,8 +79,9 @@ Repo-Name = Pfad auf GitHub Pages:
 - **Review durch einen unabhängigen Agenten:** Vor dem Bericht prüft ein eigener Agent, der die Arbeit nicht
   kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche
   Aussagen gegen Code und Quellen. Er bekommt nur Repo, Branch und Zweck des PR, nicht die Begründungen
-  der Sitzung. Befunde wie die eines Reviewers behandeln (nachprüfen, beheben oder begründen) und im Bericht
-  nennen. Grund (4.11.2026): Das Copilot-Review ersetzt dies nicht mehr, weil dessen Nutzungslimit bei der
+  der Sitzung. Befunde wie die eines Reviewers behandeln (nachprüfen, beheben oder begründen), im Bericht
+  nennen und im PR festhalten (Punkt „Review“ der PR-Vorlage), damit sie nachvollziehbar bleiben.
+  Grund (4.11.2026): Das Copilot-Review ersetzt dies nicht mehr, weil dessen Nutzungslimit bei der
   Grösse der Familie nach wenigen Tagen aufgebraucht ist. Kommt trotzdem eines, wird es gleich behandelt;
   abgewartet wird es nicht.
 - **Mergen nur auf ausdrückliches OK von Thomas.**
@@ -139,6 +150,13 @@ z. B. `plane-groups:gl-2-03`). Filter nach App, Kapitel, Stufe, Status und offen
   `node fragenliste/extract.mjs`, dann `fragenliste/fragenliste.html` mit der Adresse oben als `url`
   veröffentlichen (Fähigkeit `db` bleibt erhalten). Jede App liefert ihre Fragen über
   `tools/quiz-quelle.mjs`; eine neue App ergänzt die Liste der Ordner in `extract.mjs`.
+
+## Vorschau einer App (nicht öffentlich)
+
+Je App ein Artifact mit App, Skript, Quiz und `skript.pdf`; die Adresse steht in der `CLAUDE.md` der App.
+Beim Neuveröffentlichen die Adresse als `url` angeben und die geänderten Dateien in `files` aufführen
+(Dateien wie in der Offline-Liste von `sw.js`); `skript.pdf` vorher mit `node tools/skript-pdf.mjs`
+erzeugen (in `.gitignore`).
 
 ## Neue App
 
