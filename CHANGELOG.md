@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-04
+
+Geprüfte Helfer für Elemente der Seite in `js/seite.js` und Leitfaden zur Kennzeichnung der Typen in Datendateien. Für die Apps: Die Quiz-Seite und das Skript melden ein fehlendes Element oder eines der falschen Art jetzt beim ersten Zugriff mit der ID; beim Übernehmen die eigenen Kopien der Helfer durch die gemeinsamen ersetzen (Leitfaden Abschn. 9).
+
 ### Hinzugefügt
 
 - **`js/seite.js`: geprüfte Helfer für Elemente der Seite** (#30): `nachId(id, Art)` und die Kurzformen `$`, `eingabe`, `auswahl`, `knopf`, `abschnitt`, `grafik`, dazu `element(sel, Art)` und `elemente(sel, Art)` für Selektoren (ohne Art: HTML-Element; `elemente` gibt eine Liste zurück, auch eine leere). Sie werfen einen Fehler mit der ID bzw. dem Selektor, wenn das Element fehlt oder eine andere Art hat. Test `tests/seite.test.mjs`. Regel im Leitfaden Abschn. 9.
@@ -102,7 +106,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.5.0
 [0.4.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.4.0
 [0.3.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.1
 [0.3.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.0
