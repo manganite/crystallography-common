@@ -6,19 +6,27 @@ import {
   leererFortschritt, fortschrittAus, vermerken, stand,
 } from '../js/quiz-core.js';
 
+/** @import { Frage, Generator, Kandidat, Stufe, Status } from '../js/quiz-core.js' */
+
+/**
+ * @param {string} id @param {Stufe} stufe @param {number} kapitel @param {Status} [status]
+ * @returns {Frage}
+ */
 const frage = (id, stufe, kapitel, status = 'geprüft') => ({
   id, stufe, kapitel, status, typ: 'einfach', frage: id, antworten: ['a', 'b', 'c', 'd'], richtig: [0],
   hinweise: [null, 'b falsch', 'c falsch', 'd falsch'], erklaerung: '', quelle: '',
 });
+/** @type {Frage[]} */
 const BANK = [];
-for (const k of [1, 2]) for (const s of [1, 2, 3]) for (let i = 0; i < 8; i++) BANK.push(frage(`k${k}-s${s}-${i}`, s, k));
+for (const k of [1, 2]) for (const s of /** @type {Stufe[]} */ ([1, 2, 3])) for (let i = 0; i < 8; i++) BANK.push(frage(`k${k}-s${s}-${i}`, s, k));
 BANK.push(frage('entwurf', 1, 1, 'entwurf'));
-const GEN = [{ id: 'gen', kapitel: 1, status: 'geprüft', stufen: [1, 2], params: () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+/** @type {Generator[]} */
+const GEN = [{ id: 'gen', kapitel: 1, status: 'geprüft', stufen: [1, 2], params: () => ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
   make: (p) => ({ typ: 'einfach', frage: `g${p}`, antworten: ['x', 'y'], richtig: [1], erklaerung: '', quelle: '' }) }];
 
 test('Stufen und Anteile', () => {
   assert.deepEqual(Object.keys(STUFEN), ['1', '2', '3']);
-  for (const s of [1, 2, 3]) assert.ok(Math.abs(Object.values(ANTEILE[s]).reduce((a, b) => a + b, 0) - 1) < 1e-9);
+  for (const s of /** @type {Stufe[]} */ ([1, 2, 3])) assert.ok(Math.abs(Object.values(ANTEILE[s]).reduce((a, b) => a + b, 0) - 1) < 1e-9);
 });
 
 test('Kandidaten: Entwürfe nur auf Wunsch, Generatoren je Parameter und Stufe', () => {
@@ -49,9 +57,9 @@ test('Ziehen: Vorrang für nie beantwortete Fragen', () => {
 });
 
 test('Stellen und Prüfen: gemischte Antworten, richtige mitgeführt', () => {
-  const q = stellen({ key: 'a', frage: BANK[0] }, rng(7));
+  const q = stellen({ key: 'a', stufe: 1, kapitel: 1, frage: BANK[0] }, rng(7));
   assert.equal(q.antworten[q.richtig[0]], 'a');
-  assert.equal(q.hinweise[q.richtig[0]], null);
+  assert.equal(q.hinweise?.[q.richtig[0]], null);
   assert.ok(pruefen(q, q.richtig));
   assert.ok(!pruefen(q, [...q.richtig, (q.richtig[0] + 1) % 4]));
   assert.deepEqual(shuffle([1, 2, 3], rng(1)).sort(), [1, 2, 3]);
@@ -62,5 +70,7 @@ test('Fortschritt: speichern, lesen, Unbrauchbares ergibt leeren Stand', () => {
   assert.deepEqual(p.fragen.x, { n: 2, r: 1, letzte: 1, t: 2 });
   assert.deepEqual(fortschrittAus(JSON.stringify(p)), p);
   assert.deepEqual(fortschrittAus('kaputt'), leererFortschritt());
-  assert.deepEqual(stand([{ key: 'x', kapitel: 1 }, { key: 'y', kapitel: 1 }], p), { 1: { gesamt: 2, richtig: 1 } });
+  /** @type {Kandidat[]} */
+  const kands = [{ key: 'x', stufe: 1, kapitel: 1 }, { key: 'y', stufe: 1, kapitel: 1 }];
+  assert.deepEqual(stand(kands, p), { 1: { gesamt: 2, richtig: 1 } });
 });

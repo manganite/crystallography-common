@@ -7,9 +7,13 @@ import { VERSION } from './version.js';
 import { BANK } from './quiz-bank.js';
 import { KAPITEL, SPEICHER } from './quiz-kapitel.js';
 
+/** @param {string} name */
 const farbe = (name) => getComputedStyle(document.documentElement).getPropertyValue(`--${name}`).trim();
 
-/** Bild zu einer Bildangabe (hier: Link-Adresse der App) als SVG; opt.klein für Antwortbilder. */
+/**
+ * Bild zu einer Bildangabe (hier: Link-Adresse der App) als SVG; opt.klein für Antwortbilder.
+ * @param {string} angabe @param {string | undefined} alt
+ */
 function bild(angabe, alt) {
   const pts = [];
   for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) pts.push(`<circle cx="${260 + 70 * i}" cy="${260 + 70 * j}" r="6" fill="${farbe('ink')}"/>`);

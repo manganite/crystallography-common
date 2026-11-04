@@ -14,7 +14,7 @@ const args = process.argv.slice(2);
 const bi = args.indexOf('--base');
 const BASE = bi >= 0 ? args.splice(bi, 2)[1] : 'https://manganite.github.io/muster-app/';
 const OUT = args[0] || join(ROOT, 'skript.pdf');
-const VERSION = readFileSync(join(ROOT, 'js/version.js'), 'utf8').match(/VERSION = '([^']+)'/)[1];
+const VERSION = /** @type {RegExpMatchArray} */ (readFileSync(join(ROOT, 'js/version.js'), 'utf8').match(/VERSION = '([^']+)'/))[1];
 
 const { anzahl, fehler } = await skriptPDF({
   root: ROOT, out: OUT, base: BASE, titel: 'Muster-App', version: VERSION,

@@ -30,6 +30,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `skript-kern.js` | Skript: Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
 | | `seite.js` | Versionsnummer eintragen, Offline-Betrieb (Service Worker) |
 | | `version.js` | Version dieses Repositories |
+| | `typen.js` | Gemeinsame Typen für die Typprüfung, ohne Laufzeitcode: Vektoren, Matrizen und gekennzeichnete Typen (Richtung/Normale, Grad/Bogenmass, fraktional/kartesisch). Die Typen des Quiz stehen in `quiz-core.js`. |
 | `tools/` | `sync.mjs` | Kopie mit fester Version in eine App übernehmen |
 | | `check.mjs` | Kopie in einer App gegen ihr Manifest prüfen |
 | | `moodle.mjs` | Quizfragen als Moodle-XML |
@@ -88,6 +89,16 @@ Ohne Abhängigkeiten; Tests mit Node 22:
 ```bash
 node --test tests/*.test.mjs
 ```
+
+Typprüfung mit TypeScript über JSDoc-Typen (`tsconfig.json`, strikt; Regel im [Leitfaden](LEITFADEN.md), Abschn. 9). TypeScript wird nur dafür installiert, in der CI im Job `typen`; Versionen wie dort, alle Pakete in einem Befehl (ein zweites `npm install --no-save` entfernt die zuvor installierten):
+
+```bash
+npm install --no-save typescript@7.0.2 @types/node@22.20.5 playwright@1.52.0
+npx tsc -p .                  # js/, tools/, tests/, fragenliste/
+node tools/sync.mjs vorlagen/app && npx tsc -p vorlagen/app
+```
+
+`tests/typen.typen.js` belegt, dass die gekennzeichneten Typen aus `js/typen.js` Vertauschungen melden; die Datei läuft nur in der Typprüfung. Mit den installierten Paketen zeigt VS Code die Meldungen in geöffneten Dateien, ohne weitere Einstellung.
 
 Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt; Ablauf wie in den Apps ([Vorlage, „Versionen und Releases“](vorlagen/app/README.md#versionen-und-releases)), mit drei Unterschieden: kein `sw.js` und kein `CITATION.cff`; der Tag startet nur `release.yml`, das GitHub-Release ohne PDF (es gibt keine Live-Seite und kein Skript). Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.
 

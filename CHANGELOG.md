@@ -6,7 +6,20 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+Typprüfung mit TypeScript über JSDoc-Typen (Issue #19, Schritt 1). Am Verhalten ändert sich nichts. Eine App muss beim Übernehmen `lib/common/js/typen.js` in die Offline-Liste von `sw.js` aufnehmen.
+
+### Hinzugefügt
+
+- **`js/typen.js`:** gemeinsame Typen ohne Laufzeitcode: `Vec2`, `Vec3`, `Mat2`, `Mat3` und gekennzeichnete Typen `Richtung`, `Normale`, `Grad`, `Bogenmass`, `Fraktional<V>`, `Kartesisch<V>`. `tests/typen.typen.js` belegt, dass Vertauschungen gemeldet werden.
+- **Typen des Quiz** in `js/quiz-core.js` (`Frage`, `Frageinhalt`, `Generator`, `Kapitel`, `Kandidat`, `Fortschritt` u. a.), für die Fragenbanken der Apps; Typen der Hilfen (`Abschnitt`, `Hilfetexte`) in `js/help.js`.
+- **`tsconfig.json`** und CI-Job `typen` (TypeScript 7.0.2, strikt): `js/`, `tools/`, `tests/`, `fragenliste/` und die Vorlage.
+- **Vorlage:** `tsconfig.json`, Job `typen` in `ci.yml`, `typen.js` in der Offline-Liste; die Dateien der Muster-App sind strikt typisiert.
+- **Leitfaden** Abschn. 9: Regel zur Typprüfung; Abschn. 10: Prüfung `typen` in der Regel „main schützen“.
+
 ### Geändert
+
+- **Alle Dateien in `js/` und `tools/`** sind mit JSDoc strikt typisiert. Wo die Typprüfung `null` nicht ausschliessen kann, stehen Umwandlungen oder Abfragen, die das Verhalten nicht ändern.
+- **`tests/quiz-core.test.mjs`:** Parameter des Test-Generators als Zeichenketten, wie in den Apps.
 
 - **`vorlagen/app/README.md`:** Abschnitt „Links auf Ansichten“ heisst „Link-Adressen“, wie im Leitfaden.
 

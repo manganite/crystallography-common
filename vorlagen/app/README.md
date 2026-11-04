@@ -88,6 +88,7 @@ Der Zustand steht lesbar in der Adresse, z. B. `#m=a&g=p4mm`. Geschrieben wird n
 | `manifest.webmanifest`, `icons/` | Favicon und Homescreen-Icons |
 | `lib/common/`, `tools/common/` | Gemeinsame Grundlage aus [crystallography-common](https://github.com/manganite/crystallography-common) als Kopie mit fester Version (`lib/common/MANIFEST.json`): Stile, Schriften, Hilfen, Quiz, Skript-Bausteine, Formatierung, Werkzeuge. Nicht von Hand ändern. |
 | `tests/` | Automatische Tests (Node, ohne Abhängigkeiten) |
+| `tsconfig.json` | Typprüfung mit TypeScript (JSDoc-Typen, kein Build-Schritt) |
 
 ### Gemeinsame Grundlage
 
@@ -105,7 +106,16 @@ node tools/common/sync.mjs ../crystallography-common
 node --test tests/*.test.mjs
 ```
 
-Geprüft werden … (was die Tests der App absichern), dazu die Quizfragen, die Release-Konsistenz (Version, Changelog, Offline-Liste), die Kopie der gemeinsamen Dateien und dass App, Skript und README für sich verständlich sind (keine Verweise auf Lehrveranstaltungen). Dieselben Tests laufen bei jedem Pull Request in GitHub Actions, zusammen mit der PDF-Fassung des Skripts.
+Geprüft werden … (was die Tests der App absichern), dazu die Quizfragen, die Release-Konsistenz (Version, Changelog, Offline-Liste), die Kopie der gemeinsamen Dateien und dass App, Skript und README für sich verständlich sind (keine Verweise auf Lehrveranstaltungen). Dieselben Tests laufen bei jedem Pull Request in GitHub Actions, zusammen mit der Typprüfung und der PDF-Fassung des Skripts.
+
+Typprüfung (die Typen stehen als JSDoc-Kommentare im Code; Versionen wie im Job `typen` in `.github/workflows/ci.yml`, alle Pakete in einem Befehl, sonst entfernt npm die zuvor installierten):
+
+```bash
+npm install --no-save typescript@7.0.2 @types/node@22.20.5 playwright@1.52.0
+npx tsc -p .
+```
+
+Mit diesen Paketen zeigt auch VS Code die Meldungen in geöffneten Dateien.
 
 - Skript als PDF: `node tools/skript-pdf.mjs [Ausgabedatei]` (braucht Playwright mit Chromium)
 - Quiz für Moodle: `node tools/moodle-export.mjs quiz.xml` (mit `--entwurf` auch die ungeprüften Fragen)

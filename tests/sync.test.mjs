@@ -18,6 +18,7 @@ test('sync legt lib/common und tools/common mit Manifest an; check findet Änder
     assert.equal(manifest.version, versionVon(ROOT));
     assert.ok('lib/common/css/base.css' in manifest.files);
     assert.ok('lib/common/js/quiz-seite.js' in manifest.files);
+    assert.ok('lib/common/js/typen.js' in manifest.files);
     assert.ok('tools/common/check.mjs' in manifest.files);
     assert.deepEqual(JSON.parse(readFileSync(join(app, MANIFEST), 'utf8')).files, manifest.files);
     assert.deepEqual(pruefen(app), []);

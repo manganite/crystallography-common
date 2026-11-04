@@ -1,6 +1,9 @@
 // Fragen des Quiz (handgeschrieben). Aufbau siehe lib/common/js/quiz-core.js.
 // Nur Fragen mit status 'geprüft' erscheinen; Entwürfe zeigt quiz.html?entwurf.
 
+/** @import { Frage } from '../lib/common/js/quiz-core.js' */
+
+/** @type {Frage[]} */
 export const BANK = [
   {
     id: 'muster-1-01', stufe: 1, kapitel: 1, typ: 'einfach',

@@ -11,6 +11,7 @@ test('Maskierung: Text ohne, Attribute mit doppelten Anführungszeichen', () => 
 test('Alternativtexte von Bildern bleiben gültige Attribute, auch mit Anführungszeichen', () => {
   const kapitel = [{ nr: 1, titel: 'Kapitel' }];
   const bildSVG = () => '<svg xmlns="http://www.w3.org/2000/svg"/>';
+  /** @type {Parameters<typeof frageXML>[0]} */
   const q = {
     id: 'x-1-01', kapitel: 1, typ: 'bild-bild', frage: 'Welches?', bild: '#a', bildAlt: 'Bild "A"',
     antworten: [{ app: '#b', alt: 'Antwort "B"' }, { app: '#c', alt: 'C' }], richtig: [0], erklaerung: 'weil', quelle: 'Q',
