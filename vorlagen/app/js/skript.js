@@ -2,7 +2,7 @@
 // Querstriche und Nachladen kommen aus lib/common/js/skript-kern.js.
 
 import { appLink, inhaltsverzeichnis, querstriche } from '../lib/common/js/skript-kern.js';
-import { versionEintragen, offline } from '../lib/common/js/seite.js';
+import { versionEintragen, offline, elemente } from '../lib/common/js/seite.js';
 import { VERSION } from './version.js';
 
 /** @param {string} name */
@@ -17,7 +17,7 @@ function zeichne(fig) {
 }
 
 function abbildungen() {
-  for (const fig of /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll('figure[data-app]'))) {
+  for (const fig of elemente('figure[data-app]')) {
     appLink(fig, 'index.html');
     zeichne(fig);
   }
