@@ -77,6 +77,8 @@ Repo-Name = Pfad auf GitHub Pages:
   „email privacy restrictions“). Vorher `git fetch` und `git log --oneline -1 origin/main` prüfen
   (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit vor dem Release-PR):
   `git -c user.email=6277652+manganite@users.noreply.github.com tag -a vX.Y.Z -m "…" origin/main`
+- **Lokal committen mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den Push
+  sonst ab (GH007): `git -c user.email=6277652+manganite@users.noreply.github.com commit …`.
 - Commits enden mit `Co-Authored-By: …` und `Claude-Session: …`; PR-Texte mit
   „🤖 Generated with Claude Code“ und dem Sitzungslink.
 
