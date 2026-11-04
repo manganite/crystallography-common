@@ -6,6 +6,14 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **`vorlagen/app/.github/pull_request_template.md`:** PR-Vorlage für neue Apps, mit dem Punkt „Review durch einen unabhängigen Agenten“.
+
+### Geändert
+
+- **Leitfaden** Abschn. 9: Die Übergangsregel mit `// @ts-nocheck` entfällt, alle Dateien sind strikt typisiert (in common und beiden Apps umgesetzt). Begründungen zu Hilfeseite und ESLint stehen jetzt in `CLAUDE.md`, Abschnitt „Entscheidungen der Familie“.
+
 ## [0.4.0] - 2026-11-04
 
 ESLint als neue Prüfung `lint` (gemeinsame Regeln in `tools/eslint-basis.mjs`) und Leitfaden zu den „Erste Schritte“ je Modus und zur Hilfeseite. Für die Apps ändert sich zur Laufzeit nichts; beim Übernehmen muss eine App `eslint.config.mjs` anlegen und den Job `lint` einrichten (siehe „Hinzugefügt“).
