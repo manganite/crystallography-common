@@ -67,6 +67,9 @@ Repo-Name = Pfad auf GitHub Pages:
 - Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, in Apps auch `pdf`) und
   Copilot-Review abwarten, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Mergen nur auf ausdrückliches OK von Thomas.**
+- `main` ist in allen Repos durch die Regel „main schützen“ gesperrt: nur über PR, die Prüfungen `test` (Apps
+  auch `pdf`) müssen grün sein, kein Force-Push (eingerichtet 4.11.2026). Admins können im PR übergehen;
+  nur auf Thomas' Anweisung. Übrige Einstellungen der Repos: `LEITFADEN.md` Abschn. 9.
 - Releases über einen eigenen Release-PR: Version und CHANGELOG, in den Apps zusätzlich `sw.js` und
   `CITATION.cff` (`tests/release.test.mjs` prüft `js/version.js`, `sw.js` und CHANGELOG, nicht
   `CITATION.cff`).

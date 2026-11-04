@@ -11,3 +11,10 @@ date-released: 2026-10-30
 license: MIT
 repository-code: "https://github.com/manganite/muster-app"
 url: "https://manganite.github.io/muster-app/"
+abstract: >-
+  Interaktive Lern-App für eine Einführung in die Kristallographie: … (wie die
+  Einleitung im README). Mit Skript und Übungsquiz; läuft im Browser, als Web-App
+  und offline. Entstanden aus der Vorlesung Kristallographie an der ETH Zürich.
+keywords:
+  - Kristallographie
+  - crystallography

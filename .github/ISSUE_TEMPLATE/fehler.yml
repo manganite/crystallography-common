@@ -1,0 +1,26 @@
+name: Fehler im gemeinsamen Code
+description: Etwas in Stilen, Modulen, Werkzeugen oder Vorlagen funktioniert nicht und betrifft alle Apps.
+labels: [bug]
+body:
+  - type: textarea
+    id: was
+    attributes:
+      label: Was passiert?
+      description: Was haben Sie getan, was ist passiert, was hätten Sie erwartet?
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Link auf die Ansicht
+      description: Wo es sich zeigt, z. B. eine Ansicht einer App.
+  - type: input
+    id: umgebung
+    attributes:
+      label: Gerät, Browser und Version
+      description: z. B. „iPad, Safari, crystallography-common v0.1.1“.
+  - type: textarea
+    id: bild
+    attributes:
+      label: Bildschirmfoto
+      description: Wenn es hilft, hier hineinziehen.

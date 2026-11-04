@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: "Fehler oder Hinweis zur App „Stereographische Projektion“"
+    url: https://github.com/manganite/stereography/issues/new/choose
+    about: Fehler, fachliche Hinweise und Vorschläge zu einer einzelnen App bitte in deren Repository.
+  - name: "Fehler oder Hinweis zur App „Symmetrie in der Ebene“"
+    url: https://github.com/manganite/plane-groups/issues/new/choose
+    about: Fehler, fachliche Hinweise und Vorschläge zu einer einzelnen App bitte in deren Repository.
+  - name: Sicherheitslücke melden
+    url: https://github.com/manganite/crystallography-common/security/advisories/new
+    about: Bitte nicht öffentlich, sondern als private Meldung (siehe SECURITY.md).
