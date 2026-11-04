@@ -90,12 +90,14 @@ Ohne Abhängigkeiten; Tests mit Node 22:
 node --test tests/*.test.mjs
 ```
 
-Typprüfung mit TypeScript über JSDoc-Typen (`tsconfig.json`, strikt; Regel im [Leitfaden](LEITFADEN.md), Abschn. 9). TypeScript wird nur dafür installiert, in der CI im Job `typen`; Versionen wie dort, alle Pakete in einem Befehl (ein zweites `npm install --no-save` entfernt die zuvor installierten):
+Typprüfung mit TypeScript über JSDoc-Typen (`tsconfig.json`, strikt) und ESLint (`eslint.config.mjs`, gemeinsame Regeln in `tools/eslint-basis.mjs`); Regeln im [Leitfaden](LEITFADEN.md), Abschn. 9. Beide werden nur dafür installiert, in der CI in den Jobs `typen` und `lint`; Versionen wie dort, alle Pakete in einem Befehl (ein zweites `npm install --no-save` entfernt die zuvor installierten):
 
 ```bash
-npm install --no-save typescript@7.0.2 @types/node@22.20.5 playwright@1.52.0
+npm install --no-save typescript@7.0.2 @types/node@22.20.5 playwright@1.52.0 eslint@10.14.0 @eslint/js@10.0.1 globals@17.14.0
 npx tsc -p .                  # js/, tools/, tests/, fragenliste/
 node tools/sync.mjs vorlagen/app && npx tsc -p vorlagen/app
+npx eslint .                  # ohne die Vorlage
+(cd vorlagen/app && ../../node_modules/.bin/eslint .)
 ```
 
 `tests/typen.typen.js` belegt, dass die gekennzeichneten Typen aus `js/typen.js` Vertauschungen melden; die Datei läuft nur in der Typprüfung. Mit den installierten Paketen zeigt VS Code die Meldungen in geöffneten Dateien, ohne weitere Einstellung.

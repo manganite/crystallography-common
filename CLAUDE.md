@@ -64,7 +64,7 @@ Repo-Name = Pfad auf GitHub Pages:
 
 ## Git, PRs und Releases
 
-- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, in Apps auch `pdf`) und
+- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in Apps auch `pdf`) und
   Copilot-Review abwarten, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Mergen nur auf ausdrückliches OK von Thomas.**
 - **Einstellungen der Repos** (Regel „main schützen“, CodeQL in der erweiterten Einrichtung, About,
