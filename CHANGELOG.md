@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **`js/quiz-core.js`:** Im Typ `Frageinhalt` ist `pruefung.art` freiwillig, wie es `fragenliste/extract.mjs` schon behandelt (ein Generator in plane-groups liefert Prüfangaben ohne `art`).
+
 ### Hinzugefügt
 
 - **Leitfaden** Abschn. 7: Fragenbank als ES-Modul mit Begründung; sie enthält nur Literale und reine Formatierungshelfer, berechnete Fragen gehören in die Generatoren.
