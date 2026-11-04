@@ -60,8 +60,9 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 
 ### 5.3 Hilfen
 
-- **Erste Schritte:** Karte oben in der Seitenleiste beim ersten Besuch, drei bis vier Schritte mit Knopf, wegklickbar, über „?“ wieder zu öffnen; nicht bei Aufruf über einen Link.
-- **Tooltips** am Laptop (Maus verzögert, Tastaturfokus), **ⓘ-Erklärungen** je Abschnitt auf Touch-Geräten. Mechanik in `help.js`, Texte in der App (`hilfetexte.js`). Kurz, Begriffe wie im Skript; keine ausführlichen Erklärseiten in der App, dafür gibt es das Skript.
+- **Erste Schritte:** Karte oben in der Seitenleiste beim ersten Besuch, drei bis vier Schritte mit Knopf **je Modus** (die Karte zeigt die Schritte des aktiven Modus), wegklickbar, über „?“ wieder zu öffnen; nicht bei Aufruf über einen Link.
+- **Tooltips** am Laptop (Maus verzögert, Tastaturfokus), **ⓘ-Erklärungen** je Abschnitt auf Touch-Geräten. Mechanik in `help.js`, Texte in der App (`hilfetexte.js`). Kurz, Begriffe wie im Skript.
+- **Hilfeseite in der App:** zeigt, was man mit der App machen kann und wie, in 5–8 Anleitungen, jede eine konkrete Aufgabe Schritt für Schritt mit Bildern der Bedienung. Sie erklärt die Bedienung, nicht die Fachinhalte; umgekehrt ist das Skript keine Bedienungsanleitung. Grund (4.11.2026): Tooltips erklären einzelne Bedienelemente, das Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst. Form, Zugang und Bilder: Issue #24.
 
 ## 6. Das Skript
 
