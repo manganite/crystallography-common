@@ -109,6 +109,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Aussagen gegen Code und Quellen. Er bekommt nur Repo, Branch und Zweck des PR, nicht die Begründungen
   der Sitzung. Befunde wie die eines Reviewers behandeln (nachprüfen, beheben oder begründen), im Bericht
   nennen und im PR festhalten (Punkt „Review“ der PR-Vorlage), damit sie nachvollziehbar bleiben.
+  Das gilt für jeden PR ohne Ausnahme, auch bei reinen Textänderungen (Vorgabe Thomas, 5.11.2026; das
+  nachgeholte Review von plane-groups#75 fand übersehene Reste).
   Grund (4.11.2026): Das Copilot-Review ersetzt dies nicht mehr, weil dessen Nutzungslimit bei der
   Grösse der Familie nach wenigen Tagen aufgebraucht ist. Kommt trotzdem eines, wird es gleich behandelt;
   abgewartet wird es nicht.
