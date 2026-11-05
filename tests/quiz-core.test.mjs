@@ -99,6 +99,54 @@ test('Ziehen: Grenzen streng, wenn die Länge so erreichbar ist; sonst nie mehr 
   for (let seed = 1; seed < 30; seed++) assert.ok(streng(ziehen(voll, { stufe: 1, kapitel: [1], n: 5, rand: rng(seed) })));
 });
 
+test('Ziehen: Zufallsprüfung der Regel für erzeugte Fragen über Stufen, Kapitel, kleine Generatoren und Fortschritt (#61)', () => {
+  const r = rng(2026);
+  /** @param {number} m */
+  const zahl = (m) => Math.floor(r() * (m + 1));
+  for (let lauf = 0; lauf < 3000; lauf++) {
+    const stufe = /** @type {Stufe} */ (1 + zahl(2)), n = [3, 5, 7, 10, 20][zahl(4)];
+    const kapitel = r() < 0.5 ? null : [1 + zahl(1)];
+    /** @type {Frage[]} */
+    const bank = [];
+    for (let i = 0; i < zahl(13); i++) bank.push(frage(`h${i}`, /** @type {Stufe} */ (1 + zahl(2)), 1 + zahl(1)));
+    /** @type {Generator[]} */
+    const gens = [];
+    for (let j = 0; j < zahl(3); j++) {
+      const s = /** @type {Stufe} */ (1 + zahl(2)), anzahl = zahl(5);
+      gens.push({ ...GEN[0], id: `g${j}`, kapitel: 1 + zahl(1), stufen: [s], params: () => Array.from({ length: anzahl }, (_, i) => String(i)) });
+    }
+    const k = kandidaten(bank, gens);
+    const p = leererFortschritt();
+    for (const x of k) if (r() < 0.4) vermerken(p, x.key, r() < 0.5);
+    const z = ziehen(k, { stufe, kapitel, n, progress: p, rand: rng(lauf + 1) });
+    // Referenz, unabhängig vom Code: verfügbare Kandidaten je Art
+    const verfuegbar = k.filter((x) => x.stufe <= stufe && (!kapitel || kapitel.includes(x.kapitel)));
+    const H = verfuegbar.filter((x) => !x.gen).length;
+    /** @type {Record<string, number>} */
+    const P = {};
+    for (const x of verfuegbar) if (x.gen) P[x.gen.id] = (P[x.gen.id] || 0) + 1;
+    const summeP = Object.values(P).reduce((a, b) => a + b, 0);
+    const strengMoeglich = H + Math.min(Object.values(P).reduce((a, c) => a + Math.min(c, Math.floor(n * GEN_ANTEIL)), 0), Math.floor(n * GEN_GESAMT)) >= n;
+    const info = `Lauf ${lauf}: Stufe ${stufe}, n ${n}, H ${H}, P ${JSON.stringify(P)}: ${z.map((x) => x.key).join(' ')}`;
+    assert.equal(new Set(z.map((x) => x.key)).size, z.length, info);
+    assert.ok(z.every((x) => verfuegbar.includes(x)), info);
+    const e = z.filter((x) => x.gen).length, h = z.length - e;
+    assert.ok(e <= h, info);
+    if (strengMoeglich) assert.ok(z.length === n && streng(z), info);
+    else {
+      assert.equal(z.length, Math.min(n, H + Math.min(H, summeP)), info);
+      // gleichmässig: liegt ein Generator mehr als eine Frage zurück, sind seine Parameter erschöpft
+      const je = jeGenerator(z);
+      for (const a of Object.keys(P)) for (const b of Object.keys(P)) if ((je[a] || 0) > (je[b] || 0) + 1) assert.equal(je[b] || 0, P[b], `gleichmässig: ${info}`);
+      // Vorrang innerhalb eines Generators: keine beantwortete Frage, solange eine nie beantwortete fehlt
+      for (const x of verfuegbar) {
+        if (!x.gen || z.includes(x) || p.fragen[x.key]) continue;
+        assert.ok(!z.some((y) => y.gen?.id === x.gen?.id && p.fragen[y.key]), `Vorrang: ${info}`);
+      }
+    }
+  }
+});
+
 test('Kandidaten: derselbe Parameter auf zwei Stufen ist ein Fehler (#60)', () => {
   /** @type {Generator} */
   const doppelt = { ...GEN[0], id: 'd', stufen: [1, 2], params: () => ['p'] };

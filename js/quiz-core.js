@@ -69,10 +69,10 @@ export const STUFEN = {
 
 /** Anteile der Stufen in einem Quiz der gewählten Stufe (höchste Stufe zuerst). @type {Record<Stufe, Partial<Record<Stufe, number>>>} */
 export const ANTEILE = { 1: { 1: 1 }, 2: { 2: 0.7, 1: 0.3 }, 3: { 3: 0.5, 2: 0.3, 1: 0.2 } };
-/** Höchstens dieser Anteil eines Quiz stammt aus demselben Generator. */
+/** Höchstens dieser Anteil eines Quiz stammt aus demselben Generator, solange die gewählte Länge so erreichbar ist (ziehen()). */
 export const GEN_ANTEIL = 0.3;
-/** Höchstens dieser Anteil eines Quiz sind erzeugte Fragen, alle Generatoren zusammen (Vorgabe 25.10.2026).
- *  Reichen die handgeschriebenen Fragen nicht, wird das Quiz kürzer. */
+/** Höchstens dieser Anteil eines Quiz sind erzeugte Fragen, alle Generatoren zusammen (Vorgabe 25.10.2026). Reichen die
+ *  handgeschriebenen Fragen dafür nicht, gilt nur „nie mehr erzeugte als handgeschriebene“ (ziehen(), CLAUDE.md). */
 export const GEN_GESAMT = 0.5;
 
 /**
