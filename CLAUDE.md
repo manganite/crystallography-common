@@ -73,7 +73,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 - **„Alle Einstellungen zurücksetzen“ gemeinsam** (5.11.2026, #48, Leitfaden Abschn. 5.2): Ort und Umfang waren
   nicht festgelegt; plane-groups hatte den Knopf im Abschnitt „Darstellung“ und setzte nur den Zustand im Programm
   zurück (offene Abschnitte u. a. blieben). Neu laden ohne Speicher und Hash, wie in der Stereo-App, erreicht den
-  Startzustand sicher, auch für Zustand, der später dazukommt. Thomas zog diese Lösung vor.
+  Startzustand sicher; Thomas zog diese Lösung vor. Gelöscht wird nach Präfix statt nach einer Liste, damit ein
+  neuer Eintrag nicht vergessen werden kann (Befund des Reviews); das Präfix trennt die Apps, die auf
+  manganite.github.io denselben Speicher teilen. Feste ID `reset-alles` für Tooltips und die Hilfeseite (#24).
 - **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
   Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch

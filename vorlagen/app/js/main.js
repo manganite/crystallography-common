@@ -100,8 +100,8 @@ function init() {
   element('[data-step="1"]').addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
   element('[data-step="2"]').addEventListener('click', () => { abschnitt('sec-view').open = true; });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
-  // Alle Einträge der App im Speicher des Browsers, nicht die des Quiz (Leitfaden Abschn. 5.2)
-  $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen([INTRO]));
+  // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
+  $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));
   initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', alles);
   $('app-version').innerHTML = `<a href="${REPO}">Version ${VERSION}</a>`;

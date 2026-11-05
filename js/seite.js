@@ -1,5 +1,5 @@
 // Kleine Helfer für alle Seiten einer App (App, Skript, Quiz): Elemente der Seite, Versionsnummer eintragen,
-// Offline-Betrieb.
+// „Alle Einstellungen zurücksetzen“, Offline-Betrieb.
 
 // ------------------------------------------------------------------ Elemente der Seite
 // Die Typprüfung kennt das HTML nicht. Die Helfer prüfen deshalb zur Laufzeit, ob das Element da ist und die
@@ -72,21 +72,35 @@ export function versionEintragen(version) {
   document.querySelectorAll('[data-version]').forEach((el) => { el.textContent = version; });
 }
 
+// ------------------------------------------------------------------ Alle Einstellungen zurücksetzen
+
 /**
- * „Alle Einstellungen zurücksetzen“ (Leitfaden Abschn. 5.2): löscht die gegebenen Einträge im Speicher des
- * Browsers und lädt die Seite ohne Hash neu. So ist der Startzustand sicher erreicht, auch für Zustand, den die App
- * später dazubekommt, und die Erste-Schritte-Karte erscheint wieder. Die Einträge des Quiz gehören nicht dazu.
- * Schreibt die App beim Verlassen der Seite noch etwas (Zustand, offene Abschnitte), löscht pagehide es wieder.
- * @param {string[]} schluessel alle Einträge der App (Zustand, Erste Schritte, Abschnitte, Erläuterungen), nicht das Quiz
+ * „Alle Einstellungen zurücksetzen“ (Leitfaden Abschn. 5.2): löscht im Speicher des Browsers alle Einträge, die mit
+ * „<praefix>-“ beginnen, ausser denen des Quiz („<praefix>-quiz…“), und lädt die Seite ohne Hash neu. So ist der
+ * Startzustand sicher erreicht, auch für Zustand und Einträge, die die App später dazubekommt, und die
+ * Erste-Schritte-Karte erscheint wieder. Andere Apps derselben Adresse (manganite.github.io) haben eigene Präfixe.
+ * Was die App beim Verlassen der Seite bis pagehide noch speichert, löscht pagehide wieder; danach (visibilitychange,
+ * unload) darf sie nicht speichern.
+ * @param {string} praefix Präfix der App, z. B. 'stereo' (Leitfaden Abschn. 5.2)
  */
-export function alleEinstellungenZuruecksetzen(schluessel) {
+export function alleEinstellungenZuruecksetzen(praefix) {
+  const eigene = praefix + '-', quiz = praefix + '-quiz';
   const loeschen = () => {
-    try { for (const k of schluessel) localStorage.removeItem(k); } catch { /* ohne Speicher weiter */ }
+    try {
+      const weg = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k !== null && k.startsWith(eigene) && !k.startsWith(quiz)) weg.push(k);
+      }
+      for (const k of weg) localStorage.removeItem(k);
+    } catch { /* ohne Speicher weiter */ }
   };
   loeschen();
   window.addEventListener('pagehide', loeschen);
   location.replace(location.pathname + location.search);
 }
+
+// ------------------------------------------------------------------ Offline-Betrieb
 
 /**
  * Service Worker anmelden (Offline-Betrieb, z. B. im Hörsaal ohne WLAN). Nur über HTTPS (GitHub Pages);
