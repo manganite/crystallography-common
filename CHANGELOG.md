@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Quiz: Grenzen für erzeugte Fragen streng** (#61, `js/quiz-core.js`, `ziehen()`): höchstens 30 % je Generator und 50 % insgesamt, bezogen auf die tatsächliche Länge und abgerundet. Bisher konnten ein verkürztes Quiz (wenige handgeschriebene Fragen) 50 % und ein Quiz mit 5 Fragen 40 % aus einem Generator enthalten. Bei 5 Fragen kommt jetzt höchstens eine je Generator. Für die Apps: nichts anzupassen; ein Quiz kann etwas weniger erzeugte Fragen enthalten.
+- **Quiz: Grenzen für erzeugte Fragen streng** (#61, `js/quiz-core.js`, `ziehen()`): höchstens 30 % je Generator und 50 % insgesamt, bezogen auf die tatsächliche Länge und abgerundet. Bisher konnten ein verkürztes Quiz (wenige handgeschriebene Fragen) 50 % und ein Quiz mit 5 Fragen 40 % aus einem Generator enthalten. Bei 5 Fragen kommt jetzt höchstens eine je Generator. Für die Apps: kein Code anzupassen, aber in Kapiteln mit wenigen handgeschriebenen Fragen fällt das Quiz kürzer aus als gewählt (im Review gemessen z. B. plane-groups Kap. 6, Stufe 1: 4 statt 6 Fragen; Kap. 7, Stufe 2, bei 20 Fragen: 7 statt 10); mit nur 1–2 handgeschriebenen Fragen enthält es keine erzeugten mehr. Abhilfe: weitere handgeschriebene Fragen.
 - **Quiz: Schlüssel eindeutig** (#60, `kandidaten()`): Kommt ein Schlüssel doppelt vor (z. B. derselbe Parameter eines Generators auf zwei Stufen), bricht `kandidaten()` mit einem Fehler ab, statt den Fortschritt zweier Fragen zu vermischen. Für die Apps: nichts anzupassen, alle Generatoren erfüllen das (Tests der Apps grün).
 
 ### Behoben

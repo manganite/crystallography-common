@@ -125,12 +125,17 @@ export function kandidaten(bank, gens, { entwurf = false } = {}) {
     if (!sichtbar(g.status, entwurf)) continue;
     for (const s of g.stufen) for (const param of g.params(s)) out.push({ key: `${g.id}:${param}`, stufe: s, kapitel: g.kapitel, gen: g, param });
   }
-  // Der Schlüssel trägt den Fortschritt und enthält keine Stufe: Ein Parameter darf nur auf einer Stufe vorkommen
+  // Der Schlüssel trägt den Fortschritt und enthält keine Stufe: Ein Parameter darf nur auf einer Stufe vorkommen.
+  // Geprüft werden nur sichtbare Kandidaten; die Tests der Apps rufen kandidaten() deshalb mit { entwurf: true } auf.
   /** @type {Map<string, Kandidat>} */
   const gesehen = new Map();
   for (const k of out) {
     const vorher = gesehen.get(k.key);
-    if (vorher) throw new Error(`Quiz: Schlüssel ${k.key} doppelt (Stufe ${vorher.stufe} und ${k.stufe}); Parameter eines Generators und IDs müssen über alle Stufen eindeutig sein`);
+    if (vorher) {
+      throw new Error(k.gen
+        ? `Quiz: Generator ${k.gen.id} hat den Parameter ${k.param} auf Stufe ${vorher.stufe} und ${k.stufe}; Parameter müssen über alle Stufen eindeutig sein`
+        : `Quiz: Schlüssel ${k.key} doppelt (Frage-ID oder Generator-Schlüssel); jeder Schlüssel nur einmal`);
+    }
     gesehen.set(k.key, k);
   }
   return out;

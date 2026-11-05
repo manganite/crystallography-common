@@ -72,6 +72,14 @@ test('Ziehen: 30 % je Generator und 50 % erzeugt gelten für die tatsächliche L
   // Fall aus dem Review: 2 handgeschriebene Fragen, ein Generator, n = 10 → höchstens 30 % aus dem Generator
   const k = kandidaten(BANK.filter((q) => q.kapitel === 1 && q.stufe === 1).slice(0, 2), [g('a')]);
   for (let seed = 1; seed < 30; seed++) assert.ok(anteileEingehalten(ziehen(k, { stufe: 1, n: 10, rand: rng(seed) })));
+  // Länge: nicht unnötig gekürzt (Werte von Hand: h handgeschriebene, g erzeugte mit g ≤ ⌊0,3·L⌋ je Generator, g ≤ ⌊0,5·L⌋)
+  /** @param {number} hand @param {Generator[]} gens @param {number} n */
+  const laenge = (hand, gens, n) => ziehen(kandidaten(BANK.filter((q) => q.kapitel === 1 && q.stufe === 1).slice(0, hand), gens), { stufe: 1, n, rand: rng(5) });
+  assert.equal(laenge(8, viele, 10).length, 10); // 7 + 3 oder mehr Handfragen, jedenfalls voll
+  assert.equal(laenge(3, [g('a')], 10).length, 4); // 3 + 1: ⌊0,3·4⌋ = 1
+  assert.equal(laenge(3, [g('a')], 10).filter((x) => x.gen).length, 1);
+  assert.equal(laenge(4, viele, 10).length, 8); // 4 + 4 (⌊0,5·8⌋ = 4; je Generator ≤ ⌊2,4⌋ = 2)
+  assert.equal(laenge(2, [g('a')], 10).length, 2); // ⌊0,3·3⌋ = 0: keine erzeugte Frage
   // volle Quizrunde mit 5 Fragen: höchstens 1 je Generator (nicht 2 durch Runden)
   const voll = kandidaten(BANK, viele);
   for (let seed = 1; seed < 30; seed++) assert.ok(anteileEingehalten(ziehen(voll, { stufe: 1, kapitel: [1], n: 5, rand: rng(seed) })));
@@ -80,7 +88,8 @@ test('Ziehen: 30 % je Generator und 50 % erzeugt gelten für die tatsächliche L
 test('Kandidaten: derselbe Parameter auf zwei Stufen ist ein Fehler (#60)', () => {
   /** @type {Generator} */
   const doppelt = { ...GEN[0], id: 'd', stufen: [1, 2], params: () => ['p'] };
-  assert.throws(() => kandidaten([], [doppelt]), /d:p doppelt/);
+  assert.throws(() => kandidaten([], [doppelt]), /Generator d hat den Parameter p auf Stufe 1 und 2/);
+  assert.throws(() => kandidaten([BANK[0], BANK[0]], []), /k1-s1-0 doppelt/);
   /** @type {Generator} */
   const getrennt = { ...GEN[0], id: 'd', stufen: [1, 2], params: (s) => [`p${s}`] };
   assert.equal(kandidaten([], [getrennt]).length, 2);
