@@ -13,6 +13,7 @@ Quiz: Grenzen für erzeugte Fragen gelten streng, solange die gewählte Länge e
 ### Geändert
 
 - **Quiz: Grenzen für erzeugte Fragen** (#61, `js/quiz-core.js`, `ziehen()`): höchstens 30 % je Generator und 50 % insgesamt, bezogen auf die tatsächliche Länge und abgerundet (bei 5 Fragen höchstens eine je Generator), solange die gewählte Länge damit erreichbar ist. Sonst gilt nur noch: nie mehr erzeugte als handgeschriebene Fragen, gleichmässig über die Generatoren verteilt. Bisher konnten ein verkürztes Quiz 50 % und ein Quiz mit 5 Fragen 40 % aus einem Generator enthalten. Kürzer als gewählt wird ein Quiz nur noch, wenn es weniger handgeschriebene Fragen gibt als die halbe gewählte Länge oder zu wenige erzeugte. Für die Apps: nichts anzupassen.
+- **Leitfaden:** Abschn. 4 (Querstrich mit Alternativtext für Screenreader, mit Grenzen) und Abschn. 7 (Regel für erzeugte Fragen; Generator-Parameter nur auf einer Stufe, Frage-IDs eindeutig; Tests einer App rufen `kandidaten()` auch mit `{ entwurf: true }` auf).
 - **Quiz: Schlüssel eindeutig** (#60, `kandidaten()`): Kommt ein Schlüssel doppelt vor (z. B. derselbe Parameter eines Generators auf zwei Stufen), bricht `kandidaten()` mit einem Fehler ab, statt den Fortschritt zweier Fragen zu vermischen. Für die Apps: nichts anzupassen, alle Generatoren erfüllen das (Tests der Apps grün).
 
 ### Behoben
