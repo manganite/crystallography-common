@@ -8,11 +8,11 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **Gewählte und gesperrte Knöpfe** (#53) in `css/app.css`: `.tools button[aria-pressed="true"]` in der Akzentfarbe, `.tools button:disabled` und `.seg button:disabled` blass mit Zeiger „not-allowed“ (Leitfaden Abschn. 5.2). Bisher hatten gesperrte Knöpfe keinen eigenen Stil und sahen aktiv aus. Für die Apps: eigene Regeln dafür aus dem `<style>` entfernen (plane-groups); stereography hat keine gesperrten Knöpfe dieser Art, dort ändert sich nichts.
+- **Gewählte und gesperrte Knöpfe** (#53) in `css/app.css`: `.tools button[aria-pressed="true"]` in der Akzentfarbe, `.tools button:disabled` und `.seg button:disabled` blass mit Zeiger „not-allowed“ (Leitfaden Abschn. 5.2). Bisher hatten gesperrte Knöpfe keinen eigenen Stil und sahen aktiv aus. Für die Apps: eigene Regeln dafür aus dem `<style>` entfernen (plane-groups: `.panel-head .tools button:disabled, .seg button:disabled` und `.panel-head .tools button[aria-pressed="true"]`; `.tabs button:disabled` bleibt); stereography hat keine gesperrten Knöpfe dieser Art, dort ändert sich nichts.
 
 ### Geändert
 
-- **Leitfaden Abschn. 5.2:** Werkzeuge (Knöpfe einer Tafel, deren einziger Zweck die Art der Eingabe ist, z. B. Zeichnen, Radieren, Zone, Winkel) schliessen sich wie eine Auswahl aus und werden abgewählt, wenn ein anderes Werkzeug oder eine andere Funktion sie ausschliesst; ausgeschlossen sind sie sichtbar gesperrt, mit Grund bei der Tafel; in einem Modus ohne sie fehlen sie. Schalter, auch Knöpfe für die Ansicht wie die Lupe, bleiben „gesperrt, nicht abgewählt“. Für die Apps: nichts anzupassen (plane-groups setzt es so um; in stereography schliessen sich Zone und Winkel aus, Zone fehlt im Punktgruppenmodus). Sichtbare Sperre im gemeinsamen CSS: #53.
+- **Leitfaden Abschn. 5.2:** Werkzeuge (Knöpfe einer Tafel, deren einziger Zweck die Art der Eingabe ist, z. B. Zeichnen, Radieren, Zone, Winkel) schliessen sich wie eine Auswahl aus und werden abgewählt, wenn ein anderes Werkzeug oder eine andere Funktion sie ausschliesst; ausgeschlossen sind sie sichtbar gesperrt, mit Grund bei der Tafel; in einem Modus ohne sie fehlen sie. Schalter, auch Knöpfe für die Ansicht wie die Lupe, bleiben „gesperrt, nicht abgewählt“. Für die Apps: nichts anzupassen (plane-groups setzt es so um; in stereography schliessen sich Zone und Winkel aus, Zone fehlt im Punktgruppenmodus). Sichtbare Sperre im gemeinsamen CSS: siehe „Hinzugefügt“.
 
 ## [0.7.0] - 2026-11-05
 
