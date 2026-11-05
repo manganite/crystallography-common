@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-05
+
+Anordnung der Tafeln gemeinsam in `css/app.css` und die Vorlage als vollständige Musterseite. Für die Apps: die eigenen Regeln für die Anordnung aus dem `<style>` von `index.html` entfernen; Tafeln heissen `.p-a`/`.p-b`, der Umschalter setzt `data-fig="a"`/`"b"` (siehe „Geändert“). Sonst ändert sich zur Laufzeit nichts.
+
 ### Hinzugefügt
 
 - **Vorlage als Musterseite** (#7): Das Skript der Vorlage zeigt jetzt alle gemeinsamen Formen für Abbildungen (`fig-row`, `fig-row3`, `fig-cols`, `fig-grid5`, `fig-narrow`, `fig-note`), eine Abbildung mit Regler (`slider`, im PDF als fester Zustand), Formel (`formel`), Schema (`schema`), Tabelle mit Unterschrift (`tab`, `tabwrap`, `tab-wrap`, `caption`), einen Vertiefungsabschnitt (Etikett auch im Inhaltsverzeichnis), Lernziele zur Vertiefung (`.box > h5`) und einen Querstrich (`ov`). Leitfaden Abschn. 6: Regel zu den Nummern von Abbildungen und Tabellen, wie in den Apps.
@@ -122,7 +126,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.6.0
 [0.5.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.5.0
 [0.4.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.4.0
 [0.3.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.3.1
