@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **„Alle Einstellungen zurücksetzen“** (#48): `alleEinstellungenZuruecksetzen(schluessel)` in `js/seite.js` löscht die genannten Einträge im Speicher des Browsers (auch nochmals beim Verlassen der Seite) und lädt die Seite ohne Hash neu. Ort und Umfang des Knopfs stehen jetzt im Leitfaden (Abschn. 5.2): letztes Element der Seitenleiste, ausserhalb der Abschnitte; alle Einträge der App ausser denen des Quiz. Die Vorlage hat den Knopf. Für die Apps: Knopf dorthin verschieben und die Funktion aufrufen; sonst ändert sich nichts.
+
 ### Behoben
 
 - **PDF des Skripts** (#43): Ein Raster aus kleinen Abbildungen (`.fig-grid5`) wird nicht mehr über einen Seitenumbruch verteilt. In plane-groups stand Abb. 2.3 bisher auf zwei Seiten (jetzt eine Seite mehr, 79 statt 78; Abb. 5.1 ist höher als eine Seite und beginnt jetzt auf einer neuen), in der Vorlage Abb. 1.6; stereography unverändert.

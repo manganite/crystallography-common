@@ -32,7 +32,7 @@ g.document = {
 /** Nachgebildete Art als Art des DOM (nur für die Typprüfung). @param {Function} k */
 const art = (k) => /** @type {new () => Element} */ (/** @type {unknown} */ (k));
 
-const { nachId, $, eingabe, auswahl, knopf, abschnitt, grafik, element, elemente } = await import('../js/seite.js');
+const { nachId, $, eingabe, auswahl, knopf, abschnitt, grafik, element, elemente, alleEinstellungenZuruecksetzen } = await import('../js/seite.js');
 
 test('Elemente nach ID: richtige Art wird zurückgegeben', () => {
   assert.equal(eingabe('feld'), ids.feld);
@@ -74,4 +74,31 @@ test('Elemente zum Selektor: geprüft, elemente() erlaubt eine leere Liste', () 
   assert.throws(() => elemente('.bild'), /zu \.bild ist SVGSVGElement_, erwartet HTMLElement_$/);
   assert.equal(elemente('.bild', art(SVGSVGElement_)).length, 1);
   assert.throws(() => elemente('.zeile', art(HTMLButtonElement_)), /zu \.zeile ist HTMLElement_, erwartet HTMLButtonElement_$/);
+});
+
+test('Alle Einstellungen zurücksetzen: löscht nur die genannten Einträge, lädt ohne Hash neu, löscht beim Verlassen nochmals', () => {
+  /** @type {Map<string, string>} */
+  const speicher = new Map([['app-zustand', '{}'], ['app-intro', 'a'], ['app-quiz', '{}']]);
+  /** @type {(() => void)[]} */
+  const beimVerlassen = [];
+  /** @type {string[]} */
+  const ziele = [];
+  const vorher = { localStorage: g.localStorage, window: g.window, location: g.location };
+  Object.assign(g, {
+    localStorage: { removeItem: (/** @type {string} */ k) => { speicher.delete(k); } },
+    window: { addEventListener: (/** @type {string} */ typ, /** @type {() => void} */ f) => { if (typ === 'pagehide') beimVerlassen.push(f); } },
+    location: { pathname: '/app/', search: '?sw', hash: '#m=a', replace: (/** @type {string} */ z) => { ziele.push(z); } },
+  });
+  try {
+    alleEinstellungenZuruecksetzen(['app-zustand', 'app-intro']);
+    assert.deepEqual([...speicher.keys()], ['app-quiz'], 'Quiz bleibt');
+    assert.deepEqual(ziele, ['/app/?sw'], 'ohne Hash, Suchteil bleibt');
+    speicher.set('app-zustand', '{"spaet":1}'); // die App speichert beim Verlassen noch einmal
+    beimVerlassen.forEach((f) => f());
+    assert.deepEqual([...speicher.keys()], ['app-quiz']);
+    // Ohne Speicher (z. B. gesperrt): kein Fehler, trotzdem neu laden
+    g.localStorage = { removeItem: () => { throw new Error('gesperrt'); } };
+    alleEinstellungenZuruecksetzen(['app-zustand']);
+    assert.equal(ziele.length, 2);
+  } finally { Object.assign(g, vorher); }
 });

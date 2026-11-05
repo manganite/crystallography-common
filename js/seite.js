@@ -73,6 +73,22 @@ export function versionEintragen(version) {
 }
 
 /**
+ * „Alle Einstellungen zurücksetzen“ (Leitfaden Abschn. 5.2): löscht die gegebenen Einträge im Speicher des
+ * Browsers und lädt die Seite ohne Hash neu. So ist der Startzustand sicher erreicht, auch für Zustand, den die App
+ * später dazubekommt, und die Erste-Schritte-Karte erscheint wieder. Die Einträge des Quiz gehören nicht dazu.
+ * Schreibt die App beim Verlassen der Seite noch etwas (Zustand, offene Abschnitte), löscht pagehide es wieder.
+ * @param {string[]} schluessel alle Einträge der App (Zustand, Erste Schritte, Abschnitte, Erläuterungen), nicht das Quiz
+ */
+export function alleEinstellungenZuruecksetzen(schluessel) {
+  const loeschen = () => {
+    try { for (const k of schluessel) localStorage.removeItem(k); } catch { /* ohne Speicher weiter */ }
+  };
+  loeschen();
+  window.addEventListener('pagehide', loeschen);
+  location.replace(location.pathname + location.search);
+}
+
+/**
  * Service Worker anmelden (Offline-Betrieb, z. B. im Hörsaal ohne WLAN). Nur über HTTPS (GitHub Pages);
  * mit lokal: true auch lokal, wenn die Adresse ?sw enthält (zum Testen).
  * neuLaden: Übernimmt eine neue Version die Seite, lädt sie einmal neu (die App selbst; Skript und Quiz nicht).

@@ -70,6 +70,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   gleich und stand dreimal; eine Änderung musste dreimal gemacht werden. Bisher hiess es, jede App lege sie
   selbst fest; das gilt nur noch für eine abweichende Anordnung. Eine gemeinsame 3D-Ansicht folgt erst mit einer
   zweiten App, die eine braucht (#9).
+- **„Alle Einstellungen zurücksetzen“ gemeinsam** (5.11.2026, #48, Leitfaden Abschn. 5.2): Ort und Umfang waren
+  nicht festgelegt; plane-groups hatte den Knopf im Abschnitt „Darstellung“ und setzte nur den Zustand im Programm
+  zurück (offene Abschnitte u. a. blieben). Neu laden ohne Speicher und Hash, wie in der Stereo-App, erreicht den
+  Startzustand sicher, auch für Zustand, der später dazukommt. Thomas zog diese Lösung vor.
 - **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
   Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch

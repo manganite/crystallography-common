@@ -54,7 +54,7 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 
 - **Weniger auf einmal:** Standardmässig sichtbar ist, was man aus Lehrbuch und Vorlesung von der Darstellung erwartet. Weiteres liegt in eingeklappten Abschnitten an klar ersichtlicher Stelle. Kein globaler Einfach/Erweitert-Modus.
 - **Kein versteckter Zustand:** Ein Schalter, der gerade nicht wirkt, wird gesperrt und nicht abgewählt; der Grund steht darunter (`.check .why`). Zwei Wege zum selben Ergebnis vermeiden.
-- **Vorhersagbar:** Zurücksetzen je Abschnitt (`.resetbtn`) und „Alle Einstellungen zurücksetzen“.
+- **Vorhersagbar:** Zurücksetzen je Abschnitt (`.resetbtn`) und „Alle Einstellungen zurücksetzen“: ein `.resetbtn` als letztes Element der Seitenleiste, ausserhalb aller Abschnitte und Karten, damit immer sichtbar (Vorlage). Er ruft `alleEinstellungenZuruecksetzen(…)` aus `lib/common/js/seite.js` mit allen Einträgen der App im Speicher des Browsers auf (Zustand, Erste Schritte, offene Abschnitte, Erläuterungen), nicht denen des Quiz; die Seite lädt ohne Hash neu. Bekommt die App einen neuen Eintrag, kommt er im selben PR in diesen Aufruf.
 - **Zustand in der Adresse** (`#m=…&…`), lesbar und stabil, erst geschrieben, wenn vom Standard abgewichen wird; „Link kopieren“ für Folien und Moodle. Zusätzlich im Browser gespeichert; ein Link hat Vorrang.
 - **Geräte:** Laptop und iPad sind Ziel, Telefon nutzbar. Touch-Ziele mindestens 40 px, Trefferkreise für Punkte in Grafiken 44 px. Auf dem Telefon entfallen Export und „Link kopieren“.
 
