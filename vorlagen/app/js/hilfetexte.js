@@ -15,6 +15,7 @@ export const TIPS = {
   'v-farben': 'Symmetrieelemente in der Farbe ihrer Blickrichtung zeichnen (Positionen im Hermann-Mauguin-Symbol).',
   'v-achsen': 'Gitterachsen a und b einblenden.',
   'v-wahl': 'Beispiel für ein Auswahlfeld.',
+  'reset-alles': 'Alle Einstellungen und den gespeicherten Zustand löschen und die App neu starten (der Fortschritt im Quiz bleibt).',
 };
 
 /** ⓘ-Erklärungen: je Abschnitt ein Einleitungssatz und die Elemente, deren Texte gezeigt werden. @type {Abschnitt[]} */

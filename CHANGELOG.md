@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **„Alle Einstellungen zurücksetzen“** (#48): `alleEinstellungenZuruecksetzen(praefix)` in `js/seite.js` löscht alle Einträge der App im Speicher des Browsers ausser denen des Quiz (auch nochmals bei `pagehide`) und lädt die Seite ohne Hash neu. Die Vorlage hat den Knopf. Umsetzung in den Apps (Ort, ID, Präfix): Leitfaden Abschn. 5.2. In plane-groups ändert sich damit das Verhalten (Neuladen; auch offene Abschnitte und Tafel am Telefon werden zurückgesetzt), in stereography nicht.
+
 ### Behoben
 
 - **PDF des Skripts** (#43): Ein Raster aus kleinen Abbildungen (`.fig-grid5`) wird nicht mehr über einen Seitenumbruch verteilt. In plane-groups stand Abb. 2.3 bisher auf zwei Seiten (jetzt eine Seite mehr, 79 statt 78; Abb. 5.1 ist höher als eine Seite und beginnt jetzt auf einer neuen), in der Vorlage Abb. 1.6; stereography unverändert.

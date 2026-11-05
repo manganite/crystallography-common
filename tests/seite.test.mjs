@@ -32,7 +32,7 @@ g.document = {
 /** Nachgebildete Art als Art des DOM (nur für die Typprüfung). @param {Function} k */
 const art = (k) => /** @type {new () => Element} */ (/** @type {unknown} */ (k));
 
-const { nachId, $, eingabe, auswahl, knopf, abschnitt, grafik, element, elemente } = await import('../js/seite.js');
+const { nachId, $, eingabe, auswahl, knopf, abschnitt, grafik, element, elemente, alleEinstellungenZuruecksetzen } = await import('../js/seite.js');
 
 test('Elemente nach ID: richtige Art wird zurückgegeben', () => {
   assert.equal(eingabe('feld'), ids.feld);
@@ -74,4 +74,61 @@ test('Elemente zum Selektor: geprüft, elemente() erlaubt eine leere Liste', () 
   assert.throws(() => elemente('.bild'), /zu \.bild ist SVGSVGElement_, erwartet HTMLElement_$/);
   assert.equal(elemente('.bild', art(SVGSVGElement_)).length, 1);
   assert.throws(() => elemente('.zeile', art(HTMLButtonElement_)), /zu \.zeile ist HTMLElement_, erwartet HTMLButtonElement_$/);
+});
+
+/**
+ * Globale Eigenschaften für einen Test ersetzen und danach wiederherstellen; über Beschreibungen, weil Node
+ * (ab Version 25) localStorage selbst als Eigenschaft mit Getter mitbringt.
+ * @param {Record<string, PropertyDescriptor>} neu @param {() => void} f
+ */
+function mitGlobalen(neu, f) {
+  const alt = Object.fromEntries(Object.keys(neu).map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]));
+  for (const [k, d] of Object.entries(neu)) Object.defineProperty(globalThis, k, { configurable: true, ...d });
+  try { f(); } finally {
+    for (const [k, d] of Object.entries(alt)) {
+      if (d) Object.defineProperty(globalThis, k, d); else delete g[k];
+    }
+  }
+}
+
+test('Alle Einstellungen zurücksetzen: löscht die Einträge der App ausser dem Quiz, lädt ohne Hash neu, löscht beim Verlassen nochmals', () => {
+  /** @type {Map<string, string>} */
+  const speicher = new Map([['app-zustand', '{}'], ['app-intro', 'a'], ['app-quiz', '{}'], ['app-quiz-lauf', '1'],
+    ['andere-zustand', '{}'], ['app', 'x'], ['appx-zustand', '{}']]);
+  const nachgebildet = {
+    get length() { return speicher.size; },
+    key: (/** @type {number} */ i) => [...speicher.keys()][i] ?? null,
+    removeItem: (/** @type {string} */ k) => { speicher.delete(k); },
+  };
+  /** @type {(() => void)[]} */
+  const beimVerlassen = [];
+  /** @type {string[]} */
+  const ziele = [];
+  mitGlobalen({
+    localStorage: { value: nachgebildet },
+    window: { value: { addEventListener: (/** @type {string} */ typ, /** @type {() => void} */ f) => { if (typ === 'pagehide') beimVerlassen.push(f); } } },
+    location: { value: { pathname: '/app/', search: '?sw', hash: '#m=a', replace: (/** @type {string} */ z) => { ziele.push(z); } } },
+  }, () => {
+    alleEinstellungenZuruecksetzen('app');
+    const bleibt = ['app-quiz', 'app-quiz-lauf', 'andere-zustand', 'app', 'appx-zustand'];
+    assert.deepEqual([...speicher.keys()], bleibt, 'Quiz, andere Apps und Einträge ohne „app-“ bleiben');
+    assert.deepEqual(ziele, ['/app/?sw'], 'ohne Hash, Suchteil bleibt');
+    speicher.set('app-abschnitte', '[]'); // die App speichert beim Verlassen noch etwas
+    beimVerlassen.forEach((f) => f());
+    assert.deepEqual([...speicher.keys()], bleibt);
+  });
+  // Gesperrter Speicher: Schon der Zugriff auf localStorage wirft (SecurityError) bzw. removeItem wirft.
+  // Kein Fehler, trotzdem neu laden.
+  for (const localStorage of [{ get() { throw new Error('gesperrt'); } },
+    { value: { length: 1, key: () => 'app-zustand', removeItem: () => { throw new Error('gesperrt'); } } }]) {
+    mitGlobalen({
+      localStorage,
+      window: { value: { addEventListener: () => {} } },
+      location: { value: { pathname: '/app/', search: '', replace: (/** @type {string} */ z) => { ziele.push(z); } } },
+    }, () => {
+      const vorher = ziele.length;
+      assert.doesNotThrow(() => alleEinstellungenZuruecksetzen('app'));
+      assert.equal(ziele.length, vorher + 1);
+    });
+  }
 });

@@ -3,7 +3,7 @@
 
 import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
-import { offline, $, eingabe, abschnitt, grafik, element, elemente } from '../lib/common/js/seite.js';
+import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik, element, elemente } from '../lib/common/js/seite.js';
 import { TIPS, SECTIONS, LABELS } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
@@ -100,6 +100,8 @@ function init() {
   element('[data-step="1"]').addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
   element('[data-step="2"]').addEventListener('click', () => { abschnitt('sec-view').open = true; });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
+  // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
+  $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));
   initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', alles);
   $('app-version').innerHTML = `<a href="${REPO}">Version ${VERSION}</a>`;
