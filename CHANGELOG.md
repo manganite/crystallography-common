@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **`css/app.css`:** Stile für Werkzeuge (Leitfaden Abschn. 5.2): gewählt (`.tools button[aria-pressed="true"]`, Akzentfarbe) und gesperrt (`.tools button:disabled`, `.seg button:disabled`, blass, ohne Hover). Die Vorlage zeigt beides in Tafel A (#53). Für die Apps: eigene Regeln dafür entfernen; plane-groups hat sie im `<style>` von `index.html`, stereography setzt für `.stereo-tools` eigene Regeln (Klasse `tools` ergänzen und die Regel für `aria-pressed` entfernen).
+- **`css/app.css`:** Stile für Werkzeuge (Leitfaden Abschn. 5.2): gewählt (`.tools button[aria-pressed="true"]`, Akzentfarbe) und gesperrt (`.tools button:disabled`, `.seg button:disabled`, blass; Hover nur bei freien Knöpfen). Die Vorlage zeigt beides in Tafel A (#53). Für die Apps: eigene Regeln dafür entfernen; plane-groups hat sie im `<style>` von `index.html`, stereography setzt für `.stereo-tools` eigene Regeln (Klasse `tools` ergänzen und die Regeln für `:hover` und `aria-pressed` entfernen; die eigene Regel für `:hover` stünde sonst über der gemeinsamen für `aria-pressed`).
 
 ### Geändert
 
