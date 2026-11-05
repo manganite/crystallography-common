@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Leitfaden Abschn. 5.2:** Werkzeuge, die festlegen, was ein Tippen in einer Tafel bewirkt, schliessen sich wie eine Auswahl aus und werden abgewählt, wenn eine andere Funktion sie ausschliesst; ausgeschlossen sind sie sichtbar gesperrt mit Grund bei der Tafel. Schalter bleiben „gesperrt, nicht abgewählt“. Für die Apps: nichts anzupassen (plane-groups setzt es so um, Entscheidung „Erklärende Werkzeuge“).
+- **Leitfaden Abschn. 5.2:** Werkzeuge (Knöpfe einer Tafel, deren einziger Zweck die Art der Eingabe ist, z. B. Zeichnen, Radieren, Zone, Winkel) schliessen sich wie eine Auswahl aus und werden abgewählt, wenn ein anderes Werkzeug oder eine andere Funktion sie ausschliesst; ausgeschlossen sind sie sichtbar gesperrt, mit Grund bei der Tafel; in einem Modus ohne sie fehlen sie. Schalter, auch Knöpfe für die Ansicht wie die Lupe, bleiben „gesperrt, nicht abgewählt“. Für die Apps: nichts anzupassen (plane-groups setzt es so um; in stereography schliessen sich Zone und Winkel aus, Zone fehlt im Punktgruppenmodus). Sichtbare Sperre im gemeinsamen CSS: #53.
 
 ## [0.7.0] - 2026-11-05
 
