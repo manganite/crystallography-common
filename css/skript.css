@@ -19,8 +19,6 @@ body { font-size: 16px; line-height: 1.6; }
 .toc a:hover { background: var(--paper); }
 .toc a[aria-current="true"] { background: var(--paper); color: var(--accent); font-weight: 600; box-shadow: inset 2px 0 0 var(--accent); }
 .toc .nr { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 0.35em; }
-.toc .todo { display: block; padding: 4px 8px; color: var(--muted); }
-.toc .todo small { display: block; font-size: 0.75rem; }
 .toc-foot { margin: 12px 0 0; font-size: 0.78rem; color: var(--muted); }
 article { min-width: 0; max-width: 780px; }
 article > header { margin-bottom: 28px; }

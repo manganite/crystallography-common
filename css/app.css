@@ -224,14 +224,10 @@ footer a { color: inherit; }
   .panel-foot { display: none; }
   .legend .lg.hint { display: none; }
   #copy-link { display: none; }
-  .wide-only { display: none; }
   .panel-head { gap: 6px; }
   .figswitch button { padding: 5px 8px; }
   .tools { gap: 4px; flex-wrap: nowrap; }
   .tools button { padding: 4px 6px; font-size: 0.78rem; }
-}
-@media (min-width: 720px) {
-  .narrow-only { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
