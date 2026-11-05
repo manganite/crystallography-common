@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Behoben
 
-- **PDF des Skripts** (#43): Ein Raster aus kleinen Abbildungen (`.fig-grid5`) wird nicht mehr über einen Seitenumbruch verteilt. In plane-groups stand Abb. 2.3 bisher auf zwei Seiten (jetzt eine Seite mehr, 79 statt 78); stereography unverändert.
+- **PDF des Skripts** (#43): Ein Raster aus kleinen Abbildungen (`.fig-grid5`) wird nicht mehr über einen Seitenumbruch verteilt. In plane-groups stand Abb. 2.3 bisher auf zwei Seiten (jetzt eine Seite mehr, 79 statt 78; Abb. 5.1 ist höher als eine Seite und beginnt jetzt auf einer neuen), in der Vorlage Abb. 1.6; stereography unverändert.
 
 ## [0.6.0] - 2026-11-05
 
