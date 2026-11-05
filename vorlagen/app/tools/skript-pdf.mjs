@@ -19,7 +19,7 @@ const VERSION = /** @type {RegExpMatchArray} */ (readFileSync(join(ROOT, 'js/ver
 const { anzahl, fehler } = await skriptPDF({
   root: ROOT, out: OUT, base: BASE, titel: 'Muster-App', version: VERSION,
   // vorbereiten: async (page) => { … interaktive Abbildungen in einen festen Zustand bringen … },
-  interaktiv: [],
+  interaktiv: ['fig-1-7'],
 }).catch((e) => { console.error(e); process.exit(1); });
 console.log(`${OUT}: Skript ${VERSION}, ${anzahl} Abbildungen als Bild`);
 if (fehler.length) {
