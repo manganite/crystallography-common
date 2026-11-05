@@ -13,9 +13,9 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Behoben
 
-- **Querstrich für Screenreader** (#66, `css/base.css`): Der Querstrich war nur gezeichnet; ein Screenreader las x̄ als „x“ und (1̄00) wie (100). Der Strich (`.ov::before`) hat jetzt den Alternativtext „−“. Kein Unterschied in Darstellung, PDF-Text und Moodle-Export. Für die Apps: nichts anzupassen, sofern Querstriche mit `.ov` gesetzt sind.
+- **Querstrich für Screenreader** (#66, `css/base.css`): Der Querstrich war nur gezeichnet; ein Screenreader las x̄ als „x“ und (1̄00) wie (100). Der Strich (`.ov::before`) hat jetzt den Alternativtext „−“. Darstellung und Moodle-Export unverändert; beim Kopieren und im PDF-Text fehlt das Minus wie bisher. Für die Apps: nichts anzupassen, sofern Querstriche mit `.ov` gesetzt sind.
 - **Legende auf kleinen Bildschirmen** (#67, `css/app.css`): Sie war einzeilig und waagrecht scrollbar, mit ausgeblendeter Scrollleiste; was nicht sichtbar war, liess sich kaum entdecken. Jetzt bricht sie um. Für die Apps: nichts anzupassen.
-- **PDF: Abbildungen über zwei Reihen** (#47, `tools/skript-pdf.mjs`): Zwei Reihen derselben Abbildung und ihre gemeinsame Anmerkung werden nicht mehr getrennt (`break-before: avoid`). plane-groups: Abb. 7.3 und 7.5 je auf einer Seite, Seitenzahl gleich (79); stereography: unverändert.
+- **PDF: Abbildungen über zwei Reihen** (#47, `tools/skript-pdf.mjs`): Zwei Reihen derselben Abbildung und ihre gemeinsame Anmerkung werden nicht mehr getrennt (`break-before: avoid`). plane-groups: Abb. 7.3 und 7.5 je auf einer Seite, Seitenzahl gleich (79), dafür endet S. 70 früher; stereography: unverändert.
 - **Lokaler Server** (#62, `tools/server.mjs`): Eine ungültig kodierte Adresse (z. B. `/%ZZ`) beendete den Server; jetzt Antwort 400.
 
 ## [0.8.1] - 2026-11-05
