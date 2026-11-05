@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Behoben
+
+- **PDF des Skripts** (#43): Ein Raster aus kleinen Abbildungen (`.fig-grid5`) wird nicht mehr über einen Seitenumbruch verteilt. In plane-groups stand Abb. 2.3 bisher auf zwei Seiten (jetzt eine Seite mehr, 79 statt 78); stereography unverändert.
+
 ## [0.6.0] - 2026-11-05
 
 Anordnung der Tafeln gemeinsam in `css/app.css` und die Vorlage als vollständige Musterseite. Für die Apps: die eigenen Regeln für die Anordnung aus dem `<style>` von `index.html` entfernen; Tafeln heissen `.p-a`/`.p-b`, der Umschalter setzt `data-fig="a"`/`"b"` (siehe „Geändert“). Sonst ändert sich zur Laufzeit nichts.
