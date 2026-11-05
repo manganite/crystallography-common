@@ -110,8 +110,9 @@ figure { margin: 20px 0; }
 .fig-grid5 figcaption { font-size: 0.8rem; margin-top: 4px; }
 .fig-note { font-size: 0.86rem; color: var(--muted); }
 .fig-note b { color: var(--ink); }
-.tabwrap { overflow-x: auto; margin: 12px 0 16px; }
-.tab caption { caption-side: top; text-align: left; font-size: 0.86rem; color: var(--muted); padding-bottom: 6px; white-space: normal; }
+.tabwrap { overflow-x: auto; margin: 12px 0 16px; container-type: inline-size; }
+/* Unterschrift nie breiter als der Rahmen: sonst läuft sie auf dem Telefon mit der breiten Tabelle aus dem Bild */
+.tab caption { caption-side: top; text-align: left; font-size: 0.86rem; color: var(--muted); padding-bottom: 6px; white-space: normal; max-width: 100cqw; }
 .tab caption b { color: var(--ink); font-weight: 600; }
 .tab { border-collapse: collapse; font-size: 0.9rem; min-width: 460px; }
 .tab th, .tab td { text-align: left; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }

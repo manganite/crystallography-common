@@ -8,7 +8,11 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **Vorlage als Musterseite** (#7): Das Skript der Vorlage zeigt jetzt alle gemeinsamen Formen für Abbildungen (`fig-row`, `fig-row3`, `fig-cols`, `fig-grid5`, `fig-narrow`, `fig-note`), eine Abbildung mit Regler (`slider`), Formel (`formel`), Schema (`schema`) und Tabelle (`tab`, `tabwrap`, `tab-wrap`).
+- **Vorlage als Musterseite** (#7): Das Skript der Vorlage zeigt jetzt alle gemeinsamen Formen für Abbildungen (`fig-row`, `fig-row3`, `fig-cols`, `fig-grid5`, `fig-narrow`, `fig-note`), eine Abbildung mit Regler (`slider`, im PDF als fester Zustand), Formel (`formel`), Schema (`schema`), Tabelle mit Unterschrift (`tab`, `tabwrap`, `tab-wrap`, `caption`), einen Vertiefungsabschnitt (Etikett auch im Inhaltsverzeichnis), Lernziele zur Vertiefung (`.box > h5`) und einen Querstrich (`ov`). Leitfaden Abschn. 6: Regel zu den Nummern von Abbildungen und Tabellen, wie in den Apps.
+
+### Behoben
+
+- **Unterschrift einer Tabelle** (`.tab caption`): nie breiter als der Rahmen (`.tabwrap`); auf dem Telefon lief sie mit der Tabelle aus dem Bild. Keine App nutzt bisher `caption`; Skript und PDF der Apps unverändert (nachgeprüft).
 
 ### Entfernt
 

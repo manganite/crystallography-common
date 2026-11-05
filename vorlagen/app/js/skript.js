@@ -2,7 +2,7 @@
 // Querstriche und Nachladen kommen aus lib/common/js/skript-kern.js.
 
 import { appLink, inhaltsverzeichnis, querstriche } from '../lib/common/js/skript-kern.js';
-import { versionEintragen, offline, elemente, element, eingabe } from '../lib/common/js/seite.js';
+import { versionEintragen, offline, $, elemente, element, eingabe } from '../lib/common/js/seite.js';
 import { VERSION } from './version.js';
 
 /** @param {string} name */
@@ -18,7 +18,7 @@ function zeichne(fig, d = 70) {
 
 // Abbildung mit Regler (Abb. 1.7): zeichnet mit dem eingestellten Abstand, die Ausgabe nennt ihn
 const regler = eingabe('muster-regler');
-const reglerFig = element('.regler-fig'), reglerAus = element('.regler-fig output', HTMLOutputElement);
+const reglerFig = $('fig-1-7'), reglerAus = element('#fig-1-7 output', HTMLOutputElement);
 function zeichneRegler() {
   zeichne(reglerFig, Number(regler.value));
   reglerAus.textContent = `Abstand der Punkte: ${regler.value} Einheiten.`;
