@@ -19,7 +19,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | Ordner | Datei | Zweck |
 |---|---|---|
 | `css/` | `base.css` | Farben hell/dunkel (inklusive der Farben für Symmetrieelemente), Schriften, Grundtypografie, Kopfzeile |
-| | `app.css` | Werkbank der App: Seitenleiste mit Karten, Bedienelemente, einklappbare Abschnitte, Tafeln, Legende, Kenndaten, Erste Schritte, Tooltip, ⓘ-Erklärungen, Telefon und Touch |
+| | `app.css` | Werkbank der App: Anordnung der Tafeln, Seitenleiste mit Karten, Bedienelemente, einklappbare Abschnitte, Tafeln, Legende, Kenndaten, Erste Schritte, Tooltip, ⓘ-Erklärungen, Telefon und Touch |
 | | `skript.css` | Skript: Inhaltsverzeichnis, Lesebreite, Kästen (Lernziele, Merke, Zusammenfassung, Grundlagen, Vertiefung, In der App), Vertiefungskapitel, Abbildungsrahmen, Tabellen, Quellen |
 | | `quiz.css` | Quiz: Auswahl (Stufen, Kapitel, Anzahl), Frage, Antworten, Rückmeldung, Auswertung |
 | `fonts/` | | IBM Plex Sans und Mono, Source Serif 4 (selbst gehostet, SIL Open Font License) |
@@ -40,7 +40,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | `fragenliste/` | `extract.mjs`, `vorlage.html` | Gemeinsame Fragenliste aller Apps (Artifact in claude.ai): Fragen aus `tools/quiz-quelle.mjs` jeder App, Prüfung der Entwürfe, Rückmeldungen. Wird nicht in die Apps kopiert. |
 | (oberste Ebene) | `kristallographie.code-workspace` | VS-Code-Arbeitsbereich mit allen Repositories der Familie |
 
-Nicht hier, sondern in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Anordnung der Tafeln, Texte der Hilfen, Fragen und Kapitel.
+Nicht hier, sondern in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Grösse der Darstellung in den Tafeln (und eine abweichende Anordnung), Texte der Hilfen, Fragen und Kapitel.
 
 ## Einbinden in eine App
 

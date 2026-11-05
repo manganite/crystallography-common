@@ -48,7 +48,7 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 - **Tafeln** (`.panel`) mit Kopf (Titel, Werkzeuge, Export), Darstellung, Legende (`.legend`) und Fusszeile.
 - **Kenndaten** (`.info`) unter den Tafeln: grosses Symbol (`.hm-big`), Eckdaten (`.facts`), Erläuterungen einklappbar (`.explain`), Links ins Skript (`.skript-term`).
 - **Gruppenwahl** als Knöpfe je Kristallsystem (`.picker`, `.sysrow`, `.pgb`), Aufstellungen in einer Zeile darunter, nur wenn nötig.
-- **Anordnung der Tafeln** (`.layout`) legt jede App selbst fest. Muster der ersten App: zwei gleich grosse Tafeln nebeneinander; iPad hochkant untereinander; Telefon eine Tafel oben angeheftet mit Umschalter (`.figswitch`), Bedienung darunter.
+- **Anordnung der Tafeln** (`.layout` in `lib/common/css/app.css`): zwei gleich grosse Tafeln (`.p-a`, `.p-b`) nebeneinander; iPad hochkant untereinander; Telefon eine Tafel oben angeheftet mit Umschalter (`.figswitch`, `data-fig="a"`/`"b"`), Bedienung darunter. Eine App mit anderer Anordnung überschreibt in ihrem `<style>` die Regeln der Anordnung samt den Umbrüchen bei 999 und 719 px (das Anheften auf dem Telefon und der Umschalter gelten weiter); die Grösse der Darstellung in den Tafeln legt jede App selbst fest.
 
 ### 5.2 Bedienprinzipien
 
