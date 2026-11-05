@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-05
+
+Quiz: Grenzen für erzeugte Fragen gelten streng, solange die gewählte Länge erreichbar ist; doppelte Schlüssel sind ein Fehler. Querstrich für Screenreader, Legende mobil, PDF-Umbruch, lokaler Server robust. Für die Apps: nichts anzupassen.
+
 ### Geändert
 
 - **Quiz: Grenzen für erzeugte Fragen** (#61, `js/quiz-core.js`, `ziehen()`): höchstens 30 % je Generator und 50 % insgesamt, bezogen auf die tatsächliche Länge und abgerundet (bei 5 Fragen höchstens eine je Generator), solange die gewählte Länge damit erreichbar ist. Sonst gilt nur noch: nie mehr erzeugte als handgeschriebene Fragen, gleichmässig über die Generatoren verteilt. Bisher konnten ein verkürztes Quiz 50 % und ein Quiz mit 5 Fragen 40 % aus einem Generator enthalten. Kürzer als gewählt wird ein Quiz nur noch, wenn es weniger handgeschriebene Fragen gibt als die halbe gewählte Länge oder zu wenige erzeugte. Für die Apps: nichts anzupassen.
@@ -174,7 +178,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.9.0
 [0.8.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.1
 [0.8.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.0
 [0.7.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.7.0
