@@ -32,7 +32,7 @@ function zeichneA() {
   for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) pts.push(`<circle cx="${260 + 70 * i}" cy="${260 + 70 * j}" r="5" fill="${farbe('ink')}"/>`);
   const zelle = eingabe('opt-zelle').checked ? `<rect x="260" y="260" width="70" height="70" fill="${farbe('crystal')}" fill-opacity="0.35" stroke="${farbe('accent')}" stroke-width="2"/>` : '';
   grafik('bild-a').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zelle}${pts.join('')}`;
-  $('legend').innerHTML = `<span class="lg"><span class="sw" style="background:${farbe('ink')}"></span>Gitterpunkt</span><span class="lg"><span class="sw" style="background:${farbe('accent')}"></span>Elementarzelle</span><span class="lg hint">Hinweis in der Legende, z. B. warum Werkzeug 3 gesperrt ist</span>`;
+  $('legend').innerHTML = `<span class="lg"><span class="sw" style="background:${farbe('ink')}"></span>Gitterpunkt</span><span class="lg"><span class="sw" style="background:${farbe('accent')}"></span>Elementarzelle</span><span class="lg hint">Werkzeug 3 gesperrt: Beispiel für den Grund bei der Tafel</span>`;
 }
 
 function zeichneB() {
