@@ -66,6 +66,10 @@ Repo-Name = Pfad auf GitHub Pages:
 
 Die Regeln selbst stehen im Leitfaden; hier, warum.
 
+- **Anordnung der Tafeln gemeinsam** (5.11.2026, Leitfaden Abschn. 5.1): Sie war in beiden Apps und der Vorlage
+  gleich und stand dreimal; eine Änderung musste dreimal gemacht werden. Bisher hiess es, jede App lege sie
+  selbst fest; das gilt nur noch für eine abweichende Anordnung. Eine gemeinsame 3D-Ansicht folgt erst mit einer
+  zweiten App, die eine braucht (#9).
 - **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
   Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch

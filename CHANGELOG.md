@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Anordnung der Tafeln in `css/app.css`** (#6): `.layout`, `.figs`, `.p-a`, `.p-b`, `.info` und der Umschalter auf dem Telefon (`body[data-fig="a"|"b"]`) stehen jetzt gemeinsam, wie sie in beiden Apps und der Vorlage gleich standen. Für die Apps: die eigenen Regeln dafür aus dem `<style>` von `index.html` entfernen; Tafeln heissen `.p-a`/`.p-b`, der Umschalter setzt `data-fig="a"`/`"b"`. Eine App mit anderer Anordnung überschreibt `.layout` in ihrem `<style>`. Leitfaden Abschn. 5.1 entsprechend.
+
 ## [0.5.0] - 2026-11-04
 
 Geprüfte Helfer für Elemente der Seite in `js/seite.js` und Leitfaden zur Kennzeichnung der Typen in Datendateien. Für die Apps: Die Quiz-Seite meldet ein fehlendes Element oder eines der falschen Art jetzt beim ersten Zugriff mit der ID, das Skript Elemente der falschen Art mit dem Selektor; beim Übernehmen die eigenen Kopien der Helfer durch die gemeinsamen ersetzen (Leitfaden Abschn. 9).

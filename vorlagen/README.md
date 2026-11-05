@@ -28,7 +28,7 @@ cd vorlagen/app && python3 -m http.server 8000
    | `muster-` | `sw.js` (Cache), `js/main.js` (`muster-intro`) | eigenes Präfix (danach nie ändern) |
    | Icons | `icons/` | eigene Icons (gleicher Stil: Motiv der App auf hellem Grund) |
 
-5. Muster ersetzen: `js/main.js` (Logik der App, Bausteine und Klassennamen beibehalten), Anordnung der Tafeln im `<style>` von `index.html`, `js/hilfetexte.js`, Skriptkapitel, Fragen.
+5. Muster ersetzen: `js/main.js` (Logik der App, Bausteine und Klassennamen beibehalten), Grösse der Darstellung im `<style>` von `index.html` (die Anordnung der Tafeln kommt aus `app.css`), `js/hilfetexte.js`, Skriptkapitel, Fragen.
 6. Offline-Liste in `sw.js` nachführen, sobald Dateien dazukommen (`tests/release.test.mjs` meldet fehlende).
 7. README nach der Gliederung der Vorlage füllen (Bildschirmfoto `docs/screenshot.png`, Vorschaubild `docs/social-preview.png`), Kurzfassung in `CITATION.cff`.
 8. GitHub: Pages auf „GitHub Actions“ stellen; Auftritt und Einstellungen nach [LEITFADEN.md](../LEITFADEN.md), Abschn. 9 und 10; die App in die Tabelle im README von crystallography-common und in `.github/ISSUE_TEMPLATE/config.yml` dort aufnehmen.

@@ -40,7 +40,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | `fragenliste/` | `extract.mjs`, `vorlage.html` | Gemeinsame Fragenliste aller Apps (Artifact in claude.ai): Fragen aus `tools/quiz-quelle.mjs` jeder App, Prüfung der Entwürfe, Rückmeldungen. Wird nicht in die Apps kopiert. |
 | (oberste Ebene) | `kristallographie.code-workspace` | VS-Code-Arbeitsbereich mit allen Repositories der Familie |
 
-Nicht hier, sondern in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Anordnung der Tafeln, Texte der Hilfen, Fragen und Kapitel.
+Nicht hier, sondern in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Grösse der Darstellung in den Tafeln (und eine abweichende Anordnung), Texte der Hilfen, Fragen und Kapitel.
 
 ## Einbinden in eine App
 
