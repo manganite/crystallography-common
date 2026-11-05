@@ -203,6 +203,10 @@ select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-r
 .tools { display: flex; gap: 6px; flex-wrap: wrap; }
 .tools button { border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 4px 9px; font-size: 0.8rem; cursor: pointer; }
 .tools button:hover { border-color: var(--muted); }
+/* Werkzeuge (Leitfaden Abschn. 5.2): gewählt in der Akzentfarbe; ausgeschlossen gesperrt und blass */
+.tools button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.tools button:disabled, .seg button:disabled { opacity: 0.45; cursor: not-allowed; }
+.tools button:disabled:hover, .seg button:disabled:hover { border-color: var(--line); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 8px 12px 10px; border-top: 1px solid var(--line); font-size: 0.8rem; color: var(--muted); }
 .lg { display: inline-flex; align-items: center; gap: 6px; }
 .lg .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
