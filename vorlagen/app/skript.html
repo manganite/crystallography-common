@@ -42,6 +42,8 @@
             <ol>
               <li><a href="#abschnitt1">Ein Abschnitt</a></li>
               <li><a href="#abschnitt2">Ein Abschnitt mit Vertiefung</a></li>
+              <li><a href="#abschnitt2v">Ein Vertiefungsabschnitt</a></li>
+              <li><a href="#abschnitt3">Abbildungen, Formeln, Tabellen</a></li>
             </ol>
           </li>
           <li class="toc-teil">Vertiefungen</li>
@@ -75,11 +77,15 @@
           <li>ein Lernziel, als Tätigkeit formuliert</li>
           <li>ein zweites Lernziel</li>
         </ul>
+        <h5>Zur Vertiefung</h5>
+        <ul>
+          <li>ein Lernziel einer Vertiefung</li>
+        </ul>
       </div>
 
       <section id="abschnitt1">
         <h3>Ein Abschnitt</h3>
-        <p>Text in kurzen Absätzen. Ein <span class="term">Fachbegriff</span> wird beim ersten Auftreten erklärt.</p>
+        <p>Text in kurzen Absätzen. Ein <span class="term">Fachbegriff</span> wird beim ersten Auftreten erklärt. Negative Indizes mit Querstrich (<code>ov</code>): [0<span class="ov">1</span>1].</p>
         <div class="box grundlagen">
           <h4>Grundlagen · <b>Thema</b></h4>
           <p>Grundwissen, auf dem der Text aufbaut.</p>
@@ -104,6 +110,106 @@
         <div class="box vertiefung">
           <h4>Vertiefung · <b>Thema</b></h4>
           <p>Der erste Satz sagt, welchen Grundstoff die Vertiefung weiterführt und wozu man sie braucht.</p>
+        </div>
+      </section>
+
+      <section id="abschnitt2v" data-level="vertiefung">
+        <h3>Ein Vertiefungsabschnitt</h3>
+        <p>Ein ganzer Abschnitt als Vertiefung (<code>data-level="vertiefung"</code>): Randlinie, Etikett an der Überschrift und im Inhaltsverzeichnis.</p>
+        <div class="box merke">
+          <h4>Merke</h4>
+          <p>Ein Merksatz in einer Vertiefung.</p>
+        </div>
+      </section>
+
+      <section id="abschnitt3">
+        <h3>Abbildungen, Formeln, Tabellen</h3>
+        <p>Die gemeinsamen Formen für Abbildungen, Formeln und Tabellen, je ein Beispiel.</p>
+        <div class="fig-row">
+          <figure class="fig-card" data-app="#m=a&amp;g=p2">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.2a</b> Zwei Abbildungen nebeneinander (<code>fig-row</code>).</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p4mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>b</b> Auf dem Telefon untereinander.</figcaption>
+          </figure>
+        </div>
+        <p class="fig-note"><b>Abb. 1.2</b> Gemeinsame Bildunterschrift unter einer Reihe (<code>fig-note</code>).</p>
+        <div class="fig-row fig-row3 fig-cols">
+          <figure class="fig-card" data-app="#m=a&amp;g=p1">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.3a</b> Drei Spalten (<code>fig-row3</code>), spaltenweise gefüllt (<code>fig-cols</code>): oben a, unten b; jede Abbildung mit voller Bezeichnung.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p2">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.3b</b> Unter 1.3a.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p4mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.4a</b> Zweite Spalte.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p4mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.4b</b> Unter 1.4a.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p6mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.5a</b> Dritte Spalte.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p6mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.5b</b> Unter 1.5a; auf dem Telefon in der Reihenfolge des Quelltexts.</figcaption>
+          </figure>
+        </div>
+        <div class="fig-grid5">
+          <figure class="fig-card" data-app="#m=a&amp;g=p1">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>Abb. 1.6a</b> Erstes Bild.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p2">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>b</b> Zweites Bild.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=pm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>c</b> Drittes Bild.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p4mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>d</b> Viertes Bild.</figcaption>
+          </figure>
+          <figure class="fig-card" data-app="#m=a&amp;g=p6mm">
+            <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung"></svg></div>
+            <figcaption><b>e</b> Fünftes Bild.</figcaption>
+          </figure>
+        </div>
+        <p class="fig-note"><b>Abb. 1.6</b> Kleines Raster (<code>fig-grid5</code>), Link kurz „App“; die gemeinsame Unterschrift darunter.</p>
+        <figure class="fig-card fig-narrow" id="fig-1-7" data-app="#m=a&amp;g=p4mm">
+          <div class="fig-art"><svg viewBox="0 0 520 520" role="img" aria-label="Muster einer Abbildung mit Regler"></svg></div>
+          <div class="slider">
+            <label for="muster-regler">Abstand</label>
+            <input type="range" id="muster-regler" min="40" max="85" step="1" value="70">
+            <output for="muster-regler" aria-live="polite"></output>
+          </div>
+          <figcaption><b>Abb. 1.7</b> Schmale Abbildung (<code>fig-narrow</code>) mit Regler (<code>slider</code>); die Ausgabe darunter beschreibt den eingestellten Wert.</figcaption>
+        </figure>
+        <p>Eine abgesetzte Formel (<code>formel</code>):</p>
+        <p class="formel"><i>t</i> = <i>u</i> <i>a</i> + <i>v</i> <i>b</i> &nbsp; mit ganzen Zahlen <i>u</i>, <i>v</i></p>
+        <p>Ein Schema aus mehreren Zeilen (<code>schema</code>):</p>
+        <div class="schema" role="img" aria-label="Kreuzprodukt: u = a₂b₃ − a₃b₂, v = a₃b₁ − a₁b₃, w = a₁b₂ − a₂b₁">
+          <p>(<i>u</i>, <i>v</i>, <i>w</i>) = (<i>a</i>₁, <i>a</i>₂, <i>a</i>₃) × (<i>b</i>₁, <i>b</i>₂, <i>b</i>₃):</p>
+          <p><i>u</i> = <i>a</i>₂<i>b</i>₃ − <i>a</i>₃<i>b</i>₂, &nbsp; <i>v</i> = <i>a</i>₃<i>b</i>₁ − <i>a</i>₁<i>b</i>₃, &nbsp; <i>w</i> = <i>a</i>₁<i>b</i>₂ − <i>a</i>₂<i>b</i>₁</p>
+        </div>
+        <div class="tabwrap">
+          <table class="tab tab-wrap">
+            <caption><b>Metrik der Kristallsysteme.</b> Tabelle (<code>tab</code>) mit Unterschrift (<code>caption</code>), auf schmalen Bildschirmen seitlich verschiebbar (<code>tabwrap</code>); die letzte Spalte bricht um (<code>tab-wrap</code>).</caption>
+            <thead><tr><th>System</th><th>Metrik</th><th>Bemerkung</th></tr></thead>
+            <tbody>
+              <tr><td>schiefwinklig</td><td>keine Bedingung</td><td>Längerer Text in der letzten Spalte, der auf schmalen Bildschirmen umbricht.</td></tr>
+              <tr><td>quadratisch</td><td><i>a</i> = <i>b</i>, γ = 90°</td><td>Kurz.</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
 

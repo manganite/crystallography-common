@@ -6,6 +6,18 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Vorlage als Musterseite** (#7): Das Skript der Vorlage zeigt jetzt alle gemeinsamen Formen für Abbildungen (`fig-row`, `fig-row3`, `fig-cols`, `fig-grid5`, `fig-narrow`, `fig-note`), eine Abbildung mit Regler (`slider`, im PDF als fester Zustand), Formel (`formel`), Schema (`schema`), Tabelle mit Unterschrift (`tab`, `tabwrap`, `tab-wrap`, `caption`), einen Vertiefungsabschnitt (Etikett auch im Inhaltsverzeichnis), Lernziele zur Vertiefung (`.box > h5`) und einen Querstrich (`ov`). Leitfaden Abschn. 6: Regel zu den Nummern von Abbildungen und Tabellen, wie in den Apps.
+
+### Behoben
+
+- **Unterschrift einer Tabelle** (`.tab caption`): nie breiter als der Rahmen (`.tabwrap`); auf dem Telefon lief sie mit der Tabelle aus dem Bild. Keine App nutzt bisher `caption`; Skript und PDF der Apps unverändert (nachgeprüft).
+
+### Entfernt
+
+- **Ungenutzte Klassen** `narrow-only`, `wide-only` (`css/app.css`) und `.toc .todo` (`css/skript.css`): in keiner App und nicht in der Vorlage verwendet.
+
 ## [0.5.0] - 2026-11-04
 
 Geprüfte Helfer für Elemente der Seite in `js/seite.js` und Leitfaden zur Kennzeichnung der Typen in Datendateien. Für die Apps: Die Quiz-Seite meldet ein fehlendes Element oder eines der falschen Art jetzt beim ersten Zugriff mit der ID, das Skript Elemente der falschen Art mit dem Selektor; beim Übernehmen die eigenen Kopien der Helfer durch die gemeinsamen ersetzen (Leitfaden Abschn. 9).

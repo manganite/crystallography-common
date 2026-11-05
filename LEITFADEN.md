@@ -77,6 +77,7 @@ Eigene Seite `skript.html`. Bausteine in `css/skript.css` und `js/skript-kern.js
   - **In der App** (`.box.app`): Bedienhinweise, klein und grau, meist am Abschnittsende.
   - Kein Schalter zum Einklappen; höchstens ein Vertiefungskasten je Abschnitt.
 - **Abbildungen** kommen aus dem Code der App und sehen aus wie dort. Jede Abbildung ist eine Link-Adresse der App (`data-app="#…"`) und führt mit „In der App öffnen“ genau in diese Ansicht. Aufwendige Abbildungen (3D) laden erst beim Hineinscrollen (`nachladen`). Keine Abbildungen aus Büchern oder Folien (Bildrechte); wo eine Abbildung Vorbild ist, steht „nach … Abb. …“.
+- **Nummern** je Kapitel: Abbildungen „Abb. 1.2“; Teilbilder einer Reihe (`.fig-row`, `.fig-grid5`) „Abb. 1.2a“, dann „b“, „c“ …, mit gemeinsamer Unterschrift darunter (`.fig-note`, „Abb. 1.2“); in Spalten gefüllte Reihen (`.fig-cols`) jedes Teilbild mit voller Bezeichnung. Tabellen ohne Nummer, mit Unterschrift (`caption`). Beispiele: Skript der Vorlage, Abschn. 1.3.
 - **PDF:** `tools/skript-pdf.mjs` erzeugt eine A4-Fassung mit Inhaltsverzeichnis und Lesezeichen; bei jedem Release auf der Seite und als Anhang.
 
 ## 7. Das Quiz
