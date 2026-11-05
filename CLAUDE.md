@@ -76,6 +76,11 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Startzustand sicher; Thomas zog diese Lösung vor. Gelöscht wird nach Präfix statt nach einer Liste, damit ein
   neuer Eintrag nicht vergessen werden kann (Befund des Reviews); das Präfix trennt die Apps, die auf
   manganite.github.io denselben Speicher teilen. Feste ID `reset-alles` für Tooltips und die Hilfeseite (#24).
+- **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): In plane-groups ruhen Zeichnen,
+  Radieren und Lupe, solange ein erklärendes Werkzeug aktiv ist. Die Regel „gesperrt, nicht abgewählt“ passte
+  auf die Schalter (Lupe, Füllen), nicht auf Werkzeuge, die sich wie eine Auswahl ausschliessen: Ein gesperrtes,
+  aber gewähltes Zeichenwerkzeug täte beim Tippen nichts. Thomas wollte die Unterscheidung im Leitfaden statt als
+  Ausnahme in einer App, damit die Apps nicht auseinanderdriften.
 - **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
   Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch

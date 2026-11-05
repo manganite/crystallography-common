@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Leitfaden Abschn. 5.2:** Werkzeuge, die festlegen, was ein Tippen in einer Tafel bewirkt, schliessen sich wie eine Auswahl aus und werden abgewählt, wenn eine andere Funktion sie ausschliesst; ausgeschlossen sind sie sichtbar gesperrt mit Grund bei der Tafel. Schalter bleiben „gesperrt, nicht abgewählt“. Für die Apps: nichts anzupassen (plane-groups setzt es so um, Entscheidung „Erklärende Werkzeuge“).
+
 ## [0.7.0] - 2026-11-05
 
 „Alle Einstellungen zurücksetzen“ gemeinsam, PDF des Skripts ohne geteilte Bildraster. Für die Apps: den Knopf nach Leitfaden Abschn. 5.2 einrichten und `alleEinstellungenZuruecksetzen('<präfix>')` aufrufen.
