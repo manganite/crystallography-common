@@ -32,7 +32,7 @@ function zeichneA() {
   for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) pts.push(`<circle cx="${260 + 70 * i}" cy="${260 + 70 * j}" r="5" fill="${farbe('ink')}"/>`);
   const zelle = eingabe('opt-zelle').checked ? `<rect x="260" y="260" width="70" height="70" fill="${farbe('crystal')}" fill-opacity="0.35" stroke="${farbe('accent')}" stroke-width="2"/>` : '';
   grafik('bild-a').innerHTML = `<rect width="520" height="520" fill="${farbe('paper')}"/>${zelle}${pts.join('')}`;
-  $('legend').innerHTML = `<span class="lg"><span class="sw" style="background:${farbe('ink')}"></span>Gitterpunkt</span><span class="lg"><span class="sw" style="background:${farbe('accent')}"></span>Elementarzelle</span><span class="lg hint">Hinweis in der Legende</span>`;
+  $('legend').innerHTML = `<span class="lg"><span class="sw" style="background:${farbe('ink')}"></span>Gitterpunkt</span><span class="lg"><span class="sw" style="background:${farbe('accent')}"></span>Elementarzelle</span><span class="lg hint">Werkzeug 3 gesperrt: Beispiel für den Grund bei der Tafel</span>`;
 }
 
 function zeichneB() {
@@ -77,6 +77,13 @@ function init() {
     if (why) why.textContent = an ? '' : 'nur mit „Motiv in allgemeiner Lage“';
   });
   $('lat-ba').addEventListener('input', () => { $('lat-ba-out').textContent = Number(eingabe('lat-ba').value).toFixed(2); });
+  // Werkzeuge (Leitfaden Abschn. 5.2): schliessen sich aus, ein zweiter Klick wählt ab; Werkzeug 3 ist als
+  // Beispiel ausgeschlossen (gesperrt, Grund in der Legende)
+  const werkzeuge = elemente('[data-werkzeug]', HTMLButtonElement);
+  werkzeuge.forEach((b) => b.addEventListener('click', () => {
+    const an = b.getAttribute('aria-pressed') !== 'true';
+    werkzeuge.forEach((x) => x.setAttribute('aria-pressed', String(an && x === b)));
+  }));
   elemente('.seg button', HTMLButtonElement).forEach((b) => b.addEventListener('click', () => {
     b.parentElement?.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   }));

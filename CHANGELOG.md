@@ -6,6 +6,14 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Vorlage:** Tafel A hat eine Werkzeugleiste mit drei Werkzeugen, die sich ausschliessen; Werkzeug 3 ist als Beispiel gesperrt, der Grund steht in der Legende (Leitfaden Abschn. 5.2).
+
+### Behoben
+
+- **Gewählte Knöpfe beim Überfahren** (`css/app.css`): Die Hover-Regel aus 0.8.0 (`.tools button:hover:not(:disabled)`) war stärker als `.tools button[aria-pressed="true"]`; ein gewähltes Werkzeug oder die Lupe bekam beim Überfahren einen grauen statt eines akzentfarbenen Rands (plane-groups seit der Übernahme von 0.8.0). Jetzt `.tools button:enabled:not([aria-pressed="true"]):hover`, unabhängig von der Reihenfolge der Regeln. Für die Apps: nichts anzupassen.
+
 ## [0.8.0] - 2026-11-05
 
 Gewählte und gesperrte Knöpfe gemeinsam im CSS, Leitfaden unterscheidet Werkzeuge von Schaltern. Für die Apps: eigene Regeln für gewählte und gesperrte Knöpfe aus dem `<style>` entfernen (siehe „Hinzugefügt“); sonst nichts anzupassen.
