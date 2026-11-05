@@ -18,6 +18,7 @@ im README; was dort steht, wird hier nicht wiederholt. Der Leitfaden wird mit di
   | Arbeitsweise, Abläufe, Entscheidungen mit Grund, Fallstricke, Literatur | `CLAUDE.md` (common bzw. App) |
   | Aufbau, Link-Adressen, Werkzeuge, Release-Ablauf einer App | `README.md` der App |
   | Offene Aufgaben, Ideen, offene Fragen, Stand laufender Arbeit | GitHub Issues des betroffenen Repos (Label `idee` für nicht Beauftragtes) |
+  | Reihenfolge der offenen Arbeit über alle Repos | Issue #74 „Fahrplan der App-Familie“ |
   | Konzepte (ausführliche Begründungen, Entwürfe) | `docs/` des betroffenen Repos; nach der Umsetzung mit Statuskopf (was umgesetzt, was überholt, wo es jetzt steht) und nicht mehr nachgeführt |
   | Änderungen je Version | `CHANGELOG.md` |
 
@@ -99,6 +100,14 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 - **Kein Review durch Claude Code in GitHub Actions** (Vorgabe Thomas, 5.11.2026): Die Kosten sind nicht
   kalkulierbar. Das Review durch einen unabhängigen Agenten in der Sitzung (Abschnitt „Git, PRs und Releases“)
   bleibt der Weg; ESLint ergänzt es.
+
+- **Grenzen für erzeugte Fragen streng** (5.11.2026, Leitfaden Abschn. Quiz): Die Grenzen bezogen sich auf die
+  gewünschte Länge und wurden gerundet; ein Quiz, das mangels handgeschriebener Fragen kürzer ausfiel, konnte
+  50 % aus einem Generator haben, eines mit 5 Fragen 40 %. Thomas: Die Grenze gilt streng, ohne Ausnahme für kurze
+  Quizrunden. Die Tests prüfen die Anteile an der tatsächlichen Länge, nicht mit der Rechnung des Codes.
+- **Schlüssel des Fortschritts ohne Stufe** (5.11.2026, Leitfaden Abschn. Quiz): Statt die Stufe in den Schlüssel aufzunehmen, sind
+  Parameter über alle Stufen eindeutig. So bleibt der gespeicherte Fortschritt gültig; alle Generatoren der Apps
+  erfüllten das schon.
 
 ## Git, PRs und Releases
 

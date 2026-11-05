@@ -125,6 +125,14 @@ export function kandidaten(bank, gens, { entwurf = false } = {}) {
     if (!sichtbar(g.status, entwurf)) continue;
     for (const s of g.stufen) for (const param of g.params(s)) out.push({ key: `${g.id}:${param}`, stufe: s, kapitel: g.kapitel, gen: g, param });
   }
+  // Der Schlüssel trägt den Fortschritt und enthält keine Stufe: Ein Parameter darf nur auf einer Stufe vorkommen
+  /** @type {Map<string, Kandidat>} */
+  const gesehen = new Map();
+  for (const k of out) {
+    const vorher = gesehen.get(k.key);
+    if (vorher) throw new Error(`Quiz: Schlüssel ${k.key} doppelt (Stufe ${vorher.stufe} und ${k.stufe}); Parameter eines Generators und IDs müssen über alle Stufen eindeutig sein`);
+    gesehen.set(k.key, k);
+  }
   return out;
 }
 
@@ -166,10 +174,11 @@ function nachVorrang(list, progress, rand) {
 export function ziehen(kands, { stufe, kapitel = null, n = 10, progress = null, rand = Math.random, nur = null }) {
   let pool = kands.filter((k) => k.stufe <= stufe && (!kapitel || kapitel.includes(k.kapitel)));
   if (nur) pool = pool.filter((k) => nur.includes(k.key));
-  const genMax = Math.max(1, Math.round(n * GEN_ANTEIL));
   // auch wenn das Quiz mangels handgeschriebener Fragen kürzer wird: g ≤ (h + g) · GEN_GESAMT, also g ≤ h · GEN_GESAMT / (1 − GEN_GESAMT)
   const hand = pool.filter((k) => !k.gen).length;
   const genGesamt = Math.min(Math.floor(n * GEN_GESAMT), Math.floor((hand * GEN_GESAMT) / (1 - GEN_GESAMT)));
+  // Grenzen streng, bezogen auf die tatsächliche Länge (Entscheidung 5.11.2026, CLAUDE.md): abgerundet, ohne Mindestwert
+  const genMax = Math.floor(Math.min(n, hand + genGesamt) * GEN_ANTEIL);
   /** @type {Record<string, number>} */
   const genZahl = {};
   let genSumme = 0;
@@ -197,6 +206,18 @@ export function ziehen(kands, { stufe, kapitel = null, n = 10, progress = null, 
   }
   // auffüllen, wenn eine Stufe zu wenige Fragen hat
   for (const k of nachVorrang(pool, progress, rand)) { if (gewaehlt.length >= n) break; nimm(k); }
+  // Fiel das Quiz kürzer aus als erwartet, zuletzt gewählte erzeugte Fragen streichen, bis beide Grenzen gelten
+  /** Index der zuletzt gewählten erzeugten Frage (eines Generators oder irgendeines). @param {string} [id] */
+  const zuletzt = (id) => { for (let i = gewaehlt.length - 1; i >= 0; i--) { const g = gewaehlt[i].gen; if (g && (!id || g.id === id)) return i; } return -1; };
+  while (!nur) {
+    const laenge = gewaehlt.length;
+    const id = Object.keys(genZahl).find((x) => genZahl[x] > Math.floor(laenge * GEN_ANTEIL));
+    const i = id !== undefined ? zuletzt(id) : genSumme > Math.floor(laenge * GEN_GESAMT) ? zuletzt() : -1;
+    if (i < 0) break;
+    const weg = /** @type {Generator} */ (gewaehlt.splice(i, 1)[0].gen);
+    genZahl[weg.id] -= 1;
+    genSumme -= 1;
+  }
   return shuffle(gewaehlt, rand);
 }
 

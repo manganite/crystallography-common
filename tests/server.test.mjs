@@ -64,3 +64,17 @@ test('Server: Ordner liefern index.html, ohne Schrägstrich Umleitung', async ()
     rmSync(basis, { recursive: true, force: true });
   }
 });
+
+test('Server: ungültig kodierte Adresse ergibt 400, der Server läuft weiter (#62)', async () => {
+  const basis = mkdtempSync(join(tmpdir(), 'srv-'));
+  writeFileSync(join(basis, 'index.html'), 'start');
+  const srv = await server(basis);
+  const port = /** @type {import('node:net').AddressInfo} */ (srv.address()).port;
+  try {
+    for (const p of ['/%ZZ', '/%E0%A4%A', '/app/%']) assert.equal((await holen(port, p)).status, 400, p);
+    assert.deepEqual(await holen(port, '/'), { status: 200, body: 'start' });
+  } finally {
+    srv.close();
+    rmSync(basis, { recursive: true, force: true });
+  }
+});
