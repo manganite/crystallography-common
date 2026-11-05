@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-05
+
+Gewählte und gesperrte Knöpfe gemeinsam im CSS, Leitfaden unterscheidet Werkzeuge von Schaltern. Für die Apps: eigene Regeln für gewählte und gesperrte Knöpfe aus dem `<style>` entfernen (siehe „Hinzugefügt“); sonst nichts anzupassen.
+
 ### Hinzugefügt
 
 - **Gewählte und gesperrte Knöpfe** (#53) in `css/app.css`: `.tools button[aria-pressed="true"]` in der Akzentfarbe, `.tools button:disabled` und `.seg button:disabled` blass mit Zeiger „not-allowed“ (Leitfaden Abschn. 5.2). Bisher hatten gesperrte Knöpfe keinen eigenen Stil und sahen aktiv aus. Für die Apps: eigene Regeln dafür aus dem `<style>` entfernen (plane-groups: `.panel-head .tools button:disabled, .seg button:disabled` und `.panel-head .tools button[aria-pressed="true"]`; `.tabs button:disabled` bleibt); stereography hat keine gesperrten Knöpfe dieser Art, dort ändert sich nichts.
@@ -146,7 +150,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.0
 [0.7.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.7.0
 [0.6.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.6.0
 [0.5.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.5.0
