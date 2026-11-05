@@ -182,7 +182,7 @@ export function ziehen(kands, { stufe, kapitel = null, n = 10, progress = null, 
   // auch wenn das Quiz mangels handgeschriebener Fragen kürzer wird: g ≤ (h + g) · GEN_GESAMT, also g ≤ h · GEN_GESAMT / (1 − GEN_GESAMT)
   const hand = pool.filter((k) => !k.gen).length;
   const genGesamt = Math.min(Math.floor(n * GEN_GESAMT), Math.floor((hand * GEN_GESAMT) / (1 - GEN_GESAMT)));
-  // Grenzen streng, bezogen auf die tatsächliche Länge (Entscheidung 5.11.2026, CLAUDE.md): abgerundet, ohne Mindestwert
+  // zuerst streng, bezogen auf die tatsächliche Länge (Entscheidung 5.11.2026, CLAUDE.md): abgerundet, ohne Mindestwert
   const genMax = Math.floor(Math.min(n, hand + genGesamt) * GEN_ANTEIL);
   /** @type {Record<string, number>} */
   const genZahl = {};
@@ -222,6 +222,32 @@ export function ziehen(kands, { stufe, kapitel = null, n = 10, progress = null, 
     const weg = /** @type {Generator} */ (gewaehlt.splice(i, 1)[0].gen);
     genZahl[weg.id] -= 1;
     genSumme -= 1;
+  }
+  // Reichen die handgeschriebenen Fragen mit den strengen Grenzen nicht für die gewählte Länge, gilt nur noch:
+  // nie mehr erzeugte als handgeschriebene Fragen (Entscheidung 5.11.2026, CLAUDE.md). Aufgefüllt wird gleichmässig
+  // über die Generatoren: jeweils aus dem Generator mit den wenigsten Fragen, innerhalb davon nach Vorrang.
+  if (!nur && gewaehlt.length < n) {
+    // erzeugte Fragen neu verteilen (die strenge Runde hat sie nach Vorrang, nicht gleichmässig gewählt)
+    const nurHand = gewaehlt.filter((k) => !k.gen);
+    gewaehlt.length = 0;
+    gewaehlt.push(...nurHand);
+    for (const id of Object.keys(genZahl)) delete genZahl[id];
+    genSumme = 0;
+    const handImQuiz = nurHand.length;
+    const rest = nachVorrang(pool.filter((k) => k.gen), progress, rand);
+    while (gewaehlt.length < n && genSumme < handImQuiz) {
+      /** @type {Kandidat | null} */
+      let wahl = null;
+      for (const k of rest) {
+        const id = /** @type {Generator} */ (k.gen).id;
+        if (!gewaehlt.includes(k) && (!wahl || (genZahl[id] || 0) < (genZahl[/** @type {Generator} */ (wahl.gen).id] || 0))) wahl = k;
+      }
+      if (!wahl) break;
+      const id = /** @type {Generator} */ (wahl.gen).id;
+      gewaehlt.push(wahl);
+      genZahl[id] = (genZahl[id] || 0) + 1;
+      genSumme += 1;
+    }
   }
   return shuffle(gewaehlt, rand);
 }

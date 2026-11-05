@@ -48,41 +48,55 @@ test('Ziehen: Anzahl, Kapitel, Stufe, höchstens 30 % je Generator und 50 % erze
   }
 });
 
-/** Anteile bezogen auf die tatsächliche Länge, unabhängig von der Rechnung in ziehen() (#61). @param {Kandidat[]} z */
-const anteileEingehalten = (z) => {
+/** Erzeugte Fragen je Generator im Quiz. @param {Kandidat[]} z */
+const jeGenerator = (z) => {
   /** @type {Record<string, number>} */
   const je = {};
   for (const x of z) if (x.gen) je[x.gen.id] = (je[x.gen.id] || 0) + 1;
-  const gesamt = Object.values(je).reduce((a, b) => a + b, 0);
-  return Object.values(je).every((c) => c <= GEN_ANTEIL * z.length + 1e-9) && gesamt <= GEN_GESAMT * z.length + 1e-9;
+  return je;
+};
+/** Streng: ≤ 30 % je Generator, ≤ 50 % erzeugt, bezogen auf die tatsächliche Länge. @param {Kandidat[]} z */
+const streng = (z) => {
+  const je = Object.values(jeGenerator(z));
+  return je.every((c) => c <= GEN_ANTEIL * z.length + 1e-9) && je.reduce((a, b) => a + b, 0) <= GEN_GESAMT * z.length + 1e-9;
 };
 
-test('Ziehen: 30 % je Generator und 50 % erzeugt gelten für die tatsächliche Länge (#61)', () => {
+test('Ziehen: Grenzen streng, wenn die Länge so erreichbar ist; sonst nie mehr erzeugte als handgeschriebene (#61)', () => {
   /** @param {string} id @returns {Generator} */
   const g = (id) => ({ ...GEN[0], id, stufen: [1], params: () => Array.from({ length: 20 }, (_, i) => String(i)) });
-  const viele = [g('a'), g('b'), g('c')];
-  for (const hand of [0, 1, 2, 3, 5, 8]) {
-    const k = kandidaten(BANK.filter((q) => q.kapitel === 1 && q.stufe === 1).slice(0, hand), viele);
-    for (const n of [5, 10, 20]) for (let seed = 1; seed < 30; seed++) {
+  /** @param {number} hand @param {Generator[]} gens */
+  const pool = (hand, gens) => kandidaten(BANK.filter((q) => q.kapitel === 1 && q.stufe === 1).slice(0, hand), gens);
+  for (const gens of [[g('a')], [g('a'), g('b')], [g('a'), g('b'), g('c')]]) for (const hand of [0, 1, 2, 3, 5, 6, 8]) {
+    const k = pool(hand, gens);
+    for (const n of [5, 10, 20]) for (let seed = 1; seed < 20; seed++) {
       const z = ziehen(k, { stufe: 1, n, rand: rng(seed) });
-      assert.ok(z.length <= n);
-      assert.ok(anteileEingehalten(z), `hand ${hand}, n ${n}, seed ${seed}: ${z.map((x) => x.key).join(' ')}`);
+      const info = `${gens.length} Generatoren, hand ${hand}, n ${n}, seed ${seed}: ${z.map((x) => x.key).join(' ')}`;
+      const h = z.filter((x) => !x.gen).length, e = z.length - h;
+      if (z.length < n) assert.equal(h, hand, info); // kürzer als gewählt nur, wenn alle handgeschriebenen drin sind
+      assert.ok(z.length <= n && e <= h, info);
+      // unabhängig gerechnet: Länge mit strengen Grenzen erreichbar, wenn h + min(Generatoren · ⌊0,3 n⌋, ⌊0,5 n⌋) ≥ n
+      const strengErreichbar = hand + Math.min(gens.length * Math.floor(n * GEN_ANTEIL), Math.floor(n * GEN_GESAMT)) >= n;
+      if (strengErreichbar) assert.ok(z.length === n && streng(z), info);
+      else {
+        assert.equal(z.length, Math.min(n, 2 * hand), info); // so lang wie möglich mit e ≤ h
+        const je = Object.values(jeGenerator(z));
+        if (je.length) assert.ok(Math.max(...je) - Math.min(...je, ...(je.length < gens.length ? [0] : [])) <= 1, `gleichmässig: ${info}`);
+      }
     }
   }
-  // Fall aus dem Review: 2 handgeschriebene Fragen, ein Generator, n = 10 → höchstens 30 % aus dem Generator
-  const k = kandidaten(BANK.filter((q) => q.kapitel === 1 && q.stufe === 1).slice(0, 2), [g('a')]);
-  for (let seed = 1; seed < 30; seed++) assert.ok(anteileEingehalten(ziehen(k, { stufe: 1, n: 10, rand: rng(seed) })));
-  // Länge: nicht unnötig gekürzt (Werte von Hand: h handgeschriebene, g erzeugte mit g ≤ ⌊0,3·L⌋ je Generator, g ≤ ⌊0,5·L⌋)
-  /** @param {number} hand @param {Generator[]} gens @param {number} n */
-  const laenge = (hand, gens, n) => ziehen(kandidaten(BANK.filter((q) => q.kapitel === 1 && q.stufe === 1).slice(0, hand), gens), { stufe: 1, n, rand: rng(5) });
-  assert.equal(laenge(8, viele, 10).length, 10); // 7 + 3 oder mehr Handfragen, jedenfalls voll
-  assert.equal(laenge(3, [g('a')], 10).length, 4); // 3 + 1: ⌊0,3·4⌋ = 1
-  assert.equal(laenge(3, [g('a')], 10).filter((x) => x.gen).length, 1);
-  assert.equal(laenge(4, viele, 10).length, 8); // 4 + 4 (⌊0,5·8⌋ = 4; je Generator ≤ ⌊2,4⌋ = 2)
-  assert.equal(laenge(2, [g('a')], 10).length, 2); // ⌊0,3·3⌋ = 0: keine erzeugte Frage
-  // volle Quizrunde mit 5 Fragen: höchstens 1 je Generator (nicht 2 durch Runden)
+  // Beispiele von Hand (n = 10)
+  /** @param {number} hand @param {Generator[]} gens */
+  const lauf = (hand, gens) => ziehen(pool(hand, gens), { stufe: 1, n: 10, rand: rng(5) });
+  const viele = [g('a'), g('b'), g('c')];
+  assert.equal(lauf(8, viele).length, 10);
+  assert.ok(streng(lauf(8, viele)));
+  assert.deepEqual([lauf(6, [g('a')]).length, lauf(6, [g('a')]).filter((x) => x.gen).length], [10, 4]);
+  assert.deepEqual([lauf(3, [g('a')]).length, lauf(3, [g('a')]).filter((x) => x.gen).length], [6, 3]);
+  assert.equal(lauf(2, [g('a')]).length, 4);
+  assert.equal(lauf(0, viele).length, 0);
+  // volle Quizrunde mit 5 Fragen und genug handgeschriebenen: höchstens 1 je Generator (nicht 2 durch Runden)
   const voll = kandidaten(BANK, viele);
-  for (let seed = 1; seed < 30; seed++) assert.ok(anteileEingehalten(ziehen(voll, { stufe: 1, kapitel: [1], n: 5, rand: rng(seed) })));
+  for (let seed = 1; seed < 30; seed++) assert.ok(streng(ziehen(voll, { stufe: 1, kapitel: [1], n: 5, rand: rng(seed) })));
 });
 
 test('Kandidaten: derselbe Parameter auf zwei Stufen ist ein Fehler (#60)', () => {

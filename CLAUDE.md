@@ -100,10 +100,12 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 - **Kein Review durch Claude Code in GitHub Actions** (Vorgabe Thomas, 5.11.2026): Die Kosten sind nicht
   kalkulierbar. Das Review durch einen unabhängigen Agenten in der Sitzung (Abschnitt „Git, PRs und Releases“)
   bleibt der Weg; ESLint ergänzt es.
-- **Grenzen für erzeugte Fragen streng** (5.11.2026, Leitfaden Abschn. 7): Die Grenzen bezogen sich auf die
-  gewünschte Länge und wurden gerundet; ein Quiz, das mangels handgeschriebener Fragen kürzer ausfiel, konnte
-  50 % aus einem Generator haben, eines mit 5 Fragen 40 %. Thomas: Die Grenze gilt streng, ohne Ausnahme für kurze
-  Quizrunden. Die Tests prüfen die Anteile an der tatsächlichen Länge, nicht mit der Rechnung des Codes.
+- **Grenzen für erzeugte Fragen** (5.11.2026, Leitfaden Abschn. 7): Die Grenzen bezogen sich auf die gewünschte
+  Länge und wurden gerundet; ein Quiz konnte 50 % aus einem Generator haben, eines mit 5 Fragen 40 %. Thomas wollte
+  sie zuerst streng. Streng bezogen auf die tatsächliche Länge machten sie aber Quizrunden in Kapiteln mit wenigen
+  handgeschriebenen Fragen unnötig kurz (z. B. 4 statt 6 Fragen). Deshalb (Thomas): streng, solange die gewählte
+  Länge damit erreichbar ist; sonst nur „nie mehr erzeugte als handgeschriebene“, gleichmässig über die Generatoren
+  (ein einzelner Generator kann dann mehr als 30 % stellen). Die Tests rechnen die Erreichbarkeit unabhängig vom Code.
 - **Schlüssel des Fortschritts ohne Stufe** (5.11.2026, Leitfaden Abschn. 7): Statt die Stufe in den Schlüssel
   aufzunehmen, sind Parameter über alle Stufen eindeutig. So bleibt der gespeicherte Fortschritt gültig; alle Generatoren der Apps
   erfüllten das schon.
