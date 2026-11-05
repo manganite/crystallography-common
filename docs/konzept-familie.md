@@ -3,7 +3,7 @@
 > **Status (geprüft 3.11.2026, nachträglich ergänzt):** Umgesetzt (common v0.1.1, Stereo-App v1.11.0/v1.12.0, plane-groups v1.0.0). Überholt:
 > - „Eigenes Claude-Projekt je neuer App“ und „Leitfaden als Dokument in jedes Projekt“: ersetzt durch `CLAUDE.md` in den Repositories und ein gemeinsames Projekt „Kristallographie Apps“; der Leitfaden ist `LEITFADEN.md` (die Kopie `claude/leitfaden-familie.md` ist überholt).
 > - „Reziprokes Gitter keiner App zugeordnet“: gehört in die 2D-App (Nachtrag unten).
-> - „Bewusst noch nicht gemeinsam: Anordnung der Tafeln und 3D-Ansicht“: Issue #6.
+> - „Bewusst noch nicht gemeinsam: Anordnung der Tafeln und 3D-Ansicht“: Die Anordnung ist gemeinsam (`css/app.css`, Leitfaden Abschn. 5.1); die 3D-Ansicht: Issue #9.
 > - Die geplante 3D-App (Raumgitter, Raumgruppen): Issue #9; eigenes Repository später.
 >
 > Der Text darunter ist der Stand des Konzepts und wird nicht mehr nachgeführt. Was heute gilt, steht in `CLAUDE.md` und im `LEITFADEN.md` von crystallography-common; offene Punkte stehen in den GitHub Issues.

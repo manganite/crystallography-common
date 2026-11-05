@@ -1,9 +1,9 @@
 /* Werkbank der App: Seitenleiste mit Karten und Bedienelementen, Tafeln mit Kopf und Legende,
    Kenndaten, Hilfen (Erste Schritte, Tooltip, ⓘ). */
 
-/* Anordnung der Tafeln: links die Seitenleiste, rechts zwei gleich grosse Tafeln (.p-a, .p-b), darunter die
-   Kenndaten; iPad hochkant Tafeln untereinander; Telefon eine Tafel oben angeheftet, Umschalter .figswitch
-   (body[data-fig="a"|"b"]). Eine App mit anderer Anordnung überschreibt .layout in ihrem <style>. */
+/* Anordnung der Tafeln (Leitfaden Abschn. 5.1): links die Seitenleiste, rechts zwei gleich grosse Tafeln
+   (.p-a, .p-b), darunter die Kenndaten; iPad hochkant untereinander; Telefon eine Tafel oben angeheftet,
+   Umschalter .figswitch (body[data-fig="a"|"b"]). */
 .layout {
   max-width: 1480px; margin-inline: auto; display: grid; gap: 16px;
   grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1fr);
@@ -235,7 +235,7 @@ footer a { color: inherit; }
 @media (max-width: 1399px) {
   .brand p { display: none; }
 }
-/* Telefon: eine Tafel oben angeheftet (Umschalter Stereogramm/3D), Bedienung darunter */
+/* Telefon: Seitenleiste unter den Tafeln (nicht angeheftet), Kopfzeile und Tafeln kompakt, Umschalter sichtbar */
 @media (max-width: 719px) {
   .brand p { display: none; }
   .brand { flex: 1; }

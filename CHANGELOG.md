@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Anordnung der Tafeln in `css/app.css`** (#6): `.layout`, `.figs`, `.p-a`, `.p-b`, `.info` und der Umschalter auf dem Telefon (`body[data-fig="a"|"b"]`) stehen jetzt gemeinsam, wie sie in beiden Apps und der Vorlage gleich standen. Für die Apps: die eigenen Regeln dafür aus dem `<style>` von `index.html` entfernen; Tafeln heissen `.p-a`/`.p-b`, der Umschalter setzt `data-fig="a"`/`"b"`. Eine App mit anderer Anordnung überschreibt `.layout` in ihrem `<style>`. Leitfaden Abschn. 5.1 entsprechend.
+- **Anordnung der Tafeln in `css/app.css`** (#6): `.layout`, `.figs`, `.p-a`, `.p-b`, `.info` und der Umschalter auf dem Telefon (`body[data-fig="a"|"b"]`) stehen jetzt gemeinsam, wie sie in beiden Apps und der Vorlage gleich standen. Für die Apps: die eigenen Regeln dafür aus dem `<style>` von `index.html` entfernen; Tafeln heissen `.p-a`/`.p-b`, der Umschalter setzt `data-fig="a"`/`"b"`. Eine App mit anderer Anordnung überschreibt die Regeln samt Umbrüchen (Leitfaden Abschn. 5.1). Ohne JavaScript zeigt das Telefon beide Tafeln, wenn `<body>` kein `data-fig` hat; die Vorlage setzt `data-fig="a"`.
 
 ## [0.5.0] - 2026-11-04
 
