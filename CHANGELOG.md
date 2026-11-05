@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-05
+
+„Alle Einstellungen zurücksetzen“ gemeinsam, PDF des Skripts ohne geteilte Bildraster. Für die Apps: den Knopf nach Leitfaden Abschn. 5.2 einrichten und `alleEinstellungenZuruecksetzen('<präfix>')` aufrufen.
+
 ### Hinzugefügt
 
 - **„Alle Einstellungen zurücksetzen“** (#48): `alleEinstellungenZuruecksetzen(praefix)` in `js/seite.js` löscht alle Einträge der App im Speicher des Browsers ausser denen des Quiz (auch nochmals bei `pagehide`) und lädt die Seite ohne Hash neu. Die Vorlage hat den Knopf. Umsetzung in den Apps (Ort, ID, Präfix): Leitfaden Abschn. 5.2. In plane-groups ändert sich damit das Verhalten (Neuladen; auch offene Abschnitte und Tafel am Telefon werden zurückgesetzt), in stereography nicht.
@@ -134,7 +138,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.7.0
 [0.6.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.6.0
 [0.5.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.5.0
 [0.4.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.4.0
