@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-11-05
+
+Gewählte Knöpfe behalten beim Überfahren ihren Rand; Vorlage mit Werkzeugleiste. Für die Apps: nichts anzupassen.
+
 ### Hinzugefügt
 
 - **Vorlage:** Tafel A hat eine Werkzeugleiste mit drei Werkzeugen, die sich ausschliessen; Werkzeug 3 ist als Beispiel gesperrt, der Grund steht in der Legende (Leitfaden Abschn. 5.2).
@@ -158,7 +162,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.1
 [0.8.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.0
 [0.7.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.7.0
 [0.6.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.6.0
