@@ -110,6 +110,11 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Tabs ausgezeichnet, verhielten sich aber nicht so. Zur Wahl standen Schaltflächen mit `aria-pressed` (einfacher,
   bei zwei Modi ausreichend) und das volle Muster; das volle Muster passt auch zu Apps mit mehr Modi und
   zur Bedeutung (der Modus wechselt den ganzen Inhalt). Gemeinsamer Helfer `modusTabs()` in `js/seite.js`.
+- **Zahlen ausserhalb ihres Bereichs auf den nächsten gültigen Wert** (Thomas, 6.11.2026, Leitfaden Abschn. 5.2;
+  stereography#105): Der Leitfaden sah für Ungültiges den Startwert vor. Der Link von stereography setzte Zahlen
+  schon immer in ihren Bereich (`ga=200` ergibt 150°). Der nächste gültige Wert liegt näher an dem, was gemeint
+  war, und Link und Speicher bleiben gleich. Für fehlende, falsch getippte oder unbekannte Werte und für Werte,
+  die erst zusammen ungültig sind, bleibt es beim Startwert.
 - **Schlüssel des Fortschritts ohne Stufe** (5.11.2026, Leitfaden Abschn. 7): Statt die Stufe in den Schlüssel
   aufzunehmen, sind Parameter über alle Stufen eindeutig. So bleibt der gespeicherte Fortschritt gültig; alle Generatoren der Apps
   erfüllten das schon.
