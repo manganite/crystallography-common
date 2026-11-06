@@ -9,6 +9,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 ### Geändert
 
 - **Leitfaden 5.2:** Zahlen ausserhalb ihres Bereichs werden auf den nächsten gültigen Wert gesetzt statt durch den Startwert ersetzt (Entscheidung Thomas, 6.11.2026). Für die Apps: plane-groups ersetzt sie noch durch den Startwert (manganite/plane-groups#98).
+- **Leitfaden 9, Datendateien:** Eine einfache Suche nach Kennung (`find`, Fehler oder `null` bei unbekannter Kennung) ist in Datendateien erlaubt (Entscheidung Thomas, 6.11.2026). Für die Apps: nichts anzupassen, `ebenengruppe(id)`, `vorgabe(id)` und `exampleById(id)` bleiben.
 
 ## [0.10.0] - 2026-11-06
 
