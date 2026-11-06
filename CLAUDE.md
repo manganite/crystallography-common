@@ -221,16 +221,18 @@ fehlte beim ersten Release von plane-groups) und `vorlagen/README.md`.
   Faktorgruppe *G*_K/*B*_K, Def. 4.28, S. 146); Rosebrock, *Anschauliche Gruppentheorie* (2020;
   Nebenklassen und Satz von Lagrange, Abschn. 3.2, S. 41–42); Wipf, *Symmetrien in der Physik* (2023);
   Wagner, *Gruppentheoretische Methoden in der Physik* (1998, in Zotero ohne PDF); Glosauer,
-  *Elementar(st)e Gruppentheorie* (2016, in Zotero ohne PDF; Thomas' Hinweis für Permutationsgruppen).
-  Dazu Schwarzenbach, *Kristallographie* (2001), Abschn. 2.4: Nebenklassen nach *T*, *P* ≅ *E*/*T*, mit
-  einer Ebenengruppe als Beispiel, S. 45–46; Abschn. 2.5.1 („Der Klassenbegriff“, S. 46) warnt vor der
+  *Elementar(st)e Gruppentheorie* (2016; Symmetriegruppe des Dreiecks und Eckentripel (1, 2, 3) → (3, 1,
+  2), Abschn. 1.1–1.2, S. 1–12; symmetrische Gruppen, Abschn. 3.2, S. 50; *D*_n als Untergruppe von
+  *S*_n, Abschn. 3.3.2, S. 57; Nebenklassen, Abschn. 5.1, S. 80; Faktorgruppen, Kap. 6, S. 87). Dazu
+  Schwarzenbach, *Kristallographie* (2001), Abschn. 2.4: Nebenklassen nach *T*, *P* ≅ *E*/*T*, mit einer
+  Ebenengruppe als Beispiel, S. 45–46; Abschn. 2.5.1 („Der Klassenbegriff“, S. 46) warnt vor der
   Verwechslung mit Konjugiertenklassen. Paufler, *Physikalische Kristallographie*, führt Nebenklassen
   und Faktorgruppe nicht ein; nur die Zerlegung nach einer Untergruppe vom Index 2 für
   Schwarz-Weiss-Gruppen (Abschn. 4.3, S. 61, Gl. 4.11). Seiten (Abstand springt an jedem Kapitelanfang;
   geprüft 6.11.2026): Schwarzenbach gedruckt = PDF − 11 (Kap. 1), − 9 (Kap. 2), − 8 (Kap. 3), − 7 (Kap.
   4), − 5 (Kap. 5); Rosebrock − 12 (Kap. 1–3), − 11 (Kap. 4–9), − 10 (ab Kap. 10); Brückler − 7 (Kap.
-  2), − 6 (Kap. 3–4), − 5 (Anhang); Wipf nur an S. 14 geprüft (− 16). Im Zweifel Seitenzahl im Kopf der
-  PDF-Seite ablesen.
+  2), − 6 (Kap. 3–4), − 5 (Anhang); Wipf nur an S. 14 geprüft (− 16); Glosauer − 8 (geprüft an S. 9, 50,
+  57, 80). Im Zweifel Seitenzahl im Kopf der PDF-Seite ablesen.
 - **Bücher nicht blind übernehmen:** Abbildungen und Lösungen nachrechnen (Lösungen bei Borchardt-Ott
   verweisen oft nur auf Abbildungen). Bekannte Fehler stehen in der `CLAUDE.md` der jeweiligen App.
 - Keine Abbildungen aus Büchern oder Folien übernehmen, auch nicht in Quiz und Moodle-Export; nur
