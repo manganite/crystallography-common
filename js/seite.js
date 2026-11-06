@@ -127,10 +127,12 @@ export function offline({ datei = 'sw.js', lokal = false, neuLaden = false } = {
  * Leitfaden Abschn. 5.4): Knöpfe mit role="tab" in einem Element mit role="tablist", ein gemeinsames
  * Element mit role="tabpanel" für den Inhalt. Pfeiltasten links/rechts (mit Umlauf), Pos1 und Ende wählen
  * den nächsten nicht gesperrten Tab und lösen seinen click aus; die App reagiert wie bisher im click.
- * Nur der gewählte Tab ist im Fokus-Ablauf (tabindex). Die App ruft markieren(id) auf, wenn sich der
- * Modus ändert (auch beim Laden aus Link oder Speicher).
+ * Nur der gewählte Tab ist im Fokus-Ablauf (tabindex); ist er gesperrt, der erste freie. Die App ruft
+ * markieren(id) überall dort auf, wo ein Moduswechsel durchläuft (auch beim Laden aus Link oder Speicher),
+ * statt aria-selected selbst zu setzen, und ruft modusTabs vor dem ersten Moduswechsel auf.
  * @param {HTMLElement} liste Element mit role="tablist"
- * @param {HTMLElement} inhalt Element mit role="tabpanel" (braucht eine id)
+ * @param {HTMLElement} inhalt Element mit role="tabpanel" (braucht eine id; nicht das <main>, sonst fehlt die
+ *   Hauptlandmarke)
  * @returns {{ markieren: (id: string) => void }}
  */
 export function modusTabs(liste, inhalt) {
@@ -139,15 +141,19 @@ export function modusTabs(liste, inhalt) {
   for (const t of tabs) t.setAttribute('aria-controls', inhalt.id);
   /** @param {string} id */
   const markieren = (id) => {
+    const gewaehlt = tabs.find((t) => t.id === id);
+    if (!gewaehlt) throw new Error(`modusTabs: kein Tab mit der id „${id}“`);
+    // im Fokus-Ablauf: der gewählte Tab, wenn er gesperrt ist der erste freie
+    const fokus = gewaehlt.disabled ? (tabs.find((t) => !t.disabled) ?? gewaehlt) : gewaehlt;
     for (const t of tabs) {
-      const an = t.id === id;
-      t.setAttribute('aria-selected', String(an));
-      t.tabIndex = an ? 0 : -1;
+      t.setAttribute('aria-selected', String(t === gewaehlt));
+      t.tabIndex = t === fokus ? 0 : -1;
     }
     inhalt.setAttribute('aria-labelledby', id);
   };
   liste.addEventListener('keydown', (ev) => {
     const e = /** @type {KeyboardEvent} */ (ev);
+    if (e.altKey || e.ctrlKey || e.metaKey) return; // z. B. Alt+Pfeil links: zurück im Browser
     const frei = tabs.filter((t) => !t.disabled);
     const i = frei.findIndex((t) => t === document.activeElement);
     if (i < 0 || !frei.length) return;

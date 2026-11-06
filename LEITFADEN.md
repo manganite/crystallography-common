@@ -70,10 +70,11 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 Die Apps sollen allgemein zugänglich sein, auch ohne Maus und mit Screenreader. Mindestregeln:
 
 - **Bedeutung nie nur in Form oder Farbe:** Farben werden durch Symbole, Linienarten oder Beschriftungen ergänzt. Ein Alternativtext in CSS (`content: '' / '−'`) ist zulässig, z. B. beim Querstrich (Abschnitt 4).
-- **ARIA-Rollen nur mit dem zugehörigen Verhalten.** Die Moduswahl ist ein vollständiges Tab-Muster: `role="tablist"` und `role="tab"`, ein gemeinsames `role="tabpanel"` (das `<main>` mit `id`), Pfeiltasten, Pos1 und Ende, nur der gewählte Tab im Fokus-Ablauf. Umsetzung mit `modusTabs()` aus `lib/common/js/seite.js` (Vorlage); die App ruft `markieren(id)`, wenn sich der Modus ändert, auch beim Laden aus Link oder Speicher.
+- **ARIA-Rollen nur mit dem zugehörigen Verhalten.** Die Moduswahl ist ein vollständiges Tab-Muster: `role="tablist"` und `role="tab"`, ein gemeinsames `role="tabpanel"` (`<div class="layout" id="inhalt">` im `<main>`; das `<main>` selbst bleibt Hauptlandmarke), Pfeiltasten, Pos1 und Ende, nur der gewählte Tab im Fokus-Ablauf. Umsetzung mit `modusTabs()` aus `lib/common/js/seite.js` (Vorlage), aufgerufen vor dem ersten Moduswechsel; die App setzt `aria-selected` nicht selbst, sondern ruft `markieren(id)` dort, wo jeder Moduswechsel durchläuft, auch beim Laden aus Link oder Speicher.
 - **Alles Bedienbare per Tastatur erreichbar.** Wo eine Zeichenfläche das nicht leistet (Pole, Motive ziehen), gibt es einen gleichwertigen Weg, z. B. eine beschriftete Liste und Felder für Koordinaten, auch als Brüche.
-- **Kontraste** nach WCAG 2.2 (1.4.3 Text, 1.4.11 Bedienelemente und Grafik) für hell und dunkel messen; Touch-Ziele wie in Abschnitt 5.2 (WCAG 2.5.8).
-- **Bewegung:** `prefers-reduced-motion` beachten, auch in 3D-Ansichten.
+- **Kontraste** nach WCAG 2.2 für hell und dunkel messen: Text 4,5 : 1, grosser Text 3 : 1 (1.4.3), Bedienelemente und Grafik 3 : 1 (1.4.11). Touch-Ziele wie in Abschnitt 5.2, strenger als WCAG 2.5.8 (24 px).
+- **Grafik auch als Text:** Das Wesentliche einer Darstellung steht als kurze Zusammenfassung in den Kenndaten (`.info`).
+- **Bewegung:** `prefers-reduced-motion` beachten, auch in 3D-Ansichten; Übergänge schrittweise auslösen statt automatisch ablaufen lassen.
 - **Vor einem grösseren Release** einmal mit einem Screenreader prüfen (VoiceOver oder NVDA).
 
 ## 6. Das Skript
@@ -124,7 +125,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Als Web-App** auf dem Homescreen installierbar (Manifest, Icons).
 - **Tests** mit `node --test`, ohne Abhängigkeiten; Browser-Durchläufe mit Playwright, wo nötig.
   - **Rundlauf-Tests** je App, ohne Browser: Zustand → Link → Zustand; alter Speicherstand → gültiger Zustand; Zurücksetzen vor und nach dem Neuladen gleich (Abschnitt 5.2). Erwartungen unabhängig vom Code formulieren, nicht mit derselben Rechnung.
-- **HTML aus Zeichenketten:** Text kommt nur über `esc()` aus `lib/common/js/format.js` (Inhalt und Attributwerte) oder über `textContent` in die Seite. Mit `innerHTML` nur HTML aus den eigenen Daten der App. Werte aus Link und Speicher erst nach der Prüfung (Abschnitt 5.2), und dann als Text. Der Moodle-Export maskiert XML mit eigenen Helfern (`tools/moodle.mjs`).
+- **HTML aus Zeichenketten:** Text kommt nur über `esc()` aus `lib/common/js/format.js` (Inhalt und Attributwerte) oder über `textContent` in die Seite. Mit `innerHTML` nur HTML aus den eigenen Daten der App. Werte aus Link und Speicher erst nach der Prüfung (Abschnitt 5.2), und dann als Text. `esc()` schützt nicht Adressen (`href`, `src`), `on…`-Attribute und `style`; dort nur feste Werte der App. Der Moodle-Export maskiert XML mit eigenen Helfern (`tools/moodle.mjs`).
 - **Typprüfung** mit TypeScript über JSDoc-Typen und `checkJs` (`tsconfig.json`, CI-Job `typen`); keine `.ts`-Dateien, kein Build-Schritt. TypeScript wird nur für die Prüfung installiert, wie Playwright.
   - Alle Dateien in `js/`, `tools/` und `tests/` strikt (`strict`), ohne `// @ts-nocheck`; diese Ordner stehen in `include` der `tsconfig.json`.
   - Typen der Familie nicht in der App neu definieren: Vektoren, Matrizen und gekennzeichnete Typen aus `lib/common/js/typen.js`, Fragen, Generatoren und Kapitel aus `lib/common/js/quiz-core.js`.

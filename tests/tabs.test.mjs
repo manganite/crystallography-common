@@ -36,8 +36,8 @@ function aufbau() {
   const setze = (n, w) => { attr[n] = w; };
   const inhalt = { id: 'inhalt', attr, setAttribute: setze };
   const m = modusTabs(/** @type {any} */ (liste), /** @type {any} */ (inhalt));
-  /** @param {string} key */
-  const druecke = (key) => { let weg = false; /** @type {any} */ (taste)({ key, preventDefault: () => { weg = true; } }); return weg; };
+  /** @param {string} key @param {Record<string, boolean>} [mod] */
+  const druecke = (key, mod = {}) => { let weg = false; /** @type {any} */ (taste)({ key, ...mod, preventDefault: () => { weg = true; } }); return weg; };
   return { tabs, inhalt, m, druecke };
 }
 
@@ -70,4 +70,24 @@ test('Tabs: der schon gewählte Tab wird nicht noch einmal ausgelöst', () => {
   tabs[1].focus();
   druecke('ArrowLeft');
   assert.equal(tabs[0].klicks, 0);
+});
+
+test('Tabs: Grenzfälle (#81)', () => {
+  const { tabs, inhalt, druecke, m } = aufbau();
+  assert.throws(() => m.markieren('tab-x'), /kein Tab/);
+  m.markieren('tab-c');
+  assert.equal(inhalt.attr['aria-labelledby'], 'tab-c');
+  // gewählter Tab gesperrt: der erste freie bleibt im Fokus-Ablauf
+  tabs[2].disabled = true; m.markieren('tab-c');
+  assert.deepEqual(tabs.map((t) => t.tabIndex), [0, -1, -1]);
+  assert.equal(tabs[2].attr['aria-selected'], 'true');
+  // Pos1 und Ende überspringen gesperrte Tabs
+  tabs[0].focus(); assert.ok(druecke('End')); assert.equal(g.document.activeElement, tabs[1]);
+  tabs[0].disabled = true; druecke('Home'); assert.equal(g.document.activeElement, tabs[1]);
+  // Tasten mit Alt, Strg oder Cmd bleiben dem Browser
+  assert.ok(!druecke('ArrowLeft', { altKey: true }));
+  assert.ok(!druecke('ArrowRight', { metaKey: true }));
+  // Fokus nicht auf einem Tab, oder alle gesperrt: nichts geschieht
+  g.document.activeElement = null; assert.ok(!druecke('ArrowRight'));
+  tabs[1].focus(); tabs[1].disabled = true; assert.ok(!druecke('ArrowRight'));
 });

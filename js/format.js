@@ -24,7 +24,8 @@ export function hmParts(sym) {
 const ENTITAET = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 /**
  * Text für HTML maskieren, für Inhalt und Attributwerte (in "…" und '…'). Text, der nicht aus den Daten
- * der App stammt, kommt nur so oder über textContent in die Seite (Leitfaden Abschn. 9).
+ * der App stammt, kommt nur so oder über textContent in die Seite (Leitfaden Abschn. 9). Kein Schutz für
+ * Adressen (href, src, z. B. javascript:), on…-Attribute und style.
  * @param {unknown} s
  */
 export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ENTITAET[c]);
