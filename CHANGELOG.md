@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Leitfaden 5.2:** Zahlen ausserhalb ihres Bereichs werden auf den nächsten gültigen Wert gesetzt statt durch den Startwert ersetzt (Entscheidung Thomas, 6.11.2026). Für die Apps: plane-groups ersetzt sie noch durch den Startwert (manganite/plane-groups#98).
+
 ## [0.10.0] - 2026-11-06
 
 Moduswahl als vollständiges Tab-Muster (`modusTabs`), ein gemeinsamer Helfer `esc`, Leitfaden mit Regeln zu Link und Speicher, Rundlauf-Tests, HTML aus Zeichenketten und Barrierefreiheit. Für die Apps: Moduswahl umstellen (siehe „Hinzugefügt“), sonst nichts anzupassen.
