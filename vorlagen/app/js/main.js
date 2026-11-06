@@ -3,7 +3,7 @@
 
 import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
-import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik, element, elemente } from '../lib/common/js/seite.js';
+import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik, element, elemente, modusTabs } from '../lib/common/js/seite.js';
 import { TIPS, SECTIONS, LABELS } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
@@ -87,8 +87,9 @@ function init() {
   elemente('.seg button', HTMLButtonElement).forEach((b) => b.addEventListener('click', () => {
     b.parentElement?.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
   }));
-  // Modi
-  for (const t of ['tab-a', 'tab-b']) $(t).addEventListener('click', () => { for (const u of ['tab-a', 'tab-b']) $(u).setAttribute('aria-selected', String(u === t)); });
+  // Modi: Tab-Muster mit Pfeiltasten (Leitfaden Abschn. 5.4); markieren() auch beim Laden aus Link oder Speicher
+  const modi = modusTabs(element('.tabs'), $('inhalt'));
+  for (const t of ['tab-a', 'tab-b']) $(t).addEventListener('click', () => modi.markieren(t));
   // Telefon: eine Tafel oben, Umschalter
   const figKnoepfe = elemente('.figswitch button', HTMLButtonElement);
   figKnoepfe.forEach((b) => b.addEventListener('click', () => {

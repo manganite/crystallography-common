@@ -20,8 +20,14 @@ export function hmParts(sym) {
   return parts;
 }
 
-/** @param {unknown} s */
-const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+/** @type {Record<string, string>} */
+const ENTITAET = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+/**
+ * Text für HTML maskieren, für Inhalt und Attributwerte (in "…" und '…'). Text, der nicht aus den Daten
+ * der App stammt, kommt nur so oder über textContent in die Seite (Leitfaden Abschn. 9).
+ * @param {unknown} s
+ */
+export const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ENTITAET[c]);
 
 /** HM-Symbol als HTML (Querstrich via CSS-Klasse .ov). @param {string} sym */
 export const hmHTML = (sym) =>

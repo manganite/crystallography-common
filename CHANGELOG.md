@@ -6,6 +6,18 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Moduswahl als Tab-Muster** (#68, `js/seite.js`, `modusTabs(liste, inhalt)`): Pfeiltasten mit Umlauf, Pos1 und Ende, `aria-controls`, nur der gewählte Tab im Fokus-Ablauf; gemeinsames `role="tabpanel"`. Gesperrte Tabs werden übersprungen. Vorlage umgestellt. **Für die Apps:** `<main class="layout" id="inhalt" role="tabpanel">`; `const modi = modusTabs(element('.tabs'), $('inhalt'))` und, wo die App `aria-selected` setzt, `modi.markieren(id)`.
+- **`esc()`** (#64, `js/format.js`): ein gemeinsamer Helfer für Text und Attributwerte (& < > " '). `help.js` verwendet ihn statt einer eigenen Kopie; der Moodle-Export behält seine XML-Helfer (bytegleich).
+
+### Geändert
+
+- **Leitfaden:**
+  - Abschn. 5.2: eine Prüfung für Link und Speicher (#63).
+  - Neuer Abschn. 5.4 „Barrierefreiheit“ (#65, Tab-Muster #68).
+  - Abschn. 9: Rundlauf-Tests (#63) und Regel für HTML aus Zeichenketten (#64).
+
 ## [0.9.0] - 2026-11-05
 
 Quiz: Grenzen für erzeugte Fragen gelten streng, solange die gewählte Länge erreichbar ist; doppelte Schlüssel sind ein Fehler. Querstrich für Screenreader, Legende mobil, PDF-Umbruch, lokaler Server robust. Für die Apps: nichts anzupassen.

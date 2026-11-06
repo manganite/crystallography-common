@@ -56,6 +56,7 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 - **Kein versteckter Zustand:** Ein Schalter, der gerade nicht wirkt, wird gesperrt und nicht abgewählt; der Grund steht darunter (`.check .why`), bei einem Schalter als Knopf in der Tafel bei der Tafel (Legende oder Hinweis). Anders die **Werkzeuge**: Knöpfe in der Werkzeugleiste einer Tafel, deren einziger Zweck die Art der Eingabe ist (z. B. Zeichnen und Radieren in plane-groups, Zone und Winkel in stereography). Sie schliessen sich wie eine Auswahl aus: Wählt man ein anderes Werkzeug oder schliesst eine andere Funktion sie aus, werden sie abgewählt; solange sie ausgeschlossen sind, sind sie gesperrt (sichtbar blass, `css/app.css`: `.tools button:disabled`, ebenso `.seg button:disabled`; Muster in Tafel A der Vorlage), und der Grund steht bei der Tafel. Gibt es ein Werkzeug in einem Modus gar nicht, fehlt es dort. Knöpfe für die Ansicht (z. B. Lupe) und Kontrollkästchen sind Schalter, auch wenn sie mitbestimmen, was ein Tippen bewirkt. Zwei Wege zum selben Ergebnis vermeiden.
 - **Vorhersagbar:** Zurücksetzen je Abschnitt (`.resetbtn`) und „Alle Einstellungen zurücksetzen“: `<button class="resetbtn" id="reset-alles">` als letztes Element der Seitenleiste, ausserhalb aller Abschnitte und Karten, damit nie in einem eingeklappten Abschnitt verborgen (Vorlage). Er ruft `alleEinstellungenZuruecksetzen('<präfix>')` aus `lib/common/js/seite.js` auf: löscht alle Einträge der App im Speicher des Browsers ausser denen des Quiz und lädt die Seite ohne Hash neu. Deshalb beginnen alle Einträge einer App mit `<präfix>-`, die des Quiz mit `<präfix>-quiz`; nach `pagehide` (in `visibilitychange` oder `unload`) speichert die App nichts mehr.
 - **Zustand in der Adresse** (`#m=…&…`), lesbar und stabil, erst geschrieben, wenn vom Standard abgewichen wird; „Link kopieren“ für Folien und Moodle. Zusätzlich im Browser gespeichert; ein Link hat Vorrang.
+- **Eine Prüfung für Link und Speicher:** Beide laufen durch dieselbe Prüffunktion der App, die auch Abhängigkeiten zwischen Feldern prüft (z. B. die Winkel eines Gitters gemeinsam). Ungültiges wird durch den Startwert ersetzt, nicht stillschweigend umgedeutet. Zur wiederherstellbaren Ansicht gehört alles, was eine spätere Handlung braucht (z. B. die Herkunft einer Struktur für „Zurücksetzen“). Abgesichert durch Rundlauf-Tests (Abschnitt 9).
 - **Geräte:** Laptop und iPad sind Ziel, Telefon nutzbar. Touch-Ziele mindestens 40 px, Trefferkreise für Punkte in Grafiken 44 px. Auf dem Telefon entfallen Export und „Link kopieren“.
 
 ### 5.3 Hilfen
@@ -63,6 +64,17 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 - **Erste Schritte:** Karte oben in der Seitenleiste beim ersten Aufruf eines Modus, drei bis vier Schritte mit Knopf **je Modus**, wegklickbar; nicht bei Aufruf über einen Link. Wieder zu sehen nach „Alle Einstellungen zurücksetzen“; dieselben Schritte stehen als erste Anleitungen auf der Hilfeseite.
 - **Tooltips** am Laptop (Maus verzögert, Tastaturfokus), **ⓘ-Erklärungen** je Abschnitt auf Touch-Geräten. Mechanik in `help.js`, Texte in der App (`hilfetexte.js`). Kurz, Begriffe wie im Skript.
 - **Hilfeseite** `hilfe.html` neben Skript und Quiz, über „?“ in der Kopfzeile; Aufbau und Aussehen wie das Skript (hell und dunkel). Sie zeigt, was man mit der App machen kann und wie: wenige Anleitungen (höchstens etwa acht), jede eine konkrete Aufgabe Schritt für Schritt mit Bildern der Bedienung und einem Knopf, der die Aufgabe in der App öffnet (Link-Adresse). Die Bilder erzeugt ein Werkzeug mit Playwright im hellen Modus; ein Test prüft, dass die abgebildeten Bedienelemente noch existieren. Die Hilfeseite erklärt die Bedienung, nicht die Fachinhalte; umgekehrt ist das Skript keine Bedienungsanleitung. Umsetzung: Issue #24.
+
+### 5.4 Barrierefreiheit
+
+Die Apps sollen allgemein zugänglich sein, auch ohne Maus und mit Screenreader. Mindestregeln:
+
+- **Bedeutung nie nur in Form oder Farbe:** Farben werden durch Symbole, Linienarten oder Beschriftungen ergänzt. Ein Alternativtext in CSS (`content: '' / '−'`) ist zulässig, z. B. beim Querstrich (Abschnitt 4).
+- **ARIA-Rollen nur mit dem zugehörigen Verhalten.** Die Moduswahl ist ein vollständiges Tab-Muster: `role="tablist"` und `role="tab"`, ein gemeinsames `role="tabpanel"` (das `<main>` mit `id`), Pfeiltasten, Pos1 und Ende, nur der gewählte Tab im Fokus-Ablauf. Umsetzung mit `modusTabs()` aus `lib/common/js/seite.js` (Vorlage); die App ruft `markieren(id)`, wenn sich der Modus ändert, auch beim Laden aus Link oder Speicher.
+- **Alles Bedienbare per Tastatur erreichbar.** Wo eine Zeichenfläche das nicht leistet (Pole, Motive ziehen), gibt es einen gleichwertigen Weg, z. B. eine beschriftete Liste und Felder für Koordinaten, auch als Brüche.
+- **Kontraste** nach WCAG 2.2 (1.4.3 Text, 1.4.11 Bedienelemente und Grafik) für hell und dunkel messen; Touch-Ziele wie in Abschnitt 5.2 (WCAG 2.5.8).
+- **Bewegung:** `prefers-reduced-motion` beachten, auch in 3D-Ansichten.
+- **Vor einem grösseren Release** einmal mit einem Screenreader prüfen (VoiceOver oder NVDA).
 
 ## 6. Das Skript
 
@@ -111,6 +123,8 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 - **Offline:** Service Worker mit eigener Cache-Kennung je App; die Offline-Liste deckt alle Dateien ab (Test). Neue Version beim nächsten Öffnen mit Netz.
 - **Als Web-App** auf dem Homescreen installierbar (Manifest, Icons).
 - **Tests** mit `node --test`, ohne Abhängigkeiten; Browser-Durchläufe mit Playwright, wo nötig.
+  - **Rundlauf-Tests** je App, ohne Browser: Zustand → Link → Zustand; alter Speicherstand → gültiger Zustand; Zurücksetzen vor und nach dem Neuladen gleich (Abschnitt 5.2). Erwartungen unabhängig vom Code formulieren, nicht mit derselben Rechnung.
+- **HTML aus Zeichenketten:** Text kommt nur über `esc()` aus `lib/common/js/format.js` (Inhalt und Attributwerte) oder über `textContent` in die Seite. Mit `innerHTML` nur HTML aus den eigenen Daten der App. Werte aus Link und Speicher erst nach der Prüfung (Abschnitt 5.2), und dann als Text. Der Moodle-Export maskiert XML mit eigenen Helfern (`tools/moodle.mjs`).
 - **Typprüfung** mit TypeScript über JSDoc-Typen und `checkJs` (`tsconfig.json`, CI-Job `typen`); keine `.ts`-Dateien, kein Build-Schritt. TypeScript wird nur für die Prüfung installiert, wie Playwright.
   - Alle Dateien in `js/`, `tools/` und `tests/` strikt (`strict`), ohne `// @ts-nocheck`; diese Ordner stehen in `include` der `tsconfig.json`.
   - Typen der Familie nicht in der App neu definieren: Vektoren, Matrizen und gekennzeichnete Typen aus `lib/common/js/typen.js`, Fragen, Generatoren und Kapitel aus `lib/common/js/quiz-core.js`.

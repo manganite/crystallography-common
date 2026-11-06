@@ -119,3 +119,47 @@ export function offline({ datei = 'sw.js', lokal = false, neuLaden = false } = {
   }
   navigator.serviceWorker.register(datei).catch(() => { /* ohne Offline-Betrieb weiter */ });
 }
+
+// ------------------------------------------------------------------ Moduswahl als Tabs
+
+/**
+ * Moduswahl als vollständiges Tab-Muster (WAI-ARIA Authoring Practices, Tabs mit automatischer Aktivierung;
+ * Leitfaden Abschn. 5.4): Knöpfe mit role="tab" in einem Element mit role="tablist", ein gemeinsames
+ * Element mit role="tabpanel" für den Inhalt. Pfeiltasten links/rechts (mit Umlauf), Pos1 und Ende wählen
+ * den nächsten nicht gesperrten Tab und lösen seinen click aus; die App reagiert wie bisher im click.
+ * Nur der gewählte Tab ist im Fokus-Ablauf (tabindex). Die App ruft markieren(id) auf, wenn sich der
+ * Modus ändert (auch beim Laden aus Link oder Speicher).
+ * @param {HTMLElement} liste Element mit role="tablist"
+ * @param {HTMLElement} inhalt Element mit role="tabpanel" (braucht eine id)
+ * @returns {{ markieren: (id: string) => void }}
+ */
+export function modusTabs(liste, inhalt) {
+  const tabs = /** @type {HTMLButtonElement[]} */ ([...liste.querySelectorAll('[role="tab"]')]);
+  if (!inhalt.id) throw new Error('modusTabs: das Element mit role="tabpanel" braucht eine id');
+  for (const t of tabs) t.setAttribute('aria-controls', inhalt.id);
+  /** @param {string} id */
+  const markieren = (id) => {
+    for (const t of tabs) {
+      const an = t.id === id;
+      t.setAttribute('aria-selected', String(an));
+      t.tabIndex = an ? 0 : -1;
+    }
+    inhalt.setAttribute('aria-labelledby', id);
+  };
+  liste.addEventListener('keydown', (ev) => {
+    const e = /** @type {KeyboardEvent} */ (ev);
+    const frei = tabs.filter((t) => !t.disabled);
+    const i = frei.findIndex((t) => t === document.activeElement);
+    if (i < 0 || !frei.length) return;
+    /** @type {Record<string, number>} */
+    const ziel = { ArrowRight: (i + 1) % frei.length, ArrowLeft: (i - 1 + frei.length) % frei.length, Home: 0, End: frei.length - 1 };
+    if (!(e.key in ziel)) return;
+    e.preventDefault();
+    const t = frei[ziel[e.key]];
+    t.focus();
+    if (t.getAttribute('aria-selected') !== 'true') t.click();
+  });
+  const gewaehlt = tabs.find((t) => t.getAttribute('aria-selected') === 'true') ?? tabs[0];
+  if (gewaehlt) markieren(gewaehlt.id);
+  return { markieren };
+}
