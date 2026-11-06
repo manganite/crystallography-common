@@ -220,8 +220,9 @@ fehlte beim ersten Release von plane-groups) und `vorlagen/README.md`.
   Zotero): Brückler, *Mathematische Grundlagen der Kristallographie* (2019; Normalteiler und
   Faktorgruppe *G*_K/*B*_K, Def. 4.28, S. 146); Rosebrock, *Anschauliche Gruppentheorie* (2020;
   Nebenklassen und Satz von Lagrange, Abschn. 3.2, S. 41–42); Wipf, *Symmetrien in der Physik* (2023);
-  Wagner, *Gruppentheoretische Methoden in der Physik* (1998, in Zotero ohne PDF). Dazu Schwarzenbach,
-  *Kristallographie* (2001), Abschn. 2.4: Nebenklassen nach *T*, *P* ≅ *E*/*T*, mit einer Ebenengruppe
+  Wagner, *Gruppentheoretische Methoden in der Physik* (1998, in Zotero ohne PDF); Glosauer,
+  *Elementar(st)e Gruppentheorie* (2016, in Zotero ohne PDF; Thomas' Hinweis für Permutationsgruppen).
+  Dazu Schwarzenbach, *Kristallographie* (2001), Abschn. 2.4: Nebenklassen nach *T*, *P* ≅ *E*/*T*, mit einer Ebenengruppe
   als Beispiel, S. 45–46; Abschn. 2.5.1 („Der Klassenbegriff“, S. 46) warnt vor der Verwechslung mit
   Konjugiertenklassen. Paufler, *Physikalische Kristallographie*, führt Nebenklassen und Faktorgruppe
   nicht ein; nur die Zerlegung nach einer Untergruppe vom Index 2 für Schwarz-Weiss-Gruppen
