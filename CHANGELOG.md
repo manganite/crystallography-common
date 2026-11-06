@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-06
+
+Moduswahl als vollständiges Tab-Muster (`modusTabs`), ein gemeinsamer Helfer `esc`, Leitfaden mit Regeln zu Link und Speicher, Rundlauf-Tests, HTML aus Zeichenketten und Barrierefreiheit. Für die Apps: Moduswahl umstellen (siehe „Hinzugefügt“), sonst nichts anzupassen.
+
 ### Hinzugefügt
 
 - **Moduswahl als Tab-Muster** (#68, `js/seite.js`, `modusTabs(liste, inhalt)`): Pfeiltasten mit Umlauf, Pos1 und Ende, `aria-controls`, nur der gewählte Tab im Fokus-Ablauf; gemeinsames `role="tabpanel"`. Gesperrte Tabs werden übersprungen. Vorlage umgestellt. Unbekannte id in `markieren` ist ein Fehler; Tasten mit Alt, Strg oder Cmd bleiben dem Browser. **Für die Apps:** `<main>` um ein `<div class="layout" id="inhalt" role="tabpanel">` (das `<main>` bleibt Hauptlandmarke); `const modi = modusTabs(element('.tabs'), $('inhalt'))` vor dem ersten Moduswechsel; die eigenen `setAttribute('aria-selected', …)` durch `modi.markieren(id)` ersetzen, dort, wo jeder Moduswechsel durchläuft (auch aus Link oder Speicher), nicht nur im `click`.
@@ -191,7 +195,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.10.0
 [0.9.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.9.0
 [0.8.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.1
 [0.8.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.8.0
