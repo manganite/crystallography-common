@@ -216,6 +216,16 @@ fehlte beim ersten Release von plane-groups) und `vorlagen/README.md`.
   schwankt der Abstand (Kap. 5: − 7, Kap. 6: − 6, ab Kap. 7: − 5; geprüft 4.11.2026): Seitenzahl im Kopf der
   PDF-Seite ablesen.
   Borchardt-Ott Tab. 9.4 und viele Aufgaben liegen nur als Bild vor (Seite als Bild lesen).
+- **Gruppentheorie und Mathematik der Kristallographie** (zur Absicherung von Fragen und Skript, alle in
+  Zotero): Brückler, *Mathematische Grundlagen der Kristallographie* (2019; Normalteiler und
+  Faktorgruppe *G*/*B*, Def. 4.28, S. 146); Rosebrock, *Anschauliche Gruppentheorie* (2020;
+  Nebenklassen und Satz von Lagrange, Abschn. 3.2, S. 41); Wipf, *Symmetrien in der Physik* (2023);
+  Wagner, *Gruppentheoretische Methoden in der Physik* (1998, in Zotero ohne PDF). Dazu Schwarzenbach,
+  *Kristallographie* (2001): Nebenklassen nach *T*, *P* ≅ *E*/*T*, mit einer Ebenengruppe als Beispiel,
+  S. 45–46; in Abschn. 2.5.1 („Der Klassenbegriff“) warnt er vor der Verwechslung mit Konjugiertenklassen.
+  Paufler, *Physikalische Kristallographie*, behandelt die Zerlegung in Nebenklassen nicht.
+  Seiten: Schwarzenbach gedruckt = PDF − 9, Wipf = PDF − 16, Rosebrock = PDF − 12; bei Brückler
+  schwankt der Abstand (− 6 bis − 7), Seitenzahl im Kopf ablesen (geprüft 6.11.2026).
 - **Bücher nicht blind übernehmen:** Abbildungen und Lösungen nachrechnen (Lösungen bei Borchardt-Ott
   verweisen oft nur auf Abbildungen). Bekannte Fehler stehen in der `CLAUDE.md` der jeweiligen App.
 - Keine Abbildungen aus Büchern oder Folien übernehmen, auch nicht in Quiz und Moodle-Export; nur
