@@ -16,7 +16,7 @@ export const TIPS = {
   'v-farben': 'Symmetrieelemente in der Farbe ihrer Blickrichtung zeichnen (Positionen im Hermann-Mauguin-Symbol).',
   'v-achsen': 'Gitterachsen a und b einblenden.',
   'v-wahl': 'Beispiel für ein Auswahlfeld.',
-  'reset-alles': 'Alle Einstellungen und den gespeicherten Zustand löschen und die App neu starten (der Fortschritt im Quiz bleibt).',
+  'reset-alles': 'Alle Einstellungen und den gespeicherten Zustand löschen und die App neu starten (der Fortschritt im Quiz und der Stand der Experimente bleiben).',
 };
 
 /** ⓘ-Erklärungen: je Abschnitt ein Einleitungssatz und die Elemente, deren Texte gezeigt werden. @type {Abschnitt[]} */
@@ -47,7 +47,9 @@ export const ERSTE_SCHRITTE = [
 
 /**
  * Lernexperimente im Abschnitt „Experimente“ (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus einige,
- * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung.
+ * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung. Ein Ablauf mit
+ * params und make wird erzeugt (#92): je Parameter eine Aufgabe, am Ende „Neue Aufgabe“; ein Test der App prüft
+ * die Aussage für jeden Parameter gegen ihre Daten.
  * @type {Ablauf[]}
  */
 export const ABLAEUFE = [
@@ -58,5 +60,16 @@ export const ABLAEUFE = [
         handlung: { text: '<i>p</i>6<i>mm</i> wählen', hash: '#g=p6mm' },
         beobachtung: 'Sechs, im Abstand von 30°.', erklaerung: 'Das Symbol nennt zwei Sorten: <i>m</i> an zweiter und an dritter Stelle.' },
     ],
+  },
+  {
+    // erzeugt: n-zähliger Drehpunkt in pnmm, durch ihn gehen n Spiegellinien
+    id: 'spiegel-n', modus: 'a', titel: 'Spiegellinien durch einen Drehpunkt',
+    params: () => ['2', '4', '6'],
+    make: (n) => [{
+      frage: `Wie viele Spiegellinien gehen durch einen ${n}-zähligen Drehpunkt in <i>p</i>${n}<i>mm</i>?`,
+      vermutung: [String(Number(n) / 2), n, String(2 * Number(n))], richtig: 1,
+      handlung: { text: `<i>p</i>${n}<i>mm</i> wählen`, hash: `#g=p${n}mm` },
+      beobachtung: `${n} Spiegellinien.`, erklaerung: `Die Spiegelung erzeugt mit der ${n}-zähligen Drehung ${n} Spiegellinien.`,
+    }],
   },
 ];
