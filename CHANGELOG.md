@@ -6,13 +6,17 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-07
+
+Erzeugte Experimente wie die Generatoren im Quiz. Für die Apps: nichts anzupassen; wer erzeugte Experimente anbietet, typisiert die Liste als `(Ablauf | Erzeugt)[]`.
+
 ### Neu
 
-- **Erzeugte Experimente** (#92): Ein Ablauf kann statt fester `schritte` die Funktionen `params()` und `make(p)` haben, wie ein Generator im Quiz. Die Karte wählt den Parameter nach dem Vorrang des Quiz (nie gespielt, dann zuletzt falsch, dann die übrigen; nicht zweimal dieselbe Aufgabe hintereinander) und bietet am Ende „Neue Aufgabe“ an. Der Stand steht unter `<id>:<parameter>`, die Liste zeigt den zuletzt gespielten und markiert erzeugte Experimente mit ↻ (mit Text für Screenreader). `pruefeAblaeufe` prüft jede Variante. Neu der Typ `Erzeugt` (und `Experiment` = `Ablauf | Erzeugt`), `erzeugt`, `variante`, `schluessel`, `eintrag`, `zuletzt`, `waehleParameter`, Option `zufall` von `ablaufKarte`; `vorrang` in `quiz-core.js` (gemeinsam mit dem Quiz); Stil `.ablauf-neu`. Beispiel in der Vorlage, Leitfaden 5.3 nachgeführt. Für die Apps: nichts anzupassen; `Ablauf` behält seine `schritte`. Wer erzeugte Experimente anbietet, typisiert die Liste als `(Ablauf | Erzeugt)[]`.
+- **Erzeugte Experimente** (#92): Ein Ablauf kann statt fester `schritte` die Funktionen `params()` und `make(p)` haben, wie ein Generator im Quiz. Die Karte wählt den Parameter nach dem Vorrang des Quiz (nie gespielt, dann zuletzt falsch, dann die übrigen; nicht zweimal dieselbe Aufgabe hintereinander) und bietet am Ende „Neue Aufgabe“ an. Der Stand steht unter `<id>:<parameter>`, die Liste zeigt den zuletzt gespielten und markiert erzeugte Experimente mit ↻ (mit Text für Screenreader). `pruefeAblaeufe` prüft jede Variante und meldet neu auch eine id mit Doppelpunkt (alle Abläufe), „make ohne params“, fehlende und doppelte Parameter. `beiAbschluss` kommt auch nach „Neue Aufgabe“; stellt die App darin die Karte um, zeichnet die Karte nicht weiter. Neues Feld `variante` im Typ `Ablauf`. Neu der Typ `Erzeugt` (und `Experiment` = `Ablauf | Erzeugt`), `erzeugt`, `variante`, `schluessel`, `eintrag`, `zuletzt`, `waehleParameter`, Option `zufall` von `ablaufKarte`; `vorrang` in `quiz-core.js` (gemeinsam mit dem Quiz); Stil `.ablauf-neu`. Beispiel in der Vorlage, Leitfaden 5.3 nachgeführt. Für die Apps: nichts anzupassen; `Ablauf` behält seine `schritte`. Wer erzeugte Experimente anbietet, typisiert die Liste als `(Ablauf | Erzeugt)[]`.
 
 ### Behoben
 
-- **Vorlage:** Der Tooltip von „Alle Einstellungen zurücksetzen“ nennt jetzt auch den Stand der Experimente (#95).
+- **Vorlage:** Der Tooltip von „Alle Einstellungen zurücksetzen“ nennt jetzt auch den Stand der Experimente (#95). Für die Apps: nichts anzupassen.
 
 ## [0.12.0] - 2026-11-07
 
@@ -231,7 +235,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.13.0
 [0.12.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.12.0
 [0.11.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.11.0
 [0.10.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.10.0

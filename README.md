@@ -57,7 +57,7 @@ So bleibt jede App eigenständig veröffentlichbar und offline nutzbar. Eine Än
 
 ```bash
 cd crystallography-common
-git fetch --tags && git checkout v0.12.0     # gewünschter Release-Tag
+git fetch --tags && git checkout v0.13.0     # gewünschter Release-Tag
 cd ../stereography
 node tools/common/sync.mjs ../crystallography-common
 node --test tests/*.test.mjs                 # u. a. tests/common.test.mjs prüft die Kopie
