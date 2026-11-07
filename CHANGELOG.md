@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Geführte Abläufe** (`js/ablauf.js`, #87): Lernexperimente in der Karte „Erste Schritte“, je Schritt Frage, Vermutung mit Auflösung, Handlung per Knopf (Link-Adresse oder Aktion der App), Beobachtung, Erklärung mit Link ins Skript und Vorher/Nachher (#69). Verzweigungen nach der Antwort für die geführte Bestimmung (manganite/plane-groups#38). `pruefeAblaeufe` prüft die Daten in den Tests der App. Stile in `css/app.css` (`.ablauf-…`), Muster in der Vorlage. Leitfaden Abschn. 5.3 nachgeführt. Für die Apps: Erste Schritte auf Lernexperimente umstellen (manganite/plane-groups#56, manganite/stereography#77); `lib/common/js/ablauf.js` in die Offline-Liste von `sw.js`.
+
 ### Geändert
 
 - **Leitfaden 5.2:** Zahlen ausserhalb ihres Bereichs werden auf den nächsten gültigen Wert gesetzt statt durch den Startwert ersetzt (Entscheidung Thomas, 6.11.2026). Für die Apps: plane-groups ersetzt sie noch durch den Startwert (manganite/plane-groups#98).

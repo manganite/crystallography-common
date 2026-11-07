@@ -67,6 +67,13 @@ Repo-Name = Pfad auf GitHub Pages:
 
 Die Regeln selbst stehen im Leitfaden; hier, warum.
 
+- **Erste Schritte als Lernexperimente** (7.11.2026, #87, Leitfaden Abschn. 5.3): Ein externes Review (5.11.)
+  riet zu „eine Frage, eine Handlung, eine beobachtbare Änderung“ statt reiner Bedienschritte; die Vermutung vorher
+  macht die Beobachtung zur Antwort. Auswahl statt offener Frage, damit sich die Auflösung zeigen lässt; ohne Punkte,
+  weil das Experiment kein Quiz ist. Handlung per Knopf über die Link-Adresse, weil das zuverlässig ist und dieselben
+  Daten die Hilfeseite speisen („In der App zeigen“); eine Erkennung selbst ausgeführter Handlungen bräuchte je
+  Schritt eine Prüfbedingung. Ein Mechanismus für Experimente und Bestimmung (Verzweigung), damit plane-groups#38
+  nicht eine zweite Führung baut.
 - **Anordnung der Tafeln gemeinsam** (5.11.2026, Leitfaden Abschn. 5.1): Sie war in beiden Apps und der Vorlage
   gleich und stand dreimal; eine Änderung musste dreimal gemacht werden. Bisher hiess es, jede App lege sie
   selbst fest; das gilt nur noch für eine abweichende Anordnung. Eine gemeinsame 3D-Ansicht folgt erst mit einer

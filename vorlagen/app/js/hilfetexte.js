@@ -2,6 +2,7 @@
 // Die Mechanik steht in lib/common/js/help.js. Begriffe wie im Skript.
 
 /** @import { Abschnitt } from '../lib/common/js/help.js' */
+/** @import { Ablauf } from '../lib/common/js/ablauf.js' */
 
 /** Tooltip-Texte je Element-ID. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile. @type {Record<string, string>} */
 export const TIPS = {
@@ -27,3 +28,21 @@ export const SECTIONS = [
 
 /** Beschriftung in der ⓘ-Erklärung, wo der Text des Elements nicht passt. @type {Record<string, string>} */
 export const LABELS = {};
+
+/**
+ * Lernexperimente der Karte „Erste Schritte“ (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus wenige,
+ * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung.
+ * @type {Ablauf[]}
+ */
+export const ABLAEUFE = [
+  {
+    id: 'gruppe', modus: 'a', titel: 'Eine Gruppe wählen',
+    schritte: [
+      { frage: 'Wie viele Spiegellinien gehen durch einen 6-zähligen Drehpunkt in <i>p</i>6<i>mm</i>?', vermutung: ['drei', 'sechs'], richtig: 1,
+        handlung: { text: '<i>p</i>6<i>mm</i> wählen', hash: '#g=p6mm' },
+        beobachtung: 'Sechs, im Abstand von 30°.', erklaerung: 'Das Symbol nennt zwei Sorten: <i>m</i> an zweiter und an dritter Stelle.' },
+      { frage: 'Wo liegen weitere Optionen?', handlung: { text: 'Darstellung öffnen', aktion: 'darstellung' },
+        beobachtung: 'In den eingeklappten Abschnitten der Seitenleiste.' },
+    ],
+  },
+];

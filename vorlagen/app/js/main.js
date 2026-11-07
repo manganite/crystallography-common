@@ -4,7 +4,8 @@
 import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
 import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik, element, elemente, modusTabs } from '../lib/common/js/seite.js';
-import { TIPS, SECTIONS, LABELS } from './hilfetexte.js';
+import { ablaufKarte } from '../lib/common/js/ablauf.js';
+import { TIPS, SECTIONS, LABELS, ABLAEUFE } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
 // Elemente der Seite (index.html) über die geprüften Helfer aus seite.js ($, eingabe, abschnitt, grafik, element, elemente)
@@ -96,17 +97,23 @@ function init() {
     document.body.dataset.fig = b.dataset.fig;
     figKnoepfe.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.fig === b.dataset.fig)));
   }));
-  // Erste Schritte: beim ersten Besuch, wegklickbar, über „?“ wieder
+  // Erste Schritte: Lernexperimente des Modus (ablauf.js); beim ersten Besuch ist das erste geöffnet, nicht bei
+  // Aufruf über einen Link; wegklickbar, über „?“ wieder. Handlungen setzen den Zustand über die Adresse.
   const INTRO = 'muster-intro';
   let gesehen = false;
   try { gesehen = localStorage.getItem(INTRO) === '1'; } catch { /* ohne Speicher weiter */ }
+  const karte = ablaufKarte($('ablauf'), ABLAEUFE, {
+    anwenden: (hash) => { const g = new URLSearchParams(hash.slice(1)).get('g'); if (g) gruppe = g; alles(); },
+    adresse: () => `#g=${gruppe}`,
+    aktionen: { darstellung: () => { abschnitt('sec-view').open = true; } },
+    skriptUrl: (anker) => `skript.html#${anker}`,
+  });
+  karte.modus('a');
   /** @param {boolean} an */
   const intro = (an) => { $('intro').hidden = !an; $('help-open').setAttribute('aria-expanded', String(an)); };
-  intro(!gesehen && !location.hash);
-  $('intro-close').addEventListener('click', () => { intro(false); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
+  if (!gesehen && !location.hash) { const erster = karte.erster(); if (erster) karte.starte(erster); intro(true); }
+  $('intro-close').addEventListener('click', () => { intro(false); karte.liste(); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
   $('help-open').addEventListener('click', () => intro(Boolean($('intro').hidden)));
-  element('[data-step="1"]').addEventListener('click', () => { gruppe = 'p4mm'; alles(); });
-  element('[data-step="2"]').addEventListener('click', () => { abschnitt('sec-view').open = true; });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
   $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));
