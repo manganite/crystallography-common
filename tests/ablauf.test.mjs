@@ -43,7 +43,6 @@ test('pruefeAblaeufe: findet die typischen Fehler', () => {
   hat(/Ziel fehlt fehlt/);
   hat(/kreis: Schleife/);
   hat(/genau eines von hash und aktion/);
-  hat(/beides, Schritt 1: Beobachtung fehlt/);
 });
 
 test('naechster: der Reihe nach, bei Verzweigung nach der Antwort', () => {
@@ -146,4 +145,17 @@ test('ansage: Auflösung und Beobachtung als Text ohne HTML', () => {
   st.gewaehlt[0] = 0;
   assert.match(ansage(st), /^Zutreffend: weniger\. Deine Vermutung trifft zu\./);
   assert.equal(ansage(neuerStand(LINEAR)), '');
+});
+
+test('Erste Schritte (liste: false): Bedienschritte ohne Vermutung, überspringbar, ohne „Alle Experimente“', () => {
+  /** @type {Ablauf} */
+  const einstieg = { id: 'einstieg', titel: 'Erste Schritte', schritte: [
+    { frage: '<b>Gruppe wählen.</b> …', handlung: { text: 'p4mm wählen', hash: '#g=p4mm' } },
+    { frage: '<b>Darstellung.</b> …', handlung: { text: 'öffnen', aktion: 'darstellung' } },
+  ] };
+  assert.deepEqual(pruefeAblaeufe([einstieg], { aktionen: ['darstellung'] }), []);
+  const h = schrittHTML(neuerStand(einstieg), { liste: false });
+  assert.doesNotMatch(h, /Alle Experimente/);
+  assert.match(h, /data-tun="1">p4mm wählen/);
+  assert.match(h, /data-nav="weiter">Weiter/);
 });

@@ -30,19 +30,33 @@ export const SECTIONS = [
 export const LABELS = {};
 
 /**
- * Lernexperimente der Karte „Erste Schritte“ (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus wenige,
+ * Erste Schritte (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus ein kurzer Ablauf zur Bedienung,
+ * Schritte ohne Vermutung; der letzte verweist auf die Experimente.
+ * @type {Ablauf[]}
+ */
+export const ERSTE_SCHRITTE = [
+  {
+    id: 'einstieg-a', modus: 'a', titel: 'Erste Schritte',
+    schritte: [
+      { frage: '<b>Gruppe wählen.</b> Ein Knopf je Gruppe, geordnet nach Kristallsystem.', handlung: { text: '<i>p</i>4<i>mm</i> wählen', hash: '#g=p4mm' } },
+      { frage: '<b>Darstellung ändern.</b> Weitere Optionen liegen in den eingeklappten Abschnitten.', handlung: { text: 'Darstellung öffnen', aktion: 'darstellung' } },
+      { frage: '<b>Ausprobieren.</b> Unter „Experimente“ stehen kleine Versuche: erst vermuten, dann ausprobieren.', handlung: { text: 'Experimente öffnen', aktion: 'experimente' } },
+    ],
+  },
+];
+
+/**
+ * Lernexperimente im Abschnitt „Experimente“ (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus einige,
  * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung.
  * @type {Ablauf[]}
  */
 export const ABLAEUFE = [
   {
-    id: 'gruppe', modus: 'a', titel: 'Eine Gruppe wählen',
+    id: 'spiegel', modus: 'a', titel: 'Spiegellinien zählen',
     schritte: [
       { frage: 'Wie viele Spiegellinien gehen durch einen 6-zähligen Drehpunkt in <i>p</i>6<i>mm</i>?', vermutung: ['drei', 'sechs'], richtig: 1,
         handlung: { text: '<i>p</i>6<i>mm</i> wählen', hash: '#g=p6mm' },
         beobachtung: 'Sechs, im Abstand von 30°.', erklaerung: 'Das Symbol nennt zwei Sorten: <i>m</i> an zweiter und an dritter Stelle.' },
-      { frage: 'Wo liegen weitere Optionen?', handlung: { text: 'Darstellung öffnen', aktion: 'darstellung' },
-        beobachtung: 'In den eingeklappten Abschnitten der Seitenleiste.' },
     ],
   },
 ];
