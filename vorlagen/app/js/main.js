@@ -110,9 +110,9 @@ function init() {
   });
   karte.modus('a');
   /** @param {boolean} an */
-  const intro = (an) => { $('intro').hidden = !an; $('help-open').setAttribute('aria-expanded', String(an)); };
-  if (!gesehen && !location.hash) { const erster = karte.erster(); if (erster) karte.starte(erster); intro(true); }
-  $('intro-close').addEventListener('click', () => { intro(false); karte.liste(); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
+  const intro = (an) => { $('intro').hidden = !an; $('help-open').setAttribute('aria-expanded', String(an)); if (!an) karte.liste(); };
+  if (!gesehen && !location.hash) { const erster = karte.erster(); if (erster) karte.starte(erster, { fokus: false }); intro(true); }
+  $('intro-close').addEventListener('click', () => { intro(false); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } });
   $('help-open').addEventListener('click', () => intro(Boolean($('intro').hidden)));
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
