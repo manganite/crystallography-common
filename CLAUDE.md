@@ -80,7 +80,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 - **Stand der Experimente wie im Quiz** (7.11.2026, #91): Thomas entschied, dass sich die Experimente wie die
   Quizfragen verhalten. Gespeichert mit demselben Aufbau wie der Fortschritt im Quiz (`vermerken` aus
   `quiz-core.js`), damit später auch erzeugte Experimente (#92) unter `<generator>:<parameter>` zählen. Richtig
-  heisst: Es gab auf dem Weg mindestens eine aufgelöste Vermutung, und jede traf beim ersten Mal zu; ein Ablauf
+  heisst: Es gab auf dem Weg mindestens eine aufgelöste Vermutung, und jede traf bei der Auflösung zu (bei einem Experiment die Vermutung beim Klick auf die Handlung); ein Ablauf
   ohne Auflösung gilt nur als durchgespielt (○). Der Schlüssel `<präfix>-experimente` (statt des ersten
   Vorschlags `<präfix>-quiz-experimente` im Issue) ist eine Wahl beim Umsetzen: Die Experimente gehören nicht
   zum Quiz, und ein Name unter `<präfix>-quiz` hätte nur genutzt, dass das Zurücksetzen das Quiz verschont.
