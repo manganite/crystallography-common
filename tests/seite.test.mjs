@@ -91,9 +91,9 @@ function mitGlobalen(neu, f) {
   }
 }
 
-test('Alle Einstellungen zurücksetzen: löscht die Einträge der App ausser dem Quiz, lädt ohne Hash neu, löscht beim Verlassen nochmals', () => {
+test('Alle Einstellungen zurücksetzen: löscht die Einträge der App ausser dem Lernstand (Quiz, Experimente), lädt ohne Hash neu, löscht beim Verlassen nochmals', () => {
   /** @type {Map<string, string>} */
-  const speicher = new Map([['app-zustand', '{}'], ['app-intro', 'a'], ['app-quiz', '{}'], ['app-quiz-lauf', '1'],
+  const speicher = new Map([['app-zustand', '{}'], ['app-intro', 'a'], ['app-quiz', '{}'], ['app-quiz-lauf', '1'], ['app-experimente', '{}'], ['app-experimente-alt', '{}'],
     ['andere-zustand', '{}'], ['app', 'x'], ['appx-zustand', '{}']]);
   const nachgebildet = {
     get length() { return speicher.size; },
@@ -110,8 +110,8 @@ test('Alle Einstellungen zurücksetzen: löscht die Einträge der App ausser dem
     location: { value: { pathname: '/app/', search: '?sw', hash: '#m=a', replace: (/** @type {string} */ z) => { ziele.push(z); } } },
   }, () => {
     alleEinstellungenZuruecksetzen('app');
-    const bleibt = ['app-quiz', 'app-quiz-lauf', 'andere-zustand', 'app', 'appx-zustand'];
-    assert.deepEqual([...speicher.keys()], bleibt, 'Quiz, andere Apps und Einträge ohne „app-“ bleiben');
+    const bleibt = ['app-quiz', 'app-quiz-lauf', 'app-experimente', 'andere-zustand', 'app', 'appx-zustand'];
+    assert.deepEqual([...speicher.keys()], bleibt, 'Quiz, Experimente, andere Apps und Einträge ohne „app-“ bleiben');
     assert.deepEqual(ziele, ['/app/?sw'], 'ohne Hash, Suchteil bleibt');
     speicher.set('app-abschnitte', '[]'); // die App speichert beim Verlassen noch etwas
     beimVerlassen.forEach((f) => f());

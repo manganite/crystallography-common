@@ -1,7 +1,8 @@
 // Geführte Abläufe (js/ablauf.js, #87): Prüfung der Daten, Verzweigung und das HTML eines Schritts.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage } from '../js/ablauf.js';
+import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ergebnis, standLesen, standSchreiben } from '../js/ablauf.js';
+import { leererFortschritt, vermerken, fortschrittAus } from '../js/quiz-core.js';
 
 /** @import { Ablauf } from '../js/ablauf.js' */
 
@@ -96,11 +97,59 @@ test('schrittHTML: Verzweigung ohne „von n“, Antwort ohne Auflösung', () =>
   assert.match(h, /aria-label="Deine Antwort"/);
 });
 
-test('listeHTML: Abläufe als Knöpfe, erledigte markiert', () => {
-  const h = listeHTML([LINEAR, BAUM], new Set(['lage']));
-  assert.match(h, /<li class="done"><button class="linkbtn" type="button" data-ablauf="lage">Spezielle Lage <span aria-hidden="true">✓<\/span><span class="sr"> \(erledigt\)<\/span><\/button><\/li>/);
-  assert.match(h, /data-ablauf="bestimmen"/);
+test('listeHTML: Abläufe als Knöpfe, Stand wie im Quiz markiert, Übersicht und Löschen', () => {
+  assert.doesNotMatch(listeHTML([LINEAR, BAUM]), /ablauf-stand|data-loeschen|✓/);
+  const f = vermerken(leererFortschritt(), 'lage', true);
+  let h = listeHTML([LINEAR, BAUM], f);
+  assert.match(h, /<li class="done"><button class="linkbtn" type="button" data-ablauf="lage">Spezielle Lage <span aria-hidden="true">✓<\/span><span class="sr"> \(zuletzt richtig\)<\/span><\/button><\/li>/);
+  assert.match(h, /<li><button class="linkbtn" type="button" data-ablauf="bestimmen">Bestimmen<\/button>/);
+  assert.match(h, /Stand: 1 ✓ \(zuletzt richtig\), 0 ○ \(durchgespielt\), 1 offen\. <button class="linkbtn" type="button" data-loeschen="1">Stand löschen/);
+  vermerken(f, 'lage', false);
+  h = listeHTML([LINEAR, BAUM], f);
+  assert.match(h, /<li class="gespielt">.*Spezielle Lage <span aria-hidden="true">○<\/span><span class="sr"> \(durchgespielt\)/);
+  assert.match(h, /Stand: 0 ✓ \(zuletzt richtig\), 1 ○ \(durchgespielt\), 1 offen\./);
+  // Einträge anderer Modi zählen in der Übersicht nicht mit
+  assert.doesNotMatch(listeHTML([BAUM], f), /ablauf-stand/);
   assert.equal(listeHTML([]), '');
+});
+
+test('ergebnis: richtig, wenn es eine Auflösung gab und jede beim ersten Mal zutraf; nur der gegangene Weg zählt', () => {
+  const st = neuerStand(LINEAR);
+  st.weg.push(1); st.gewaehlt[0] = 0;
+  assert.equal(ergebnis(st), true);
+  st.gewaehlt[0] = 1;
+  assert.equal(ergebnis(st), false);
+  st.erste[0] = 1; st.gewaehlt[0] = 0;
+  assert.equal(ergebnis(st), false, 'nach der Auflösung umgewählt zählt nicht');
+  const b = neuerStand(BAUM); b.gewaehlt[0] = 1; b.weg.push(2);
+  assert.equal(ergebnis(b), false, 'ohne Auflösung nur durchgespielt');
+  /** @type {Ablauf} */
+  const zwei = { id: 'z', titel: 'Z', schritte: [
+    { id: 'f', frage: '?', vermutung: ['a', 'b'], weiter: { 0: 'x', 1: 'y' } },
+    { id: 'x', frage: 'X', vermutung: ['1', '2'], richtig: 0 }, { id: 'y', frage: 'Y', vermutung: ['1', '2'], richtig: 1 },
+  ] };
+  const z = neuerStand(zwei); z.gewaehlt[0] = 0; z.gewaehlt[1] = 1; z.erste[1] = 1; // Zweig x falsch, dann zurück
+  z.gewaehlt[0] = 1; z.weg.push(2); z.gewaehlt[2] = 1; z.erste[2] = 1;
+  assert.equal(ergebnis(z), true, 'Antworten ausserhalb des Wegs zählen nicht');
+});
+
+test('standLesen/standSchreiben: Rundlauf, gesperrter und unbrauchbarer Speicher', () => {
+  const alt = Object.getOwnPropertyDescriptor(globalThis, 'localStorage');
+  /** @type {Map<string, string>} */
+  const m = new Map();
+  try {
+    Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: { getItem: (/** @type {string} */ k) => m.get(k) ?? null, setItem: (/** @type {string} */ k, /** @type {string} */ v) => { m.set(k, v); } } });
+    assert.deepEqual(standLesen('a-experimente'), leererFortschritt());
+    standSchreiben('a-experimente', vermerken(leererFortschritt(), 'lage', true, 5));
+    assert.deepEqual(standLesen('a-experimente').fragen.lage, { n: 1, r: 1, letzte: 1, t: 5 });
+    for (const kaputt of ['x', '5', '{"v":1,"fragen":[]}', '{"v":2,"fragen":{}}']) { m.set('a-experimente', kaputt); assert.deepEqual(standLesen('a-experimente'), leererFortschritt(), kaputt); }
+    Object.defineProperty(globalThis, 'localStorage', { configurable: true, get() { throw new Error('gesperrt'); } });
+    assert.deepEqual(standLesen('a-experimente'), leererFortschritt());
+    assert.doesNotThrow(() => standSchreiben('a-experimente', leererFortschritt()));
+  } finally {
+    if (alt) Object.defineProperty(globalThis, 'localStorage', alt); else delete (/** @type {any} */ (globalThis)).localStorage;
+  }
+  assert.deepEqual(fortschrittAus('{"v":1,"fragen":[]}'), leererFortschritt(), 'auch im Quiz: Array statt Objekt');
 });
 
 test('Handlung gesperrt, bis eine Vermutung gewählt ist (Entscheidung Thomas, 7.11.2026)', () => {

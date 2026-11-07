@@ -77,6 +77,14 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Zuerst ersetzten die Experimente die Erste Schritte; Thomas fand sie dafür zu schade („als kurze
   Kennenlernübung beim Einstieg eigentlich verschwendet“). Deshalb stehen sie in einem eigenen Abschnitt, und
   die Erste Schritte bleiben kurze Bedienschritte mit derselben Mechanik.
+- **Stand der Experimente wie im Quiz** (7.11.2026, #91): Thomas entschied, dass sich die Experimente wie die
+  Quizfragen verhalten. Gespeichert mit demselben Aufbau wie der Fortschritt im Quiz (`vermerken` aus
+  `quiz-core.js`), damit später auch erzeugte Experimente (#92) unter `<generator>:<parameter>` zählen. Richtig
+  heisst: Es gab auf dem Weg mindestens eine aufgelöste Vermutung, und jede traf beim ersten Mal zu; ein Ablauf
+  ohne Auflösung gilt nur als durchgespielt (○). Der Schlüssel `<präfix>-experimente` (statt des ersten
+  Vorschlags `<präfix>-quiz-experimente` im Issue) ist eine Wahl beim Umsetzen: Die Experimente gehören nicht
+  zum Quiz, und ein Name unter `<präfix>-quiz` hätte nur genutzt, dass das Zurücksetzen das Quiz verschont.
+  Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
 - **Anordnung der Tafeln gemeinsam** (5.11.2026, Leitfaden Abschn. 5.1): Sie war in beiden Apps und der Vorlage
   gleich und stand dreimal; eine Änderung musste dreimal gemacht werden. Bisher hiess es, jede App lege sie
   selbst fest; das gilt nur noch für eine abweichende Anordnung. Eine gemeinsame 3D-Ansicht folgt erst mit einer
