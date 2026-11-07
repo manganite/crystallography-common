@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Leitfaden 9:** Der gemeinsame Rechenkern (#99) ist ein eigenes Projekt in TypeScript und auf Englisch; für ihn gilt der Leitfaden nicht. Für die Apps: nichts anzupassen.
+
 ## [0.13.0] - 2026-11-07
 
 Erzeugte Experimente wie die Generatoren im Quiz. Für die Apps: nichts anzupassen; wer erzeugte Experimente anbietet, typisiert die Liste als `(Ablauf | Erzeugt)[]`.
