@@ -124,8 +124,16 @@ export function listeHTML(liste, erledigt = new Set()) {
   }).join('')}</ol>`;
 }
 
-/** Text ohne HTML (für die Ansage). @param {string} h */
-const ohneHTML = (h) => h.replace(/<[^>]*>/g, '');
+/**
+ * Text ohne Auszeichnung für die Ansage. Das Ergebnis geht nur in textContent (nie in innerHTML); die Tags werden
+ * trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist, und verbliebene spitze Klammern fallen weg.
+ * @param {string} h
+ */
+const ohneHTML = (h) => {
+  let t = h;
+  for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
+  return t.replace(/[<>]/g, '');
+};
 
 /**
  * Ansage nach Handlung oder Antwort (für die Live-Region): Auflösung der Vermutung und Beobachtung.
