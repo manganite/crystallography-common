@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-11-07
+
+Der Stand der Experimente wird wie im Quiz gespeichert.
+
 ### Neu
 
 - **Stand der Experimente wie im Quiz** (#91): `ablaufKarte` speichert mit `speicher: '<präfix>-experimente'` je Experiment die Durchgänge und ob zuletzt alle Vermutungen zutrafen (Aufbau wie der Fortschritt im Quiz). Richtig heisst: Jede aufgelöste Vermutung auf dem Weg traf bei der Auflösung zu; ein Ablauf ohne Auflösung gilt nur als durchgespielt. Die Liste zeigt ✓ (zuletzt richtig) oder ○ (durchgespielt), mit Text für Screenreader, darunter eine Übersicht mit Legende und „Stand löschen“. Nach „Fertig“ liegt der Fokus auf dem beendeten Experiment, das Ergebnis wird angesagt. Vor jedem Schreiben wird neu gelesen, und ein anderer Tab aktualisiert die Liste (`storage`). Neu `ergebnis(stand)`, `standLesen`, `standSchreiben`. Leitfaden 5.2 und 5.3 nachgeführt.
@@ -219,7 +223,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.12.0
 [0.11.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.11.0
 [0.10.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.10.0
 [0.9.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.9.0
