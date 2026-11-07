@@ -6,6 +6,14 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Erzeugte Experimente** (#92): Ein Ablauf kann statt fester `schritte` die Funktionen `params()` und `make(p)` haben, wie ein Generator im Quiz. Die Karte wählt den Parameter nach dem Vorrang des Quiz (nie gespielt, dann zuletzt falsch, dann die übrigen; nicht zweimal dieselbe Aufgabe hintereinander) und bietet am Ende „Neue Aufgabe“ an. Der Stand steht unter `<id>:<parameter>`, die Liste zeigt den zuletzt gespielten und markiert erzeugte Experimente mit ↻ (mit Text für Screenreader). `pruefeAblaeufe` prüft jede Variante. Neu der Typ `Erzeugt` (und `Experiment` = `Ablauf | Erzeugt`), `erzeugt`, `variante`, `schluessel`, `eintrag`, `zuletzt`, `waehleParameter`, Option `zufall` von `ablaufKarte`; `vorrang` in `quiz-core.js` (gemeinsam mit dem Quiz); Stil `.ablauf-neu`. Beispiel in der Vorlage, Leitfaden 5.3 nachgeführt. Für die Apps: nichts anzupassen; `Ablauf` behält seine `schritte`. Wer erzeugte Experimente anbietet, typisiert die Liste als `(Ablauf | Erzeugt)[]`.
+
+### Behoben
+
+- **Vorlage:** Der Tooltip von „Alle Einstellungen zurücksetzen“ nennt jetzt auch den Stand der Experimente (#95).
+
 ## [0.12.0] - 2026-11-07
 
 Der Stand der Experimente wird wie im Quiz gespeichert. Für die Apps: in der Karte „Experimente“ `speicher: '<präfix>-experimente'` angeben.

@@ -85,6 +85,13 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Vorschlags `<präfix>-quiz-experimente` im Issue) ist eine Wahl beim Umsetzen: Die Experimente gehören nicht
   zum Quiz, und ein Name unter `<präfix>-quiz` hätte nur genutzt, dass das Zurücksetzen das Quiz verschont.
   Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
+- **Erzeugte Experimente wie die Generatoren im Quiz** (7.11.2026, Thomas, #92): damit Studierende immer wieder
+  neue Aufgaben derselben Art lösen. Gleiche Form wie im Quiz (`params`, `make`), gleicher Vorrang bei der Wahl und
+  Stand unter `<id>:<parameter>`, damit beides gleich funktioniert und geprüft wird (`params`/`make` statt der
+  im Issue skizzierten `erzeuge(zufall)`: So lassen sich alle Varianten aufzählen und prüfen, und der Schlüssel ist
+  stabil). In der Liste zählt der zuletzt
+  gespielte Parameter (✓ oder ○); ein erzeugter Ablauf ist ein Eintrag, nicht einer je Parameter, damit die Liste
+  kurz bleibt.
 - **Anordnung der Tafeln gemeinsam** (5.11.2026, Leitfaden Abschn. 5.1): Sie war in beiden Apps und der Vorlage
   gleich und stand dreimal; eine Änderung musste dreimal gemacht werden. Bisher hiess es, jede App lege sie
   selbst fest; das gilt nur noch für eine abweichende Anordnung. Eine gemeinsame 3D-Ansicht folgt erst mit einer

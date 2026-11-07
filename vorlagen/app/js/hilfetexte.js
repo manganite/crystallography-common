@@ -2,7 +2,7 @@
 // Die Mechanik steht in lib/common/js/help.js. Begriffe wie im Skript.
 
 /** @import { Abschnitt } from '../lib/common/js/help.js' */
-/** @import { Ablauf } from '../lib/common/js/ablauf.js' */
+/** @import { Ablauf, Erzeugt } from '../lib/common/js/ablauf.js' */
 
 /** Tooltip-Texte je Element-ID. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile. @type {Record<string, string>} */
 export const TIPS = {
@@ -16,7 +16,7 @@ export const TIPS = {
   'v-farben': 'Symmetrieelemente in der Farbe ihrer Blickrichtung zeichnen (Positionen im Hermann-Mauguin-Symbol).',
   'v-achsen': 'Gitterachsen a und b einblenden.',
   'v-wahl': 'Beispiel für ein Auswahlfeld.',
-  'reset-alles': 'Alle Einstellungen und den gespeicherten Zustand löschen und die App neu starten (der Fortschritt im Quiz bleibt).',
+  'reset-alles': 'Alle Einstellungen und den gespeicherten Zustand löschen und die App neu starten (der Fortschritt im Quiz und der Stand der Experimente bleiben).',
 };
 
 /** ⓘ-Erklärungen: je Abschnitt ein Einleitungssatz und die Elemente, deren Texte gezeigt werden. @type {Abschnitt[]} */
@@ -47,8 +47,10 @@ export const ERSTE_SCHRITTE = [
 
 /**
  * Lernexperimente im Abschnitt „Experimente“ (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus einige,
- * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung.
- * @type {Ablauf[]}
+ * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung. Ein Ablauf mit
+ * params und make wird erzeugt (#92): je Parameter eine Aufgabe, am Ende „Neue Aufgabe“. In einer App prüft ein
+ * Test die Aussage für jeden Parameter gegen ihre Daten; die Reihenfolge der Antworten wechselt mit dem Parameter.
+ * @type {(Ablauf | Erzeugt)[]}
  */
 export const ABLAEUFE = [
   {
@@ -58,5 +60,21 @@ export const ABLAEUFE = [
         handlung: { text: '<i>p</i>6<i>mm</i> wählen', hash: '#g=p6mm' },
         beobachtung: 'Sechs, im Abstand von 30°.', erklaerung: 'Das Symbol nennt zwei Sorten: <i>m</i> an zweiter und an dritter Stelle.' },
     ],
+  },
+  {
+    // erzeugt: n-zähliger Drehpunkt in pnmm, durch ihn gehen n Spiegellinien
+    id: 'spiegel-n', modus: 'a', titel: 'Spiegellinien durch einen Drehpunkt',
+    params: () => ['2', '4', '6'],
+    make: (n) => {
+      // Antworten je Parameter in anderer Reihenfolge, damit die richtige nicht immer an derselben Stelle steht
+      const k = Number(n), alle = [k / 2, k, 2 * k], dreh = ['2', '4', '6'].indexOf(n);
+      const vermutung = [...alle.slice(dreh), ...alle.slice(0, dreh)].map(String);
+      return [{
+      frage: `Wie viele Spiegellinien gehen durch einen ${n}-zähligen Drehpunkt in <i>p</i>${n}<i>mm</i>?`,
+      vermutung, richtig: vermutung.indexOf(n),
+      handlung: { text: `<i>p</i>${n}<i>mm</i> wählen`, hash: `#g=p${n}mm` },
+      beobachtung: `${n} Spiegellinien.`, erklaerung: `Die Spiegelung erzeugt mit der ${n}-zähligen Drehung ${n} Spiegellinien.`,
+      }];
+    },
   },
 ];

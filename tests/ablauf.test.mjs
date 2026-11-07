@@ -1,10 +1,10 @@
 // Geführte Abläufe (js/ablauf.js, #87): Prüfung der Daten, Verzweigung und das HTML eines Schritts.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ergebnis, standLesen, standSchreiben } from '../js/ablauf.js';
+import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
 import { leererFortschritt, vermerken, fortschrittAus } from '../js/quiz-core.js';
 
-/** @import { Ablauf } from '../js/ablauf.js' */
+/** @import { Ablauf, Erzeugt } from '../js/ablauf.js' */
 
 /** @type {Ablauf} */
 const LINEAR = {
@@ -208,3 +208,60 @@ test('Erste Schritte (liste: false): Bedienschritte ohne Vermutung, überspringb
   assert.match(h, /data-tun="1">p4mm wählen/);
   assert.match(h, /data-nav="weiter">Weiter/);
 });
+
+/** Erzeugtes Experiment (#92): Zahl der Pole je Gruppe. @type {Erzeugt} */
+const GEN = {
+  id: 'polzahl', modus: 'a', titel: 'Wie viele Pole?',
+  params: () => ['2', '4', '6'],
+  make: (p) => [{ frage: `Gruppe ${p}?`, vermutung: [p, String(2 * Number(p))], richtig: 0, handlung: { text: 'Zeigen', hash: `#g=${p}` }, beobachtung: `${p} Pole.` }],
+};
+
+test('Erzeugte Abläufe: Prüfung jeder Variante, typische Fehler', () => {
+  assert.deepEqual(pruefeAblaeufe([GEN, LINEAR], { aktionen: ['werkzeug'], hashGueltig: (h) => h.startsWith('#') }), []);
+  const f = pruefeAblaeufe([
+    { ...GEN, make: (p) => [{ frage: '?', vermutung: ['a'], richtig: 0, handlung: { text: 't', hash: `#${p}` }, beobachtung: 'b' }] },
+    { id: 'leer', titel: 'L', params: () => [], make: () => [] },
+    { id: 'doppelt', titel: 'D', params: () => ['x', 'x'], make: () => [{ frage: 'X', beobachtung: 'x' }] },
+    /** @type {any} */ ({ id: 'ohne', titel: 'O', params: () => ['x'] }),
+    /** @type {any} */ ({ id: 'nurmake', titel: 'M', make: () => [] }),
+    { id: 'a:b', titel: 'Doppelpunkt', schritte: [{ frage: 'X', beobachtung: 'x' }] },
+  ], { hashGueltig: (h) => h !== '#4' });
+  const hat = (/** @type {RegExp} */ r) => assert.ok(f.some((x) => r.test(x)), `${r} in ${JSON.stringify(f)}`);
+  hat(/^polzahl:2, Schritt 1: 2–3 Antworten erwartet/); hat(/^polzahl:4, Schritt 1: ungültige Adresse #4/);
+  hat(/leer: keine Parameter/); hat(/doppelt: Parameter doppelt/); hat(/ohne: erzeugt braucht params und make/); hat(/a:b: id mit Doppelpunkt/); hat(/nurmake: make ohne params/);
+});
+
+test('waehleParameter: nie gespielt vor zuletzt falsch vor zuletzt richtig, nicht dieselbe Aufgabe wie eben', () => {
+  const f = leererFortschritt();
+  assert.equal(waehleParameter(GEN, f, () => 0), '2');
+  assert.equal(waehleParameter(GEN, f, () => 0.99), '6');
+  assert.equal(waehleParameter(GEN, f, () => 0, '2'), '4');
+  vermerken(f, 'polzahl:2', true); vermerken(f, 'polzahl:4', false);
+  assert.equal(waehleParameter(GEN, f, () => 0), '6', 'nie gespielt zuerst');
+  vermerken(f, 'polzahl:6', true);
+  assert.equal(waehleParameter(GEN, f, () => 0.5), '4', 'dann zuletzt falsch');
+  assert.equal(waehleParameter(GEN, f, () => 0, '4'), '2', 'ohne die eben gestellte');
+  assert.equal(waehleParameter({ ...GEN, params: () => ['2'] }, f, () => 0, '2'), '2', 'nur ein Parameter: dieselbe');
+});
+
+test('Erzeugte Abläufe: Schlüssel id:parameter, Liste mit ↻ und dem zuletzt gespielten Stand, „Neue Aufgabe“ am Ende', () => {
+  const v = variante(GEN, '4');
+  assert.equal(schluessel(v), 'polzahl:4'); assert.equal(schluessel(LINEAR), 'lage');
+  assert.equal(v.schritte[0].frage, 'Gruppe 4?');
+  const f = leererFortschritt();
+  assert.equal(eintrag(GEN, f), undefined);
+  vermerken(f, 'polzahl:2', true, 1); vermerken(f, 'polzahl:4', false, 2);
+  assert.equal(eintrag(GEN, f)?.letzte, 0, 'der zuletzt gespielte zählt');
+  assert.equal(eintrag({ ...GEN, id: 'pol' }, f), undefined, 'nur Schlüssel mit genau dieser id');
+  assert.equal(zuletzt(GEN, f), '4');
+  assert.equal(eintrag({ ...GEN, params: () => ['2'] }, f)?.letzte, 1, 'entfernte Parameter zählen nicht');
+  assert.doesNotMatch(schrittHTML(Object.assign(neuerStand(v), { gewaehlt: { 0: 0 }, gezeigt: new Set([0]) }), { liste: false }), /data-nav="neu"/, 'nicht in den Erste Schritten');
+  const h = listeHTML([GEN], f);
+  assert.match(h, /Wie viele Pole\? <span class="ablauf-neu" aria-hidden="true">↻<\/span><span class="sr"> \(immer neue Aufgaben\)<\/span> <span aria-hidden="true">○/);
+  const st = neuerStand(v);
+  assert.match(schrittHTML(st), /data-nav="neu" disabled>Neue Aufgabe/, 'gesperrt bis zur Handlung, wie „Fertig“');
+  st.gewaehlt[0] = 0; st.gezeigt.add(0);
+  assert.match(schrittHTML(st), /data-nav="neu">Neue Aufgabe<\/button><button class="linkbtn" type="button" data-nav="fertig">Fertig/);
+  assert.doesNotMatch(schrittHTML(Object.assign(neuerStand(LINEAR), { weg: [0, 1], gezeigt: new Set([0, 1]) })), /data-nav="neu"/, 'feste Abläufe ohne');
+});
+
