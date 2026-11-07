@@ -217,6 +217,10 @@ Je App ein Artifact mit App, Skript, Quiz und `skript.pdf`; die Adresse steht in
 Beim Neuveröffentlichen die Adresse als `url` angeben und die geänderten Dateien in `files` aufführen
 (Dateien wie in der Offline-Liste von `sw.js`); `skript.pdf` vorher mit `node tools/skript-pdf.mjs`
 erzeugen (in `.gitignore`).
+Geändert heisst: gegenüber der Vorschau, nicht nur gegenüber dem letzten PR. Vorher die Dateien der Vorschau
+(`action: list`, `scope: files`) mit dem Arbeitsstand vergleichen; sonst fehlt z. B. eine inzwischen gemergte
+Änderung, ein Import schlägt fehl und die App zeigt nur leere Tafeln (plane-groups, 7.11.2026). Danach die
+Vorschau im Browser öffnen, bevor sie Thomas gezeigt wird.
 
 ## Neue App
 
