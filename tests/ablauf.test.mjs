@@ -1,7 +1,8 @@
 // Geführte Abläufe (js/ablauf.js, #87): Prüfung der Daten, Verzweigung und das HTML eines Schritts.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage } from '../js/ablauf.js';
+import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ergebnis } from '../js/ablauf.js';
+import { leererFortschritt, vermerken } from '../js/quiz-core.js';
 
 /** @import { Ablauf } from '../js/ablauf.js' */
 
@@ -96,11 +97,30 @@ test('schrittHTML: Verzweigung ohne „von n“, Antwort ohne Auflösung', () =>
   assert.match(h, /aria-label="Deine Antwort"/);
 });
 
-test('listeHTML: Abläufe als Knöpfe, erledigte markiert', () => {
-  const h = listeHTML([LINEAR, BAUM], new Set(['lage']));
-  assert.match(h, /<li class="done"><button class="linkbtn" type="button" data-ablauf="lage">Spezielle Lage <span aria-hidden="true">✓<\/span><span class="sr"> \(erledigt\)<\/span><\/button><\/li>/);
-  assert.match(h, /data-ablauf="bestimmen"/);
+test('listeHTML: Abläufe als Knöpfe, Stand wie im Quiz markiert, Übersicht und Löschen', () => {
+  assert.doesNotMatch(listeHTML([LINEAR, BAUM]), /ablauf-stand|data-loeschen|✓/);
+  const f = vermerken(leererFortschritt(), 'lage', true);
+  let h = listeHTML([LINEAR, BAUM], f);
+  assert.match(h, /<li class="done"><button class="linkbtn" type="button" data-ablauf="lage">Spezielle Lage <span aria-hidden="true">✓<\/span><span class="sr"> \(zuletzt richtig\)<\/span><\/button><\/li>/);
+  assert.match(h, /<li><button class="linkbtn" type="button" data-ablauf="bestimmen">Bestimmen<\/button>/);
+  assert.match(h, /Durchgespielt: 1 von 2, davon zuletzt alle Vermutungen richtig: 1\. <button class="linkbtn" type="button" data-loeschen="1">Stand löschen/);
+  vermerken(f, 'lage', false);
+  h = listeHTML([LINEAR, BAUM], f);
+  assert.match(h, /<li class="gespielt">.*Spezielle Lage <span aria-hidden="true">○<\/span><span class="sr"> \(durchgespielt\)/);
+  assert.match(h, /richtig: 0\./);
+  // Einträge anderer Modi zählen in der Übersicht nicht mit
+  assert.doesNotMatch(listeHTML([BAUM], f), /ablauf-stand/);
   assert.equal(listeHTML([]), '');
+});
+
+test('ergebnis: richtig, wenn jede aufgelöste Vermutung auf dem Weg zutraf; Fragen ohne Auflösung zählen nicht', () => {
+  const st = neuerStand(LINEAR);
+  st.weg.push(1); st.gewaehlt[0] = 0;
+  assert.equal(ergebnis(st), true);
+  st.gewaehlt[0] = 1;
+  assert.equal(ergebnis(st), false);
+  const b = neuerStand(BAUM); b.gewaehlt[0] = 1; b.weg.push(2);
+  assert.equal(ergebnis(b), true, 'Verzweigung ohne richtig');
 });
 
 test('Handlung gesperrt, bis eine Vermutung gewählt ist (Entscheidung Thomas, 7.11.2026)', () => {

@@ -6,6 +6,15 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Stand der Experimente wie im Quiz** (#91): `ablaufKarte` speichert mit `speicher: '<präfix>-experimente'` je Experiment die Durchgänge und ob zuletzt alle Vermutungen zutrafen (Aufbau wie der Fortschritt im Quiz). Die Liste zeigt ✓ (zuletzt richtig) oder ○ (durchgespielt), mit Text für Screenreader, darunter eine Übersicht und „Stand löschen“. Neu `ergebnis(stand)`. Leitfaden 5.2 und 5.3 nachgeführt.
+
+### Geändert
+
+- **`ablaufKarte`:** Die Option `erledigt` entfällt (keine App nutzte sie); `listeHTML` nimmt statt einer Menge erledigter ids den Stand (`Fortschritt`). Für die Apps: in der Karte „Experimente“ `speicher: '<präfix>-experimente'` angeben.
+- **„Alle Einstellungen zurücksetzen“** (`seite.js`) lässt neben dem Quiz auch `<präfix>-experimente` stehen.
+
 ## [0.11.0] - 2026-11-07
 
 ### Neu

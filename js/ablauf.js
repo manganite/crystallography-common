@@ -4,6 +4,11 @@
 // Ablauf die Adresse; danach schaltet „Vorher/Nachher“ zwischen beiden um (#69).
 // Die Abläufe selbst sind Daten der App (Leitfaden Abschn. 9); Texte dürfen einfaches HTML enthalten (<i>, <b>,
 // <sub>), sie stammen aus der App und nicht aus Eingaben. pruefeAblaeufe() hilft den Tests der App.
+// Der Stand der Experimente wird wie der Fortschritt im Quiz gespeichert (#91, gleicher Aufbau wie in quiz-core.js).
+
+import { leererFortschritt, fortschrittAus, vermerken } from './quiz-core.js';
+
+/** @import { Fortschritt } from './quiz-core.js' */
 
 /**
  * Handlung eines Schritts: Text des Knopfs und entweder eine Link-Adresse (`#…`, Regelfall, auch für die Hilfeseite)
@@ -113,15 +118,31 @@ export function pruefeAblaeufe(ablaeufe, { hashGueltig = () => true, aktionen = 
 export const neuerStand = (ablauf) => ({ ablauf, weg: [0], gewaehlt: {}, gezeigt: new Set(), vorher: {}, nachher: {}, zurueck: null, vorherAktiv: false });
 
 /**
- * HTML der Liste der Abläufe eines Modus (Knöpfe data-ablauf), erledigte mit ✓ (nicht nur über Farbe).
- * @param {Ablauf[]} liste @param {Set<string>} [erledigt] ids der abgeschlossenen Abläufe
+ * Ergebnis eines abgeschlossenen Durchgangs wie im Quiz: richtig, wenn jede Vermutung mit Auflösung auf dem
+ * gegangenen Weg zutraf. Schritte ohne Auflösung (Bedienschritte, Fragen einer Verzweigung) zählen nicht.
+ * @param {Stand} st
  */
-export function listeHTML(liste, erledigt = new Set()) {
+export function ergebnis(st) {
+  return st.weg.every((i) => { const s = st.ablauf.schritte[i]; return s.richtig === undefined || st.gewaehlt[i] === s.richtig; });
+}
+
+/**
+ * HTML der Liste der Abläufe eines Modus (Knöpfe data-ablauf). Nach dem Stand (Fortschritt, Schlüssel = id):
+ * zuletzt richtig ✓, durchgespielt ○, je mit Text für Screenreader (nicht nur über Farbe); darunter die Übersicht
+ * und „Stand löschen“ (data-loeschen), sobald etwas durchgespielt ist.
+ * @param {Ablauf[]} liste @param {Fortschritt} [stand]
+ */
+export function listeHTML(liste, stand = leererFortschritt()) {
   if (!liste.length) return '';
+  const fertig = liste.filter((a) => stand.fragen[a.id]);
+  const richtig = fertig.filter((a) => stand.fragen[a.id].letzte);
+  const uebersicht = fertig.length
+    ? `<p class="ablauf-stand">Durchgespielt: ${fertig.length} von ${liste.length}, davon zuletzt alle Vermutungen richtig: ${richtig.length}. <button class="linkbtn" type="button" data-loeschen="1">Stand löschen</button></p>` : '';
   return `<p class="ablauf-hinweis">Kleine Experimente: erst vermuten, dann ausprobieren.</p><ol class="ablauf-liste">${liste.map((a) => {
-    const fertig = erledigt.has(a.id);
-    return `<li${fertig ? ' class="done"' : ''}><button class="linkbtn" type="button" data-ablauf="${a.id}">${a.titel}${fertig ? ' <span aria-hidden="true">✓</span><span class="sr"> (erledigt)</span>' : ''}</button></li>`;
-  }).join('')}</ol>`;
+    const e = stand.fragen[a.id];
+    const marke = !e ? '' : e.letzte ? ' <span aria-hidden="true">✓</span><span class="sr"> (zuletzt richtig)</span>' : ' <span aria-hidden="true">○</span><span class="sr"> (durchgespielt)</span>';
+    return `<li${e ? ` class="${e.letzte ? 'done' : 'gespielt'}"` : ''}><button class="linkbtn" type="button" data-ablauf="${a.id}">${a.titel}${marke}</button></li>`;
+  }).join('')}</ol>${uebersicht}`;
 }
 
 /**
@@ -206,13 +227,15 @@ export function schrittHTML(st, { skriptUrl, liste = true } = {}) {
  * - anwenden(hash): Zustand der App aus einer Adresse setzen und zeichnen,
  * - adresse(): aktuelle Adresse (für Vorher/Nachher),
  * - aktionen: Aktionen der App nach Namen,
- * - skriptUrl(anker), beiAbschluss(id), erledigt (ids aus dem Speicher der App): optional,
- * - liste: false für einen geführten Einstieg (Erste Schritte): je Modus ein Ablauf, ohne Liste; nach „Fertig“
- *   beginnt er wieder von vorn (beiAbschluss schliesst z. B. die Karte).
+ * - skriptUrl(anker), beiAbschluss(id): optional,
+ * - speicher: Schlüssel im Browser für den Stand der Experimente, `<präfix>-experimente` (Leitfaden Abschn. 5.3;
+ *   „Alle Einstellungen zurücksetzen“ verschont ihn wie das Quiz). Ohne Angabe gilt der Stand nur bis zum Neuladen.
+ * - liste: false für einen geführten Einstieg (Erste Schritte): je Modus ein Ablauf, ohne Liste und ohne Stand; nach
+ *   „Fertig“ beginnt er wieder von vorn (beiAbschluss schliesst z. B. die Karte).
  * @param {HTMLElement} el
  * @param {Ablauf[]} ablaeufe
  * @param {{ anwenden: (hash: string) => void, adresse: () => string, aktionen?: Record<string, () => void>,
- *   skriptUrl?: (anker: string) => string, beiAbschluss?: (id: string) => void, erledigt?: Iterable<string>,
+ *   skriptUrl?: (anker: string) => string, beiAbschluss?: (id: string) => void, speicher?: string,
  *   liste?: boolean }} o
  */
 export function ablaufKarte(el, ablaeufe, o) {
@@ -220,7 +243,10 @@ export function ablaufKarte(el, ablaeufe, o) {
   let modus;
   /** @type {Stand | null} */
   let st = null;
-  const erledigt = new Set(o.erledigt ?? []);
+  /** @type {Fortschritt} */
+  let fortschritt = leererFortschritt();
+  if (o.speicher) try { fortschritt = fortschrittAus(localStorage.getItem(o.speicher)); } catch { /* ohne Speicher weiter */ }
+  const speichern = () => { if (o.speicher) try { localStorage.setItem(o.speicher, JSON.stringify(fortschritt)); } catch { /* ohne Speicher weiter */ } };
   el.innerHTML = '<div class="ablauf-inhalt"></div><p class="sr ablauf-ansage" aria-live="polite"></p>';
   const inhalt = /** @type {HTMLElement} */ (el.firstElementChild);
   const ansageEl = /** @type {HTMLElement} */ (el.lastElementChild);
@@ -228,7 +254,7 @@ export function ablaufKarte(el, ablaeufe, o) {
   /** Zeichnen und den Fokus auf das Element zum Selektor legen (Tastatur, Screenreader). @param {string | null} [fokus] */
   const zeichnen = (fokus = null) => {
     if (!st && o.liste === false) { const a = imModus()[0]; st = a ? neuerStand(a) : null; }
-    inhalt.innerHTML = st ? schrittHTML(st, { skriptUrl: o.skriptUrl, liste: o.liste !== false }) : listeHTML(imModus(), erledigt);
+    inhalt.innerHTML = st ? schrittHTML(st, { skriptUrl: o.skriptUrl, liste: o.liste !== false }) : listeHTML(imModus(), fortschritt);
     const z = fokus ? inhalt.querySelector(fokus) : null;
     if (z instanceof HTMLElement) z.focus({ preventScroll: true });
   };
@@ -258,6 +284,10 @@ export function ablaufKarte(el, ablaeufe, o) {
     const b = /** @type {Element} */ (e.target).closest('button');
     if (!b || !(b instanceof HTMLButtonElement) || b.disabled || b.getAttribute('aria-disabled') === 'true') return;
     if (b.dataset.ablauf) { starte(b.dataset.ablauf); return; }
+    if (b.dataset.loeschen) {
+      if (!confirm('Den Stand aller Experimente löschen?')) return;
+      fortschritt = leererFortschritt(); speichern(); zeichnen('[data-ablauf]'); sagen('Stand gelöscht'); return;
+    }
     const stand = st;
     if (!stand) return;
     const i = stand.weg[stand.weg.length - 1];
@@ -304,7 +334,10 @@ export function ablaufKarte(el, ablaeufe, o) {
       const n = naechster(stand.ablauf, i, stand.gewaehlt[i]);
       if (n >= 0) { stand.weg.push(n); zeichnen('.ablauf-frage'); sagen(ansage(stand)); }
     } else if (nav === 'fertig' || nav === 'liste') {
-      if (nav === 'fertig') { erledigt.add(stand.ablauf.id); o.beiAbschluss?.(stand.ablauf.id); }
+      if (nav === 'fertig') {
+        if (o.liste !== false) { vermerken(fortschritt, stand.ablauf.id, ergebnis(stand)); speichern(); }
+        o.beiAbschluss?.(stand.ablauf.id);
+      }
       zurListe(true);
     }
   });

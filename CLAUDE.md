@@ -74,6 +74,11 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Daten die Hilfeseite speisen („In der App zeigen“); eine Erkennung selbst ausgeführter Handlungen bräuchte je
   Schritt eine Prüfbedingung. Ein Mechanismus für Experimente und Bestimmung (Verzweigung), damit plane-groups#38
   nicht eine zweite Führung baut.
+- **Stand der Experimente wie im Quiz** (7.11.2026, Thomas, #91): gespeichert mit demselben Aufbau wie der
+  Fortschritt im Quiz (`vermerken` aus `quiz-core.js`), damit sich beide gleich verhalten und später auch erzeugte
+  Experimente (#92) unter `<generator>:<parameter>` zählen. Richtig heisst: alle aufgelösten Vermutungen auf dem
+  Weg trafen zu. Eigener Schlüssel `<präfix>-experimente`, den „Alle Einstellungen zurücksetzen“ verschont,
+  statt eines Namens unter `<präfix>-quiz`, weil die Experimente nicht zum Quiz gehören.
   Zuerst ersetzten die Experimente die Erste Schritte; Thomas fand sie dafür zu schade („als kurze
   Kennenlernübung beim Einstieg eigentlich verschwendet“). Deshalb stehen sie in einem eigenen Abschnitt, und
   die Erste Schritte bleiben kurze Bedienschritte mit derselben Mechanik.
