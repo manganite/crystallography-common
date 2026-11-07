@@ -68,17 +68,18 @@ Repo-Name = Pfad auf GitHub Pages:
 Die Regeln selbst stehen im Leitfaden; hier, warum.
 
 - **Gemeinsamer Rechenkern in TypeScript, eigenes Repository** (Thomas, 7.11.2026, #99): Punktgruppen
-  werden heute in stereography und in birss-app je eigens erzeugt, die Ebenengruppen in plane-groups; die
-  3D-App (#9) bräuchte die Gruppen ein weiteres Mal. Thomas hält den Teil von birss-app für den am besten
-  ausgebauten und abgesicherten (Referenztests gegen Birss und ITC), deshalb ist er der Ausgangspunkt.
-  Entschieden: ein Kern mit allen Berechnungen, die heute in den Apps der Familie und in birss-app stecken,
-  leicht erweiterbar, in einem eigenen Repository, durchgehend auf Englisch (auch Bezeichner und Kommentare)
-  und so gebaut, dass er als eigenständige Bibliothek verbreitet werden kann. TypeScript, weil birss-app es
-  schon ist und eine Bibliothek ihre Typen mitliefert. Die Regel „keine `.ts`-Dateien, kein Build-Schritt“
-  (Leitfaden Abschn. 9) gilt weiter für common und die Apps. birss-app baut künftig auf dem Kern auf, bleibt
-  aber ein eigenes Projekt ausserhalb der Familie. Bis der Kern steht, bleibt das Fachliche in den Apps.
-  Offen (#99): Name des Repositorys, wie die Apps den übersetzten Kern ohne eigenen Build einbinden,
-  Platz im Fahrplan (#74).
+  werden heute in stereography und in birss-app unabhängig voneinander erzeugt, die Ebenengruppen in
+  plane-groups; die 3D-App (#9) bräuchte die Gruppen ein weiteres Mal. Thomas hält die Rechenmodule von
+  birss-app für die am besten ausgebauten und abgesicherten (Referenztests gegen Birss und ITC); sie sind
+  der Ausgangspunkt. Entschieden: Ein Kern enthält alle Berechnungen, die heute in den Apps der Familie und
+  in birss-app stecken; die Darstellung bleibt in den Apps. Er ist leicht erweiterbar und so gebaut, dass er
+  als eigenständige Bibliothek verbreitet werden kann. Er ist ein eigenes Projekt mit eigenem Repository,
+  durchgehend auf Englisch (auch Bezeichner und Kommentare); für ihn gelten weder der Leitfaden noch diese
+  Datei. TypeScript, weil birss-app es schon ist und eine Bibliothek ihre Typen mitliefert. common und die
+  Apps bleiben ohne `.ts` und ohne Build-Schritt; sie binden das nach JavaScript übersetzte Ergebnis ein.
+  birss-app baut künftig auf dem Kern auf, bleibt aber ein eigenes Projekt ausserhalb der Familie
+  (festgehalten in deren `STATUS.md`). Bis der Kern steht, bleiben die Berechnungen in den Apps. Offene
+  Punkte: #99.
 - **Lernexperimente, eigener Abschnitt** (7.11.2026, #87, Leitfaden Abschn. 5.3): Ein externes Review (5.11.)
   riet zu „eine Frage, eine Handlung, eine beobachtbare Änderung“ statt reiner Bedienschritte; die Vermutung vorher
   macht die Beobachtung zur Antwort. Auswahl statt offener Frage, damit sich die Auflösung zeigen lässt; ohne Punkte,
