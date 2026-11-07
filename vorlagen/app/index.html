@@ -46,12 +46,16 @@
   <aside class="side" aria-label="Bedienung">
     <section class="card intro" id="intro" aria-labelledby="intro-title" hidden>
       <div class="intro-head"><h2 id="intro-title">Erste Schritte</h2><button class="intro-x" id="intro-close" type="button" aria-label="Erste Schritte schliessen">×</button></div>
-      <ol class="steps">
-        <li><b>Gruppe wählen.</b> Ein Knopf je Gruppe, geordnet nach Kristallsystem. <button class="linkbtn" type="button" data-step="1">p4mm wählen</button></li>
-        <li><b>Darstellung ändern.</b> Weitere Optionen liegen in den eingeklappten Abschnitten. <button class="linkbtn" type="button" data-step="2">Darstellung öffnen</button></li>
-      </ol>
+      <div id="ablauf"></div>
       <p class="intro-foot"><span class="only-fine">Tooltips erklären jedes Bedienelement.</span><span class="only-coarse">Das ⓘ neben den Überschriften erklärt die Bedienelemente.</span></p>
     </section>
+
+    <div class="card">
+      <details class="sect" id="sec-experimente">
+        <summary>Experimente<span class="sumhint">Erst vermuten, dann ausprobieren</span></summary>
+        <div id="experimente"></div>
+      </details>
+    </div>
 
     <div class="card">
       <section id="ctl-gruppe" class="stack">

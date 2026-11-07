@@ -32,3 +32,12 @@ test('Quiz: Speicher im Browser behält seinen Namen (sonst ginge der Stand der 
 test('keine Kopien gemeinsamer Module mehr in js/', () => {
   for (const f of ['format.js', 'help.js', 'quiz-core.js']) assert.throws(() => read(`js/${f}`), `js/${f}`);
 });
+
+test('Erste Schritte und Lernexperimente: Daten vollständig (pruefeAblaeufe)', async () => {
+  const { pruefeAblaeufe } = await import('../lib/common/js/ablauf.js');
+  const { ABLAEUFE, ERSTE_SCHRITTE } = await import('../js/hilfetexte.js');
+  // In einer App: hashGueltig über die Prüffunktion der Adresse (Rundlauf), modi und anker aus der App
+  const o = { aktionen: ['darstellung', 'experimente'], modi: ['a', 'b'], hashGueltig: (/** @type {string} */ h) => /^#g=p/.test(h) };
+  assert.deepEqual(pruefeAblaeufe(ABLAEUFE, o), []);
+  assert.deepEqual(pruefeAblaeufe(ERSTE_SCHRITTE, o), []);
+});

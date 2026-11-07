@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Geführte Abläufe** (`js/ablauf.js`, #87): Lernexperimente in einem eigenen Abschnitt „Experimente“ der Seitenleiste und kurze Erste Schritte zur Bedienung (`liste: false`), mit derselben Mechanik. Je Experiment-Schritt Frage, Vermutung mit Auflösung, Handlung per Knopf (Link-Adresse oder Aktion der App), Beobachtung, Erklärung mit Link ins Skript und Vorher/Nachher (#69). Verzweigungen nach der Antwort für die geführte Bestimmung (manganite/plane-groups#38). `pruefeAblaeufe` prüft die Daten in den Tests der App (auch Modi, Anker im Skript, Erreichbarkeit). Bedienbar mit Tastatur und Screenreader: Fokus nach jedem Klick, bleibende Live-Region für Auflösung und Beobachtung. Die Hilfsklasse `.sr` (nur für Screenreader) steht jetzt in `css/base.css` statt in `css/quiz.css`. Stile in `css/app.css` (`.ablauf-…`), Muster in der Vorlage. Leitfaden Abschn. 5.3 nachgeführt. Für die Apps: Erste Schritte und Experimente umstellen (manganite/plane-groups#56, manganite/stereography#77); `lib/common/js/ablauf.js` in die Offline-Liste von `sw.js`.
+
 ### Geändert
 
 - **Leitfaden 5.2:** Zahlen ausserhalb ihres Bereichs werden auf den nächsten gültigen Wert gesetzt statt durch den Startwert ersetzt (Entscheidung Thomas, 6.11.2026). Für die Apps: plane-groups ersetzt sie noch durch den Startwert (manganite/plane-groups#98).
