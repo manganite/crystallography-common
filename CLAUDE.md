@@ -74,14 +74,17 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Daten die Hilfeseite speisen („In der App zeigen“); eine Erkennung selbst ausgeführter Handlungen bräuchte je
   Schritt eine Prüfbedingung. Ein Mechanismus für Experimente und Bestimmung (Verzweigung), damit plane-groups#38
   nicht eine zweite Führung baut.
-- **Stand der Experimente wie im Quiz** (7.11.2026, Thomas, #91): gespeichert mit demselben Aufbau wie der
-  Fortschritt im Quiz (`vermerken` aus `quiz-core.js`), damit sich beide gleich verhalten und später auch erzeugte
-  Experimente (#92) unter `<generator>:<parameter>` zählen. Richtig heisst: alle aufgelösten Vermutungen auf dem
-  Weg trafen zu. Eigener Schlüssel `<präfix>-experimente`, den „Alle Einstellungen zurücksetzen“ verschont,
-  statt eines Namens unter `<präfix>-quiz`, weil die Experimente nicht zum Quiz gehören.
   Zuerst ersetzten die Experimente die Erste Schritte; Thomas fand sie dafür zu schade („als kurze
   Kennenlernübung beim Einstieg eigentlich verschwendet“). Deshalb stehen sie in einem eigenen Abschnitt, und
   die Erste Schritte bleiben kurze Bedienschritte mit derselben Mechanik.
+- **Stand der Experimente wie im Quiz** (7.11.2026, #91): Thomas entschied, dass sich die Experimente wie die
+  Quizfragen verhalten. Gespeichert mit demselben Aufbau wie der Fortschritt im Quiz (`vermerken` aus
+  `quiz-core.js`), damit später auch erzeugte Experimente (#92) unter `<generator>:<parameter>` zählen. Richtig
+  heisst: Es gab auf dem Weg mindestens eine aufgelöste Vermutung, und jede traf beim ersten Mal zu; ein Ablauf
+  ohne Auflösung gilt nur als durchgespielt (○). Der Schlüssel `<präfix>-experimente` (statt des ersten
+  Vorschlags `<präfix>-quiz-experimente` im Issue) ist eine Wahl beim Umsetzen: Die Experimente gehören nicht
+  zum Quiz, und ein Name unter `<präfix>-quiz` hätte nur genutzt, dass das Zurücksetzen das Quiz verschont.
+  Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
 - **Anordnung der Tafeln gemeinsam** (5.11.2026, Leitfaden Abschn. 5.1): Sie war in beiden Apps und der Vorlage
   gleich und stand dreimal; eine Änderung musste dreimal gemacht werden. Bisher hiess es, jede App lege sie
   selbst fest; das gilt nur noch für eine abweichende Anordnung. Eine gemeinsame 3D-Ansicht folgt erst mit einer

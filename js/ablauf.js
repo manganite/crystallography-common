@@ -1,4 +1,4 @@
-// Geführte Abläufe (Lernexperimente als Erste Schritte, später die geführte Bestimmung, #87): je Schritt
+// Geführte Abläufe (Experimente, Erste Schritte, später die geführte Bestimmung, #87): je Schritt
 // Frage → Vermutung → Handlung → Beobachtung → Erklärung. Die App bleibt dabei normal bedienbar; die Handlung setzt
 // den Zustand über die Link-Adresse (Ausnahme: eine benannte Aktion der App). Vor der Handlung merkt sich der
 // Ablauf die Adresse; danach schaltet „Vorher/Nachher“ zwischen beiden um (#69).
@@ -30,9 +30,10 @@ import { leererFortschritt, fortschrittAus, vermerken } from './quiz-core.js';
 /** Ablauf (Lernexperiment). modus: Modus der App, in dem er angeboten wird. @typedef {{ id: string, modus?: string, titel: string, schritte: Schritt[] }} Ablauf */
 /**
  * Stand eines laufenden Ablaufs. weg: Indizes der besuchten Schritte (für „Zurück“), gewaehlt: Antwort je
- * Schrittindex, gezeigt: Schritte, deren Beobachtung sichtbar ist, vorher/nachher: Adressen um die Handlung,
+ * Schrittindex, erste: Antwort, die bei der Auflösung galt (zählt für das Ergebnis, auch wenn sie danach geändert
+ * wird), gezeigt: Schritte, deren Beobachtung sichtbar ist, vorher/nachher: Adressen um die Handlung,
  * zurueck: Adresse beim Umschalten auf „Vorher“ (dorthin führt „Nachher“), vorherAktiv: „Vorher“ ist angewandt.
- * @typedef {{ ablauf: Ablauf, weg: number[], gewaehlt: Record<number, number>, gezeigt: Set<number>,
+ * @typedef {{ ablauf: Ablauf, weg: number[], gewaehlt: Record<number, number>, erste: Record<number, number>, gezeigt: Set<number>,
  *   vorher: Record<number, string>, nachher: Record<number, string>, zurueck: string | null, vorherAktiv: boolean }} Stand
  */
 
@@ -115,15 +116,26 @@ export function pruefeAblaeufe(ablaeufe, { hashGueltig = () => true, aktionen = 
 }
 
 /** Neuer Stand für einen Ablauf. @param {Ablauf} ablauf @returns {Stand} */
-export const neuerStand = (ablauf) => ({ ablauf, weg: [0], gewaehlt: {}, gezeigt: new Set(), vorher: {}, nachher: {}, zurueck: null, vorherAktiv: false });
+export const neuerStand = (ablauf) => ({ ablauf, weg: [0], gewaehlt: {}, erste: {}, gezeigt: new Set(), vorher: {}, nachher: {}, zurueck: null, vorherAktiv: false });
 
 /**
- * Ergebnis eines abgeschlossenen Durchgangs wie im Quiz: richtig, wenn jede Vermutung mit Auflösung auf dem
- * gegangenen Weg zutraf. Schritte ohne Auflösung (Bedienschritte, Fragen einer Verzweigung) zählen nicht.
+ * Ergebnis eines abgeschlossenen Durchgangs wie im Quiz: richtig, wenn es auf dem gegangenen Weg mindestens eine
+ * aufgelöste Vermutung gab und jede bei der Auflösung zutraf (erste). Schritte ohne Auflösung (Bedienschritte,
+ * Fragen einer Verzweigung) zählen nicht; ein Ablauf ganz ohne Auflösung gilt nur als durchgespielt.
  * @param {Stand} st
  */
 export function ergebnis(st) {
-  return st.weg.every((i) => { const s = st.ablauf.schritte[i]; return s.richtig === undefined || st.gewaehlt[i] === s.richtig; });
+  const geprueft = st.weg.filter((i) => st.ablauf.schritte[i].richtig !== undefined);
+  return geprueft.length > 0 && geprueft.every((i) => (st.erste[i] ?? st.gewaehlt[i]) === st.ablauf.schritte[i].richtig);
+}
+
+/** Stand der Experimente aus dem Speicher (gesperrt oder unbrauchbar: leer). @param {string} schluessel @returns {Fortschritt} */
+export function standLesen(schluessel) {
+  try { return fortschrittAus(localStorage.getItem(schluessel)); } catch { return leererFortschritt(); }
+}
+/** Stand der Experimente speichern (gesperrter Speicher: nichts). @param {string} schluessel @param {Fortschritt} f */
+export function standSchreiben(schluessel, f) {
+  try { localStorage.setItem(schluessel, JSON.stringify(f)); } catch { /* ohne Speicher weiter */ }
 }
 
 /**
@@ -135,9 +147,9 @@ export function ergebnis(st) {
 export function listeHTML(liste, stand = leererFortschritt()) {
   if (!liste.length) return '';
   const fertig = liste.filter((a) => stand.fragen[a.id]);
-  const richtig = fertig.filter((a) => stand.fragen[a.id].letzte);
+  const richtig = fertig.filter((a) => stand.fragen[a.id].letzte).length;
   const uebersicht = fertig.length
-    ? `<p class="ablauf-stand">Durchgespielt: ${fertig.length} von ${liste.length}, davon zuletzt alle Vermutungen richtig: ${richtig.length}. <button class="linkbtn" type="button" data-loeschen="1">Stand löschen</button></p>` : '';
+    ? `<p class="ablauf-stand">Stand: ${richtig} ✓ (zuletzt richtig), ${fertig.length - richtig} ○ (durchgespielt), ${liste.length - fertig.length} offen. <button class="linkbtn" type="button" data-loeschen="1">Stand löschen</button></p>` : '';
   return `<p class="ablauf-hinweis">Kleine Experimente: erst vermuten, dann ausprobieren.</p><ol class="ablauf-liste">${liste.map((a) => {
     const e = stand.fragen[a.id];
     const marke = !e ? '' : e.letzte ? ' <span aria-hidden="true">✓</span><span class="sr"> (zuletzt richtig)</span>' : ' <span aria-hidden="true">○</span><span class="sr"> (durchgespielt)</span>';
@@ -221,7 +233,7 @@ export function schrittHTML(st, { skriptUrl, liste = true } = {}) {
 }
 
 /**
- * Karte mit den Abläufen der App. Das Element ist der Inhalt der Karte „Erste Schritte“; ein Klick ist eine
+ * Karte mit den Abläufen der App (Abschnitt „Experimente“ oder Karte „Erste Schritte“); ein Klick ist eine
  * Handlung, Antwort oder Navigation (Ereignis-Delegation, Tastatur über die Knöpfe). Neu erscheinender Text wird
  * über eine bleibende Live-Region angesagt; nach jedem Klick liegt der Fokus auf einem passenden Element.
  * - anwenden(hash): Zustand der App aus einer Adresse setzen und zeichnen,
@@ -244,9 +256,10 @@ export function ablaufKarte(el, ablaeufe, o) {
   /** @type {Stand | null} */
   let st = null;
   /** @type {Fortschritt} */
-  let fortschritt = leererFortschritt();
-  if (o.speicher) try { fortschritt = fortschrittAus(localStorage.getItem(o.speicher)); } catch { /* ohne Speicher weiter */ }
-  const speichern = () => { if (o.speicher) try { localStorage.setItem(o.speicher, JSON.stringify(fortschritt)); } catch { /* ohne Speicher weiter */ } };
+  let fortschritt = o.speicher ? standLesen(o.speicher) : leererFortschritt();
+  // vor jedem Schreiben neu lesen, damit ein zweiter offener Tab nichts überschreibt
+  const frisch = () => { if (o.speicher) fortschritt = standLesen(o.speicher); };
+  const speichern = () => { if (o.speicher) standSchreiben(o.speicher, fortschritt); };
   el.innerHTML = '<div class="ablauf-inhalt"></div><p class="sr ablauf-ansage" aria-live="polite"></p>';
   const inhalt = /** @type {HTMLElement} */ (el.firstElementChild);
   const ansageEl = /** @type {HTMLElement} */ (el.lastElementChild);
@@ -280,12 +293,17 @@ export function ablaufKarte(el, ablaeufe, o) {
   };
   /** Zur Liste. @param {boolean} [fokus] */
   const zurListe = (fokus = false) => { nachherHerstellen(); st = null; zeichnen(fokus ? (o.liste === false ? '.ablauf-frage' : '[data-ablauf]') : null); sagen(''); };
+  // ein anderer Tab hat den Stand geändert: die Liste neu zeichnen (ein laufender Ablauf bleibt)
+  if (o.speicher && typeof window !== 'undefined') window.addEventListener('storage', (e) => {
+    if (e.key !== o.speicher && e.key !== null) return;
+    frisch(); if (!st) zeichnen();
+  });
   el.addEventListener('click', (e) => {
     const b = /** @type {Element} */ (e.target).closest('button');
     if (!b || !(b instanceof HTMLButtonElement) || b.disabled || b.getAttribute('aria-disabled') === 'true') return;
     if (b.dataset.ablauf) { starte(b.dataset.ablauf); return; }
     if (b.dataset.loeschen) {
-      if (!confirm('Den Stand aller Experimente löschen?')) return;
+      if (!confirm('Den Stand aller Experimente in allen Modi löschen?')) return;
       fortschritt = leererFortschritt(); speichern(); zeichnen('[data-ablauf]'); sagen('Stand gelöscht'); return;
     }
     const stand = st;
@@ -297,15 +315,17 @@ export function ablaufKarte(el, ablaeufe, o) {
       if (!s.handlung) {
         // Frage ohne Handlung: die Wahl beantwortet sie; eine andere Antwort verwirft den Stand späterer Schritte
         if (stand.gewaehlt[i] !== k) {
-          for (const m of [stand.gewaehlt, stand.vorher, stand.nachher]) for (const j of Object.keys(m).map(Number)) if (!stand.weg.includes(j)) delete m[j];
+          for (const m of [stand.gewaehlt, stand.erste, stand.vorher, stand.nachher]) for (const j of Object.keys(m).map(Number)) if (!stand.weg.includes(j)) delete m[j];
           for (const j of [...stand.gezeigt]) if (!stand.weg.includes(j)) stand.gezeigt.delete(j);
         }
         stand.gezeigt.add(i);
+        stand.erste[i] ??= k; // aufgelöst: diese Antwort zählt
       }
       stand.gewaehlt[i] = k;
       zeichnen(`[data-antwort="${k}"]`); sagen(ansage(stand)); return;
     }
     if (b.dataset.tun && s.handlung) {
+      if (stand.gewaehlt[i] !== undefined) stand.erste[i] ??= stand.gewaehlt[i];
       stand.vorher[i] = o.adresse();
       if (s.handlung.hash !== undefined) o.anwenden(s.handlung.hash);
       else o.aktionen?.[/** @type {string} */ (s.handlung.aktion)]?.();
@@ -334,10 +354,15 @@ export function ablaufKarte(el, ablaeufe, o) {
       const n = naechster(stand.ablauf, i, stand.gewaehlt[i]);
       if (n >= 0) { stand.weg.push(n); zeichnen('.ablauf-frage'); sagen(ansage(stand)); }
     } else if (nav === 'fertig' || nav === 'liste') {
-      if (nav === 'fertig') {
-        if (o.liste !== false) { vermerken(fortschritt, stand.ablauf.id, ergebnis(stand)); speichern(); }
+      if (nav === 'fertig' && o.liste !== false) {
+        const ok = ergebnis(stand);
+        frisch(); vermerken(fortschritt, stand.ablauf.id, ok); speichern();
         o.beiAbschluss?.(stand.ablauf.id);
+        nachherHerstellen(); st = null; zeichnen(`[data-ablauf="${stand.ablauf.id}"]`);
+        sagen(ok ? 'Alle Vermutungen trafen zu.' : 'Durchgespielt.');
+        return;
       }
+      if (nav === 'fertig') o.beiAbschluss?.(stand.ablauf.id);
       zurListe(true);
     }
   });

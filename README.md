@@ -24,7 +24,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `quiz.css` | Quiz: Auswahl (Stufen, Kapitel, Anzahl), Frage, Antworten, Rückmeldung, Auswertung |
 | `fonts/` | | IBM Plex Sans und Mono, Source Serif 4 (selbst gehostet, SIL Open Font License) |
 | `js/` | `format.js` | Hermann-Mauguin-Symbole und Millersche Indizes mit Querstrich |
-| | `ablauf.js` | Geführte Abläufe: Lernexperimente im Abschnitt „Experimente“ (Frage, Vermutung, Handlung, Beobachtung, Vorher/Nachher) und kurze Erste Schritte (`liste: false`), Verzweigung für die Bestimmung; `pruefeAblaeufe` für die Tests der App |
+| | `ablauf.js` | Geführte Abläufe: Lernexperimente im Abschnitt „Experimente“ (Frage, Vermutung, Handlung, Beobachtung, Vorher/Nachher, Stand wie im Quiz) und kurze Erste Schritte (`liste: false`), Verzweigung für die Bestimmung; `pruefeAblaeufe` für die Tests der App |
 | | `help.js` | Mechanik der Hilfen: Tooltips (Laptop), ⓘ-Erklärungen je Abschnitt (Touch); Texte liefert die App |
 | | `quiz-core.js` | Quiz-Logik ohne Seite: Kandidaten, Ziehen nach Stufen und Vorrang, Mischen, Auswerten, Fortschritt |
 | | `quiz-seite.js` | Quiz-Seite: Auswahl, Fragen mit sofortiger Rückmeldung, Auswertung, Fortschritt im Browser |

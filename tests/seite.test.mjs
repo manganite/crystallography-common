@@ -91,9 +91,9 @@ function mitGlobalen(neu, f) {
   }
 }
 
-test('Alle Einstellungen zurücksetzen: löscht die Einträge der App ausser dem Quiz, lädt ohne Hash neu, löscht beim Verlassen nochmals', () => {
+test('Alle Einstellungen zurücksetzen: löscht die Einträge der App ausser dem Lernstand (Quiz, Experimente), lädt ohne Hash neu, löscht beim Verlassen nochmals', () => {
   /** @type {Map<string, string>} */
-  const speicher = new Map([['app-zustand', '{}'], ['app-intro', 'a'], ['app-quiz', '{}'], ['app-quiz-lauf', '1'], ['app-experimente', '{}'],
+  const speicher = new Map([['app-zustand', '{}'], ['app-intro', 'a'], ['app-quiz', '{}'], ['app-quiz-lauf', '1'], ['app-experimente', '{}'], ['app-experimente-alt', '{}'],
     ['andere-zustand', '{}'], ['app', 'x'], ['appx-zustand', '{}']]);
   const nachgebildet = {
     get length() { return speicher.size; },
