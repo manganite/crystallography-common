@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [0.14.0] - 2026-11-08
 
-Barrierefreiheit: Screenreader lesen HM-Symbole, Indizes und Querstriche genauer; Kontraste nach WCAG 2.2 gemessen und die Farben (hell) angepasst. Für die Apps: nichts anzupassen; eigene Eingabefelder mit `var(--field)` umranden, Befunde in den eigenen Abbildungen nach plane-groups#114 und stereography#119.
+Barrierefreiheit: Screenreader lesen HM-Symbole, Indizes und Querstriche genauer; Kontraste nach WCAG 2.2 gemessen und die Farben (hell) angepasst. Für die Apps: eigene Eingabefelder mit `var(--field)` umranden; Befunde in den eigenen Abbildungen nach plane-groups#114 und stereography#119; sonst nichts anzupassen.
 
 ### Neu
 
