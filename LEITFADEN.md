@@ -71,7 +71,7 @@ Die App ist eine **Werkbank**: links die Bedienung, rechts die Darstellungen, da
 
 Die Apps sollen allgemein zugänglich sein, auch ohne Maus und mit Screenreader. Mindestregeln:
 
-- **Bedeutung nie nur in Form oder Farbe:** Farben werden durch Symbole, Linienarten oder Beschriftungen ergänzt. Ein Alternativtext in CSS (`content: '' / '−'`) ist zulässig, z. B. beim Querstrich (Abschnitt 4).
+- **Bedeutung nie nur in Form oder Farbe:** Farben werden durch Symbole, Linienarten oder Beschriftungen ergänzt. Ein Alternativtext in CSS (`content: '' / ' quer '`) ist zulässig, z. B. beim Querstrich (Abschnitt 4).
 - **ARIA-Rollen nur mit dem zugehörigen Verhalten.** Die Moduswahl ist ein vollständiges Tab-Muster: `role="tablist"` und `role="tab"`, ein gemeinsames `role="tabpanel"` (`<div class="layout" id="inhalt">` im `<main>`; das `<main>` selbst bleibt Hauptlandmarke), Pfeiltasten, Pos1 und Ende, nur der gewählte Tab im Fokus-Ablauf. Umsetzung mit `modusTabs()` aus `lib/common/js/seite.js` (Vorlage), aufgerufen vor dem ersten Moduswechsel; die App setzt `aria-selected` nicht selbst, sondern ruft `markieren(id)` dort, wo jeder Moduswechsel durchläuft, auch beim Laden aus Link oder Speicher.
 - **Alles Bedienbare per Tastatur erreichbar.** Wo eine Zeichenfläche das nicht leistet (Pole, Motive ziehen), gibt es einen gleichwertigen Weg, z. B. eine beschriftete Liste und Felder für Koordinaten, auch als Brüche.
 - **Kontraste** nach WCAG 2.2 für hell und dunkel messen: Text 4,5 : 1, grosser Text 3 : 1 (1.4.3), Bedienelemente und Grafik 3 : 1 (1.4.11). Touch-Ziele wie in Abschnitt 5.2, strenger als WCAG 2.5.8 (24 px).
