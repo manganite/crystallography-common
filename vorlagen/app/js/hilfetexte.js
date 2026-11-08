@@ -31,16 +31,17 @@ export const LABELS = {};
 
 /**
  * Erste Schritte (lib/common/js/ablauf.js, Leitfaden Abschn. 5.3): je Modus ein kurzer Ablauf zur Bedienung,
- * Schritte ohne Vermutung; der letzte verweist auf die Experimente.
+ * Schritte ohne Vermutung; der letzte verweist auf die Experimente. Sie sind zugleich die Anleitungen der Hilfeseite
+ * (js/hilfe-daten.js): zeige = Selektor des Bedienelements, das ihr Bild markiert (tools/common/hilfe-bilder.mjs).
  * @type {Ablauf[]}
  */
 export const ERSTE_SCHRITTE = [
   {
     id: 'einstieg-a', modus: 'a', titel: 'Erste Schritte',
     schritte: [
-      { frage: '<b>Gruppe wählen.</b> Ein Knopf je Gruppe, geordnet nach Kristallsystem.', handlung: { text: '<i>p</i>4<i>mm</i> wählen', hash: '#g=p4mm' } },
-      { frage: '<b>Darstellung ändern.</b> Weitere Optionen liegen in den eingeklappten Abschnitten.', handlung: { text: 'Darstellung öffnen', aktion: 'darstellung' } },
-      { frage: '<b>Ausprobieren.</b> Unter „Experimente“ stehen kleine Versuche: erst vermuten, dann ausprobieren.', handlung: { text: 'Experimente öffnen', aktion: 'experimente' } },
+      { frage: '<b>Gruppe wählen.</b> Ein Knopf je Gruppe, geordnet nach Kristallsystem.', handlung: { text: '<i>p</i>4<i>mm</i> wählen', hash: '#g=p4mm' }, zeige: '#picker' },
+      { frage: '<b>Darstellung ändern.</b> Weitere Optionen liegen in den eingeklappten Abschnitten.', handlung: { text: 'Darstellung öffnen', aktion: 'darstellung' }, zeige: '#sec-view > summary' },
+      { frage: '<b>Ausprobieren.</b> Unter „Experimente“ stehen kleine Versuche: erst vermuten, dann ausprobieren.', handlung: { text: 'Experimente öffnen', aktion: 'experimente' }, zeige: '#sec-experimente > summary' },
     ],
   },
 ];
