@@ -56,11 +56,12 @@ export function hmLabel(sym) {
 const symbolHTML = (innen, label) => `<span role="img" aria-label="${esc(label)}">${innen}</span>`;
 
 /**
- * HM-Symbol als HTML (Querstrich via CSS-Klasse .ov), für Screenreader mit Ansagetext aus `hmLabel`.
+ * HM-Symbol als HTML (Querstrich via CSS-Klasse .ov), für Screenreader mit Ansagetext aus `hmLabel`; leeres Symbol:
+ * leere Zeichenkette (keine Grafik ohne Namen).
  * @param {string} sym
  */
-export const hmHTML = (sym) =>
-  symbolHTML(hmParts(sym).map((p) => (p.bar ? `<span class="ov">${esc(p.t)}</span>` : esc(p.t))).join(''), hmLabel(sym));
+export const hmHTML = (sym) => (sym === '' ? '' :
+  symbolHTML(hmParts(sym).map((p) => (p.bar ? `<span class="ov">${esc(p.t)}</span>` : esc(p.t))).join(''), hmLabel(sym)));
 
 /** HM-Symbol als Klartext mit kombinierendem Überstrich (für <option>). @param {string} sym */
 export const hmText = (sym) => hmParts(sym).map((p) => (p.bar ? p.t + '̅' : p.t)).join('');

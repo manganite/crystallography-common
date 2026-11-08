@@ -217,6 +217,9 @@ test('ansage: Querstrich als „quer“ wie in der Darstellung für Screenreader
   st.ablauf.schritte[0].beobachtung = `Die Form ${hklHTML([1, -1, 1], false, ['{', '}'])} in ${hmHTML('m-3m')}.`;
   delete st.ablauf.schritte[0].erklaerung;
   assert.equal(ansage(st), 'Zutreffend: 4 quer, 2, m. Deine Vermutung: 4 über m, m, m. Die Form {1, 1 quer, 1} in m, 3 quer, m.');
+  // Leerraum: Bindestrich, deutsche Anführungszeichen, Verhältnis
+  st.ablauf.schritte[0].beobachtung = `Die ${hmHTML('-4')}-Achse, „${hmHTML('mm2')}“, 2 : 1.`;
+  assert.match(ansage(st), /Die 4 quer-Achse, „m, m, 2“, 2 : 1\.$/);
 });
 
 test('Erste Schritte (liste: false): Bedienschritte ohne Vermutung, überspringbar, ohne „Alle Experimente“', () => {

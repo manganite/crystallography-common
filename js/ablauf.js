@@ -228,7 +228,8 @@ const ZEICHEN = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;
 const SYMBOL = /<span role="img" aria-label="([^"]*)">(?:[^<]|<span class="ov">[^<]*<\/span>)*<\/span>/g;
 /**
  * Querstrich im übrigen Text, auch mit Auszeichnung darin (koordHTML in plane-groups: `<i>x</i>`), in jeder
- * Attributform; `class="ovs"` (SVG) nicht.
+ * Attributform; `class="ovs"` (SVG) nicht. Grenze: ein weiteres `<span>` innerhalb des Querstrichs wird nicht erkannt
+ * (dann ohne „quer“ angesagt).
  */
 const QUERSTRICH = /<span\b[^>]*\bclass\s*=\s*["'](?:[^"']*\s)?ov(?:\s[^"']*)?["'][^>]*>((?:[^<]|<(?!\/?span\b)[^<>]*>)*)<\/span>/gi;
 
@@ -237,15 +238,16 @@ const QUERSTRICH = /<span\b[^>]*\bclass\s*=\s*["'](?:[^"']*\s)?ov(?:\s[^"']*)?["
  * Symbole aus hmHTML/hklHTML mit ihrem Ansagetext (#82), andere Querstriche als „x quer“ (#90). Das Ergebnis geht nur
  * in textContent (nie in innerHTML); die Tags werden trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist,
  * und verbliebene spitze Klammern fallen weg. Danach werden die Entitäten aus `esc()` und `&nbsp;` zurückübersetzt
- * (andere bleiben stehen; die Apps schreiben Zeichen wie „−“ oder „½“ direkt) und Leerraum vereinheitlicht (kein
- * Leerzeichen innerhalb von Klammern oder vor Satzzeichen).
+ * (andere bleiben stehen; die Apps schreiben Zeichen wie „−“ oder „½“ direkt) und Leerraum vereinheitlicht: kein
+ * Leerzeichen innerhalb von Klammern und Anführungszeichen, vor . , ! ? und vor einem Bindestrich vor einem Wort
+ * („4 quer-Achse“); „2 : 1“ bleibt.
  * @param {string} h
  */
 const ohneHTML = (h) => {
   let t = h.replace(SYMBOL, ' $1 ').replace(QUERSTRICH, ' $1 quer ');
   for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
   return t.replace(/[<>]/g, '').replace(/&(?:lt|gt|quot|#39|nbsp|amp);/g, (e) => ZEICHEN[e])
-    .replace(/\s+/g, ' ').replace(/([([{⟨]) /g, '$1').replace(/ ([)\]}⟩.,;:!?])/g, '$1').trim();
+    .replace(/\s+/g, ' ').replace(/([([{⟨„]) /g, '$1').replace(/ ([)\]}⟩“.,!?])/g, '$1').replace(/ -(?=\w)/g, '-').trim();
 };
 
 /**

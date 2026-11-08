@@ -84,7 +84,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   „minus vier“, und 222 oder (110) als Zahl. `role="img"` mit `aria-label` statt eines versteckten Texts (`.sr`), weil
   der Moodle-Export ohne das CSS der Familie auskommt (versteckter Text wäre dort sichtbar) und das Kopieren
   unverändert bleibt; dafür nennt ein Screenreader das Symbol zusätzlich „Grafik“. Gesprochen „quer“ (auch bei
-  Indizes) und „über“; Indizes ohne die Art der Klammer, weil der Satz sie meist schon nennt („die Form …“).
+  Indizes), „über“ und „Punkt“; Indizes ohne die Art der Klammer, weil der Satz sie meist schon nennt („die Form …“).
 - **Kontraste: Messung und Grenzen** (8.11.2026, #65, Leitfaden Abschn. 5.4): Gemessen wird die gerenderte Seite,
   weil die Paare aus den Variablen allein Mischungen, Deckkraft und Farben in Abbildungen nicht erfassen; die
   Variablen prüft zusätzlich ein Test ohne Browser (CI). Beschriftungen in Abbildungen mit 3 : 1 statt 4,5 : 1: WCAG

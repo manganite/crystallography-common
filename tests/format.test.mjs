@@ -33,4 +33,5 @@ test('Ansagetext für Screenreader (#82, Entscheidungen Thomas 8.11.2026): Zeich
   assert.equal(hklLabel([1, 0, 1], true), '1, 0, 1 quer, 1', 'Miller-Bravais mit i');
   assert.equal(hklLabel([10, -1, 0]), '10, 1 quer, 0', 'zweistellige Indizes bleiben eine Zahl');
   assert.match(hmHTML('<"'), /aria-label="&lt;, &quot;">&lt;&quot;</, 'Ansagetext maskiert');
+  assert.equal(hmHTML(''), '', 'keine Grafik ohne Namen');
 });
