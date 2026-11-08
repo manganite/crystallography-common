@@ -6,11 +6,15 @@ import { ERSTE_SCHRITTE, ABLAEUFE } from './hilfetexte.js';
 
 /** @import { HilfeDaten } from '../lib/common/js/hilfe-seite.js' */
 
-/** Modus: Kennung wie in hilfetexte.js, Name wie auf dem Tab, Link-Adresse, die ihn wählt. @type {HilfeDaten} */
+/**
+ * Modi: Kennung wie in hilfetexte.js, Name wie auf dem Tab, Link-Adresse, die ihn wählt (in einer App mit Modus in der
+ * Adresse, z. B. `#m=b`). Die Vorlage führt den Modus nicht in der Adresse; ihr Modus B hat keine Erste Schritte und
+ * fehlt hier deshalb. Die Adresse zeigt die App vor dem ersten Schritt (hier mit p2, der Schritt wählt p4mm).
+ * @type {HilfeDaten}
+ */
 export const HILFE = {
   modi: [
-    { id: 'a', name: 'Modus A', hash: '#g=p4mm' },
-    { id: 'b', name: 'Modus B', hash: '#g=p4mm' },
+    { id: 'a', name: 'Modus A', hash: '#g=p2' },
   ],
   ersteSchritte: ERSTE_SCHRITTE,
   experimente: ABLAEUFE,

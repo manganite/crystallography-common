@@ -5,7 +5,7 @@
 // Bilder: tools/hilfe-bilder.mjs erzeugt je Schritt mit `zeige` (Selektor des Bedienelements) einen Ausschnitt der
 // App im hellen Modus, das Element markiert, unter hilfe/<Ablauf>-<Nr>.png. pruefeHilfe() ist für die Tests der App.
 
-import { erzeugt } from './ablauf.js';
+import { erzeugt, ohneHTML } from './ablauf.js';
 
 /** @import { Ablauf, Experiment, Schritt } from './ablauf.js' */
 
@@ -26,9 +26,6 @@ import { erzeugt } from './ablauf.js';
 /** Name des Parameters, mit dem die Hilfeseite ein Experiment in der App startet (`index.html?experiment=<id>#…`). */
 export const EXPERIMENT_PARAM = 'experiment';
 
-/** Text ohne Auszeichnung (für Alternativtexte). @param {string} h */
-const ohneTags = (h) => h.replace(/<[^<>]*>/g, '').replace(/\s+/g, ' ').trim();
-
 /** Attributwert maskieren. @param {string} s */
 const attr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -36,8 +33,10 @@ const attr = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</
 const modusVon = (d, id) => d.modi.find((m) => m.id === id) ?? d.modi[0];
 
 /**
- * Die Bilder der Anleitungen: je Schritt mit `zeige` eines. Zustand vor dem Schritt = Adresse des letzten Schritts
- * davor, der eine hat, sonst die des Modus.
+ * Die Bilder der Anleitungen: je Schritt mit `zeige` eines. Zustand im Bild: `bild` des Schritts, sonst die Adresse
+ * des letzten Schritts davor, der eine hat (`handlung.hash` oder `bild`), sonst die des Modus. Aktionen der App
+ * (`handlung.aktion`) wirken nicht auf die Bilder; ein Schritt nach einer Aktion braucht deshalb `bild`, wenn sein
+ * Bild deren Wirkung zeigen soll.
  * @param {HilfeDaten} d
  * @returns {HilfeBild[]}
  */
@@ -47,6 +46,7 @@ export function hilfeBilder(d) {
   for (const a of d.ersteSchritte) {
     let adresse = modusVon(d, a.modus)?.hash ?? '';
     a.schritte.forEach((s, i) => {
+      if (s.bild) adresse = s.bild;
       if (s.zeige) bilder.push({ datei: `${a.id}-${i + 1}.png`, adresse, zeige: s.zeige, ablauf: a.id, nr: i + 1 });
       if (s.handlung?.hash) adresse = s.handlung.hash;
     });
@@ -55,7 +55,11 @@ export function hilfeBilder(d) {
 }
 
 /** Erster Schritt eines Experiments (bei einem erzeugten der zum ersten Parameter, als Beispiel). @param {Experiment} e @returns {Schritt | undefined} */
-const ersterSchritt = (e) => (erzeugt(e) ? e.make(e.params()[0])[0] : e.schritte[0]);
+const ersterSchritt = (e) => {
+  if (!erzeugt(e)) return e.schritte[0];
+  const p = e.params();
+  return p.length ? e.make(p[0])[0] : undefined;
+};
 
 /**
  * Inhalt der Hilfeseite als HTML: je Modus ein Kapitel mit den Erste Schritten als Anleitung und den Experimenten als
@@ -70,7 +74,7 @@ export function hilfeHTML(d) {
       const schritte = a.schritte.map((s, i) => {
         const bild = bilder.get(`${a.id}:${i + 1}`);
         const h = s.handlung;
-        const alt = `Ausschnitt der App${h ? `: ${ohneTags(h.text)}` : ''}, das Bedienelement ist markiert`;
+        const alt = `Ausschnitt der App${h ? `: ${ohneHTML(h.text)}` : ''}, das Bedienelement ist markiert`;
         return `<li class="hilfe-schritt">
   <p>${s.frage}</p>
   ${bild ? `<figure class="hilfe-bild"><img src="${attr(ordner + bild.datei)}" alt="${attr(alt)}" loading="lazy"></figure>` : ''}
@@ -87,8 +91,9 @@ ${schritte}
     }).join('\n');
     const liste = d.experimente.filter((e) => (e.modus ?? d.modi[0].id) === m.id).map((e) => {
       const s = ersterSchritt(e);
-            const href = `${app}?${EXPERIMENT_PARAM}=${encodeURIComponent(e.id)}${m.hash}`;
-      return `<li><b>${e.titel}</b>${erzeugt(e) ? ' <span class="hilfe-erzeugt" title="stellt immer neue Aufgaben">↻</span>' : ''}${s ? `<br>${s.frage}` : ''}
+          const href = `${app}?${EXPERIMENT_PARAM}=${encodeURIComponent(e.id)}${m.hash}`;
+      const neu = erzeugt(e) ? ' <span class="hilfe-erzeugt" aria-hidden="true">↻</span><span class="sr"> (immer neue Aufgaben)</span>' : '';
+      return `<li><b>${e.titel}</b>${neu}${s ? `<br>${s.frage}` : ''}
   <br><a class="to-app" href="${attr(href)}">In der App ausprobieren</a></li>`;
     }).join('\n');
     if (!anleitungen && !liste) return '';
@@ -117,7 +122,7 @@ export function hilfeInhalt(d) {
       ...(d.experimente.some((e) => (e.modus ?? d.modi[0].id) === m.id) ? [`<li><a href="#experimente-${attr(m.id)}">Experimente</a></li>`] : []),
     ];
     if (!unter.length) return '';
-    return `<li><a href="#modus-${attr(m.id)}">${m.name}</a>${unter.length ? `<ol>${unter.join('')}</ol>` : ''}</li>`;
+    return `<li><a href="#modus-${attr(m.id)}">${m.name}</a><ol>${unter.join('')}</ol></li>`;
   }).join('')}</ol>`;
 }
 
@@ -134,32 +139,38 @@ export function hilfeSeite(ziel, d, inhalt) {
     const setzen = () => { if (img.naturalWidth) img.style.width = `${img.naturalWidth / 2}px`; };
     if (img.complete) setzen(); else img.addEventListener('load', setzen, { once: true });
   }
-  // Sprung an einen Anker, nachdem der Inhalt steht
-  if (location.hash) document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView();
+  // Sprung an einen Anker, nachdem der Inhalt steht (ein fehlerhafter Anker wird übergangen)
+  let anker = location.hash.slice(1);
+  try { anker = decodeURIComponent(anker); } catch { /* wie geschrieben */ }
+  if (anker) document.getElementById(anker)?.scrollIntoView();
 }
 
 /**
  * In der App: Experiment aus der Adresse starten (`?experiment=<id>`, von der Hilfeseite). Entfernt den Parameter
- * aus der Adresse und gibt die gestartete Kennung zurück (sonst null); die App öffnet dann ihren Abschnitt
- * „Experimente“. `ids`: Kennungen der Experimente der App.
- * @param {{ starte: (id: string) => void }} karte @param {string[]} ids
+ * aus der Adresse und gibt die gestartete Kennung zurück (sonst null). `ids`: Kennungen der Experimente der App;
+ * `oeffnen`: macht die Karte sichtbar (Abschnitt „Experimente“ aufklappen), vor dem Start, damit der Fokus auf der
+ * Frage landet.
+ * @param {{ starte: (id: string) => void }} karte @param {string[]} ids @param {() => void} [oeffnen]
  * @returns {string | null}
  */
-export function experimentAusAdresse(karte, ids) {
+export function experimentAusAdresse(karte, ids, oeffnen) {
   const url = new URL(location.href);
   const id = url.searchParams.get(EXPERIMENT_PARAM);
   if (id === null) return null;
   url.searchParams.delete(EXPERIMENT_PARAM);
   history.replaceState(history.state, '', url.pathname + url.search + url.hash);
   if (!ids.includes(id)) return null;
+  oeffnen?.();
   karte.starte(id);
   return id;
 }
 
 /**
- * Prüft die Daten der Hilfeseite, für die Tests der App: Modi der Abläufe bekannt, Selektoren `#id` im HTML der App
- * vorhanden, zu jedem Bild eine Datei, keine überzähligen Bilder. Rückgabe: Liste der Fehler.
- * html: Inhalt von index.html; dateien: Namen der Dateien im Ordner der Bilder.
+ * Prüft die Daten der Hilfeseite, für die Tests der App: Modi der Abläufe bekannt, Adressen der Modi, jedes `zeige`
+ * beginnt mit `#id` und diese ID steht im HTML der App (der Rest des Selektors und Elemente, die erst das Programm
+ * erzeugt, prüft erst tools/hilfe-bilder.mjs), zu jedem Bild eine Datei, keine überzähligen Bilder, erzeugte
+ * Experimente mit Parametern. Rückgabe: Liste der Fehler. html: Inhalt von index.html; dateien: Namen der Dateien im
+ * Ordner der Bilder.
  * @param {HilfeDaten} d @param {{ html: string, dateien: string[] }} o
  */
 export function pruefeHilfe(d, { html, dateien }) {
@@ -174,9 +185,11 @@ export function pruefeHilfe(d, { html, dateien }) {
   const bilder = hilfeBilder(d);
   for (const b of bilder) {
     const id = b.zeige.match(/^#([\w-]+)/)?.[1];
-    if (id && !ids.has(id)) fehler.push(`${b.ablauf}, Schritt ${b.nr}: Element #${id} fehlt in der App`);
+    if (!id) fehler.push(`${b.ablauf}, Schritt ${b.nr}: zeige muss mit #id beginnen (${b.zeige})`);
+    else if (!ids.has(id)) fehler.push(`${b.ablauf}, Schritt ${b.nr}: Element #${id} fehlt in der App`);
     if (!dateien.includes(b.datei)) fehler.push(`${b.ablauf}, Schritt ${b.nr}: Bild ${b.datei} fehlt (node tools/common/hilfe-bilder.mjs)`);
   }
+  for (const e of d.experimente) if (erzeugt(e) && !e.params().length) fehler.push(`${e.id}: keine Parameter`);
   const erwartet = new Set(bilder.map((b) => b.datei));
   for (const f of dateien) if (f.endsWith('.png') && !erwartet.has(f)) fehler.push(`überzähliges Bild ${f}`);
   return fehler;

@@ -13,6 +13,8 @@ const DATEN = {
       { frage: '<b>Gruppe wählen.</b>', handlung: { text: '<i>p</i>4 wählen', hash: '#m=a&g=p4' }, zeige: '#picker' },
       { frage: 'Darstellung ändern.', handlung: { text: 'öffnen', aktion: 'darstellung' }, zeige: '#sec-view' },
       { frage: 'Ohne Bild.' },
+      { frage: 'Nach einer Aktion.', bild: '#m=a&g=p6', zeige: '#picker' },
+      { frage: 'Danach.', zeige: '#picker' },
     ] },
     { id: 'einstieg-b', modus: 'b', titel: 'Erste Schritte B', schritte: [{ frage: 'B', zeige: '#tab-b' }] },
   ],
@@ -26,6 +28,9 @@ test('Bilder: je Schritt mit zeige eines; Adresse = letzter Zustand davor, sonst
   assert.deepEqual(hilfeBilder(DATEN), [
     { datei: 'einstieg-a-1.png', adresse: '#m=a', zeige: '#picker', ablauf: 'einstieg-a', nr: 1 },
     { datei: 'einstieg-a-2.png', adresse: '#m=a&g=p4', zeige: '#sec-view', ablauf: 'einstieg-a', nr: 2 },
+    // nach einer Aktion: Adresse aus bild, sie gilt auch für die folgenden Schritte
+    { datei: 'einstieg-a-4.png', adresse: '#m=a&g=p6', zeige: '#picker', ablauf: 'einstieg-a', nr: 4 },
+    { datei: 'einstieg-a-5.png', adresse: '#m=a&g=p6', zeige: '#picker', ablauf: 'einstieg-a', nr: 5 },
     { datei: 'einstieg-b-1.png', adresse: '#m=b', zeige: '#tab-b', ablauf: 'einstieg-b', nr: 1 },
   ]);
 });
@@ -40,10 +45,10 @@ test('Inhalt: Anleitungen mit Bildern und Links, Experimente als Liste, leere Mo
   // ein Schritt mit Aktion hat keinen Link (die Aktion steht nicht in der Adresse)
   assert.equal(h.match(/In der App zeigen/g)?.length, 1);
   assert.match(h, /href="index\.html\?experiment=spiegel#m=a">In der App ausprobieren/);
-  assert.match(h, /<b>Erzeugt<\/b> <span class="hilfe-erzeugt"[^>]*>↻<\/span><br>Bei 3\?/);
+  assert.match(h, /<b>Erzeugt<\/b> <span class="hilfe-erzeugt" aria-hidden="true">↻<\/span><span class="sr"> \(immer neue Aufgaben\)<\/span><br>Bei 3\?/);
   // keine Auflösung auf der Hilfeseite
   assert.doesNotMatch(h, /Wie viele\?[\s\S]*<li>2/);
-  assert.equal(h.match(/<img /g)?.length, 3);
+  assert.equal(h.match(/<img /g)?.length, 5);
   const inhalt = hilfeInhalt(DATEN);
   assert.match(inhalt, /href="#modus-a">Modus A<\/a><ol><li><a href="#einstieg-a">Erste Schritte<\/a><\/li><li><a href="#experimente-a">Experimente/);
   assert.doesNotMatch(inhalt, /modus-c/);
@@ -52,17 +57,30 @@ test('Inhalt: Anleitungen mit Bildern und Links, Experimente als Liste, leere Mo
 
 test('Prüfung: fehlende Elemente, Bilder, überzählige Bilder, unbekannte Modi', () => {
   const html = '<div id="picker"></div><details id="sec-view"></details><button id="tab-b"></button>';
-  const dateien = ['einstieg-a-1.png', 'einstieg-a-2.png', 'einstieg-b-1.png'];
+  const dateien = ['einstieg-a-1.png', 'einstieg-a-2.png', 'einstieg-a-4.png', 'einstieg-a-5.png', 'einstieg-b-1.png'];
   assert.deepEqual(pruefeHilfe(DATEN, { html, dateien }), []);
-  const f = pruefeHilfe({ ...DATEN, experimente: [{ ...DATEN.experimente[0], modus: 'x' }], modi: [...DATEN.modi, { id: 'd', name: 'D', hash: 'm=d' }] },
-    { html: html.replace('id="tab-b"', ''), dateien: [...dateien.slice(1), 'alt.png'] });
+  const leer = { id: 'leer', titel: 'Leer', params: () => [], make: () => [] };
+  const ohneId = { id: 'einstieg-c', modus: 'a', titel: 'C', schritte: [{ frage: 'C', zeige: '.tabs button' }] };
+  const f = pruefeHilfe({ ...DATEN, ersteSchritte: [...DATEN.ersteSchritte, ohneId], experimente: [{ ...DATEN.experimente[0], modus: 'x' }, leer], modi: [...DATEN.modi, { id: 'd', name: 'D', hash: 'm=d' }] },
+    { html: html.replace('id="tab-b"', ''), dateien: [...dateien.slice(1), 'einstieg-c-1.png', 'alt.png'] });
   assert.deepEqual(f, [
     'spiegel: unbekannter Modus x',
     'Modus d: Adresse muss mit # beginnen',
     'einstieg-a, Schritt 1: Bild einstieg-a-1.png fehlt (node tools/common/hilfe-bilder.mjs)',
     'einstieg-b, Schritt 1: Element #tab-b fehlt in der App',
+    'einstieg-c, Schritt 1: zeige muss mit #id beginnen (.tabs button)',
+    'leer: keine Parameter',
     'überzähliges Bild alt.png',
   ]);
+  // ein erzeugtes Experiment ohne Parameter erscheint ohne Frage, statt make(undefined) aufzurufen
+  assert.match(hilfeHTML({ ...DATEN, experimente: [{ ...leer, modus: 'a' }] }), /<b>Leer<\/b>[^\n]*\n {2}<br><a class="to-app"/);
+});
+
+test('Alternativtext: Querstriche, Symbole und Zeichen wie in der Ansage', () => {
+  const h = hilfeHTML({ modi: [DATEN.modi[0]], experimente: [], ersteSchritte: [{ id: 'q', modus: 'a', titel: 'Q', schritte: [
+    { frage: 'x', handlung: { text: '<span class="ov">4</span>&nbsp;&amp; <span role="img" aria-label="4 quer, 2, m"><span class="ov">4</span>2m</span> wählen', hash: '#m=a' }, zeige: '#picker' },
+  ] }] });
+  assert.match(h, /alt="Ausschnitt der App: 4 quer &amp; 4 quer, 2, m wählen, das Bedienelement ist markiert"/);
 });
 
 test('Experiment aus der Adresse: startet bekannte, entfernt den Parameter immer', () => {
@@ -75,11 +93,11 @@ test('Experiment aus der Adresse: startet bekannte, entfernt den Parameter immer
     let neu = '';
     g.location = new URL(href);
     g.history = { state: null, replaceState: (/** @type {unknown} */ _s, /** @type {string} */ _t, /** @type {string} */ u) => { neu = u; } };
-    const id = experimentAusAdresse({ starte: (i) => gestartet.push(i) }, ['spiegel']);
+    const id = experimentAusAdresse({ starte: (i) => gestartet.push(i) }, ['spiegel'], () => gestartet.push('offen'));
     return { id, gestartet, neu };
   };
   try {
-    assert.deepEqual(lauf(`http://x/app/index.html?${EXPERIMENT_PARAM}=spiegel&a=1#m=a`), { id: 'spiegel', gestartet: ['spiegel'], neu: '/app/index.html?a=1#m=a' });
+    assert.deepEqual(lauf(`http://x/app/index.html?${EXPERIMENT_PARAM}=spiegel&a=1#m=a`), { id: 'spiegel', gestartet: ['offen', 'spiegel'], neu: '/app/index.html?a=1#m=a' });
     assert.deepEqual(lauf(`http://x/index.html?${EXPERIMENT_PARAM}=unbekannt#m=a`), { id: null, gestartet: [], neu: '/index.html#m=a' });
     assert.deepEqual(lauf('http://x/index.html#m=a'), { id: null, gestartet: [], neu: '' });
   } finally {

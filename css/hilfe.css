@@ -19,8 +19,6 @@ article figure.hilfe-bild { margin: 8px 0 10px; padding: 0; border: 0; backgroun
 .hilfe-liste > li:last-child { border-bottom: 1px solid var(--line); }
 .hilfe-erzeugt { color: var(--muted); }
 
-a.to-app { font-weight: 600; color: var(--accent); }
-
 @media print {
   .hilfe-schritt, .hilfe-liste > li { break-inside: avoid; }
 }

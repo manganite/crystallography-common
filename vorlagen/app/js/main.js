@@ -104,7 +104,12 @@ function init() {
   const INTRO = 'muster-intro';
   let gesehen = false;
   try { gesehen = localStorage.getItem(INTRO) === '1'; } catch { /* ohne Speicher weiter */ }
-  const anwenden = (/** @type {string} */ hash) => { const g = new URLSearchParams(hash.slice(1)).get('g'); if (g) gruppe = g; alles(); };
+  // Nur bekannte Gruppen übernehmen (in einer App: die Prüffunktion der Adresse, Leitfaden Abschn. 5.2)
+  const anwenden = (/** @type {string} */ hash) => {
+    const g = new URLSearchParams(hash.slice(1)).get('g');
+    if (g && SYSTEME.some(([, gs]) => gs.includes(g))) gruppe = g;
+    alles();
+  };
   const adresse = () => `#g=${gruppe}`;
   const skriptUrl = (/** @type {string} */ anker) => `skript.html#${anker}`;
   /** @param {boolean} an */
@@ -117,10 +122,12 @@ function init() {
   const einstieg = ablaufKarte($('ablauf'), ERSTE_SCHRITTE, { anwenden, adresse, aktionen, skriptUrl, liste: false, beiAbschluss: introZu });
   const experimente = ablaufKarte($('experimente'), ABLAEUFE, { anwenden, adresse, aktionen, skriptUrl, speicher: 'muster-experimente' });
   einstieg.modus('a'); experimente.modus('a');
+  // Zustand aus der Adresse (in einer App über ihre Prüffunktion, Leitfaden Abschn. 5.2)
+  if (location.hash) anwenden(location.hash);
   if (!gesehen && !location.hash) intro(true);
   $('intro-close').addEventListener('click', introZu);
   // Von der Hilfeseite: „In der App ausprobieren“ startet ein Experiment (index.html?experiment=<id>#…)
-  if (experimentAusAdresse(experimente, ABLAEUFE.map((a) => a.id))) aktionen.experimente();
+  experimentAusAdresse(experimente, ABLAEUFE.map((a) => a.id), aktionen.experimente);
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
   $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));

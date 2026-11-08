@@ -4,10 +4,10 @@
 //   node tools/common/hilfe-bilder.mjs            (im Ordner der App)
 //
 // Liest die Daten der Hilfeseite aus js/hilfe-daten.js der App (Export HILFE, Typ HilfeDaten aus
-// lib/common/js/hilfe-seite.js), öffnet die App je Bild mit der Adresse des Zustands vor dem Schritt, klappt
-// geschlossene Abschnitte um das Element auf, umrahmt es und schneidet den umgebenden Baustein aus (Karte, Tafel oder
-// Kopfzeile, mit Rand). Ausgabe: <bilder>/<Ablauf>-<Nr>.png (Standard hilfe/); Bilder, die nicht mehr
-// gebraucht werden, löscht das Werkzeug. Breite 1280 px, deviceScaleFactor 2, Service Worker gesperrt.
+// lib/common/js/hilfe-seite.js), öffnet die App je Bild mit seiner Adresse (`hilfeBilder`: `bild` des Schritts,
+// sonst die letzte davor), klappt geschlossene Abschnitte um das Element auf, umrahmt es und schneidet den
+// umgebenden Baustein aus (Karte, Tafel oder Kopfzeile, mit Rand). Ausgabe: <bilder>/<Ablauf>-<Nr>.png (Standard hilfe/); Bilder, die nicht mehr
+// gebraucht werden oder nicht entstehen, löscht das Werkzeug. Breite 1280 px, deviceScaleFactor 2, Service Worker gesperrt.
 //
 // Braucht Playwright mit Chromium (wie tools/skript-pdf.mjs); mit KONTRASTE_CHROME=<Pfad> ein anderer Chromium.
 
@@ -85,11 +85,15 @@ export async function hilfeBilderErzeugen({ root, daten, chrome = process.env.KO
           const rechts = Math.min(innerWidth, Math.max(box.right, r.right + 8) + rand), unten = Math.min(innerHeight, Math.max(box.bottom, r.bottom + 8) + rand);
           return { x: links, y: oben, width: rechts - links, height: unten - oben };
         }, { sel: b.zeige, baustein: BAUSTEIN, rand: RAND, marke: MARKE });
-        if (!rahmen) { fehler.push(`${b.ablauf}, Schritt ${b.nr}: kein Element ${b.zeige} unter ${b.adresse}`); continue; }
-        if (rahmen.width < 1 || rahmen.height < 1) { fehler.push(`${b.ablauf}, Schritt ${b.nr}: ${b.zeige} ist nicht sichtbar`); continue; }
+        if (!rahmen) throw new Error(`kein Element ${b.zeige} unter ${b.adresse}`);
+        if (rahmen.width < 1 || rahmen.height < 1) throw new Error(`${b.zeige} ist nicht sichtbar`);
         await page.screenshot({ path: join(ordner, b.datei), clip: rahmen, animations: 'disabled' });
         dateien.push(b.datei);
         if (konsole.length) fehler.push(`${b.ablauf}, Schritt ${b.nr}: Fehler der Seite: ${konsole.join('; ')}`);
+      } catch (e) {
+        // ein altes Bild nicht stehen lassen: pruefeHilfe() meldet das fehlende, ein veraltetes bliebe unbemerkt
+        rmSync(join(ordner, b.datei), { force: true });
+        fehler.push(`${b.ablauf}, Schritt ${b.nr}: ${e instanceof Error ? e.message : String(e)}`);
       } finally {
         await ctx.close();
       }
