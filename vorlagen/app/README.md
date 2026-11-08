@@ -79,7 +79,8 @@ Der Zustand steht lesbar in der Adresse, z. B. `#m=a&g=p4mm`. Geschrieben wird n
 | Datei | Inhalt |
 |---|---|
 | `index.html`, `js/main.js` | Oberfläche und Bedienung der App |
-| `js/hilfetexte.js` | Texte der Tooltips und ⓘ-Erklärungen |
+| `js/hilfetexte.js` | Texte der Tooltips und ⓘ-Erklärungen, Erste Schritte und Experimente |
+| `hilfe.html`, `js/hilfe.js`, `js/hilfe-daten.js`, `hilfe/` | Hilfeseite: Anleitungen und Experimente aus `js/hilfetexte.js`, Bilder mit `node tools/common/hilfe-bilder.mjs` |
 | `skript.html`, `js/skript.js` | Skript; Abbildungen aus dem Code der App |
 | `quiz.html`, `js/quiz.js`, `js/quiz-kapitel.js`, `js/quiz-bank.js` | Quiz: Ablauf aus `lib/common/`, Kapitel und Fragen dieser App |
 | `tools/moodle-export.mjs`, `tools/skript-pdf.mjs` | Moodle-Export und PDF des Skripts |

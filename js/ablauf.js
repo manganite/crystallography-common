@@ -23,9 +23,10 @@ import { leererFortschritt, fortschrittAus, vermerken, vorrang } from './quiz-co
  *   (Index als Schlüssel) zur id eines Schritts. Die Antwort lässt sich ändern.
  * - Text: nur frage (z. B. ein Ergebnis), dazu beobachtung oder erklaerung.
  * In einem Ablauf mit Verzweigung endet ein Schritt ohne weiter den Ablauf; sonst geht es der Reihe nach weiter.
- * skript: Anker im Skript (ohne #).
+ * skript: Anker im Skript (ohne #). zeige: CSS-Selektor des Bedienelements, das die Hilfeseite im Bild des Schritts
+ * markiert (Erste Schritte, `hilfe-seite.js`); in der App ohne Wirkung.
  * @typedef {{ id?: string, frage: string, vermutung?: string[], richtig?: number, handlung?: Handlung,
- *   beobachtung?: string, erklaerung?: string, skript?: string, weiter?: Record<string, string> }} Schritt
+ *   beobachtung?: string, erklaerung?: string, skript?: string, weiter?: Record<string, string>, zeige?: string }} Schritt
  */
 /**
  * Ablauf (Lernexperiment) mit festen Schritten. modus: Modus der App, in dem er angeboten wird. variante: bei

@@ -5,6 +5,7 @@ import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
 import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik, element, elemente, modusTabs } from '../lib/common/js/seite.js';
 import { ablaufKarte } from '../lib/common/js/ablauf.js';
+import { experimentAusAdresse } from '../lib/common/js/hilfe-seite.js';
 import { TIPS, SECTIONS, LABELS, ABLAEUFE, ERSTE_SCHRITTE } from './hilfetexte.js';
 import { VERSION } from './version.js';
 
@@ -98,8 +99,8 @@ function init() {
     figKnoepfe.forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.fig === b.dataset.fig)));
   }));
   // Erste Schritte (kurz, zur Bedienung) und Experimente (eigener Abschnitt) mit derselben Mechanik (ablauf.js).
-  // Erste Schritte beim ersten Besuch, nicht bei Aufruf über einen Link; wegklickbar, über „?“ wieder.
-  // Handlungen setzen den Zustand über die Adresse.
+  // Erste Schritte beim ersten Besuch, nicht bei Aufruf über einen Link; wegklickbar, wieder nach „Alle Einstellungen
+  // zurücksetzen“. „?“ führt zur Hilfeseite (hilfe.html). Handlungen setzen den Zustand über die Adresse.
   const INTRO = 'muster-intro';
   let gesehen = false;
   try { gesehen = localStorage.getItem(INTRO) === '1'; } catch { /* ohne Speicher weiter */ }
@@ -107,7 +108,7 @@ function init() {
   const adresse = () => `#g=${gruppe}`;
   const skriptUrl = (/** @type {string} */ anker) => `skript.html#${anker}`;
   /** @param {boolean} an */
-  const intro = (an) => { $('intro').hidden = !an; $('help-open').setAttribute('aria-expanded', String(an)); if (!an) einstieg.liste(); };
+  const intro = (an) => { $('intro').hidden = !an; if (!an) einstieg.liste(); };
   const introZu = () => { intro(false); try { localStorage.setItem(INTRO, '1'); } catch { /* ohne Speicher weiter */ } };
   const aktionen = {
     darstellung: () => { abschnitt('sec-view').open = true; },
@@ -118,7 +119,8 @@ function init() {
   einstieg.modus('a'); experimente.modus('a');
   if (!gesehen && !location.hash) intro(true);
   $('intro-close').addEventListener('click', introZu);
-  $('help-open').addEventListener('click', () => intro(Boolean($('intro').hidden)));
+  // Von der Hilfeseite: „In der App ausprobieren“ startet ein Experiment (index.html?experiment=<id>#…)
+  if (experimentAusAdresse(experimente, ABLAEUFE.map((a) => a.id))) aktionen.experimente();
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
   $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));

@@ -22,10 +22,12 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `app.css` | Werkbank der App: Anordnung der Tafeln, Seitenleiste mit Karten, Bedienelemente, einklappbare Abschnitte, Tafeln, Legende, Kenndaten, Erste Schritte, Tooltip, ⓘ-Erklärungen, Telefon und Touch |
 | | `skript.css` | Skript: Inhaltsverzeichnis, Lesebreite, Kästen (Lernziele, Merke, Zusammenfassung, Grundlagen, Vertiefung, In der App), Vertiefungskapitel, Abbildungsrahmen, Tabellen, Quellen |
 | | `quiz.css` | Quiz: Auswahl (Stufen, Kapitel, Anzahl), Frage, Antworten, Rückmeldung, Auswertung |
+| | `hilfe.css` | Hilfeseite (nach `skript.css`): Anleitungen mit Bildern der Bedienung, Liste der Experimente |
 | `fonts/` | | IBM Plex Sans und Mono, Source Serif 4 (selbst gehostet, SIL Open Font License) |
 | `js/` | `format.js` | Hermann-Mauguin-Symbole und Millersche Indizes mit Querstrich |
 | | `ablauf.js` | Geführte Abläufe: Lernexperimente im Abschnitt „Experimente“ (Frage, Vermutung, Handlung, Beobachtung, Vorher/Nachher, Stand wie im Quiz, erzeugte Varianten) und kurze Erste Schritte (`liste: false`), Verzweigung für die Bestimmung; `pruefeAblaeufe` für die Tests der App |
 | | `help.js` | Mechanik der Hilfen: Tooltips (Laptop), ⓘ-Erklärungen je Abschnitt (Touch); Texte liefert die App |
+| | `hilfe-seite.js` | Hilfeseite: Erste Schritte aller Modi als Anleitungen mit Bildern, Experimente als Liste mit „In der App ausprobieren“ (`?experiment=<id>`, in der App `experimentAusAdresse`); `pruefeHilfe` für die Tests der App |
 | | `quiz-core.js` | Quiz-Logik ohne Seite: Kandidaten, Ziehen nach Stufen und Vorrang, Mischen, Auswerten, Fortschritt |
 | | `quiz-seite.js` | Quiz-Seite: Auswahl, Fragen mit sofortiger Rückmeldung, Auswertung, Fortschritt im Browser |
 | | `skript-kern.js` | Skript: Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
@@ -36,6 +38,8 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `check.mjs` | Kopie in einer App gegen ihr Manifest prüfen |
 | | `moodle.mjs` | Quizfragen als Moodle-XML |
 | | `skript-pdf.mjs` | Skript als PDF (A4) mit Playwright |
+| | `hilfe-bilder.mjs` | Bilder der Hilfeseite mit Playwright: Ausschnitt der App je Schritt mit `zeige`, Bedienelement umrahmt (in der App `node tools/common/hilfe-bilder.mjs`) |
+| | `kontraste.mjs` | Kontraste der gerenderten Seiten nach WCAG 2.2 messen (unten) |
 | | `server.mjs` | kleiner statischer Webserver für Werkzeuge und Tests; direkt gestartet bedient er den Arbeitsordner wie GitHub Pages |
 | `vorlagen/` | | Ausgangspunkt für eine neue App (Seiten, Service Worker, Workflows, Tests) |
 | `fragenliste/` | `extract.mjs`, `vorlage.html` | Gemeinsame Fragenliste aller Apps (Artifact in claude.ai): Fragen aus `tools/quiz-quelle.mjs` jeder App, Prüfung der Entwürfe, Rückmeldungen. Wird nicht in die Apps kopiert. |

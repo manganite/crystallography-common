@@ -6,6 +6,14 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Hilfeseite** (#24, Leitfaden 5.3): `js/hilfe-seite.js` baut aus den Daten der App (`js/hilfe-daten.js`: Modi, Erste Schritte, Experimente) die Seite `hilfe.html`: je Modus die Erste Schritte als Anleitung mit Bildern der Bedienung und „In der App zeigen“, danach die Experimente als Liste mit „In der App ausprobieren“ (`?experiment=<id>`; in der App startet `experimentAusAdresse` das Experiment). Stile in `css/hilfe.css` (nach `skript.css`). `tools/hilfe-bilder.mjs` erzeugt die Bilder (Ausschnitt um das Bedienelement aus `zeige`, umrahmt, hell); `pruefeHilfe` prüft im Test der App Bilder und Bedienelemente. Neues Feld `zeige` im Schritt (`ablauf.js`). Vorlage mit `hilfe.html`, `js/hilfe.js`, `js/hilfe-daten.js`, Bildern unter `hilfe/`. Für die Apps: Seite, Daten und Bilder nach der Vorlage anlegen, `zeige` in den Erste Schritten ergänzen, „?“ als Link auf `hilfe.html` (statt Erste Schritte), `experimentAusAdresse` aufrufen, `sw.js` (Seite in `PAGES`, Dateien und Bilder in `FILES`), `deploy.yml` (`hilfe.html`, `hilfe`) und den Test aus `tests/common.test.mjs` der Vorlage übernehmen.
+
+### Geändert
+
+- **„?“ führt zur Hilfeseite** (Leitfaden 5.1, 5.3; Entscheidung Thomas, 4.11.2026): Die Erste Schritte öffnet es nicht mehr; sie erscheinen beim ersten Aufruf eines Modus und nach „Alle Einstellungen zurücksetzen“. `a.helpbtn` in `css/app.css` für den Link. Für die Apps: siehe oben.
+
 ## [0.14.0] - 2026-11-08
 
 Barrierefreiheit: Screenreader lesen HM-Symbole, Indizes und Querstriche genauer; Kontraste nach WCAG 2.2 gemessen und die Farben (hell) angepasst. Für die Apps: eigene Eingabefelder mit `var(--field)` umranden; Befunde in den eigenen Abbildungen nach plane-groups#114 und stereography#119; sonst nichts anzupassen.

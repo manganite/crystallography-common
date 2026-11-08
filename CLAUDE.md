@@ -147,7 +147,13 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   mitbestimmen, was ein Tippen bewirkt. Thomas wollte die Unterscheidung im Leitfaden statt als Ausnahme in
   einer App, damit die Apps nicht auseinanderdriften.
 - **Hilfeseite** (4.11.2026, Leitfaden Abschn. 5.3): Tooltips erklären einzelne Bedienelemente, das
-  Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst.
+  Skript die Begriffe; dazwischen blieb unklar, wie man mit der App eine Aufgabe löst. Inhalt (Thomas, 8.11.2026,
+  #24): die Erste Schritte aller Modi als bebilderte Anleitungen, die Experimente nur als Liste mit Frage und „In
+  der App ausprobieren“; Bilder als Ausschnitt um das Bedienelement mit Rahmen. Gründe des Vorschlags: Die
+  Experimente leben vom Vermuten, eine Auflösung auf der Hilfeseite verriete sie; auf einem Bild der ganzen App sieht
+  man nicht, wohin man tippen soll. Welches Element, sagt `zeige` im Schritt, damit Text und Bild an einem Ort stehen.
+  Start eines Experiments per `?experiment=<id>` statt im Hash, damit die Link-Adressen der Apps (Schnittstelle)
+  unberührt bleiben; die App entfernt den Parameter gleich wieder. Hilfe nach typischen Fragen später (#110).
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären
