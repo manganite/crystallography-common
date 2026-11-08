@@ -37,8 +37,15 @@ Repo-Name = Pfad auf GitHub Pages:
 <arbeitsordner>/crystallography-common
 <arbeitsordner>/stereography
 <arbeitsordner>/plane-groups
+<arbeitsordner>/symcrys        eigenes Projekt (#99)
+<arbeitsordner>/birss-app      eigenes Projekt, baut auf symcrys auf
 ```
 
+- **symcrys und birss-app** liegen im selben Arbeitsordner, sind aber eigene Projekte mit eigenen Regeln
+  (englisch; für sie gelten weder diese Datei noch der Leitfaden). Daneben liegen sie, weil die Apps symcrys
+  wie common als Kopie aus dem Nachbarordner übernehmen werden (#99) und birss-app eine unveröffentlichte
+  Version mit `npm link ../symcrys` ausprobieren kann. Sie gehören nicht in den Workspace der Familie: in
+  einem eigenen VS-Code-Fenster öffnen (`code .` im Ordner), sonst lädt die Erweiterung diese Datei.
 - **VS Code:** `crystallography-common/kristallographie.code-workspace` öffnen (alle Repos in einem
   Fenster, Kopien des gemeinsamen Codes schreibgeschützt). Liegt in common, damit sie versioniert und
   überall gleich ist; eine neue App ergänzt dort ihren Ordner.
@@ -53,7 +60,8 @@ Repo-Name = Pfad auf GitHub Pages:
   funktionieren).
 - Den Arbeitsordner nicht in einen synchronisierten Ordner legen (iCloud, OneDrive, Dropbox): verträgt
   sich nicht mit Git.
-- In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/manganite/<name>`).
+- In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/manganite/<name>`), auch symcrys und
+  birss-app, wenn die Aufgabe sie betrifft.
 - Eine Einstiegsseite für die Familie ist geplant (Issue #12); sie käme als weiteres Repo daneben.
 
 ## Arbeitsweise mit Thomas
