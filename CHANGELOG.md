@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Behoben
+
+- **Tooltips auf Laptops mit Touchscreen** (`help.js`, #114): Tooltips erschienen nur, wenn der Browser die Maus als primäres Zeigegerät meldete (`(hover: hover) and (pointer: fine)`). Edge und Chrome unter Windows melden auf Laptops mit Touchscreen oft `pointer: coarse`, auch mit angeschlossener Maus; dann fehlten alle Tooltips (gemeldet von Thomas, Edge mit Maus). Massgebend ist jetzt das Gerät der letzten Zeigerbewegung; beim Tippen bleibt der Tooltip weiter aus. Für die Apps: nichts anzupassen.
+
 ## [0.15.0] - 2026-11-08
 
 Hilfeseite (#24): Anleitungen aus den Erste Schritten mit Bildern der Bedienung, Experimente als Liste; „?“ führt zur Hilfeseite. Für die Apps: Hilfeseite nach der Vorlage anlegen (Einzelheiten unter „Neu“).
