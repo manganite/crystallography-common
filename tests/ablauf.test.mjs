@@ -1,7 +1,7 @@
 // Geführte Abläufe (js/ablauf.js, #87): Prüfung der Daten, Verzweigung und das HTML eines Schritts.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
+import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ablaufKarte, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
 import { leererFortschritt, vermerken, fortschrittAus } from '../js/quiz-core.js';
 
 /** @import { Ablauf, Erzeugt } from '../js/ablauf.js' */
@@ -196,6 +196,22 @@ test('ansage: Auflösung und Beobachtung als Text ohne HTML', () => {
   assert.equal(ansage(neuerStand(LINEAR)), '');
 });
 
+test('ansage: Querstrich als „−“ wie in der Darstellung für Screenreader, Entitäten aus esc() als Zeichen (#90)', () => {
+  /** @type {Ablauf} */
+  const a = {
+    id: 'q', titel: 'Querstrich',
+    schritte: [{
+      frage: 'Welche Gruppe?', vermutung: ['<span class="ov">4</span>2<i>m</i>', '4'], richtig: 0,
+      handlung: { text: 'Zeigen', hash: '#g=-42m' },
+      beobachtung: '(<span class="ov">1</span><span class="ov">1</span>1) und (1<span class="ov">1</span>0) &amp; m<span class="ov">3</span>m',
+    }],
+  };
+  const st = neuerStand(a);
+  st.gewaehlt[0] = 1; st.gezeigt.add(0);
+  // so in stereography gemessen: „Deine Vermutung: 4.“ und „(111) …“ statt der Drehinversion bzw. der negativen Indizes
+  assert.equal(ansage(st), 'Zutreffend: −42m. Deine Vermutung: 4. (−1−11) und (1−10) & m−3m');
+});
+
 test('Erste Schritte (liste: false): Bedienschritte ohne Vermutung, überspringbar, ohne „Alle Experimente“', () => {
   /** @type {Ablauf} */
   const einstieg = { id: 'einstieg', titel: 'Erste Schritte', schritte: [
@@ -265,3 +281,50 @@ test('Erzeugte Abläufe: Schlüssel id:parameter, Liste mit ↻ und dem zuletzt 
   assert.doesNotMatch(schrittHTML(Object.assign(neuerStand(LINEAR), { weg: [0, 1], gezeigt: new Set([0, 1]) })), /data-nav="neu"/, 'feste Abläufe ohne');
 });
 
+
+test('ablaufKarte: Live-Region beim Wechsel des Modus geleert, ausstehende Ansage entfällt (#90)', async () => {
+  // kleine Nachbildung des DOM: nur, was ablaufKarte für Klicks und die Ansage braucht
+  /** @type {Record<string, any>} */
+  const g = globalThis;
+  class HTMLElement {}
+  class HTMLButtonElement extends HTMLElement {
+    /** @param {Record<string, string>} dataset */
+    constructor(dataset) { super(); this.dataset = dataset; this.disabled = false; }
+    getAttribute() { return null; }
+    closest() { return this; }
+  }
+  /** @type {Map<number, () => void>} */
+  const rahmen = new Map();
+  let nr = 0;
+  Object.assign(g, {
+    HTMLElement, HTMLButtonElement,
+    requestAnimationFrame: (/** @type {() => void} */ f) => { rahmen.set(++nr, f); return nr; },
+    cancelAnimationFrame: (/** @type {number} */ n) => { rahmen.delete(n); },
+  });
+  const malen = () => { const f = [...rahmen.values()]; rahmen.clear(); f.forEach((x) => x()); };
+  try {
+    const inhalt = { innerHTML: '', querySelector: () => null };
+    const live = { textContent: '' };
+    /** @type {(e: { target: any }) => void} */
+    let klick = () => {};
+    const el = {
+      /** @param {string} _h Gerüst aus Inhalt und Live-Region (hier schon vorhanden) */
+      set innerHTML(_h) { /* nichts */ },
+      firstElementChild: inhalt, lastElementChild: live,
+      addEventListener: (/** @type {string} */ _t, /** @type {any} */ f) => { klick = f; },
+    };
+    const k = ablaufKarte(/** @type {any} */ (el), [LINEAR, { ...LINEAR, id: 'b-lage', modus: 'b' }], { anwenden: () => {}, adresse: () => '#' });
+    const druecke = (/** @type {Record<string, string>} */ d) => klick({ target: new HTMLButtonElement(d) });
+    k.modus('a'); k.starte('lage');
+    druecke({ antwort: '1' }); druecke({ tun: '1' }); malen();
+    assert.match(live.textContent, /^Zutreffend: weniger\./);
+    k.modus('b');
+    assert.equal(live.textContent, '', 'Text des vorigen Modus geleert');
+    // ausstehende Ansage: ein Moduswechsel vor dem nächsten Bild verwirft sie
+    k.modus('a'); k.starte('lage'); druecke({ antwort: '0' }); druecke({ tun: '1' });
+    k.modus('b'); malen();
+    assert.equal(live.textContent, '');
+  } finally {
+    for (const n of ['HTMLElement', 'HTMLButtonElement', 'requestAnimationFrame', 'cancelAnimationFrame']) delete g[n];
+  }
+});
