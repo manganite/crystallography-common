@@ -11,6 +11,7 @@
   --ink: #15202b;
   --muted: #586472;
   --line: #d2d9e0;
+  --field: #808b96; /* Grenze von Eingabefeldern (select), 3 : 1 nach WCAG 1.4.11 */
   --accent: #0b63b6;
   --accent2: #bc3f0c;
   --upper: #1d4f91;
@@ -30,7 +31,7 @@
   --dir2: #2b7a53;
   --dir3: #9b5f07;
   /* Formfarben der Beispielkristalle: bewusst verschieden von den Blickrichtungsfarben (dir1–3) */
-  --fc0: #2b6cb0; --fc1: #c53030; --fc2: #b83280; --fc3: #2c7a7b; --fc4: #dd6b20; --fc5: #7c8a12; --fc6: #8b5a2b; --fc7: #718096;
+  --fc0: #2b6cb0; --fc1: #c53030; --fc2: #b83280; --fc3: #2c7a7b; --fc4: #b6581a; --fc5: #6d7910; --fc6: #8b5a2b; --fc7: #667488;
   --font-display: 'Source Serif 4', 'Georgia', 'Times New Roman', serif;
   --font-ui: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
@@ -38,7 +39,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0e1318; --surface: #151c23; --paper: #1a222b; --ink: #e5ebf1; --muted: #98a6b4;
-    --line: #2a3541; --accent: #4fa3ff; --accent2: #ff8a4c; --upper: #79b0ff; --mirror: #4fa3ff;
+    --line: #2a3541; --field: #606d7a; --accent: #4fa3ff; --accent2: #ff8a4c; --upper: #79b0ff; --mirror: #4fa3ff;
     --net: #4b5967; --ray: #f5a524; --crystal: #3f73a8; --crystal2: #4b5d70; --edge: #dbe6f0;
     --normal: #4fa3ff; --ax2: #48bb78; --ax3: #ecc94b; --ax4: #9f7aea; --ax6: #f56565;
     --dir1: #a78bfa; --dir2: #48bb78; --dir3: #e0b341;
@@ -48,7 +49,7 @@
 }
 :root[data-theme="dark"] {
   --bg: #0e1318; --surface: #151c23; --paper: #1a222b; --ink: #e5ebf1; --muted: #98a6b4;
-  --line: #2a3541; --accent: #4fa3ff; --accent2: #ff8a4c; --upper: #79b0ff; --mirror: #4fa3ff;
+  --line: #2a3541; --field: #606d7a; --accent: #4fa3ff; --accent2: #ff8a4c; --upper: #79b0ff; --mirror: #4fa3ff;
   --net: #4b5967; --ray: #f5a524; --crystal: #3f73a8; --crystal2: #4b5d70; --edge: #dbe6f0;
   --normal: #4fa3ff; --ax2: #48bb78; --ax3: #ecc94b; --ax4: #9f7aea; --ax6: #f56565;
   --dir1: #a78bfa; --dir2: #48bb78; --dir3: #e0b341;

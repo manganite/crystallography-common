@@ -108,7 +108,7 @@ node tools/kontraste.mjs                      # App, Skript und Quiz jeder App d
 node tools/kontraste.mjs ../ "stereography/#m=form" plane-groups/skript.html
 ```
 
-Ausgabe: Text unter der Schwelle (Exitcode 1) und Grafik unter 3 : 1 zur Durchsicht, je nach Farbpaar gruppiert.
+Ausgabe: Text unter der Schwelle (Exitcode 1) und Grafik unter 3 : 1 zur Durchsicht, je nach Farbpaar gruppiert. In einer App liegt das Werkzeug als `tools/common/kontraste.mjs` und misst ohne Angabe ebenfalls alle Apps im Arbeitsordner; Grenzen der Messung im Kopf der Datei.
 
 `tests/typen.typen.js` belegt, dass die gekennzeichneten Typen aus `js/typen.js` Vertauschungen melden; die Datei läuft nur in der Typprüfung. Mit den installierten Paketen zeigt VS Code die Meldungen in geöffneten Dateien, ohne weitere Einstellung.
 

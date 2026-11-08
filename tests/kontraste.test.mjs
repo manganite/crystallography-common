@@ -25,8 +25,9 @@ const alle = (art, vorne, hinten, soll) => vorne.flatMap((fg) => hinten.map((bg)
 /** Die Paare, die die gemeinsamen Stile verwenden. @type {Paar[]} */
 const PAARE = [
   ...alle('Text', ['ink', 'muted', 'accent', 'accent2'], ['bg', 'surface', 'paper'], SCHWELLE.text),
-  // Farben der Blickrichtungen als Text (Kenndaten, Blickrichtungen in stereography) auf Karte und Tafel
-  ...alle('Text', ['dir1', 'dir2', 'dir3'], ['surface', 'paper'], SCHWELLE.text),
+  // Farben der Blickrichtungen und Formen als Text (Kenndaten, Blickrichtungen und Beschriftungen in stereography)
+  ...alle('Text', ['dir1', 'dir2', 'dir3', 'ax2', 'ax6'], ['bg', 'surface', 'paper'], SCHWELLE.text),
+  ...alle('Text', ['fc0', 'fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc7'], ['surface', 'paper'], SCHWELLE.text),
   // gewählte Tabs, Gruppen, Segmente, Tooltip: paper auf ink; gewähltes Werkzeug: paper auf accent
   paar('Text paper auf ink', 'paper', 'ink', SCHWELLE.text),
   paar('Text paper auf accent', 'paper', 'accent', SCHWELLE.text),
@@ -35,12 +36,27 @@ const PAARE = [
   paar('Text paper auf ax6', 'paper', 'ax6', SCHWELLE.text),
   // Warnkasten (app.css): Überschrift in accent2 auf 8 % accent2 über surface
   paar('Text accent2 im Warnkasten', 'accent2', (f) => misch(f.accent2, 0.08, f.surface), SCHWELLE.text),
-  // Kasten Vertiefung (skript.css): 13 % ax3 über surface
-  paar('Text muted in der Vertiefung', 'muted', (f) => misch(f.ax3, 0.13, f.surface), SCHWELLE.text),
+  // getönte Kästen: Trenner Vertiefung (skript.css .teil, 13 % ax3, der dunkelste), Grundlagen (6 % fc3),
+  // Hilfekasten (app.css .helpbox, 6 % accent über paper), Antworten im Quiz (9 % ax2, 8 % ax6 über paper);
+  // jeweils muted und accent (Links) als Text
+  ...[['Trenner', (/** @type {Record<string, string>} */ f) => misch(f.ax3, 0.13, f.surface)],
+    ['Grundlagen', (/** @type {Record<string, string>} */ f) => misch(f.fc3, 0.06, f.surface)],
+    ['Hilfekasten', (/** @type {Record<string, string>} */ f) => misch(f.accent, 0.06, f.paper)],
+    ['richtige Antwort', (/** @type {Record<string, string>} */ f) => misch(f.ax2, 0.09, f.paper)],
+    ['falsche Antwort', (/** @type {Record<string, string>} */ f) => misch(f.ax6, 0.08, f.paper)]]
+    .flatMap(([name, bg]) => ['muted', 'accent'].map((fg) => paar(`Text ${fg} im Kasten ${name}`, fg, /** @type {Paar['bg']} */ (bg), SCHWELLE.text))),
   // Fokusrahmen (accent) auf allen Flächen
   ...alle('Fokus', ['accent'], ['bg', 'surface', 'paper'], SCHWELLE.grafik),
-  // Farben der Symmetrie und der Formen als Grafik auf der Tafel und auf der Karte (Legende)
-  ...alle('Grafik', ['ax2', 'ax3', 'ax4', 'ax6', 'dir1', 'dir2', 'dir3', 'mirror', 'edge', 'fc0', 'fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc7'], ['surface', 'paper'], SCHWELLE.grafik),
+  // Farben der Symmetrie, der Formen und der Konstruktion als Grafik auf der Tafel und auf der Karte (Legende).
+  // Nicht geprüft, weil nur stützend (Leitfaden 5.4): --net (Hilfsnetz), --line (Rahmen, Hilfslinien), --crystal und
+  // --crystal2 (Tönung von Flächen mit eigenem Umriss).
+  ...alle('Grafik', ['ax2', 'ax3', 'ax4', 'ax6', 'dir1', 'dir2', 'dir3', 'mirror', 'edge', 'upper', 'normal', 'ray', 'accent', 'accent2',
+    'fc0', 'fc1', 'fc2', 'fc3', 'fc4', 'fc5', 'fc6', 'fc7'], ['surface', 'paper'], SCHWELLE.grafik),
+  // Grenze von Eingabefeldern (select) gegen die Karte und das Feld selbst (WCAG 1.4.11, Entscheidung Thomas, 8.11.2026)
+  ...alle('Feld', ['field'], ['bg', 'surface', 'paper'], SCHWELLE.grafik),
+  // Fortschrittsbalken (quiz.css): Füllung auf der Spur in --line
+  paar('Balken ax2 auf line', 'ax2', 'line', SCHWELLE.grafik),
+  paar('Balken accent auf line', 'accent', 'line', SCHWELLE.grafik),
 ];
 
 for (const [schema, f] of /** @type {const} */ ([['hell', HELL], ['dunkel', DUNKEL]])) {

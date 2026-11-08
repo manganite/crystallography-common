@@ -2,18 +2,23 @@
 //
 //   node tools/kontraste.mjs [Arbeitsordner] [Seite …]
 //
-// Arbeitsordner: absolut oder mit „.“ beginnend, Ordner mit den Repositories nebeneinander (Standard: zwei Ebenen über dieser Datei, wie
-// tools/server.mjs). Seiten relativ dazu, z. B. `stereography/` oder `plane-groups/skript.html`; ohne Angabe App,
+// Arbeitsordner: absolut oder mit „.“ beginnend, Ordner mit den Repositories nebeneinander (Standard: der Ordner über
+// crystallography-common bzw. über der App, wenn die Datei als tools/common/ in einer App liegt). Seiten relativ dazu, z. B. `stereography/` oder `plane-groups/skript.html`; ohne Angabe App,
 // Skript und Quiz jeder App im Arbeitsordner (Ordner mit lib/common/); eine Seite darf einen Zustand tragen
 // (`stereography/#m=form`). Ausgabe: je Seite und Farbschema die Befunde, gruppiert nach Farbpaar; Exitcode 1, wenn ein
 // Text die Schwelle verfehlt (Grafik entscheidet die Durchsicht).
 //
 // Gemessen wird die gerenderte Seite (Chromium über Playwright): Textfarbe gegen den Hintergrund, der sich aus den
-// Hintergrundfarben der Vorfahren ergibt (mit Transparenz und Deckkraft). Nicht gemessen: Text über Bildern oder
-// Verläufen (als „unsicher“ gemeldet), Inhalte von <canvas> (3D-Ansichten), Zustände nach Bedienung ausser den
-// angegebenen. Gesperrte Bedienelemente sind nach WCAG ausgenommen und werden nur gezählt. Grafik (SVG-Linien und
-// -Flächen unter 3 : 1) wird als Liste zur Durchsicht ausgegeben: Ob eine Linie zum Verständnis nötig ist (1.4.11) oder
-// nur schmückt, entscheidet der Mensch.
+// Hintergrundfarben der Vorfahren ergibt (mit Transparenz und Deckkraft); Text in SVG gegen seinen Hof oder die Flächen,
+// die ihn umschliessen, mit denselben Schwellen. Gesperrte Bedienelemente sind nach WCAG ausgenommen und werden nur
+// gezählt. Grafik (SVG-Linien und -Flächen unter 3 : 1) wird als Liste zur Durchsicht ausgegeben: Ob eine Linie zum
+// Verständnis nötig ist (1.4.11) oder nur stützt, entscheidet der Mensch.
+// Grenzen: Text über Bildern, Verläufen oder Mustern wird als „unsicher“ gemeldet, nicht gemessen; Inhalte von
+// <canvas> (3D), Pfeilspitzen (<marker>), <use>, Tooltips und Zustände nach Bedienung ausser den angegebenen Adressen
+// fehlen; Abbildungen, die erst beim Hineinscrollen geladen werden, fehlen, wenn sie beim Messen nicht da sind. Flächen
+// unter SVG-Text: nur solche, die ihn mit ihrem umschreibenden Rechteck ganz umfassen und Mausereignisse annehmen
+// (`elementsFromPoint`, also nicht mit `pointer-events: none`). Die Deckkraft einer Gruppe wird je Element
+// verrechnet, nicht auf das fertige Bild der Gruppe (bei abgeblendeten Gruppen mit Hof leicht abweichend).
 //
 // Braucht Playwright mit Chromium (wie tools/skript-pdf.mjs); mit KONTRASTE_CHROME=<Pfad> ein anderer Chromium.
 
@@ -24,9 +29,8 @@ import { fileURLToPath } from 'node:url';
 import { server } from './server.mjs';
 
 /**
- * Schwellen nach WCAG 2.2: Text 4,5, grosser Text 3 (1.4.3), Grafik und Bedienelemente 3 (1.4.11). Text in einer
- * Abbildung (SVG) misst die Familie wie Grafik mit 3 : 1: WCAG nimmt Text in einem Bild mit wesentlichem weiterem
- * Bildinhalt von 1.4.3 aus, die Beschriftungen tragen aber Bedeutung (Leitfaden Abschn. 5.4).
+ * Schwellen nach WCAG 2.2: Text 4,5, grosser Text 3 (1.4.3), Grafik und Bedienelemente 3 (1.4.11). Beschriftungen in
+ * Abbildungen (SVG-Text) sind Text und haben dieselben Schwellen (Leitfaden Abschn. 5.4, Entscheidung Thomas, 8.11.2026).
  */
 export const SCHWELLE = { text: 4.5, gross: 3, grafik: 3 };
 
@@ -81,8 +85,14 @@ function messenImBrowser() {
     const d = ctx.getImageData(0, 0, 1, 1).data;
     return [d[0], d[1], d[2], 1];
   };
-  /** Ist eine Farbe ganz durchsichtig? @param {string} css */
-  const leer = (css) => css === 'none' || css === 'transparent' || /^rgba\(.*,\s*0\)$/.test(css) || css.startsWith('url(');
+  /** Ist eine Farbe ganz durchsichtig (jede Schreibweise, auch color(… / 0))? Muster url(…) zählen nicht dazu. @param {string} css */
+  const leer = (css) => {
+    if (css === 'none' || css.startsWith('url(')) return css === 'none';
+    ctx.clearRect(0, 0, 1, 1); ctx.globalAlpha = 1; ctx.fillStyle = 'rgba(0,0,0,0)'; ctx.fillStyle = css; ctx.fillRect(0, 0, 1, 1);
+    return ctx.getImageData(0, 0, 1, 1).data[3] === 0;
+  };
+  /** Muster oder Verlauf (url(…)): Farbe nicht bestimmbar. @param {string} css */
+  const muster = (css) => css.startsWith('url(');
   /** Hintergrund hinter einem HTML-Element und ob ein Bild oder Verlauf darunter liegt. @param {Element} el */
   const hintergrund = (el) => {
     /** @type {Element[]} */
@@ -93,8 +103,12 @@ function messenImBrowser() {
     for (const e of kette) {
       if (e instanceof SVGElement) continue;
       const cs = getComputedStyle(e);
+      // eine deckende Farbe darüber macht ein Bild darunter bedeutungslos
+      if (!leer(cs.backgroundColor)) {
+        bg = mische(cs.backgroundColor, bg);
+        if (mische(cs.backgroundColor, [0, 0, 0, 1]).every((v, i) => v === bg[i])) unsicher = false;
+      }
       if (cs.backgroundImage !== 'none') unsicher = true;
-      if (!leer(cs.backgroundColor)) bg = mische(cs.backgroundColor, bg);
     }
     return { bg, unsicher };
   };
@@ -121,12 +135,15 @@ function messenImBrowser() {
     const unter = document.elementsFromPoint(x, y).filter((e) => e !== el && !el.contains(e) && svg.contains(e) && e.matches(FORM) && umfasst(e));
     // von unten nach oben über den HTML-Hintergrund legen (deckende Flächen ersetzen, was darunter liegt)
     let bg = html.bg;
+    let unsicher = html.unsicher;
     for (const e of unter.reverse()) {
       const cs = getComputedStyle(e);
-      if (leer(cs.fill) || e.matches('line, polyline')) continue;
+      if (e.matches('line, polyline')) continue;
+      if (muster(cs.fill)) { unsicher = true; continue; }
+      if (leer(cs.fill)) continue;
       bg = mische(cs.fill, bg, Number(cs.fillOpacity) * deckkraft(e));
     }
-    return { bg, unsicher: html.unsicher };
+    return { bg, unsicher };
   };
   /** Kurzer Selektor zur Wiedererkennung. @param {Element} el */
   const wo = (el) => {
@@ -163,6 +180,7 @@ function messenImBrowser() {
     const cs = getComputedStyle(el);
     const svg = el instanceof SVGElement;
     const farbeText = svg ? cs.fill : cs.color;
+    if (muster(farbeText)) { texte.push({ fg: [0, 0, 0, 1], bg: [0, 0, 0, 1], unsicher: true, svg, gross: false, gesperrt: false, wo: wo(el), text: '' }); continue; }
     if (leer(farbeText)) continue;
     const r = el.getBoundingClientRect();
     let { bg, unsicher } = svg ? grund(el, r.x + r.width / 2, r.y + r.height / 2) : hintergrund(el);
@@ -221,7 +239,8 @@ export async function kontraste({ root, seiten, chrome = process.env.KONTRASTE_C
         /** @type {string[]} */
         const fehler = [];
         page.on('pageerror', (e) => fehler.push(String(e)));
-        await page.goto(`http://127.0.0.1:${port}/${seite}`, { waitUntil: 'networkidle' });
+        const antwort = await page.goto(`http://127.0.0.1:${port}/${seite}`, { waitUntil: 'networkidle' }).catch(() => null);
+        if (!antwort || !antwort.ok()) throw new Error(`kontraste: Seite ${seite} nicht gefunden (Arbeitsordner ${root})`);
         await page.evaluate(() => document.fonts.ready);
         // eingeklappte Abschnitte öffnen, damit ihr Inhalt mitgemessen wird
         await page.evaluate(() => { for (const d of document.querySelectorAll('details')) d.open = true; });
@@ -234,8 +253,7 @@ export async function kontraste({ root, seiten, chrome = process.env.KONTRASTE_C
           if (t.gesperrt) { gesperrt++; continue; }
           if (t.unsicher) { unsicher.push(t); continue; }
           const k = kontrast(t.fg, t.bg);
-          // Text in einer Grafik (SVG): wie Grafik 3 : 1 (Leitfaden Abschn. 5.4)
-          const soll = t.svg ? SCHWELLE.grafik : t.gross ? SCHWELLE.gross : SCHWELLE.text;
+          const soll = t.gross ? SCHWELLE.gross : SCHWELLE.text;
           if (k < soll) text.push({ ...t, k, soll });
         }
         const grafik = m.grafik.map((/** @type {any} */ g) => ({ ...g, k: kontrast(g.fg, g.bg) })).filter((/** @type {any} */ g) => g.k < SCHWELLE.grafik);
@@ -269,9 +287,16 @@ function gruppiert(liste, extra = () => '') {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   // Arbeitsordner: absoluter oder mit „.“ beginnender Pfad; Seiten sind relativ zu ihm
-  const root = resolve(args[0] && (isAbsolute(args[0]) || args[0].startsWith('.')) ? args.shift() ?? '' : join(dirname(fileURLToPath(import.meta.url)), '..', '..'));
+  const hier = dirname(fileURLToPath(import.meta.url));
+  // in crystallography-common: tools/ → Arbeitsordner zwei Ebenen höher; in einer App: tools/common/ → drei Ebenen
+  const standard = join(hier, ...(hier.endsWith(join('tools', 'common')) ? ['..', '..', '..'] : ['..', '..']));
+  const root = resolve(args[0] && (isAbsolute(args[0]) || args[0].startsWith('.')) ? args.shift() ?? '' : standard);
   const seiten = args.length ? args : readdirSync(root).filter((d) => existsSync(join(root, d, 'lib', 'common')))
     .flatMap((d) => [`${d}/`, `${d}/skript.html`, `${d}/quiz.html`].filter((s) => existsSync(join(root, s.endsWith('/') ? s + 'index.html' : s))));
+  if (!seiten.length) {
+    console.error(`kontraste: keine Seiten gefunden in ${root} (erwartet: Ordner mit lib/common/ und index.html)`);
+    process.exit(2);
+  }
   const erg = await kontraste({ root, seiten });
   let fehlt = 0;
   for (const e of erg) {

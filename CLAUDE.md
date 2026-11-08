@@ -87,10 +87,12 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Indizes), „über“ und „Punkt“; Indizes ohne die Art der Klammer, weil der Satz sie meist schon nennt („die Form …“).
 - **Kontraste: Messung und Grenzen** (8.11.2026, #65, Leitfaden Abschn. 5.4): Gemessen wird die gerenderte Seite,
   weil die Paare aus den Variablen allein Mischungen, Deckkraft und Farben in Abbildungen nicht erfassen; die
-  Variablen prüft zusätzlich ein Test ohne Browser (CI). Beschriftungen in Abbildungen mit 3 : 1 statt 4,5 : 1: WCAG
-  nimmt Text in einem Bild mit wesentlichem weiterem Inhalt von 1.4.3 aus, ganz ohne Schwelle wären Achsennamen oder
-  Nummern aber unlesbar zulässig. Ob eine Linie oder Fläche unter 3 : 1 nötig ist oder nur stützt, entscheidet die
-  Durchsicht, nicht das Werkzeug. Die ersten Befunde (hell: `--ax2`/`--dir2` als Text 4,31, `--accent2` im
+  Variablen prüft zusätzlich ein Test ohne Browser (CI). Beschriftungen in Abbildungen wie Text mit 4,5 : 1 (Thomas):
+  Die Ausnahme in WCAG 1.4.3 für Text in einem Bild zielt auf Fotos und Szenen; Beschriftungen in Diagrammen gelten
+  nach dem Understanding zu 1.4.11 als Text (Review des PR #105; ein erster Entwurf mit 3 : 1 wurde verworfen). Dafür
+  wurden die Formfarben `--fc4`, `--fc5`, `--fc7` (hell) dunkler. Grenze von Eingabefeldern mit eigener Farbe
+  `--field` (Thomas): Bei `select` ist sie die einzige Grenze; Knöpfe kennzeichnet ihr Text. Ob eine Linie oder
+  Fläche unter 3 : 1 nötig ist oder nur stützt, entscheidet die Durchsicht, nicht das Werkzeug. Die ersten Befunde (hell: `--ax2`/`--dir2` als Text 4,31, `--accent2` im
   Warnkasten 4,39, `--dir3` und `--accent2` auf `--bg` knapp unter 4,5) wurden durch leicht dunklere Farben behoben;
   die Befunde in den Abbildungen der Apps stehen in plane-groups#114 und stereography#119.
 - **Lernexperimente, eigener Abschnitt** (7.11.2026, #87, Leitfaden Abschn. 5.3): Ein externes Review (5.11.)
