@@ -92,7 +92,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Nummern aber unlesbar zulässig. Ob eine Linie oder Fläche unter 3 : 1 nötig ist oder nur stützt, entscheidet die
   Durchsicht, nicht das Werkzeug. Die ersten Befunde (hell: `--ax2`/`--dir2` als Text 4,31, `--accent2` im
   Warnkasten 4,39, `--dir3` und `--accent2` auf `--bg` knapp unter 4,5) wurden durch leicht dunklere Farben behoben;
-  die Befunde in den Abbildungen der Apps stehen in deren Issues.
+  die Befunde in den Abbildungen der Apps stehen in plane-groups#114 und stereography#119.
 - **Lernexperimente, eigener Abschnitt** (7.11.2026, #87, Leitfaden Abschn. 5.3): Ein externes Review (5.11.)
   riet zu „eine Frage, eine Handlung, eine beobachtbare Änderung“ statt reiner Bedienschritte; die Vermutung vorher
   macht die Beobachtung zur Antwort. Auswahl statt offener Frage, damit sich die Auflösung zeigen lässt; ohne Punkte,
