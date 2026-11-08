@@ -6,13 +6,18 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Ansage von HM-Symbolen und Indizes** (`format.js`, #82): `hmHTML` und `hklHTML` liefern das Symbol als `<span role="img">` mit Ansagetext; neu `hmLabel` und `hklLabel` dafür. Ein Screenreader liest die Zeichen einzeln, den Querstrich „quer“, den Bruchstrich „über“ (4̄2*m* „4 quer, 2, m“, (1̄10) „1 quer, 1, 0“). Die Ansage der Experimente liest dieselben Texte. Leitfaden 4 und `CLAUDE.md` nachgeführt. Für die Apps: nichts anzupassen; Tests, die die Ausgabe von `hmHTML`/`hklHTML` wörtlich erwarten, vergleichen künftig mit dem Aufruf selbst.
+
 ### Geändert
 
+- **Querstrich für Screenreader** (`css/base.css`, #82): Alternativtext „quer“ nach der Ziffer (`.ov::after`) statt „−“ davor; x̄ wird „x quer“ gelesen, wie in den Symbolen. Für die Apps: nichts anzupassen.
 - **Leitfaden 9:** Der gemeinsame Rechenkern (#99) ist ein eigenes Projekt in TypeScript und auf Englisch; für ihn gilt der Leitfaden nicht. Für die Apps: nichts anzupassen.
 
 ### Behoben
 
-- **Ansage der Experimente** (`ablauf.js`, #90): Querstriche (`<span class="ov">`) werden wie in der Darstellung für Screenreader als „−“ angesagt; bisher fiel der Strich weg („Deine Vermutung: 4.“ statt „−4“, „(111)“ statt „(−1−11)“). Entitäten aus `esc()` erscheinen als Zeichen. Beim Wechsel des Modus wird die Live-Region geleert, und eine noch ausstehende Ansage entfällt. Für die Apps: nichts anzupassen.
+- **Ansage der Experimente** (`ablauf.js`, #90): Querstriche (`<span class="ov">`) werden wie in der Darstellung für Screenreader angesagt (mit #82 „x quer“); bisher fiel der Strich weg („Deine Vermutung: 4.“, „(111)“ statt (1̄1̄1)). Entitäten aus `esc()` erscheinen als Zeichen. Beim Wechsel des Modus wird die Live-Region geleert, und eine noch ausstehende Ansage entfällt. Für die Apps: nichts anzupassen.
 
 ## [0.13.0] - 2026-11-07
 

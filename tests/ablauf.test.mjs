@@ -3,6 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ablaufKarte, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
 import { leererFortschritt, vermerken, fortschrittAus } from '../js/quiz-core.js';
+import { hmHTML, hklHTML } from '../js/format.js';
 
 /** @import { Ablauf, Erzeugt } from '../js/ablauf.js' */
 
@@ -196,7 +197,7 @@ test('ansage: Auflösung und Beobachtung als Text ohne HTML', () => {
   assert.equal(ansage(neuerStand(LINEAR)), '');
 });
 
-test('ansage: Querstrich als „−“ wie in der Darstellung für Screenreader, Entitäten aus esc() als Zeichen (#90)', () => {
+test('ansage: Querstrich als „quer“ wie in der Darstellung für Screenreader, Entitäten aus esc() als Zeichen (#90, #82)', () => {
   /** @type {Ablauf} */
   const a = {
     id: 'q', titel: 'Querstrich',
@@ -209,8 +210,16 @@ test('ansage: Querstrich als „−“ wie in der Darstellung für Screenreader,
   };
   const st = neuerStand(a);
   st.gewaehlt[0] = 1; st.gezeigt.add(0);
-  // so in stereography gemessen: „Deine Vermutung: 4.“ und „(111) …“ statt der Drehinversion bzw. der negativen Indizes
-  assert.equal(ansage(st), 'Zutreffend: −42m. Deine Vermutung: 4. (−1−11) und (1−10) & m−3m Lage −x+½, −1, −2, 3');
+  // vor #90 in stereography gemessen: „Deine Vermutung: 4.“ und „(111) …“ ohne die Querstriche
+  assert.equal(ansage(st), 'Zutreffend: 4 quer 2m. Deine Vermutung: 4. (1 quer 1 quer 1) und (1 1 quer 0) & m 3 quer m Lage x quer +½, 1 quer, 2 quer, 3');
+  // Symbole aus hmHTML/hklHTML mit ihrem Ansagetext (#82)
+  st.ablauf.schritte[0].vermutung = [hmHTML('-42m'), hmHTML('4/mmm')];
+  st.ablauf.schritte[0].beobachtung = `Die Form ${hklHTML([1, -1, 1], false, ['{', '}'])} in ${hmHTML('m-3m')}.`;
+  delete st.ablauf.schritte[0].erklaerung;
+  assert.equal(ansage(st), 'Zutreffend: 4 quer, 2, m. Deine Vermutung: 4 über m, m, m. Die Form {1, 1 quer, 1} in m, 3 quer, m.');
+  // Leerraum: Bindestrich, deutsche Anführungszeichen, Verhältnis
+  st.ablauf.schritte[0].beobachtung = `Die ${hmHTML('-4')}-Achse, „${hmHTML('mm2')}“, 2 : 1.`;
+  assert.match(ansage(st), /Die 4 quer-Achse, „m, m, 2“, 2 : 1\.$/);
 });
 
 test('Erste Schritte (liste: false): Bedienschritte ohne Vermutung, überspringbar, ohne „Alle Experimente“', () => {
