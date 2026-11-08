@@ -10,6 +10,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 - **Leitfaden 9:** Der gemeinsame Rechenkern (#99) ist ein eigenes Projekt in TypeScript und auf Englisch; für ihn gilt der Leitfaden nicht. Für die Apps: nichts anzupassen.
 
+### Behoben
+
+- **Ansage der Experimente** (`ablauf.js`, #90): Querstriche (`<span class="ov">`) werden wie in der Darstellung für Screenreader als „−“ angesagt; bisher fiel der Strich weg („Deine Vermutung: 4.“ statt „−4“, „(111)“ statt „(−1−11)“). Entitäten aus `esc()` erscheinen als Zeichen. Beim Wechsel des Modus wird die Live-Region geleert, und eine noch ausstehende Ansage entfällt. Für die Apps: nichts anzupassen.
+
 ## [0.13.0] - 2026-11-07
 
 Erzeugte Experimente wie die Generatoren im Quiz. Für die Apps: nichts anzupassen; wer erzeugte Experimente anbietet, typisiert die Liste als `(Ablauf | Erzeugt)[]`.

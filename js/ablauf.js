@@ -221,15 +221,22 @@ export function listeHTML(liste, stand = leererFortschritt()) {
   }).join('')}</ol>${uebersicht}`;
 }
 
+/** Entitäten, die `esc()` erzeugt, und das geschützte Leerzeichen. @type {Record<string, string>} */
+const ZEICHEN = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ', '&amp;': '&' };
+
 /**
- * Text ohne Auszeichnung für die Ansage. Das Ergebnis geht nur in textContent (nie in innerHTML); die Tags werden
- * trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist, und verbliebene spitze Klammern fallen weg.
+ * Text ohne Auszeichnung für die Ansage. Ein Querstrich (`<span class="ov">x</span>`) wird wie in der Darstellung
+ * für Screenreader zu „−x“ (Leitfaden Abschn. 4, #90). Das Ergebnis geht nur in textContent (nie in innerHTML); die
+ * Tags werden trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist, und verbliebene spitze Klammern fallen
+ * weg. Danach werden die Entitäten aus `esc()` und `&nbsp;` zurückübersetzt; andere Entitäten bleiben stehen (die Apps
+ * schreiben Zeichen wie „−“ oder „½“ direkt).
  * @param {string} h
  */
 const ohneHTML = (h) => {
-  let t = h;
+  // nur das öffnende Tag: auch ein Querstrich mit Auszeichnung darin (koordHTML in plane-groups: <i>x</i>)
+  let t = h.replace(/<span\b[^>]*\bclass\s*=\s*["'](?:[^"']*\s)?ov(?:\s[^"']*)?["'][^>]*>/gi, '−');
   for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
-  return t.replace(/[<>]/g, '');
+  return t.replace(/[<>]/g, '').replace(/&(?:lt|gt|quot|#39|nbsp|amp);/g, (e) => ZEICHEN[e]);
 };
 
 /**
@@ -337,8 +344,18 @@ export function ablaufKarte(el, ablaeufe, o) {
     const z = fokus ? inhalt.querySelector(fokus) : null;
     if (z instanceof HTMLElement) z.focus({ preventScroll: true });
   };
-  /** Ansage über die bleibende Live-Region (erst leeren, damit auch gleicher Text erneut angesagt wird). @param {string} t */
-  const sagen = (t) => { ansageEl.textContent = ''; if (t) requestAnimationFrame(() => { ansageEl.textContent = t; }); };
+  /** @type {number | null} */
+  let spaeter = null;
+  /**
+   * Ansage über die bleibende Live-Region (erst leeren, damit auch gleicher Text erneut angesagt wird). Eine noch
+   * ausstehende frühere Ansage entfällt, damit sie nicht nach dem Leeren doch noch erscheint.
+   * @param {string} t
+   */
+  const sagen = (t) => {
+    if (spaeter !== null) { cancelAnimationFrame(spaeter); spaeter = null; }
+    ansageEl.textContent = '';
+    if (t) spaeter = requestAnimationFrame(() => { spaeter = null; ansageEl.textContent = t; });
+  };
   /**
    * Ist „Vorher“ angewandt und hat seither niemand die App bedient, zurück zum Stand vor dem Umschalten, damit die
    * App nicht im alten Zustand bleibt; eine eigene Änderung bleibt.
@@ -447,10 +464,15 @@ export function ablaufKarte(el, ablaeufe, o) {
     }
   });
   return {
-    /** Modus setzen: zeigt die Liste seiner Abläufe (ein laufender Ablauf eines anderen Modus endet). @param {string} m */
+    /**
+     * Modus setzen: zeigt die Liste seiner Abläufe (ein laufender Ablauf eines anderen Modus endet). Bei einem Wechsel
+     * wird die Live-Region geleert, damit sie nicht den Text des vorigen Modus behält (#90).
+     * @param {string} m
+     */
     modus(m) {
       // ein Wechsel des Modus ist eine eigene Handlung: „Vorher“ nicht mehr herstellen
       if (st && st.ablauf.modus !== undefined && st.ablauf.modus !== m) st = null;
+      if (m !== modus) sagen('');
       modus = m; zeichnen();
     },
     starte,
