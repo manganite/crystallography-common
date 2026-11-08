@@ -17,6 +17,7 @@ Hilfeseite (#24): Anleitungen aus den Erste Schritten mit Bildern der Bedienung,
 ### Geändert
 
 - **„?“ führt zur Hilfeseite** (Leitfaden 5.1, 5.3; Entscheidung Thomas, 4.11.2026): Die Erste Schritte öffnet es nicht mehr; sie erscheinen beim ersten Aufruf eines Modus und nach „Alle Einstellungen zurücksetzen“. `a.helpbtn` in `css/app.css` für den Link; „?“ auf Touch-Geräten 40 px statt 36 px (Leitfaden 5.2). Für die Apps: siehe oben.
+- **Leitfaden 5.3:** festgehalten, dass die Erste Schritte nicht erscheinen, solange die Adresse einen Zustand enthält, auch nach dem Neuladen (Entscheidung Thomas, 4.11.2026; in beiden Apps schon so). Die Vorlage wendet jetzt beim Laden die Adresse an und übernimmt nur bekannte Gruppen. Für die Apps: nichts anzupassen.
 
 ## [0.14.0] - 2026-11-08
 
