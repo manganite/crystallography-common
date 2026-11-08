@@ -204,12 +204,13 @@ test('ansage: Querstrich als „−“ wie in der Darstellung für Screenreader,
       frage: 'Welche Gruppe?', vermutung: ['<span class="ov">4</span>2<i>m</i>', '4'], richtig: 0,
       handlung: { text: 'Zeigen', hash: '#g=-42m' },
       beobachtung: '(<span class="ov">1</span><span class="ov">1</span>1) und (1<span class="ov">1</span>0) &amp; m<span class="ov">3</span>m',
+      erklaerung: 'Lage <span class="ov"><i>x</i></span>+½, <span id="a" class=\'x ov\'>1</span>, <SPAN CLASS="ov">2</SPAN>, <span class="ovs">3</span>',
     }],
   };
   const st = neuerStand(a);
   st.gewaehlt[0] = 1; st.gezeigt.add(0);
   // so in stereography gemessen: „Deine Vermutung: 4.“ und „(111) …“ statt der Drehinversion bzw. der negativen Indizes
-  assert.equal(ansage(st), 'Zutreffend: −42m. Deine Vermutung: 4. (−1−11) und (1−10) & m−3m');
+  assert.equal(ansage(st), 'Zutreffend: −42m. Deine Vermutung: 4. (−1−11) und (1−10) & m−3m Lage −x+½, −1, −2, 3');
 });
 
 test('Erste Schritte (liste: false): Bedienschritte ohne Vermutung, überspringbar, ohne „Alle Experimente“', () => {
@@ -280,7 +281,6 @@ test('Erzeugte Abläufe: Schlüssel id:parameter, Liste mit ↻ und dem zuletzt 
   assert.match(schrittHTML(st), /data-nav="neu">Neue Aufgabe<\/button><button class="linkbtn" type="button" data-nav="fertig">Fertig/);
   assert.doesNotMatch(schrittHTML(Object.assign(neuerStand(LINEAR), { weg: [0, 1], gezeigt: new Set([0, 1]) })), /data-nav="neu"/, 'feste Abläufe ohne');
 });
-
 
 test('ablaufKarte: Live-Region beim Wechsel des Modus geleert, ausstehende Ansage entfällt (#90)', async () => {
   // kleine Nachbildung des DOM: nur, was ablaufKarte für Klicks und die Ansage braucht

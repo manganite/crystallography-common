@@ -228,11 +228,13 @@ const ZEICHEN = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;
  * Text ohne Auszeichnung für die Ansage. Ein Querstrich (`<span class="ov">x</span>`) wird wie in der Darstellung
  * für Screenreader zu „−x“ (Leitfaden Abschn. 4, #90). Das Ergebnis geht nur in textContent (nie in innerHTML); die
  * Tags werden trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist, und verbliebene spitze Klammern fallen
- * weg. Danach werden die Entitäten aus `esc()` zurückübersetzt.
+ * weg. Danach werden die Entitäten aus `esc()` und `&nbsp;` zurückübersetzt; andere Entitäten bleiben stehen (die Apps
+ * schreiben Zeichen wie „−“ oder „½“ direkt).
  * @param {string} h
  */
 const ohneHTML = (h) => {
-  let t = h.replace(/<span\s+class="(?:[^"]*\s)?ov(?:\s[^"]*)?"\s*>([^<]*)<\/span>/g, '−$1');
+  // nur das öffnende Tag: auch ein Querstrich mit Auszeichnung darin (koordHTML in plane-groups: <i>x</i>)
+  let t = h.replace(/<span\b[^>]*\bclass\s*=\s*["'](?:[^"']*\s)?ov(?:\s[^"']*)?["'][^>]*>/gi, '−');
   for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
   return t.replace(/[<>]/g, '').replace(/&(?:lt|gt|quot|#39|nbsp|amp);/g, (e) => ZEICHEN[e]);
 };
