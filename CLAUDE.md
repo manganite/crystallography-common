@@ -85,6 +85,14 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   der Moodle-Export ohne das CSS der Familie auskommt (versteckter Text wäre dort sichtbar) und das Kopieren
   unverändert bleibt; dafür nennt ein Screenreader das Symbol zusätzlich „Grafik“. Gesprochen „quer“ (auch bei
   Indizes) und „über“; Indizes ohne die Art der Klammer, weil der Satz sie meist schon nennt („die Form …“).
+- **Kontraste: Messung und Grenzen** (8.11.2026, #65, Leitfaden Abschn. 5.4): Gemessen wird die gerenderte Seite,
+  weil die Paare aus den Variablen allein Mischungen, Deckkraft und Farben in Abbildungen nicht erfassen; die
+  Variablen prüft zusätzlich ein Test ohne Browser (CI). Beschriftungen in Abbildungen mit 3 : 1 statt 4,5 : 1: WCAG
+  nimmt Text in einem Bild mit wesentlichem weiterem Inhalt von 1.4.3 aus, ganz ohne Schwelle wären Achsennamen oder
+  Nummern aber unlesbar zulässig. Ob eine Linie oder Fläche unter 3 : 1 nötig ist oder nur stützt, entscheidet die
+  Durchsicht, nicht das Werkzeug. Die ersten Befunde (hell: `--ax2`/`--dir2` als Text 4,31, `--accent2` im
+  Warnkasten 4,39, `--dir3` und `--accent2` auf `--bg` knapp unter 4,5) wurden durch leicht dunklere Farben behoben;
+  die Befunde in den Abbildungen der Apps stehen in deren Issues.
 - **Lernexperimente, eigener Abschnitt** (7.11.2026, #87, Leitfaden Abschn. 5.3): Ein externes Review (5.11.)
   riet zu „eine Frage, eine Handlung, eine beobachtbare Änderung“ statt reiner Bedienschritte; die Vermutung vorher
   macht die Beobachtung zur Antwort. Auswahl statt offener Frage, damit sich die Auflösung zeigen lässt; ohne Punkte,

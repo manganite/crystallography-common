@@ -101,6 +101,15 @@ npx eslint .                  # ohne die Vorlage
 (cd vorlagen/app && ../../node_modules/.bin/eslint .)
 ```
 
+Kontraste der gerenderten Seiten (Leitfaden Abschn. 5.4) im Arbeitsordner mit den Apps messen, hell und dunkel; braucht Playwright mit Chromium (mit `KONTRASTE_CHROME=<Pfad>` ein vorhandener Chrome):
+
+```bash
+node tools/kontraste.mjs                      # App, Skript und Quiz jeder App daneben
+node tools/kontraste.mjs ../ "stereography/#m=form" plane-groups/skript.html
+```
+
+Ausgabe: Text unter der Schwelle (Exitcode 1) und Grafik unter 3 : 1 zur Durchsicht, je nach Farbpaar gruppiert.
+
 `tests/typen.typen.js` belegt, dass die gekennzeichneten Typen aus `js/typen.js` Vertauschungen melden; die Datei läuft nur in der Typprüfung. Mit den installierten Paketen zeigt VS Code die Meldungen in geöffneten Dateien, ohne weitere Einstellung.
 
 Versionen nach [Semantic Versioning](https://semver.org/lang/de/), Änderungen in [CHANGELOG.md](CHANGELOG.md). Ein Release entsteht mit einem Tag `vX.Y.Z`, der zu `js/version.js` passt; Ablauf wie in den Apps ([Vorlage, „Versionen und Releases“](vorlagen/app/README.md#versionen-und-releases)), mit drei Unterschieden: kein `sw.js` und kein `CITATION.cff`; der Tag startet nur `release.yml`, das GitHub-Release ohne PDF (es gibt keine Live-Seite und kein Skript). Im Release-PR auch die Version in „Neue Version übernehmen“ (oben) und im Beispiel von `.github/ISSUE_TEMPLATE/fehler.yml` nachführen. Solange die Version mit 0 beginnt, kann sich die Schnittstelle noch ändern: Was wirklich allen Apps gemeinsam ist, zeigt sich erst mit der zweiten App.

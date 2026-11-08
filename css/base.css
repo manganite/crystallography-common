@@ -12,7 +12,7 @@
   --muted: #586472;
   --line: #d2d9e0;
   --accent: #0b63b6;
-  --accent2: #c2410c;
+  --accent2: #bc3f0c;
   --upper: #1d4f91;
   --mirror: #0b63b6;
   --net: #9aa6b2;
@@ -21,14 +21,14 @@
   --crystal2: #cfd9e3;
   --edge: #1b2a3a;
   --normal: #0b63b6;
-  --ax2: #2f855a;
+  --ax2: #2b7a53;
   --ax3: #b7791f;
   --ax4: #6b46c1;
   --ax6: #c53030;
   /* Blickrichtungen (Positionen im Hermann-Mauguin-Symbol) */
   --dir1: #6b46c1;
-  --dir2: #2f855a;
-  --dir3: #a16207;
+  --dir2: #2b7a53;
+  --dir3: #9b5f07;
   /* Formfarben der Beispielkristalle: bewusst verschieden von den Blickrichtungsfarben (dir1–3) */
   --fc0: #2b6cb0; --fc1: #c53030; --fc2: #b83280; --fc3: #2c7a7b; --fc4: #dd6b20; --fc5: #7c8a12; --fc6: #8b5a2b; --fc7: #718096;
   --font-display: 'Source Serif 4', 'Georgia', 'Times New Roman', serif;
