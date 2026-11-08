@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-11-08
+
+Hilfeseite (#24): Anleitungen aus den Erste Schritten mit Bildern der Bedienung, Experimente als Liste; „?“ führt zur Hilfeseite. Für die Apps: Hilfeseite nach der Vorlage anlegen (Einzelheiten unter „Neu“).
+
 ### Neu
 
 - **Hilfeseite** (#24, Leitfaden 5.3): `js/hilfe-seite.js` baut aus den Daten der App (`js/hilfe-daten.js`: Modi, Erste Schritte, Experimente) die Seite `hilfe.html`: je Modus die Erste Schritte als Anleitung mit Bildern der Bedienung und „In der App zeigen“, danach die Experimente als Liste mit „In der App ausprobieren“ (`?experiment=<id>`; in der App startet `experimentAusAdresse` das Experiment). Stile in `css/hilfe.css` (nach `skript.css`). `tools/hilfe-bilder.mjs` erzeugt die Bilder (Ausschnitt um das Bedienelement aus `zeige`, umrahmt, hell); `pruefeHilfe` prüft im Test der App Bilder und Bedienelemente. Neue Felder `zeige` (Bedienelement im Bild) und `bild` (Link-Adresse des Bildes, nach einer Aktion) im Schritt (`ablauf.js`, geprüft von `pruefeAblaeufe`); `ohneHTML` aus `ablauf.js` exportiert (Alternativtexte). Vorlage mit `hilfe.html`, `js/hilfe.js`, `js/hilfe-daten.js`, Bildern unter `hilfe/`. Für die Apps: Seite, Daten und Bilder nach der Vorlage anlegen; `zeige` in den Erste Schritten ergänzen, nach einer Aktion auch `bild` (oder die Handlung als Link-Adresse schreiben, dann gibt es auch „In der App zeigen“); „?“ als Link auf `hilfe.html` statt Knopf, dabei Klick-Handler und `aria-expanded` von `help-open` entfernen und dessen Tooltip anpassen; `experimentAusAdresse(karte, ids, oeffnen)` aufrufen (öffnet den Abschnitt „Experimente“ vor dem Start); `sw.js` (Seite in `PAGES`, Dateien und Bilder in `FILES`), `deploy.yml` (`hilfe.html`, `hilfe`), `tests/release.test.mjs` (`hilfe.html` und Ordner `hilfe/` in der Offline-Liste) und den Test aus `tests/common.test.mjs` der Vorlage übernehmen.
@@ -264,7 +268,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.0
 [0.14.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.14.0
 [0.13.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.13.0
 [0.12.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.12.0
