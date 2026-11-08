@@ -153,7 +153,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Experimente leben vom Vermuten, eine Auflösung auf der Hilfeseite verriete sie; auf einem Bild der ganzen App sieht
   man nicht, wohin man tippen soll. Welches Element, sagt `zeige` im Schritt, damit Text und Bild an einem Ort stehen.
   Start eines Experiments per `?experiment=<id>` statt im Hash, damit die Link-Adressen der Apps (Schnittstelle)
-  unberührt bleiben; die App entfernt den Parameter gleich wieder. Hilfe nach typischen Fragen später (#110).
+  unberührt bleiben; die App entfernt den Parameter gleich wieder. Weiteres zur Hilfe: #114.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären
