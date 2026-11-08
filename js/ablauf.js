@@ -224,19 +224,28 @@ export function listeHTML(liste, stand = leererFortschritt()) {
 /** Entitäten, die `esc()` erzeugt, und das geschützte Leerzeichen. @type {Record<string, string>} */
 const ZEICHEN = { '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'", '&nbsp;': ' ', '&amp;': '&' };
 
+/** Symbol aus hmHTML/hklHTML (format.js): Grafik mit Ansagetext, innen Text und Querstriche. */
+const SYMBOL = /<span role="img" aria-label="([^"]*)">(?:[^<]|<span class="ov">[^<]*<\/span>)*<\/span>/g;
 /**
- * Text ohne Auszeichnung für die Ansage. Ein Querstrich (`<span class="ov">x</span>`) wird wie in der Darstellung
- * für Screenreader zu „−x“ (Leitfaden Abschn. 4, #90). Das Ergebnis geht nur in textContent (nie in innerHTML); die
- * Tags werden trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist, und verbliebene spitze Klammern fallen
- * weg. Danach werden die Entitäten aus `esc()` und `&nbsp;` zurückübersetzt; andere Entitäten bleiben stehen (die Apps
- * schreiben Zeichen wie „−“ oder „½“ direkt).
+ * Querstrich im übrigen Text, auch mit Auszeichnung darin (koordHTML in plane-groups: `<i>x</i>`), in jeder
+ * Attributform; `class="ovs"` (SVG) nicht.
+ */
+const QUERSTRICH = /<span\b[^>]*\bclass\s*=\s*["'](?:[^"']*\s)?ov(?:\s[^"']*)?["'][^>]*>((?:[^<]|<(?!\/?span\b)[^<>]*>)*)<\/span>/gi;
+
+/**
+ * Text ohne Auszeichnung für die Ansage, gesprochen wie in der Darstellung für Screenreader (Leitfaden Abschn. 4):
+ * Symbole aus hmHTML/hklHTML mit ihrem Ansagetext (#82), andere Querstriche als „x quer“ (#90). Das Ergebnis geht nur
+ * in textContent (nie in innerHTML); die Tags werden trotzdem wiederholt entfernt, bis nichts mehr zu entfernen ist,
+ * und verbliebene spitze Klammern fallen weg. Danach werden die Entitäten aus `esc()` und `&nbsp;` zurückübersetzt
+ * (andere bleiben stehen; die Apps schreiben Zeichen wie „−“ oder „½“ direkt) und Leerraum vereinheitlicht (kein
+ * Leerzeichen innerhalb von Klammern oder vor Satzzeichen).
  * @param {string} h
  */
 const ohneHTML = (h) => {
-  // nur das öffnende Tag: auch ein Querstrich mit Auszeichnung darin (koordHTML in plane-groups: <i>x</i>)
-  let t = h.replace(/<span\b[^>]*\bclass\s*=\s*["'](?:[^"']*\s)?ov(?:\s[^"']*)?["'][^>]*>/gi, '−');
+  let t = h.replace(SYMBOL, ' $1 ').replace(QUERSTRICH, ' $1 quer ');
   for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
-  return t.replace(/[<>]/g, '').replace(/&(?:lt|gt|quot|#39|nbsp|amp);/g, (e) => ZEICHEN[e]);
+  return t.replace(/[<>]/g, '').replace(/&(?:lt|gt|quot|#39|nbsp|amp);/g, (e) => ZEICHEN[e])
+    .replace(/\s+/g, ' ').replace(/([([{⟨]) /g, '$1').replace(/ ([)\]}⟩.,;:!?])/g, '$1').trim();
 };
 
 /**
