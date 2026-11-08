@@ -9,9 +9,13 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 ### Neu
 
 - **Ansage von HM-Symbolen und Indizes** (`format.js`, #82): `hmHTML` und `hklHTML` liefern das Symbol als `<span role="img">` mit Ansagetext; neu `hmLabel` und `hklLabel` dafür. Ein Screenreader liest die Zeichen einzeln, den Querstrich „quer“, den Bruchstrich „über“ (4̄2*m* „4 quer, 2, m“, (1̄10) „1 quer, 1, 0“). Die Ansage der Experimente liest dieselben Texte. Leitfaden 4 und `CLAUDE.md` nachgeführt. Für die Apps: nichts anzupassen; Tests, die die Ausgabe von `hmHTML`/`hklHTML` wörtlich erwarten, vergleichen künftig mit dem Aufruf selbst.
+- **Kontraste messen** (#65): `tools/kontraste.mjs` misst Text und SVG-Grafik der gerenderten Seiten nach WCAG 2.2, hell und dunkel (Leitfaden 5.4, README „Entwicklung“); `tests/kontraste.test.mjs` prüft die Farbpaare der gemeinsamen Stile ohne Browser. Für die Apps: nichts anzupassen; das Werkzeug kommt als `tools/common/kontraste.mjs` mit.
 
 ### Geändert
 
+- **Farben, hell** (`css/base.css`, #65): `--ax2` und `--dir2` #2f855a → #2b7a53 (als Text auf Karten 4,31 : 1), `--dir3` #a16207 → #9b5f07, `--accent2` #c2410c → #bc3f0c (im Warnkasten 4,39 : 1), als Beschriftung `--fc4` #dd6b20 → #b6581a, `--fc5` #7c8a12 → #6d7910, `--fc7` #718096 → #667488; alle als Text jetzt mindestens 4,5 : 1. Dunkel unverändert. Für die Apps: nichts anzupassen; Bilder und Abbildungen werden etwas dunkler.
+- **Grenze von Eingabefeldern** (#65): neue Variable `--field` (hell #808b96, dunkel #606d7a, 3 : 1 nach WCAG 1.4.11) für `select` statt `--line`. Für die Apps: eigene Eingabefelder ebenfalls mit `var(--field)` umranden.
+- **Leitfaden 4 und 5.4:** Beschriftungen in Abbildungen mit denselben Schwellen wie Text, `--field`, Ausnahmen und Messung festgehalten. Für die Apps: Befunde in den eigenen Abbildungen nach plane-groups#114 und stereography#119.
 - **Querstrich für Screenreader** (`css/base.css`, #82): Alternativtext „quer“ nach der Ziffer (`.ov::after`) statt „−“ davor; x̄ wird „x quer“ gelesen, wie in den Symbolen. Für die Apps: nichts anzupassen.
 - **Leitfaden 9:** Der gemeinsame Rechenkern (#99) ist ein eigenes Projekt in TypeScript und auf Englisch; für ihn gilt der Leitfaden nicht. Für die Apps: nichts anzupassen.
 
