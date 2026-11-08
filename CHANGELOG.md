@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-11-08
+
+Barrierefreiheit: Screenreader lesen HM-Symbole, Indizes und Querstriche genauer; Kontraste nach WCAG 2.2 gemessen und die Farben (hell) angepasst. Für die Apps: eigene Eingabefelder mit `var(--field)` umranden; Befunde in den eigenen Abbildungen nach plane-groups#114 und stereography#119; sonst nichts anzupassen.
+
 ### Neu
 
 - **Ansage von HM-Symbolen und Indizes** (`format.js`, #82): `hmHTML` und `hklHTML` liefern das Symbol als `<span role="img">` mit Ansagetext; neu `hmLabel` und `hklLabel` dafür. Ein Screenreader liest die Zeichen einzeln, den Querstrich „quer“, den Bruchstrich „über“ (4̄2*m* „4 quer, 2, m“, (1̄10) „1 quer, 1, 0“). Die Ansage der Experimente liest dieselben Texte. Leitfaden 4 und `CLAUDE.md` nachgeführt. Für die Apps: nichts anzupassen; Tests, die die Ausgabe von `hmHTML`/`hklHTML` wörtlich erwarten, vergleichen künftig mit dem Aufruf selbst.
@@ -252,7 +256,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.14.0
 [0.13.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.13.0
 [0.12.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.12.0
 [0.11.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.11.0
