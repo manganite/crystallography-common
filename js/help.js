@@ -24,11 +24,13 @@ let tipFor = null;
 let tipDesc = null;
 /** @type {ReturnType<typeof setTimeout> | undefined} */
 let showTimer;
-// Das primäre Zeigegerät (Media Query) reicht nicht: Laptops mit Touchscreen melden unter Windows oft
-// `pointer: coarse`, auch mit angeschlossener Maus (#114). Massgebend ist deshalb das zuletzt benutzte Gerät.
-const hoverMQ = window.matchMedia('(hover: hover) and (pointer: fine)');
+// Ob Tooltips erscheinen, entscheidet das zuletzt benutzte Gerät, nicht das primäre Zeigegerät des Browsers
+// (Media Query): Laptops mit Touchscreen melden unter Windows oft `pointer: coarse`, auch mit angeschlossener Maus
+// (#114). Maus: Tooltip beim Überfahren; Tastatur: beim Fokus; Tippen auf dem Touchscreen: keiner.
 /** Kam die letzte Zeigerbewegung von einer Maus? @type {boolean} */
 let maus = false;
+/** Wurde seit dem letzten Tippen oder Klicken die Tastatur benutzt? @type {boolean} */
+let tastatur = false;
 
 /**
  * Element, an dem der Tooltip einer ID erscheint (bei Eingaben die ganze Zeile).
@@ -150,7 +152,8 @@ export function initHelp({ tips = {}, sections = [], labels = {} } = {}) {
   // Laptop: Maus (verzögert) und Tastaturfokus. Das Gerät zählt je Ereignis, nicht die Media Query.
   /** @param {PointerEvent} e */
   const geraet = (e) => { maus = e.pointerType === 'mouse'; };
-  document.addEventListener('pointerdown', geraet, true);
+  document.addEventListener('pointerdown', (e) => { geraet(e); tastatur = false; }, true);
+  document.addEventListener('keydown', () => { tastatur = true; }, true);
   document.addEventListener('pointermove', geraet, true);
   document.addEventListener('pointerover', (e) => {
     geraet(e);
@@ -167,7 +170,7 @@ export function initHelp({ tips = {}, sections = [], labels = {} } = {}) {
   document.addEventListener('focusin', (e) => {
     const ziel = /** @type {Element} */ (e.target);
     const el = tipVon(ziel);
-    if (el && ziel.matches(':focus-visible') && (maus || hoverMQ.matches)) showFor(el, ziel);
+    if (el && ziel.matches(':focus-visible') && (maus || tastatur)) showFor(el, ziel);
   });
   document.addEventListener('focusout', hideTip);
   document.addEventListener('pointerdown', hideTip, true);

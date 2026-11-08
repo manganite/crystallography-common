@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Behoben
 
-- **Tooltips auf Laptops mit Touchscreen** (`help.js`, #114): Tooltips erschienen nur, wenn der Browser die Maus als primäres Zeigegerät meldete (`(hover: hover) and (pointer: fine)`). Edge und Chrome unter Windows melden auf Laptops mit Touchscreen oft `pointer: coarse`, auch mit angeschlossener Maus; dann fehlten alle Tooltips (gemeldet von Thomas, Edge mit Maus). Massgebend ist jetzt das Gerät der letzten Zeigerbewegung; beim Tippen bleibt der Tooltip weiter aus. Für die Apps: nichts anzupassen.
+- **Tooltips auf Laptops mit Touchscreen** (`help.js`, #114): Tooltips erschienen nur, wenn der Browser die Maus als primäres Zeigegerät meldete (`(hover: hover) and (pointer: fine)`). Edge und Chrome unter Windows melden auf Laptops mit Touchscreen oft `pointer: coarse`, auch mit angeschlossener Maus; dann fehlten alle Tooltips (gemeldet von Thomas, Edge mit Maus). Massgebend ist jetzt das zuletzt benutzte Gerät: Maus (Tooltip beim Überfahren, auch über Polen mit `showTipAt`), Tastatur (beim Fokus) oder Touchscreen (kein Tooltip, auch nicht beim Tippen in ein Eingabefeld). Für die Apps: nichts anzupassen.
 
 ## [0.15.0] - 2026-11-08
 
