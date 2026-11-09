@@ -123,6 +123,18 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Vorschlags `<präfix>-quiz-experimente` im Issue) ist eine Wahl beim Umsetzen: Die Experimente gehören nicht
   zum Quiz, und ein Name unter `<präfix>-quiz` hätte nur genutzt, dass das Zurücksetzen das Quiz verschont.
   Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
+- **Tooltips: Abdeckung, Länge, Gerät** (Thomas, 8. und 9.11.2026, #114, Leitfaden Abschn. 5.3): Thomas fand zu
+  einem Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
+  Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“ und Export-Knöpfe mit Text (Thomas). „Ein Satz“ ist
+  Richtwert, der Test prüft nur eine Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte
+  hatten gut 300. Der Test sieht nur Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im
+  Code erzeugte bräuchten einen Browsertest je App. Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten
+  Gerät (`data-zeiger`, `data-touch` an `<html>`), nicht nur der Media Query: Nach #116 erschienen Tooltips auf einem
+  Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter „Das ⓘ … erklärt“ (Review von #116). Das ⓘ
+  bleibt ab dem ersten Tippen sichtbar, weil es sonst mit jeder Mausbewegung verschwände und eine offene Erklärung ohne
+  Knopf zum Schliessen zurückliesse (Befund des Browsertests). Browsertests laufen in der CI von common im eigenen Job
+  `browser` (Thomas); die Emulation von Chromium meldet mit Touchscreen immer `hover: none`, der Fall „Touchscreen und
+  `hover: hover`“ wird deshalb mit einem Zeigerereignis vom Typ `touch` geprüft.
 - **Erzeugte Experimente wie die Generatoren im Quiz** (7.11.2026, Thomas, #92): damit Studierende immer wieder
   neue Aufgaben derselben Art lösen. Gleiche Form wie im Quiz (`params`, `make`), gleicher Vorrang bei der Wahl und
   Stand unter `<id>:<parameter>`, damit beides gleich funktioniert und geprüft wird (`params`/`make` statt der
@@ -190,7 +202,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 
 ## Git, PRs und Releases
 
-- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in Apps auch `pdf`)
+- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in common auch `browser`, in Apps auch `pdf`)
   abwarten, das Review (nächster Punkt) einholen, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Review durch einen unabhängigen Agenten:** Vor dem Bericht prüft ein eigener Agent, der die Arbeit nicht
   kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche

@@ -6,6 +6,15 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Tooltips prüfen** (`help.js`, #114, Leitfaden 5.3; Entscheidungen Thomas, 9.11.2026): `pruefeTooltips(html, tips, { ohne, max })` meldet für die Tests der App Bedienelemente mit `id` in `index.html` ohne Tooltip (ausser den Ausnahmen in `ohne`), veraltete Ausnahmen und Tooltips über `TIP_MAX` (120) Zeichen. Regel im Leitfaden: jedes Bedienelement mit Tooltip, ein kurzer Satz als Richtwert. Vorlage: Test ergänzt, Tooltip für „Link kopieren“ in `TIPS` statt als `title`, Tooltip von „Alle Einstellungen zurücksetzen“ gekürzt. Für die Apps: Test nach der Vorlage übernehmen (Ausnahmen je App in `ohne`), zu lange Tooltips kürzen (Ausführlicheres ins ⓘ), `title` von „Link kopieren“ entfernen, falls vorhanden.
+- **Browsertests in der CI** (`tests/browser/`, Job `browser`, #114): zuerst für `help.js` mit Maus, Tastatur und Touchscreen, auch auf einem Gerät mit `pointer: coarse`. Für die Apps: nichts anzupassen.
+
+### Geändert
+
+- **Texte für Maus und Touch und das ⓘ nach dem benutzten Gerät** (`help.js`, `css/app.css`, #114): `help.js` setzt `data-zeiger` (`maus` oder `touch`) an `<html>`; `.only-fine` und `.only-coarse` folgen dem zuletzt benutzten Gerät statt nur der Media Query (vorher sagte die Karte „Erste Schritte“ auf einem Laptop mit Touchscreen „Das ⓘ … erklärt“, obwohl Tooltips erschienen). Das ⓘ erscheint ausserdem ab dem ersten Tippen (`data-touch`), auch wenn der Browser `hover: hover` meldet. Vor der ersten Eingabe gilt die Media Query wie bisher. Für die Apps: nichts anzupassen.
+
 ### Behoben
 
 - **Tooltips auf Laptops mit Touchscreen** (`help.js`, #114): Tooltips erschienen nur, wenn der Browser die Maus als primäres Zeigegerät meldete (`(hover: hover) and (pointer: fine)`). Edge und Chrome unter Windows melden auf Laptops mit Touchscreen oft `pointer: coarse`, auch mit angeschlossener Maus; dann fehlten alle Tooltips (gemeldet von Thomas, Edge mit Maus). Massgebend ist jetzt das zuletzt benutzte Gerät: Maus (Tooltip beim Überfahren, auch über Polen mit `showTipAt`), Tastatur (beim Fokus) oder Touchscreen (kein Tooltip, auch nicht beim Tippen in ein Eingabefeld). Für die Apps: nichts anzupassen.

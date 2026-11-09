@@ -4,8 +4,14 @@
 /** @import { Abschnitt } from '../lib/common/js/help.js' */
 /** @import { Ablauf, Erzeugt } from '../lib/common/js/ablauf.js' */
 
-/** Tooltip-Texte je Element-ID. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile. @type {Record<string, string>} */
+/**
+ * Tooltip-Texte je Element-ID, je ein kurzer Satz (Leitfaden Abschn. 5.3; höchstens TIP_MAX Zeichen, geprüft in
+ * tests/common.test.mjs). Jedes Bedienelement hat einen, ausser selbsterklärenden Links, Schliessen „×“ und
+ * Export-Knöpfen mit Text. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile.
+ * @type {Record<string, string>}
+ */
 export const TIPS = {
+  'copy-link': 'Link auf genau diese Ansicht in die Zwischenablage kopieren, z. B. für Folien.',
   'tab-a': 'Erster Modus der App.',
   'tab-b': 'Zweiter Modus der App.',
   'opt-elemente': 'Symmetrieelemente der gewählten Gruppe einblenden.',
@@ -16,7 +22,7 @@ export const TIPS = {
   'v-farben': 'Symmetrieelemente in der Farbe ihrer Blickrichtung zeichnen (Positionen im Hermann-Mauguin-Symbol).',
   'v-achsen': 'Gitterachsen a und b einblenden.',
   'v-wahl': 'Beispiel für ein Auswahlfeld.',
-  'reset-alles': 'Alle Einstellungen und den gespeicherten Zustand löschen und die App neu starten (der Fortschritt im Quiz und der Stand der Experimente bleiben).',
+  'reset-alles': 'Alle Einstellungen löschen und die App neu starten; Quiz und Experimente behalten ihren Stand.',
 };
 
 /** ⓘ-Erklärungen: je Abschnitt ein Einleitungssatz und die Elemente, deren Texte gezeigt werden. @type {Abschnitt[]} */

@@ -1,5 +1,8 @@
 // Hilfen: Tooltips (Laptop: Maus oder Tastaturfokus) und ⓘ-Erklärungen je Abschnitt (Touch-Geräte).
 // Die Texte liefert die App (initHelp); hier steht nur die Mechanik. Stile in css/app.css (.tip, .infobtn, .helpbox).
+// Das zuletzt benutzte Zeigegerät steht als `data-zeiger` (maus | touch) an <html>; danach richten sich die Texte für
+// Maus und Touch (.only-fine, .only-coarse). Nach dem ersten Tippen steht dort zudem `data-touch`, und das ⓘ bleibt
+// sichtbar, auch wenn danach wieder die Maus benutzt wird (#114). pruefeTooltips() ist für die Tests der App.
 
 import { esc } from './format.js';
 
@@ -13,6 +16,49 @@ import { esc } from './format.js';
  * Texte der Hilfen (HTML) je Element-ID.
  * @typedef {{ tips?: Record<string, string>, sections?: Abschnitt[], labels?: Record<string, string> }} Hilfetexte
  */
+
+/**
+ * Höchstlänge eines Tooltips in Zeichen (ohne Auszeichnung). Richtwert der Regel ist ein Satz (Leitfaden Abschn. 5.3,
+ * Entscheidung Thomas, 9.11.2026, #114); geprüft wird nur die Länge, Ausführlicheres gehört ins ⓘ und auf die Hilfeseite.
+ */
+export const TIP_MAX = 120;
+
+/** Tags, die als Bedienelement einen Tooltip brauchen (mit id; input ausser type="hidden"). */
+const BEDIENELEMENT = /<(button|input|select|textarea|a)\b([^>]*)>/gi;
+
+/**
+ * Prüft die Tooltips einer App, für ihre Tests: Jedes Bedienelement mit id in `html` (button, input, select,
+ * textarea, a) hat einen Eintrag in `tips`, ausser es steht in `ohne` (Ausnahmen nach Leitfaden 5.3: selbsterklärende
+ * Links, Schliessen „×“, Export-Knöpfe mit Text). Jede Ausnahme muss im HTML vorkommen und darf keinen Tooltip haben,
+ * damit die Liste nicht veraltet. Kein Tooltip ist länger als `max` Zeichen (ohne Auszeichnung und Entitäten als ein
+ * Zeichen). Elemente ohne id und solche, die die App erst im Code erzeugt (`setTip`), sieht diese Prüfung nicht.
+ * Rückgabe: Liste der Fehler (leer, wenn alles stimmt).
+ * @param {string} html Inhalt von index.html
+ * @param {Record<string, string>} tips Texte der Tooltips je id (TIPS der App)
+ * @param {{ ohne?: string[], max?: number }} [o]
+ * @returns {string[]}
+ */
+export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
+  /** @type {string[]} */
+  const f = [];
+  /** @type {Set<string>} */
+  const ids = new Set();
+  for (const [, tag, attrs] of html.matchAll(BEDIENELEMENT)) {
+    const id = /\bid\s*=\s*["']([^"']+)["']/i.exec(attrs)?.[1];
+    if (!id || /\btype\s*=\s*["']?hidden\b/i.test(attrs)) continue;
+    ids.add(id);
+    if (!(id in tips) && !ohne.includes(id)) f.push(`${tag.toLowerCase()}#${id}: kein Tooltip`);
+  }
+  for (const id of ohne) {
+    if (!ids.has(id)) f.push(`${id}: Ausnahme, aber kein Bedienelement mit dieser id im HTML`);
+    if (id in tips) f.push(`${id}: Ausnahme, hat aber einen Tooltip`);
+  }
+  for (const [id, text] of Object.entries(tips)) {
+    const n = [...text.replace(/<[^>]*>/g, '').replace(/&(?:#\d+|#x[0-9a-f]+|[a-z]+);/gi, '_')].length;
+    if (n > max) f.push(`${id}: Tooltip mit ${n} Zeichen, länger als ${max}`);
+  }
+  return f;
+}
 
 /** @type {Required<Hilfetexte>} */
 let cfg = { tips: {}, sections: [], labels: {} };
@@ -151,7 +197,15 @@ export function initHelp({ tips = {}, sections = [], labels = {} } = {}) {
 
   // Laptop: Maus (verzögert) und Tastaturfokus. Das Gerät zählt je Ereignis, nicht die Media Query.
   /** @param {PointerEvent} e */
-  const geraet = (e) => { maus = e.pointerType === 'mouse'; };
+  const geraet = (e) => {
+    maus = e.pointerType === 'mouse';
+    // für CSS (.only-fine, .only-coarse, .infobtn): nur bei einem Wechsel schreiben
+    const zeiger = maus ? 'maus' : 'touch';
+    const d = document.documentElement.dataset;
+    if (d.zeiger !== zeiger) d.zeiger = zeiger;
+    // ⓘ: ab dem ersten Tippen, damit es nicht mit jeder Mausbewegung verschwindet (und eine offene Erklärung mit ihm)
+    if (!maus && d.touch === undefined) d.touch = '';
+  };
   document.addEventListener('pointerdown', (e) => { geraet(e); tastatur = false; }, true);
   document.addEventListener('keydown', () => { tastatur = true; }, true);
   document.addEventListener('pointermove', geraet, true);
