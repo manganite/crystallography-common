@@ -22,7 +22,9 @@ before(async () => {
   srv = await server(ROOT);
   url = `http://127.0.0.1:${/** @type {import('node:net').AddressInfo} */ (srv.address()).port}/tests/browser/help.html`;
   const chrome = process.env.KONTRASTE_CHROME;
-  browser = await chromium.launch(chrome ? { executablePath: chrome } : {});
+  // volles Chromium im neuen Headless-Modus: chromium-headless-shell (Vorgabe) übernimmt die Emulation von pointer:
+  // coarse nicht, die Voraussetzung des dritten Tests (in der CI festgestellt)
+  browser = await chromium.launch(chrome ? { executablePath: chrome } : { channel: 'chromium' });
 });
 after(async () => { await browser?.close(); srv?.close(); });
 
