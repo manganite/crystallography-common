@@ -355,20 +355,30 @@ test('nachKapitel: Schwelle 6, Reihenfolge der Kapitel, ohne Kapitel zuletzt', (
   const g = nachKapitel(sechs, KAP);
   // Kapitel 2 hat keine Einträge und entfällt; unbekanntes Kapitel 9 und fehlendes zu „Weitere“
   assert.deepEqual(g.map((x) => [x.kapitel?.nr ?? null, x.eintraege.map((e) => e.id)]), [[1, ['b', 'e']], [3, ['a', 'd']], [null, ['c', 'f']]]);
-  assert.equal(kapitelTitel(KAP[1]), '2 Zwei');
+  assert.equal(kapitelTitel(KAP[1]), '<span class="sr">Kapitel </span>2 Zwei');
   assert.equal(kapitelTitel(null), 'Weitere');
 });
 
-test('listeHTML: ab 6 Einträgen Überschriften je Kapitel, durchgehend nummeriert', () => {
+test('listeHTML: ab 6 Einträgen Titel je Kapitel, Listen damit beschriftet, durchgehend nummeriert', () => {
   const sechs = [ex('a', 3), ex('b', 1), ex('c', 1), ex('d', 3), ex('e', 1), ex('f', 3)];
   const h = listeHTML(sechs, leererFortschritt(), KAP);
-  assert.deepEqual([...h.matchAll(/<h3 class="ablauf-kapitel">([^<]*)<\/h3>/g)].map((m) => m[1]), ['1 Eins', '3 Drei']);
+  const titel = [...h.matchAll(/<p class="ablauf-kapitel" id="([^"]+)"><span class="sr">Kapitel <\/span>([^<]*)<\/p>/g)].map((m) => [m[1], m[2]]);
+  assert.deepEqual(titel, [['ablauf-kap-1', '1 Eins'], ['ablauf-kap-3', '3 Drei']]);
   assert.deepEqual([...h.matchAll(/data-ablauf="([^"]+)"/g)].map((m) => m[1]), ['b', 'c', 'e', 'a', 'd', 'f']);
-  assert.match(h, /<\/h3><ol class="ablauf-liste">/, 'erste Liste ohne start');
-  assert.match(h, /<h3 class="ablauf-kapitel">3 Drei<\/h3><ol class="ablauf-liste" start="4">/);
+  assert.match(h, /<ol class="ablauf-liste" aria-labelledby="ablauf-kap-1">/, 'erste Liste ohne start');
+  assert.match(h, /<ol class="ablauf-liste" start="4" aria-labelledby="ablauf-kap-3">/);
+  assert.doesNotMatch(h, /<h\d/, 'keine Überschriften in der Seitenleiste');
+  // Einträge ohne bekanntes Kapitel zuletzt unter „Weitere“, Nummern laufen weiter
+  const w = listeHTML([...sechs, ex('g'), ex('h', 9)], leererFortschritt(), KAP);
+  assert.match(w, /<p class="ablauf-kapitel" id="ablauf-kap-weitere">Weitere<\/p><ol class="ablauf-liste" start="7" aria-labelledby="ablauf-kap-weitere"><li><button class="linkbtn" type="button" data-ablauf="g">/);
+  // ein erzeugtes Experiment steht in seinem Kapitel
+  /** @type {Erzeugt} */
+  const gen = { id: 'gen', modus: 'a', kapitel: 1, titel: 'Erzeugt', params: () => ['x'], make: () => [{ frage: 'x', beobachtung: 'b' }] };
+  const mitGen = listeHTML([...sechs, gen], leererFortschritt(), KAP);
+  assert.deepEqual([...mitGen.matchAll(/data-ablauf="([^"]+)"/g)].map((m) => m[1]), ['b', 'c', 'e', 'gen', 'a', 'd', 'f']);
   // unter der Schwelle oder ohne Kapitel: flach wie bisher
-  assert.doesNotMatch(listeHTML(sechs.slice(0, 5), leererFortschritt(), KAP), /<h3|start=/);
-  assert.doesNotMatch(listeHTML(sechs), /<h3|start=/);
+  assert.doesNotMatch(listeHTML(sechs.slice(0, 5), leererFortschritt(), KAP), /ablauf-kapitel|start=|aria-labelledby/);
+  assert.doesNotMatch(listeHTML(sechs), /ablauf-kapitel|start=|aria-labelledby/);
   // Stand über den ganzen Modus
   const f = leererFortschritt();
   vermerken(f, 'b', true); vermerken(f, 'f', false);
@@ -376,7 +386,7 @@ test('listeHTML: ab 6 Einträgen Überschriften je Kapitel, durchgehend nummerie
 });
 
 test('pruefeAblaeufe: Kapitel bekannt, ab 6 je Modus vorhanden', () => {
-  const nr = KAP.map((k) => k.nr);
+  const nr = KAP; // wie in der App: KAPITEL direkt
   // Modus a: 6 Einträge (davon einer ohne Modus, er zählt in jedem Modus), Modus b: 2
   const daten = [ex('a1', 1), ex('a2', 2), ex('a3', 2), ex('a4'), ex('a5', 3), ex('alle', 1, undefined), ex('b1', undefined, 'b'), ex('b2', 7, 'b')];
   assert.deepEqual(pruefeAblaeufe(daten, { kapitel: nr }), [
@@ -391,4 +401,27 @@ test('pruefeAblaeufe: Kapitel bekannt, ab 6 je Modus vorhanden', () => {
   const ohneModus = ['x1', 'x2', 'x3', 'x4', 'x5', 'x6'].map((id) => ex(id, undefined, undefined));
   assert.equal(pruefeAblaeufe(ohneModus, { kapitel: nr }).length, 6);
   assert.equal(pruefeAblaeufe(ohneModus, { kapitel: nr, modi: ['a', 'b'] }).length, 6, 'je Experiment nur einmal gemeldet');
+});
+
+test('ablaufKarte: gibt kapitel an die Liste weiter, gezählt wird je Modus', (t) => {
+  /** @type {Record<string, any>} */
+  const g = globalThis;
+  g.HTMLElement = class {};
+  t.after(() => { delete g.HTMLElement; });
+  const inhalt = { innerHTML: '', querySelector: () => null };
+  const el = {
+    set innerHTML(/** @type {string} */ _h) { /* Gerüst */ },
+    firstElementChild: inhalt, lastElementChild: { textContent: '' },
+    addEventListener: () => {},
+  };
+  // Modus a: 5 eigene und eines ohne Modus (zählt in jedem Modus) = 6; Modus b: 1 eigenes und das ohne Modus
+  const daten = [ex('a1', 1), ex('a2', 2), ex('a3', 2), ex('a4', 3), ex('a5', 1), ex('alle', 3, undefined), ex('b1', 1, 'b')];
+  const k = ablaufKarte(/** @type {any} */ (el), daten, { anwenden: () => {}, adresse: () => '#', kapitel: KAP });
+  k.modus('a');
+  assert.deepEqual([...inhalt.innerHTML.matchAll(/id="ablauf-kap-(\w+)"/g)].map((m) => m[1]), ['1', '2', '3']);
+  k.modus('b');
+  assert.doesNotMatch(inhalt.innerHTML, /ablauf-kapitel/, 'unter der Schwelle flach');
+  // ohne kapitel flach
+  ablaufKarte(/** @type {any} */ (el), daten, { anwenden: () => {}, adresse: () => '#' }).modus('a');
+  assert.doesNotMatch(inhalt.innerHTML, /ablauf-kapitel/);
 });

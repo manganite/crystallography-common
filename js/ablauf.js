@@ -69,8 +69,12 @@ export function nachKapitel(liste, kapitel) {
   const rest = liste.filter((a) => !kapitel.some((k) => k.nr === a.kapitel));
   return rest.length ? [...gruppen, { kapitel: null, eintraege: rest }] : gruppen;
 }
-/** Überschrift einer Gruppe: Nummer und Kurztitel wie in der Auswahl des Quiz. @param {Kapitel | null} k */
-export const kapitelTitel = (k) => (k ? `${k.nr} ${k.kurz}` : 'Weitere');
+/**
+ * Titel einer Gruppe (HTML): Nummer und Kurztitel wie in der Auswahl des Quiz, für Screenreader mit „Kapitel“ davor,
+ * damit „5 17 Ebenengruppen“ nicht als Zahl gelesen wird. Ohne Kapitel „Weitere“.
+ * @param {Kapitel | null} k
+ */
+export const kapitelTitel = (k) => (k ? `<span class="sr">Kapitel </span>${k.nr} ${k.kurz}` : 'Weitere');
 
 /** Index eines Schritts nach id. @param {Ablauf} a @param {string} id */
 const indexVon = (a, id) => a.schritte.findIndex((s) => s.id === id);
@@ -101,16 +105,18 @@ export function naechster(a, i, antwort) {
  * Prüft Abläufe auf Fehler in den Daten, für die Tests der App. hashGueltig: Prüffunktion der App für eine
  * Link-Adresse (z. B. Rundlauf durch die Prüffunktion des Zustands), aktionen: Namen der Aktionen der App,
  * modi: Modi der App, anker: Anker im Skript, kapitel: Nummern der Kapitel (je ohne Angabe nicht geprüft). Mit
- * kapitel muss jedes Experiment eines Modus mit mindestens GLIEDERN_AB Experimenten ein bekanntes Kapitel haben (#107).
+ * kapitel (`KAPITEL` der App) meldet sie unbekannte Kapitel und, in einem Modus mit mindestens GLIEDERN_AB Experimenten,
+ * fehlende (#107).
  * Rückgabe: Liste der Fehler (leer, wenn alles stimmt).
  * @param {Experiment[]} ablaeufe
- * @param {{ hashGueltig?: (hash: string) => boolean, aktionen?: string[], modi?: string[], anker?: string[], kapitel?: number[] }} [o]
+ * @param {{ hashGueltig?: (hash: string) => boolean, aktionen?: string[], modi?: string[], anker?: string[], kapitel?: readonly Kapitel[] }} [o]
  * @returns {string[]}
  */
 export function pruefeAblaeufe(ablaeufe, { hashGueltig = () => true, aktionen = [], modi, anker, kapitel } = {}) {
   /** @type {string[]} */
   const f = [];
   const ids = new Set();
+  const nummern = kapitel?.map((k) => k.nr);
   /** @type {Ablauf[]} */
   const konkret = [];
   for (const a of ablaeufe) {
@@ -118,7 +124,7 @@ export function pruefeAblaeufe(ablaeufe, { hashGueltig = () => true, aktionen = 
     ids.add(a.id);
     if (a.id.includes(':')) f.push(`${a.id}: id mit Doppelpunkt`);
     if (modi && a.modus !== undefined && !modi.includes(a.modus)) f.push(`${a.id}: unbekannter Modus ${a.modus}`);
-    if (kapitel && a.kapitel !== undefined && !kapitel.includes(a.kapitel)) f.push(`${a.id}: unbekanntes Kapitel ${a.kapitel}`);
+    if (nummern && a.kapitel !== undefined && !nummern.includes(a.kapitel)) f.push(`${a.id}: unbekanntes Kapitel ${a.kapitel}`);
     if (erzeugt(a)) {
       if ('schritte' in a || typeof a.make !== 'function') { f.push(`${a.id}: erzeugt braucht params und make, keine schritte`); continue; }
       const ps = a.params();
@@ -244,7 +250,9 @@ export function waehleParameter(a, stand, zufall = Math.random, ausser) {
  * HTML der Liste der Abläufe eines Modus (Knöpfe data-ablauf). Nach dem Stand (Fortschritt, Schlüssel = id):
  * zuletzt richtig ✓, durchgespielt ○, je mit Text für Screenreader (nicht nur über Farbe); darunter die Übersicht
  * und „Stand löschen“ (data-loeschen), sobald etwas durchgespielt ist. Mit kapitel ab GLIEDERN_AB Einträgen nach
- * Kapiteln gegliedert (nachKapitel): je Gruppe eine Überschrift und eine Liste, durchgehend nummeriert (#107).
+ * Kapiteln gegliedert (nachKapitel): je Gruppe ein Titel und eine Liste, durchgehend nummeriert (#107). Der Titel ist
+ * keine Überschrift, sondern beschriftet die Liste (aria-labelledby, wie `.group-title`): Die Karte „Experimente“ hat
+ * nur ein `<summary>`, keine Überschrift, unter die sie sich einordnen liesse.
  * @param {Experiment[]} liste @param {Fortschritt} [stand] @param {readonly Kapitel[]} [kapitel]
  */
 export function listeHTML(liste, stand = leererFortschritt(), kapitel) {
@@ -265,8 +273,10 @@ export function listeHTML(liste, stand = leererFortschritt(), kapitel) {
   const listen = gruppen.map((g) => {
     const start = nr;
     nr += g.eintraege.length;
-    const ol = `<ol class="ablauf-liste"${start > 1 ? ` start="${start}"` : ''}>${g.eintraege.map(punkt).join('')}</ol>`;
-    return gruppen.length > 1 || g.kapitel ? `<h3 class="ablauf-kapitel">${kapitelTitel(g.kapitel)}</h3>${ol}` : ol;
+    const titel = gruppen.length > 1 || g.kapitel;
+    const id = `ablauf-kap-${g.kapitel ? g.kapitel.nr : 'weitere'}`;
+    const ol = `<ol class="ablauf-liste"${start > 1 ? ` start="${start}"` : ''}${titel ? ` aria-labelledby="${id}"` : ''}>${g.eintraege.map(punkt).join('')}</ol>`;
+    return titel ? `<p class="ablauf-kapitel" id="${id}">${kapitelTitel(g.kapitel)}</p>${ol}` : ol;
   }).join('');
   return `<p class="ablauf-hinweis">Kleine Experimente: erst vermuten, dann ausprobieren.</p>${listen}${uebersicht}`;
 }

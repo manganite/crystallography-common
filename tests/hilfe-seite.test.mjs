@@ -62,9 +62,19 @@ test('Experimente nach Kapiteln wie in der App (#107): ab 6 je Modus, sonst eine
   const sechs = [ex('p', 2), ex('q', 1), ex('r', 2), ex('s', 1), ex('t'), ex('u', 1)];
   const h = hilfeHTML({ ...DATEN, experimente: sechs, kapitel });
   const teil = h.slice(h.indexOf('id="experimente-a"'));
-  assert.deepEqual([...teil.matchAll(/<h4>([^<]*)<\/h4>/g)].map((m) => m[1]), ['1 Eins', '2 Zwei', 'Weitere']);
+  assert.deepEqual([...teil.matchAll(/<h4>(?:<span class="sr">Kapitel <\/span>)?([^<]*)<\/h4>/g)].map((m) => m[1]), ['1 Eins', '2 Zwei', 'Weitere']);
   assert.deepEqual([...teil.matchAll(/<b>T-(\w)<\/b>/g)].map((m) => m[1]), ['q', 's', 'u', 'p', 'r', 't']);
   assert.equal(teil.match(/<ul class="hilfe-liste">/g)?.length, 3);
+  // ein Experiment ohne Modus zählt wie in der App in jedem Modus: Modus b kommt so auf 6 und wird gegliedert
+  /** @param {string} id @param {number} k */
+  const exB = (id, k) => ({ ...ex(id, k), modus: 'b' });
+  const ohneModus = { id: 'alle', kapitel: 2, titel: 'T-alle', schritte: [{ frage: 'F-alle' }] };
+  const b = hilfeHTML({ ...DATEN, experimente: [exB('v', 1), exB('w', 1), exB('x', 2), exB('y', 2), exB('z', 1), ohneModus], kapitel });
+  const teilB = b.slice(b.indexOf('id="experimente-b"'), b.indexOf('id="modus-c"'));
+  assert.match(b, /id="modus-c"[\s\S]*T-alle/, 'auch in einem Modus ohne eigene Experimente, wie in der App');
+  assert.deepEqual([...teilB.matchAll(/<b>T-(\w+)<\/b>/g)].map((m) => m[1]), ['v', 'w', 'z', 'x', 'y', 'alle']);
+  assert.match(b, /id="experimente-a"[\s\S]*T-alle[\s\S]*id="experimente-b"/, 'auch im ersten Modus');
+  assert.match(hilfeInhalt({ ...DATEN, experimente: [ohneModus] }), /href="#experimente-b"/);
   // unter der Schwelle (DATEN: zwei Experimente) wie bisher
   const flach = hilfeHTML({ ...DATEN, kapitel });
   assert.doesNotMatch(flach, /<h4>/);

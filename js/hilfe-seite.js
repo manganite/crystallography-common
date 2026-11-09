@@ -101,7 +101,8 @@ ${schritte}
   <br><a class="to-app" href="${attr(href)}">In der App ausprobieren</a></li>`;
     };
     // wie in der App ab GLIEDERN_AB Experimenten nach Kapiteln gegliedert (ablauf.js, #107)
-    const gruppen = nachKapitel(d.experimente.filter((e) => (e.modus ?? d.modi[0].id) === m.id), d.kapitel);
+    // ein Experiment ohne Modus erscheint wie in der App (ablaufKarte) in jedem Modus
+    const gruppen = nachKapitel(d.experimente.filter((e) => e.modus === undefined || e.modus === m.id), d.kapitel);
     const liste = gruppen.some((g) => g.eintraege.length) ? gruppen.map((g) => `${gruppen.length > 1 || g.kapitel ? `<h4>${kapitelTitel(g.kapitel)}</h4>\n` : ''}<ul class="hilfe-liste">
 ${g.eintraege.map(punkt).join('\n')}
 </ul>`).join('\n') : '';
@@ -126,7 +127,7 @@ export function hilfeInhalt(d) {
   return `<ol>${d.modi.map((m) => {
     const unter = [
       ...d.ersteSchritte.filter((a) => (a.modus ?? d.modi[0].id) === m.id).map((a) => `<li><a href="#${attr(a.id)}">${a.titel}</a></li>`),
-      ...(d.experimente.some((e) => (e.modus ?? d.modi[0].id) === m.id) ? [`<li><a href="#experimente-${attr(m.id)}">Experimente</a></li>`] : []),
+      ...(d.experimente.some((e) => e.modus === undefined || e.modus === m.id) ? [`<li><a href="#experimente-${attr(m.id)}">Experimente</a></li>`] : []),
     ];
     if (!unter.length) return '';
     return `<li><a href="#modus-${attr(m.id)}">${m.name}</a><ol>${unter.join('')}</ol></li>`;

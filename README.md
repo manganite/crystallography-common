@@ -27,7 +27,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | `js/` | `format.js` | Hermann-Mauguin-Symbole und Millersche Indizes mit Querstrich |
 | | `ablauf.js` | Geführte Abläufe: Lernexperimente im Abschnitt „Experimente“ (Frage, Vermutung, Handlung, Beobachtung, Vorher/Nachher, Stand wie im Quiz, erzeugte Varianten) und kurze Erste Schritte (`liste: false`), Verzweigung für die Bestimmung; ab 6 Experimenten je Modus nach Kapiteln gegliedert (`kapitel`); `pruefeAblaeufe` für die Tests der App |
 | | `help.js` | Mechanik der Hilfen: Tooltips (Laptop), ⓘ-Erklärungen je Abschnitt (Touch); Texte liefert die App |
-| | `hilfe-seite.js` | Hilfeseite: Erste Schritte aller Modi als Anleitungen mit Bildern, Experimente als Liste mit „In der App ausprobieren“ (`?experiment=<id>`, in der App `experimentAusAdresse`); `pruefeHilfe` für die Tests der App |
+| | `hilfe-seite.js` | Hilfeseite: Erste Schritte aller Modi als Anleitungen mit Bildern, Experimente als Liste mit „In der App ausprobieren“ (`?experiment=<id>`, in der App `experimentAusAdresse`), nach Kapiteln wie in der App; `pruefeHilfe` für die Tests der App |
 | | `quiz-core.js` | Quiz-Logik ohne Seite: Kandidaten, Ziehen nach Stufen und Vorrang, Mischen, Auswerten, Fortschritt |
 | | `quiz-seite.js` | Quiz-Seite: Auswahl, Fragen mit sofortiger Rückmeldung, Auswertung, Fortschritt im Browser |
 | | `skript-kern.js` | Skript: Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
