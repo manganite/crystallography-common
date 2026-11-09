@@ -123,6 +123,20 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Vorschlags `<präfix>-quiz-experimente` im Issue) ist eine Wahl beim Umsetzen: Die Experimente gehören nicht
   zum Quiz, und ein Name unter `<präfix>-quiz` hätte nur genutzt, dass das Zurücksetzen das Quiz verschont.
   Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
+- **Tooltips: Abdeckung, Länge, Gerät** (Thomas, 8. und 9.11.2026, #114, Leitfaden Abschn. 5.3): Thomas fand zu einem
+  Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
+  Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, Export-Knöpfe mit Text und die Köpfe
+  einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
+  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Der Test sieht nur
+  Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
+  Browsertest je App (offen, #114). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
+  des PR #120). Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten Gerät (`data-zeiger`, `data-touch` an
+  `<html>`), nicht nur der Media Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte
+  „Erste Schritte“ sagte aber weiter „Das ⓘ … erklärt“ (Review von #116). Das ⓘ bleibt ab dem ersten Tippen sichtbar,
+  weil es sonst mit jeder Mausbewegung verschwände und eine offene Erklärung ohne Knopf zum Schliessen zurückliesse
+  (Befund des Browsertests). Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
+  von Chromium meldet mit Touchscreen immer `hover: none`, der Fall „Touchscreen und `hover: hover`“ wird deshalb mit
+  einem Zeigerereignis vom Typ `touch` geprüft.
 - **Experimente nach Kapiteln gliedern** (Thomas, 9.11.2026, #107, Leitfaden Abschn. 5.3): Mit 8–12 Experimenten je
   Modus (stereography#115, plane-groups#109) wird die flache Liste unübersichtlich; das Quiz gliedert schon nach
   Kapiteln. Schwelle 6 je Modus (gezählt wird, was die Liste eines Modus zeigt, nicht die ganze App). Das Kapitel steht
@@ -204,7 +218,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 
 ## Git, PRs und Releases
 
-- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in Apps auch `pdf`)
+- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in common auch `browser`, in Apps auch `pdf`)
   abwarten, das Review (nächster Punkt) einholen, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Review durch einen unabhängigen Agenten:** Vor dem Bericht prüft ein eigener Agent, der die Arbeit nicht
   kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche

@@ -1,0 +1,25 @@
+<!doctype html>
+<!-- Testseite für tests/browser/help.test.mjs: Tooltips, Texte für Maus und Touch, ⓘ (js/help.js, #114) -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Test help.js</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<main>
+  <section class="card">
+    <h2 id="h-a">Abschnitt</h2>
+    <button id="knopf" type="button">Knopf</button>
+    <input id="feld" type="text" aria-label="Feld">
+    <p><span class="only-fine" id="fein">Tooltips erklären jedes Bedienelement.</span><span class="only-coarse" id="grob">Das ⓘ erklärt die Bedienelemente.</span></p>
+  </section>
+</main>
+<script type="module">
+  import { initHelp } from '/js/help.js';
+  initHelp({ tips: { knopf: 'Tooltip des Knopfs.', feld: 'Tooltip des Felds.' }, sections: [{ heading: '#h-a', ids: ['knopf', 'feld'] }] });
+  document.body.dataset.bereit = '1';
+</script>
+</body>
+</html>

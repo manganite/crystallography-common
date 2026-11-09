@@ -95,6 +95,12 @@ Ohne Abhängigkeiten; Tests mit Node 22:
 node --test tests/*.test.mjs
 ```
 
+Browsertests (`tests/browser/`, CI-Job `browser`) prüfen, was nur im Browser prüfbar ist, z. B. Tooltips bei Maus, Tastatur und Touchscreen; sie brauchen Playwright mit Chromium (Pakete wie unten, dazu einmal `npx playwright install chromium`; mit `KONTRASTE_CHROME=<Pfad>` ein vorhandener Chrome):
+
+```bash
+node --test tests/browser/*.test.mjs
+```
+
 Typprüfung mit TypeScript über JSDoc-Typen (`tsconfig.json`, strikt) und ESLint (`eslint.config.mjs`, gemeinsame Regeln in `tools/eslint-basis.mjs`); Regeln im [Leitfaden](LEITFADEN.md), Abschn. 9. Beide werden nur dafür installiert, in der CI in den Jobs `typen` und `lint`; Versionen wie dort, alle Pakete in einem Befehl (ein zweites `npm install --no-save` entfernt die zuvor installierten):
 
 ```bash

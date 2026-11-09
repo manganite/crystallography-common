@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 22
       - name: Syntax check
-        run: for f in js/*.js tools/*.mjs tests/*.mjs vorlagen/app/js/*.js vorlagen/app/sw.js vorlagen/app/tools/*.mjs vorlagen/app/tests/*.mjs; do node --check "$f"; done
+        run: for f in js/*.js tools/*.mjs tests/*.mjs tests/browser/*.mjs vorlagen/app/js/*.js vorlagen/app/sw.js vorlagen/app/tools/*.mjs vorlagen/app/tests/*.mjs; do node --check "$f"; done
       - name: Tests
         run: node --test tests/*.test.mjs
       # Die Vorlage muss mit dem aktuellen Stand zusammenpassen (z. B. Offline-Liste, Einbindung der Stylesheets)
@@ -67,3 +67,22 @@ jobs:
         run: |
           node tools/sync.mjs vorlagen/app
           cd vorlagen/app && ../../node_modules/.bin/eslint .
+
+  # Browsertests (tests/browser/, Playwright mit Chromium; Entscheidung Thomas, 9.11.2026, #114): Verhalten, das nur
+  # im Browser prüfbar ist, z. B. Tooltips bei Maus, Tastatur und Touchscreen (js/help.js).
+  # Playwright 1.52 kennt die Systempakete von Ubuntu 24.04; ubuntu-latest wechselt auf Ubuntu 26 (wie „pdf“ der Apps)
+  browser:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.52.0
+          npx playwright install --with-deps chromium
+      - name: Browsertests
+        run: node --test tests/browser/*.test.mjs
