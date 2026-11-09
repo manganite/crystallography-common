@@ -6,6 +6,18 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Experimente nach Kapiteln** (`ablauf.js`, `hilfe-seite.js`, #107, Leitfaden 5.3; Entscheidungen Thomas, 9.11.2026): Ab 6 Experimenten in einem Modus gliedern die Liste in der App und die Hilfeseite sie nach den Kapiteln des Skripts, je Kapitel mit Titel (Nummer und Kurztitel wie im Quiz, für Screenreader mit „Kapitel“ davor; in der Seitenleiste als Beschriftung der Liste mit `aria-labelledby`, auf der Hilfeseite als Überschrift), durchgehend nummeriert. Neues Feld `kapitel` in `Ablauf` und `Erzeugt`, neue Option `kapitel` (`KAPITEL` der App) in `ablaufKarte`, `HilfeDaten` und `pruefeAblaeufe` (meldet unbekannte Kapitel und ab der Schwelle fehlende); `nachKapitel`, `kapitelTitel` und `GLIEDERN_AB` exportiert. Ohne Kapitel bleibt die Liste flach wie bisher. Vorlage nachgeführt (Daten, `main.js`, `hilfe-daten.js`, Test). Für die Apps: jedem Experiment `kapitel` geben und `kapitel: KAPITEL` an `ablaufKarte`, in `js/hilfe-daten.js` und im Test an `pruefeAblaeufe` übergeben; erzeugte Experimente in ihr Kapitel einordnen.
+
+### Geändert
+
+- **Hilfeseite: Experimente ohne Modus** (`hilfe-seite.js`, #107) erscheinen wie in der App in jedem Modus, nicht nur im ersten. Für die Apps: nichts anzupassen (alle Experimente haben einen Modus).
+
+### Behoben
+
+- **Zweistellige Nummern der Experimente** (`css/app.css`): Ab zehn Experimenten wurde die Nummer links abgeschnitten („0.“ statt „10.“); die Liste hat jetzt Platz für zwei Stellen. Für die Apps: nichts anzupassen.
+
 ## [0.15.1] - 2026-11-09
 
 Tooltips auch auf Laptops mit Touchscreen. Für die Apps: nichts anzupassen.

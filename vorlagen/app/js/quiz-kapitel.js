@@ -1,8 +1,10 @@
-// Kapitel des Skripts für das Quiz (Auswahl, Stand, Links ins Skript) und Name des Speichers im Browser.
+// Kapitel des Skripts für das Quiz (Auswahl, Stand, Links ins Skript) und die Liste der Experimente (Gliederung,
+// #107), dazu der Name des Speichers im Browser.
 
 /** @import { Kapitel } from '../lib/common/js/quiz-core.js' */
 
-/** Kapitel des Skripts mit Anker (skript.html#…); kurz: Name auf den Auswahlknöpfen des Quiz. @type {Kapitel[]} */
+/** Kapitel des Skripts mit Anker (skript.html#…); kurz: Name auf den Auswahlknöpfen des Quiz und über den
+ * Experimenten eines Kapitels. @type {Kapitel[]} */
 export const KAPITEL = [
   { nr: 1, titel: 'Ein Kapitel des Grundstoffs', kurz: 'Grundstoff', anker: 'kapitel1' },
   { nr: 2, titel: 'Ein Vertiefungskapitel', kurz: 'Vertiefung', anker: 'kapitel2' },
