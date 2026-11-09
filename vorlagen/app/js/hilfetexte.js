@@ -6,8 +6,8 @@
 
 /**
  * Tooltip-Texte je Element-ID, je ein kurzer Satz (Leitfaden Abschn. 5.3; höchstens TIP_MAX Zeichen, geprüft in
- * tests/common.test.mjs). Jedes Bedienelement hat einen, ausser selbsterklärenden Links, Schliessen „×“ und
- * Export-Knöpfen mit Text. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile.
+ * tests/common.test.mjs). Jedes Bedienelement hat einen, ausser selbsterklärenden Links, Schliessen „×“,
+ * Export-Knöpfen mit Text und Köpfen einklappbarer Abschnitte. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile.
  * @type {Record<string, string>}
  */
 export const TIPS = {
