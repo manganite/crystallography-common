@@ -26,9 +26,9 @@ export const TIP_MAX = 120;
 
 /**
  * Tags, die als Bedienelement einen Tooltip brauchen (mit id; input ausser type="hidden"). Attributwerte in
- * Anführungszeichen dürfen `>` enthalten.
+ * Anführungszeichen dürfen `>` enthalten. Ein HTML-Kommentar wird als Ganzes gefunden und übergangen (ohne Tag).
  */
-const BEDIENELEMENT = /<(button|input|select|textarea|a)\b((?:[^>"']|"[^"]*"|'[^']*')*)>/gi;
+const BEDIENELEMENT = /<!--[\s\S]*?-->|<(button|input|select|textarea|a)\b((?:[^>"']|"[^"]*"|'[^']*')*)>/gi;
 /** Wert eines Attributs (in Anführungszeichen oder ohne), nicht eines gleich endenden wie data-id. @param {string} attrs @param {string} name */
 const attribut = (attrs, name) => {
   const m = new RegExp(`(?:^|\\s)${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, 'i').exec(attrs);
@@ -53,7 +53,8 @@ export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
   const f = [];
   /** @type {Set<string>} */
   const ids = new Set();
-  for (const [, tag, attrs] of html.replace(/<!--[\s\S]*?-->/g, '').matchAll(BEDIENELEMENT)) {
+  for (const [, tag, attrs] of html.matchAll(BEDIENELEMENT)) {
+    if (tag === undefined) continue; // Kommentar
     const id = attribut(attrs, 'id');
     if (!id || attribut(attrs, 'type')?.toLowerCase() === 'hidden') continue;
     ids.add(id);
