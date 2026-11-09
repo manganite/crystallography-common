@@ -6,9 +6,13 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-11-09
+
+Tooltips auch auf Laptops mit Touchscreen. Für die Apps: nichts anzupassen.
+
 ### Behoben
 
-- **Tooltips auf Laptops mit Touchscreen** (`help.js`, #114): Tooltips erschienen nur, wenn der Browser die Maus als primäres Zeigegerät meldete (`(hover: hover) and (pointer: fine)`). Edge und Chrome unter Windows melden auf Laptops mit Touchscreen oft `pointer: coarse`, auch mit angeschlossener Maus; dann fehlten alle Tooltips (gemeldet von Thomas, Edge mit Maus). Massgebend ist jetzt das zuletzt benutzte Gerät: Maus (Tooltip beim Überfahren, auch über Polen mit `showTipAt`), Tastatur (beim Fokus) oder Touchscreen (kein Tooltip, auch nicht beim Tippen in ein Eingabefeld). Für die Apps: nichts anzupassen.
+- **Tooltips auf Laptops mit Touchscreen** (`help.js`, #114): Tooltips erschienen nur, wenn der Browser die Maus als primäres Zeigegerät meldete (`(hover: hover) and (pointer: fine)`). Edge und Chrome unter Windows melden auf Laptops mit Touchscreen oft `pointer: coarse`, auch mit angeschlossener Maus; dann fehlten alle Tooltips (gemeldet von Thomas, Edge mit Maus). Massgebend ist jetzt das zuletzt benutzte Gerät: Maus (Tooltip beim Überfahren, auch über Polen mit `showTipAt`), Tastatur (beim Fokus) oder Touchscreen (kein Tooltip, auch nicht beim Tippen in ein Eingabefeld). Leitfaden 5.3 nachgeführt. Für die Apps: nichts anzupassen.
 
 ## [0.15.0] - 2026-11-08
 
@@ -273,7 +277,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.15.1...HEAD
+[0.15.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.1
 [0.15.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.0
 [0.14.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.14.0
 [0.13.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.13.0
