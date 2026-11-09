@@ -54,7 +54,11 @@ export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
     if (id in tips) f.push(`${id}: Ausnahme, hat aber einen Tooltip`);
   }
   for (const [id, text] of Object.entries(tips)) {
-    const n = [...text.replace(/<[^>]*>/g, '').replace(/&(?:#\d+|#x[0-9a-f]+|[a-z]+);/gi, '_')].length;
+    // nur zum Zählen: Tags wiederholt entfernen, bis nichts mehr zu entfernen ist (wie ohneHTML in ablauf.js), dann
+    // verbliebene spitze Klammern; Entitäten zählen als ein Zeichen
+    let t = text;
+    for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
+    const n = [...t.replace(/[<>]/g, '').replace(/&(?:#\d+|#x[0-9a-f]+|[a-z]+);/gi, '_')].length;
     if (n > max) f.push(`${id}: Tooltip mit ${n} Zeichen, länger als ${max}`);
   }
   return f;

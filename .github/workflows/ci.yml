@@ -70,8 +70,9 @@ jobs:
 
   # Browsertests (tests/browser/, Playwright mit Chromium; Entscheidung Thomas, 9.11.2026, #114): Verhalten, das nur
   # im Browser prüfbar ist, z. B. Tooltips bei Maus, Tastatur und Touchscreen (js/help.js).
+  # Playwright 1.52 kennt die Systempakete von Ubuntu 24.04; ubuntu-latest wechselt auf Ubuntu 26 (wie „pdf“ der Apps)
   browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
