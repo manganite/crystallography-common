@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-11-09
+
+Experimente ab 6 je Modus nach Kapiteln gegliedert (#107); Regel und Prüfhelfer für Tooltips, Hinweise für Maus und Touch nach dem benutzten Gerät, Browsertests in der CI (#114). Für die Apps: ohne Anpassung übernehmbar (ohne `kapitel` bleibt die Liste flach); danach `kapitel` je Experiment und der Tooltip-Test der Vorlage mit gekürzten Texten (Einzelheiten unter „Neu“).
+
 ### Neu
 
 - **Experimente nach Kapiteln** (`ablauf.js`, `hilfe-seite.js`, #107, Leitfaden 5.3; Entscheidungen Thomas, 9.11.2026): Ab 6 Experimenten in einem Modus gliedern die Liste in der App und die Hilfeseite sie nach den Kapiteln des Skripts, je Kapitel mit Titel (Nummer und Kurztitel wie im Quiz, für Screenreader mit „Kapitel“ davor; in der Seitenleiste als Beschriftung der Liste mit `aria-labelledby`, auf der Hilfeseite als Überschrift), durchgehend nummeriert. Neues Feld `kapitel` in `Ablauf` und `Erzeugt`, neue Option `kapitel` (`KAPITEL` der App) in `ablaufKarte`, `HilfeDaten` und `pruefeAblaeufe` (meldet unbekannte Kapitel und ab der Schwelle fehlende); `nachKapitel`, `kapitelTitel` und `GLIEDERN_AB` exportiert. Ohne Kapitel bleibt die Liste flach wie bisher. Vorlage nachgeführt (Daten, `main.js`, `hilfe-daten.js`, Test). Für die Apps: jedem Experiment `kapitel` geben und `kapitel: KAPITEL` an `ablaufKarte`, in `js/hilfe-daten.js` und im Test an `pruefeAblaeufe` übergeben; erzeugte Experimente in ihr Kapitel einordnen.
@@ -14,6 +18,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
+- **`CLAUDE.md`, Übernahme in die Apps** (#121): Offene PRs einer App, die nur `CHANGELOG.md` berühren, halten eine Übernahme nicht auf (Entscheidung Thomas, 9.11.2026). Für die Apps: nichts anzupassen.
 - **Hilfeseite: Experimente ohne Modus** (`hilfe-seite.js`, #107) erscheinen wie in der App in jedem Modus, nicht nur im ersten. Für die Apps: nichts anzupassen (alle Experimente haben einen Modus).
 - **Texte für Maus und Touch und das ⓘ nach dem benutzten Gerät** (`help.js`, `css/app.css`, #114): `help.js` setzt `data-zeiger` (`maus` oder `touch`) an `<html>`; `.only-fine` und `.only-coarse` folgen dem zuletzt benutzten Gerät statt nur der Media Query (vorher sagte die Karte „Erste Schritte“ auf einem Laptop mit Touchscreen „Das ⓘ … erklärt“, obwohl Tooltips erschienen). Ein Stift zählt als Touch. Das ⓘ erscheint ausserdem ab dem ersten Tippen (`data-touch`), auch wenn der Browser `hover: hover` meldet; meldet er `hover: none`, bleibt es wie bisher immer sichtbar. Vor der ersten Eingabe gilt die Media Query wie bisher. Für die Apps: nichts anzupassen.
 
@@ -296,7 +301,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.15.1...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.16.0
 [0.15.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.1
 [0.15.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.0
 [0.14.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.14.0
