@@ -1,11 +1,12 @@
 // Geführte Abläufe (js/ablauf.js, #87): Prüfung der Daten, Verzweigung und das HTML eines Schritts.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pruefeAblaeufe, naechster, neuerStand, schrittHTML, listeHTML, ansage, ablaufKarte, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
+import { pruefeAblaeufe, nachKapitel, kapitelTitel, GLIEDERN_AB, naechster, neuerStand, schrittHTML, listeHTML, ansage, ablaufKarte, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
 import { leererFortschritt, vermerken, fortschrittAus } from '../js/quiz-core.js';
 import { hmHTML, hklHTML } from '../js/format.js';
 
 /** @import { Ablauf, Erzeugt } from '../js/ablauf.js' */
+/** @import { Kapitel } from '../js/quiz-core.js' */
 
 /** @type {Ablauf} */
 const LINEAR = {
@@ -336,4 +337,58 @@ test('ablaufKarte: Live-Region beim Wechsel des Modus geleert, ausstehende Ansag
   } finally {
     for (const n of ['HTMLElement', 'HTMLButtonElement', 'requestAnimationFrame', 'cancelAnimationFrame']) delete g[n];
   }
+});
+
+// Gliederung nach Kapiteln (#107): ab 6 Experimenten je Modus, Reihenfolge der Kapitel, darin der Daten
+/** @type {Kapitel[]} */
+const KAP = [{ nr: 1, titel: 'Erstes', kurz: 'Eins', anker: 'k1' }, { nr: 2, titel: 'Zweites', kurz: 'Zwei', anker: 'k2' }, { nr: 3, titel: 'Drittes', kurz: 'Drei', anker: 'k3' }];
+/** Experiment mit einem Schritt. @param {string} id @param {number} [kapitel] @param {string} [modus] @returns {Ablauf} */
+const ex = (id, kapitel, modus = 'a') => ({ id, modus, ...(kapitel === undefined ? {} : { kapitel }), titel: `T-${id}`, schritte: [{ frage: id, beobachtung: 'b' }] });
+
+test('nachKapitel: Schwelle 6, Reihenfolge der Kapitel, ohne Kapitel zuletzt', () => {
+  assert.equal(GLIEDERN_AB, 6);
+  const fuenf = ['a', 'b', 'c', 'd', 'e'].map((id) => ex(id, 2));
+  assert.deepEqual(nachKapitel(fuenf, KAP), [{ kapitel: null, eintraege: fuenf }], 'unter 6: eine Gruppe ohne Kapitel');
+  const sechs = [ex('a', 3), ex('b', 1), ex('c'), ex('d', 3), ex('e', 1), ex('f', 9)];
+  assert.deepEqual(nachKapitel(sechs, []), [{ kapitel: null, eintraege: sechs }], 'ohne Kapitel: flach');
+  assert.deepEqual(nachKapitel(sechs), [{ kapitel: null, eintraege: sechs }]);
+  const g = nachKapitel(sechs, KAP);
+  // Kapitel 2 hat keine Einträge und entfällt; unbekanntes Kapitel 9 und fehlendes zu „Weitere“
+  assert.deepEqual(g.map((x) => [x.kapitel?.nr ?? null, x.eintraege.map((e) => e.id)]), [[1, ['b', 'e']], [3, ['a', 'd']], [null, ['c', 'f']]]);
+  assert.equal(kapitelTitel(KAP[1]), '2 Zwei');
+  assert.equal(kapitelTitel(null), 'Weitere');
+});
+
+test('listeHTML: ab 6 Einträgen Überschriften je Kapitel, durchgehend nummeriert', () => {
+  const sechs = [ex('a', 3), ex('b', 1), ex('c', 1), ex('d', 3), ex('e', 1), ex('f', 3)];
+  const h = listeHTML(sechs, leererFortschritt(), KAP);
+  assert.deepEqual([...h.matchAll(/<h3 class="ablauf-kapitel">([^<]*)<\/h3>/g)].map((m) => m[1]), ['1 Eins', '3 Drei']);
+  assert.deepEqual([...h.matchAll(/data-ablauf="([^"]+)"/g)].map((m) => m[1]), ['b', 'c', 'e', 'a', 'd', 'f']);
+  assert.match(h, /<\/h3><ol class="ablauf-liste">/, 'erste Liste ohne start');
+  assert.match(h, /<h3 class="ablauf-kapitel">3 Drei<\/h3><ol class="ablauf-liste" start="4">/);
+  // unter der Schwelle oder ohne Kapitel: flach wie bisher
+  assert.doesNotMatch(listeHTML(sechs.slice(0, 5), leererFortschritt(), KAP), /<h3|start=/);
+  assert.doesNotMatch(listeHTML(sechs), /<h3|start=/);
+  // Stand über den ganzen Modus
+  const f = leererFortschritt();
+  vermerken(f, 'b', true); vermerken(f, 'f', false);
+  assert.match(listeHTML(sechs, f, KAP), /Stand: 1 ✓ \(zuletzt richtig\), 1 ○ \(durchgespielt\), 4 offen/);
+});
+
+test('pruefeAblaeufe: Kapitel bekannt, ab 6 je Modus vorhanden', () => {
+  const nr = KAP.map((k) => k.nr);
+  // Modus a: 6 Einträge (davon einer ohne Modus, er zählt in jedem Modus), Modus b: 2
+  const daten = [ex('a1', 1), ex('a2', 2), ex('a3', 2), ex('a4'), ex('a5', 3), ex('alle', 1, undefined), ex('b1', undefined, 'b'), ex('b2', 7, 'b')];
+  assert.deepEqual(pruefeAblaeufe(daten, { kapitel: nr }), [
+    'b2: unbekanntes Kapitel 7',
+    'a4: Kapitel fehlt (ab 6 Experimenten je Modus nach Kapiteln gegliedert)',
+  ]);
+  // b1 fehlt erst, wenn Modus b die Schwelle erreicht
+  assert.deepEqual(pruefeAblaeufe(daten.filter((a) => a.id !== 'a4'), { kapitel: nr }), ['b2: unbekanntes Kapitel 7']);
+  // ohne die Option keine Prüfung der Kapitel
+  assert.deepEqual(pruefeAblaeufe(daten), []);
+  // modi übergeben: auch ein Modus, in dem nur Experimente ohne Modus stehen, zählt
+  const ohneModus = ['x1', 'x2', 'x3', 'x4', 'x5', 'x6'].map((id) => ex(id, undefined, undefined));
+  assert.equal(pruefeAblaeufe(ohneModus, { kapitel: nr }).length, 6);
+  assert.equal(pruefeAblaeufe(ohneModus, { kapitel: nr, modi: ['a', 'b'] }).length, 6, 'je Experiment nur einmal gemeldet');
 });

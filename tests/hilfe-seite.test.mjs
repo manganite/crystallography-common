@@ -55,6 +55,22 @@ test('Inhalt: Anleitungen mit Bildern und Links, Experimente als Liste, leere Mo
   assert.match(hilfeHTML({ ...DATEN, app: 'app.html', bilder: 'bilder/' }), /src="bilder\/einstieg-a-1\.png"[\s\S]*href="app\.html#m=a&amp;g=p4"/);
 });
 
+test('Experimente nach Kapiteln wie in der App (#107): ab 6 je Modus, sonst eine Liste ohne Überschrift', () => {
+  const kapitel = [{ nr: 1, titel: 'Eins', kurz: 'Eins', anker: 'k1' }, { nr: 2, titel: 'Zwei', kurz: 'Zwei', anker: 'k2' }];
+  /** @param {string} id @param {number} [k] */
+  const ex = (id, k) => ({ id, modus: 'a', ...(k === undefined ? {} : { kapitel: k }), titel: `T-${id}`, schritte: [{ frage: `F-${id}` }] });
+  const sechs = [ex('p', 2), ex('q', 1), ex('r', 2), ex('s', 1), ex('t'), ex('u', 1)];
+  const h = hilfeHTML({ ...DATEN, experimente: sechs, kapitel });
+  const teil = h.slice(h.indexOf('id="experimente-a"'));
+  assert.deepEqual([...teil.matchAll(/<h4>([^<]*)<\/h4>/g)].map((m) => m[1]), ['1 Eins', '2 Zwei', 'Weitere']);
+  assert.deepEqual([...teil.matchAll(/<b>T-(\w)<\/b>/g)].map((m) => m[1]), ['q', 's', 'u', 'p', 'r', 't']);
+  assert.equal(teil.match(/<ul class="hilfe-liste">/g)?.length, 3);
+  // unter der Schwelle (DATEN: zwei Experimente) wie bisher
+  const flach = hilfeHTML({ ...DATEN, kapitel });
+  assert.doesNotMatch(flach, /<h4>/);
+  assert.equal(flach.match(/<ul class="hilfe-liste">/g)?.length, 1);
+});
+
 test('Prüfung: fehlende Elemente, Bilder, überzählige Bilder, unbekannte Modi', () => {
   const html = '<div id="picker"></div><details id="sec-view"></details><button id="tab-b"></button>';
   const dateien = ['einstieg-a-1.png', 'einstieg-a-2.png', 'einstieg-a-4.png', 'einstieg-a-5.png', 'einstieg-b-1.png'];

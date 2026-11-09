@@ -152,9 +152,12 @@ a.helpbtn { display: inline-grid; place-items: center; text-decoration: none; }
 .intro-foot { margin: 12px 0 0; font-size: 0.78rem; color: var(--muted); }
 /* Geführte Abläufe (js/ablauf.js): Experimente (Abschnitt „Experimente“) und Erste Schritte */
 .ablauf-hinweis { margin: 0 0 8px; font-size: 0.84rem; color: var(--muted); }
-.ablauf-liste { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; font-size: 0.86rem; }
+.ablauf-liste { margin: 0; padding-left: 1.9em; display: grid; gap: 8px; font-size: 0.86rem; }
 .ablauf-liste li::marker { color: var(--accent); font-weight: 600; }
 .ablauf-liste li.done .linkbtn { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+/* Gliederung nach Kapiteln ab 6 Experimenten je Modus (#107): Überschrift wie .group-title */
+.ablauf-kapitel { font-size: 0.78rem; color: var(--muted); font-weight: 600; margin: 12px 0 6px; }
+.ablauf-hinweis + .ablauf-kapitel { margin-top: 4px; }
 .ablauf-neu { color: var(--muted); }
 .ablauf-stand { margin: 10px 0 0; font-size: 0.78rem; color: var(--muted); }
 .ablauf-stand .linkbtn { font-size: inherit; }
