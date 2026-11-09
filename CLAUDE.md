@@ -275,7 +275,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
    (siehe „Git, PRs und Releases“).
 3. Je App ein PR: `git checkout vX.Y.Z` in common, dann in der App
    `node tools/common/sync.mjs ../crystallography-common`; Tests der App laufen lassen
-   (`tests/common.test.mjs` prüft die Kopie gegen das Manifest).
+   (`tests/common.test.mjs` prüft die Kopie gegen das Manifest). Dazu eine Zeile im CHANGELOG der App.
+   Übernommen wird nur, wenn kein offener PR der App dieselben Dateien berührt (#74); `CHANGELOG.md` zählt
+   dabei nicht, ein Konflikt dort wird beim späteren Merge aufgelöst (Thomas, 9.11.2026: sonst müsste jede
+   Übernahme warten, weil fast jeder PR eine Zeile unter „Unreleased“ ergänzt).
 4. Je App über einen Release-PR veröffentlichen, wenn Thomas das will.
 
 Bei einem Umbau ohne sichtbare Änderung (z. B. Umzug auf common, Stereo-App v1.11.0) vorher und nachher
