@@ -229,7 +229,7 @@ a.helpbtn { display: inline-grid; place-items: center; text-decoration: none; }
 }
 /* Das zuletzt benutzte Zeigegerät (data-zeiger, help.js) geht der Media Query vor: Laptops mit Touchscreen melden
    oft pointer: coarse, auch wenn mit der Maus gearbeitet wird (#114) */
-:root[data-zeiger="maus"] .only-fine, :root[data-zeiger="touch"] .only-coarse { display: inline; }
+:root[data-zeiger="maus"] .only-fine, :root[data-zeiger="touch"] .only-coarse { display: revert; }
 :root[data-zeiger="maus"] .only-coarse, :root[data-zeiger="touch"] .only-fine { display: none; }
 /* Tafeln */
 .panel { margin: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }

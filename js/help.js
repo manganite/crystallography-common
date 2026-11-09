@@ -1,8 +1,9 @@
 // Hilfen: Tooltips (Laptop: Maus oder Tastaturfokus) und ⓘ-Erklärungen je Abschnitt (Touch-Geräte).
 // Die Texte liefert die App (initHelp); hier steht nur die Mechanik. Stile in css/app.css (.tip, .infobtn, .helpbox).
 // Das zuletzt benutzte Zeigegerät steht als `data-zeiger` (maus | touch) an <html>; danach richten sich die Texte für
-// Maus und Touch (.only-fine, .only-coarse). Nach dem ersten Tippen steht dort zudem `data-touch`, und das ⓘ bleibt
-// sichtbar, auch wenn danach wieder die Maus benutzt wird (#114). pruefeTooltips() ist für die Tests der App.
+// Maus und Touch (.only-fine, .only-coarse). Ein Stift zählt als Touch (kein Tooltip, Texte „antippen“). Nach dem ersten
+// Tippen steht dort zudem `data-touch`, und das ⓘ bleibt sichtbar, auch wenn danach wieder die Maus benutzt wird; meldet
+// der Browser hover: none, ist es immer sichtbar (#114). pruefeTooltips() ist für die Tests der App.
 
 import { esc } from './format.js';
 
@@ -23,15 +24,24 @@ import { esc } from './format.js';
  */
 export const TIP_MAX = 120;
 
-/** Tags, die als Bedienelement einen Tooltip brauchen (mit id; input ausser type="hidden"). */
-const BEDIENELEMENT = /<(button|input|select|textarea|a)\b([^>]*)>/gi;
+/**
+ * Tags, die als Bedienelement einen Tooltip brauchen (mit id; input ausser type="hidden"). Attributwerte in
+ * Anführungszeichen dürfen `>` enthalten.
+ */
+const BEDIENELEMENT = /<(button|input|select|textarea|a)\b((?:[^>"']|"[^"]*"|'[^']*')*)>/gi;
+/** Wert eines Attributs (in Anführungszeichen oder ohne), nicht eines gleich endenden wie data-id. @param {string} attrs @param {string} name */
+const attribut = (attrs, name) => {
+  const m = new RegExp(`(?:^|\\s)${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, 'i').exec(attrs);
+  return m ? (m[1] ?? m[2] ?? m[3]) : undefined;
+};
 
 /**
  * Prüft die Tooltips einer App, für ihre Tests: Jedes Bedienelement mit id in `html` (button, input, select,
  * textarea, a) hat einen Eintrag in `tips`, ausser es steht in `ohne` (Ausnahmen nach Leitfaden 5.3: selbsterklärende
  * Links, Schliessen „×“, Export-Knöpfe mit Text). Jede Ausnahme muss im HTML vorkommen und darf keinen Tooltip haben,
- * damit die Liste nicht veraltet. Kein Tooltip ist länger als `max` Zeichen (ohne Auszeichnung und Entitäten als ein
- * Zeichen). Elemente ohne id und solche, die die App erst im Code erzeugt (`setTip`), sieht diese Prüfung nicht.
+ * damit die Liste nicht veraltet. Ein Element mit Tooltip hat kein `title` (der Browser zeigte sonst zwei). Kein Tooltip
+ * ist länger als `max` Zeichen (ohne Auszeichnung; Entitäten und Zeichen mit Querstrich als eines). Elemente ohne id,
+ * Elemente in Kommentaren und solche, die die App erst im Code erzeugt (`setTip`), sieht diese Prüfung nicht.
  * Rückgabe: Liste der Fehler (leer, wenn alles stimmt).
  * @param {string} html Inhalt von index.html
  * @param {Record<string, string>} tips Texte der Tooltips je id (TIPS der App)
@@ -43,11 +53,12 @@ export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
   const f = [];
   /** @type {Set<string>} */
   const ids = new Set();
-  for (const [, tag, attrs] of html.matchAll(BEDIENELEMENT)) {
-    const id = /\bid\s*=\s*["']([^"']+)["']/i.exec(attrs)?.[1];
-    if (!id || /\btype\s*=\s*["']?hidden\b/i.test(attrs)) continue;
+  for (const [, tag, attrs] of html.replace(/<!--[\s\S]*?-->/g, '').matchAll(BEDIENELEMENT)) {
+    const id = attribut(attrs, 'id');
+    if (!id || attribut(attrs, 'type')?.toLowerCase() === 'hidden') continue;
     ids.add(id);
     if (!(id in tips) && !ohne.includes(id)) f.push(`${tag.toLowerCase()}#${id}: kein Tooltip`);
+    if (id in tips && attribut(attrs, 'title') !== undefined) f.push(`${tag.toLowerCase()}#${id}: title und Tooltip (title entfernen)`);
   }
   for (const id of ohne) {
     if (!ids.has(id)) f.push(`${id}: Ausnahme, aber kein Bedienelement mit dieser id im HTML`);
@@ -55,10 +66,10 @@ export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
   }
   for (const [id, text] of Object.entries(tips)) {
     // nur zum Zählen: Tags wiederholt entfernen, bis nichts mehr zu entfernen ist (wie ohneHTML in ablauf.js), dann
-    // verbliebene spitze Klammern; Entitäten zählen als ein Zeichen
+    // verbliebene spitze Klammern; Entitäten zählen als ein Zeichen, kombinierende Zeichen (x̄) nicht extra
     let t = text;
     for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
-    const n = [...t.replace(/[<>]/g, '').replace(/&(?:#\d+|#x[0-9a-f]+|[a-z]+);/gi, '_')].length;
+    const n = [...t.replace(/[<>]/g, '').replace(/&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/gi, '_').replace(/\p{M}/gu, '')].length;
     if (n > max) f.push(`${id}: Tooltip mit ${n} Zeichen, länger als ${max}`);
   }
   return f;

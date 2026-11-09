@@ -39,3 +39,26 @@ test('pruefeTooltips: Höchstlänge ohne Auszeichnung, Entitäten als ein Zeiche
   assert.deepEqual(pruefeTooltips(HTML, tips, { ohne: ['help-open', 'intro-close'] }), ['lat: Tooltip mit 121 Zeichen, länger als 120']);
   assert.deepEqual(pruefeTooltips(HTML, tips, { ohne: ['help-open', 'intro-close'], max: 200 }), []);
 });
+
+test('pruefeTooltips: title neben einem Tooltip, Ausnahmen dürfen eines haben', () => {
+  const html = '<button id="mit" type="button" title="alt">A</button><a id="hilfe" href="h.html" title="Hilfe">?</a>';
+  assert.deepEqual(pruefeTooltips(html, { mit: 'Tooltip.' }, { ohne: ['hilfe'] }), ['button#mit: title und Tooltip (title entfernen)']);
+});
+
+test('pruefeTooltips: Attribute genau gelesen, Kommentare übergangen', () => {
+  const html = `<!-- <button id="alt">alt</button> -->
+<button data-id="foo" id="bar">B</button>
+<input id=ohneAnf>
+<input data-type="hidden" id="sichtbar">
+<input type=HIDDEN id="versteckt">
+<button id="pfeil" data-x="1>2">P</button>`;
+  assert.deepEqual(pruefeTooltips(html, { bar: 'x' }), ['input#ohneAnf: kein Tooltip', 'input#sichtbar: kein Tooltip', 'button#pfeil: kein Tooltip']);
+});
+
+test('pruefeTooltips: benannte Entitäten mit Ziffern und Zeichen mit Querstrich zählen als eines', () => {
+  const html = '<button id="a">A</button>';
+  // 116 + &frac12; + x̄ (x und U+0304) + &#772; (eigenständig, zählt als eines) + . = 120
+  const t = 'a'.repeat(116) + '&frac12;' + 'x̄' + '&#772;' + '.';
+  assert.deepEqual(pruefeTooltips(html, { a: t }), []);
+  assert.equal(pruefeTooltips(html, { a: t + 'b' }).length, 1);
+});

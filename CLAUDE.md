@@ -127,8 +127,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   einem Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
   Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“ und Export-Knöpfe mit Text (Thomas). „Ein Satz“ ist
   Richtwert, der Test prüft nur eine Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte
-  hatten gut 300. Der Test sieht nur Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im
-  Code erzeugte bräuchten einen Browsertest je App. Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten
+  hatten gut 300. Der Test sieht nur Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe), im
+  Code erzeugte und die Köpfe der Abschnitte (`summary`) bräuchten einen Browsertest je App (offen, #114). `title`
+  neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review des PR #120). Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten
   Gerät (`data-zeiger`, `data-touch` an `<html>`), nicht nur der Media Query: Nach #116 erschienen Tooltips auf einem
   Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter „Das ⓘ … erklärt“ (Review von #116). Das ⓘ
   bleibt ab dem ersten Tippen sichtbar, weil es sonst mit jeder Mausbewegung verschwände und eine offene Erklärung ohne
