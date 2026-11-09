@@ -7,6 +7,7 @@ import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik,
 import { ablaufKarte } from '../lib/common/js/ablauf.js';
 import { experimentAusAdresse } from '../lib/common/js/hilfe-seite.js';
 import { TIPS, SECTIONS, LABELS, ABLAEUFE, ERSTE_SCHRITTE } from './hilfetexte.js';
+import { KAPITEL } from './quiz-kapitel.js';
 import { VERSION } from './version.js';
 
 // Elemente der Seite (index.html) über die geprüften Helfer aus seite.js ($, eingabe, abschnitt, grafik, element, elemente)
@@ -120,7 +121,7 @@ function init() {
     experimente: () => { abschnitt('sec-experimente').open = true; abschnitt('sec-experimente').scrollIntoView({ block: 'nearest' }); },
   };
   const einstieg = ablaufKarte($('ablauf'), ERSTE_SCHRITTE, { anwenden, adresse, aktionen, skriptUrl, liste: false, beiAbschluss: introZu });
-  const experimente = ablaufKarte($('experimente'), ABLAEUFE, { anwenden, adresse, aktionen, skriptUrl, speicher: 'muster-experimente' });
+  const experimente = ablaufKarte($('experimente'), ABLAEUFE, { anwenden, adresse, aktionen, skriptUrl, speicher: 'muster-experimente', kapitel: KAPITEL });
   einstieg.modus('a'); experimente.modus('a');
   // Zustand aus der Adresse (in einer App über ihre Prüffunktion, Leitfaden Abschn. 5.2)
   if (location.hash) anwenden(location.hash);

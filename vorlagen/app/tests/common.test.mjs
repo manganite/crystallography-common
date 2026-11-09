@@ -37,9 +37,11 @@ test('keine Kopien gemeinsamer Module mehr in js/', () => {
 test('Erste Schritte und Lernexperimente: Daten vollständig (pruefeAblaeufe)', async () => {
   const { pruefeAblaeufe } = await import('../lib/common/js/ablauf.js');
   const { ABLAEUFE, ERSTE_SCHRITTE } = await import('../js/hilfetexte.js');
+  const { KAPITEL } = await import('../js/quiz-kapitel.js');
   // In einer App: hashGueltig über die Prüffunktion der Adresse (Rundlauf), modi und anker aus der App
   const o = { aktionen: ['darstellung', 'experimente'], modi: ['a', 'b'], hashGueltig: (/** @type {string} */ h) => /^#g=p/.test(h) };
-  assert.deepEqual(pruefeAblaeufe(ABLAEUFE, o), []);
+  // kapitel: ab 6 Experimenten je Modus braucht jedes ein bekanntes Kapitel (Gliederung der Liste, #107)
+  assert.deepEqual(pruefeAblaeufe(ABLAEUFE, { ...o, kapitel: KAPITEL }), []);
   assert.deepEqual(pruefeAblaeufe(ERSTE_SCHRITTE, o), []);
 });
 

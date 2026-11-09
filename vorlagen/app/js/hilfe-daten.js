@@ -3,6 +3,7 @@
 // Bilder: node tools/common/hilfe-bilder.mjs (schreibt hilfe/<Ablauf>-<Nr>.png), geprüft in tests/common.test.mjs.
 
 import { ERSTE_SCHRITTE, ABLAEUFE } from './hilfetexte.js';
+import { KAPITEL } from './quiz-kapitel.js';
 
 /** @import { HilfeDaten } from '../lib/common/js/hilfe-seite.js' */
 
@@ -18,4 +19,5 @@ export const HILFE = {
   ],
   ersteSchritte: ERSTE_SCHRITTE,
   experimente: ABLAEUFE,
+  kapitel: KAPITEL,
 };

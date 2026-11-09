@@ -57,11 +57,12 @@ export const ERSTE_SCHRITTE = [
  * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung. Ein Ablauf mit
  * params und make wird erzeugt (#92): je Parameter eine Aufgabe, am Ende „Neue Aufgabe“. In einer App prüft ein
  * Test die Aussage für jeden Parameter gegen ihre Daten; die Reihenfolge der Antworten wechselt mit dem Parameter.
+ * kapitel: Nummer im Skript wie im Quiz (js/quiz-kapitel.js); ab 6 Experimenten je Modus gliedert die Liste danach (#107).
  * @type {(Ablauf | Erzeugt)[]}
  */
 export const ABLAEUFE = [
   {
-    id: 'spiegel', modus: 'a', titel: 'Spiegellinien zählen',
+    id: 'spiegel', modus: 'a', kapitel: 1, titel: 'Spiegellinien zählen',
     schritte: [
       { frage: 'Wie viele Spiegellinien gehen durch einen 6-zähligen Drehpunkt in <i>p</i>6<i>mm</i>?', vermutung: ['drei', 'sechs'], richtig: 1,
         handlung: { text: '<i>p</i>6<i>mm</i> wählen', hash: '#g=p6mm' },
@@ -70,7 +71,7 @@ export const ABLAEUFE = [
   },
   {
     // erzeugt: n-zähliger Drehpunkt in pnmm, durch ihn gehen n Spiegellinien
-    id: 'spiegel-n', modus: 'a', titel: 'Spiegellinien durch einen Drehpunkt',
+    id: 'spiegel-n', modus: 'a', kapitel: 1, titel: 'Spiegellinien durch einen Drehpunkt',
     params: () => ['2', '4', '6'],
     make: (n) => {
       // Antworten je Parameter in anderer Reihenfolge, damit die richtige nicht immer an derselben Stelle steht
