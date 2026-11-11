@@ -77,13 +77,18 @@ Repo-Name, bei den Apps auch Pfad auf GitHub Pages:
 
 Die Regeln selbst stehen im Leitfaden; hier, warum.
 
-- **Entwicklung vor Stabilität** (Thomas, 10. und 11.11.2026, #126, Leitfaden Abschn. 8): „Wir sollten wirklich auf
+- **Entwicklung vor Stabilität** (Thomas, 10. und 11.11.2026, #126, Leitfaden Abschn. 8, auch 5.2, 7, 9, 10): „Wir sollten wirklich auf
   sauberen Code bestehen, der keine unnötigen Altlasten mit sich herumschleppt.“ Der Kreis der Nutzer ist klein, und
   die Nutzung ist ein Testlauf; niemand ausserhalb verlässt sich auf feste Link-Adressen. Grössere Umbauten (Anlass:
   ein dritter Modus in plane-groups) sollen deshalb nicht an der Umrechnung alter Links und Speicherstände hängen,
   und vorhandener Code dafür kommt in beiden Apps jetzt heraus, „bevor sich noch mehr ansammelt“. Stabil werden die
   Link-Adressen, „wenn die Apps auch sonst ihre endgültige Form erreicht haben“. Ersetzt die frühere Regel, dass
-  Link-Adressen und Namen im Speicher von Anfang an stabil bleiben.
+  Link-Adressen und Namen im Speicher von Anfang an stabil bleiben. Derzeit sind alle Apps in Entwicklung (11.11.2026).
+  Aus dem Review des PR #127: Der Lernstand ist ausgenommen, weil Thomas' Antworten das „Link Feature“ betreffen und
+  der Lernstand der Studierenden sonst verloren ginge (offene Frage an Thomas in #126); geänderte Bedeutung heisst
+  neuer Schlüssel, geändertes Format neue Version, damit nichts umgedeutet wird (Leitfaden 5.2); ein Bruch des
+  Link-Formats zählt als MINOR, weil die Apps sonst bei jedem Umbau eine neue Hauptversion bräuchten; Links zwischen
+  den Apps liegen in getrennten Repos und lassen sich nicht im selben PR anpassen.
 - **Gemeinsamer Rechenkern in TypeScript, eigenes Repository** (Thomas, 7.11.2026, #99): Punktgruppen
   werden heute in stereography und in birss-app unabhängig voneinander erzeugt, die Ebenengruppen in
   plane-groups; die 3D-App (#9) bräuchte die Gruppen ein weiteres Mal. Thomas hält die Rechenmodule von
