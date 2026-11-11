@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Leitfaden 7, 8, 9, 10: Entwicklung vor Stabilität** (Entscheidung Thomas, #126): Solange eine App in Entwicklung ist, dürfen sich Link-Adressen und Speicher ohne Umrechnung ändern; Code zum Umrechnen alter Links und Speicherstände wird entfernt. Geänderte Bedeutung heisst neuer Schlüssel, geändertes Format neue Version; Bruch des Link-Formats als MINOR mit Hinweis im CHANGELOG. Das gilt auch für den Lernstand (Quiz, Experimente). Links und Anker, die eine andere App nutzt, nur mit PR dort und abgestimmten Releases. Stabil werden Link-Adressen und Speicher erst, wenn die App ihre endgültige Form erreicht hat; die `CLAUDE.md` der App vermerkt den Stand. READMEs der Vorlage entsprechend. Für die Apps: Stand in der `CLAUDE.md` vermerken, Umrechnungen alter Links und Speicherstände entfernen (eigene PRs).
+- **Leitfaden 5.2, 7, 8, 9, 10: Entwicklung vor Stabilität** (Entscheidung Thomas, #126): Solange eine App in Entwicklung ist, dürfen sich Link-Adressen und Speicher ohne Umrechnung ändern; Code zum Umrechnen alter Links und Speicherstände wird entfernt. Geänderte Bedeutung heisst neuer Schlüssel, geändertes Format neue Version; Bruch des Link-Formats als MINOR mit Hinweis im CHANGELOG. Das gilt auch für den Lernstand (Quiz, Experimente). Links und Anker, die eine andere App nutzt, nur mit PR dort und abgestimmten Releases. Stabil werden Link-Adressen und Speicher erst, wenn die App ihre endgültige Form erreicht hat; die `CLAUDE.md` der App vermerkt den Stand. READMEs der Vorlage entsprechend. Für die Apps: Stand in der `CLAUDE.md` vermerken, Umrechnungen alter Links und Speicherstände entfernen (eigene PRs).
 
 ## [0.16.0] - 2026-11-09
 

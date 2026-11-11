@@ -26,7 +26,7 @@ test('jede Seite bindet Schriften, base.css und das Stylesheet ihres Seitentyps 
   }
 });
 
-test('Quiz: Speicher im Browser heisst wie festgelegt (Umbenennen löscht den Lernstand, Leitfaden Abschn. 7)', () => {
+test('Quiz: Speicher im Browser heisst wie festgelegt (Umbenennen verwirft den Lernstand, Leitfaden Abschn. 7)', () => {
   assert.equal(SPEICHER, 'muster-quiz');
 });
 
