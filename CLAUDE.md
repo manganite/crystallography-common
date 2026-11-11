@@ -215,6 +215,11 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 - **Schlüssel des Fortschritts ohne Stufe** (5.11.2026, Leitfaden Abschn. 7): Statt die Stufe in den Schlüssel
   aufzunehmen, sind Parameter über alle Stufen eindeutig. So bleibt der gespeicherte Fortschritt gültig; alle Generatoren der Apps
   erfüllten das schon.
+- **Browser in CI, Deploy und Release ohne apt** (11.11.2026, #128, Thomas einverstanden): `npx playwright install
+  chromium` ohne `--with-deps`, weil ein Ausfall der Ubuntu-Paketquellen sonst Prüfungen und Releases verhindert
+  (11.11.2026 mehrfach). Die Bibliotheken bringt das Image Ubuntu 24.04 mit; die Zeichen des Skripts ausserhalb der
+  eigenen Schriften deckt dort DejaVu ab (in der CI geprüft, nur ⓘ nicht, das im Skript nicht vorkommt). Beim Wechsel
+  des Images oder der Version von Playwright neu prüfen.
 
 ## Git, PRs und Releases
 
