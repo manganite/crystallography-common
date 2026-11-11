@@ -10,6 +10,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 - **Leitfaden 5.2, 7, 8, 9, 10: Entwicklung vor Stabilität** (Entscheidung Thomas, #126): Solange eine App in Entwicklung ist, dürfen sich Link-Adressen und Speicher ohne Umrechnung ändern; Code zum Umrechnen alter Links und Speicherstände wird entfernt. Geänderte Bedeutung heisst neuer Schlüssel, geändertes Format neue Version; Bruch des Link-Formats als MINOR mit Hinweis im CHANGELOG. Das gilt auch für den Lernstand (Quiz, Experimente). Links und Anker, die eine andere App nutzt, nur mit PR dort und abgestimmten Releases. Stabil werden Link-Adressen und Speicher erst, wenn die App ihre endgültige Form erreicht hat; die `CLAUDE.md` der App vermerkt den Stand. READMEs der Vorlage entsprechend. Für die Apps: Stand in der `CLAUDE.md` vermerken, Umrechnungen alter Links und Speicherstände entfernen (eigene PRs).
 
+### Behoben
+
+- **CI ohne apt** (#128): Der Browser für die Tests wird ohne `--with-deps` installiert, also ohne Systempakete über `apt`; am 11.11.2026 scheiterten die Jobs mehrfach, weil der Runner die Paketquellen von Ubuntu nicht erreichte. Ebenso in den Workflows der Vorlage (`ci.yml`, `deploy.yml`, `release.yml`). Für die Apps: dieselbe Änderung in ihren Workflows.
+
 ## [0.16.0] - 2026-11-09
 
 Experimente ab 6 je Modus nach Kapiteln gegliedert (#107); Regel und Prüfhelfer für Tooltips, Hinweise für Maus und Touch nach dem benutzten Gerät, Browsertests in der CI (#114); zweistellige Nummern der Experimente nicht mehr abgeschnitten. Für die Apps: ohne Anpassung übernehmbar (ohne `kapitel` bleibt die Liste flach); danach `kapitel` je Experiment und der Tooltip-Test der Vorlage mit gekürzten Texten (Einzelheiten unter „Neu“).
