@@ -61,7 +61,7 @@ Ein Doppelklick auf `index.html` genügt nicht: Browser laden die JavaScript-Mod
 
 ## Link-Adressen
 
-Der Zustand steht lesbar in der Adresse, z. B. `#m=a&g=p4mm`. Geschrieben wird nur, was vom Startzustand abweicht. Die Link-Adressen sind eine Schnittstelle (Skript, Quiz, andere Apps der Familie) und bleiben stabil; alte Links werden umgerechnet (Test `tests/zustand.test.mjs`):
+Der Zustand steht lesbar in der Adresse, z. B. `#m=a&g=p4mm`. Geschrieben wird nur, was vom Startzustand abweicht. Die Link-Adressen sind eine Schnittstelle (Skript, Quiz, andere Apps der Familie), geprüft von `tests/zustand.test.mjs`. Solange die App in Entwicklung ist, kann sich das Format ändern; alte Links gelten dann nicht mehr (Leitfaden der Familie, Abschnitt 8):
 
 | Schlüssel | Bedeutung | Werte (Startwert fett) |
 |---|---|---|

@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Leitfaden 5.2, 7, 8, 10: Entwicklung vor Stabilität** (Entscheidung Thomas, #126): Solange eine App in Entwicklung ist, dürfen sich Link-Adressen und Speicher ohne Umrechnung ändern; Code zum Umrechnen alter Links und Speicherstände wird entfernt. Stabil werden sie erst, wenn die App ihre endgültige Form erreicht hat; die `CLAUDE.md` der App vermerkt den Stand. README der Vorlage entsprechend. Für die Apps: Stand in der `CLAUDE.md` vermerken, Umrechnungen alter Links und Speicherstände entfernen (eigene PRs).
+
 ## [0.16.0] - 2026-11-09
 
 Experimente ab 6 je Modus nach Kapiteln gegliedert (#107); Regel und Prüfhelfer für Tooltips, Hinweise für Maus und Touch nach dem benutzten Gerät, Browsertests in der CI (#114); zweistellige Nummern der Experimente nicht mehr abgeschnitten. Für die Apps: ohne Anpassung übernehmbar (ohne `kapitel` bleibt die Liste flach); danach `kapitel` je Experiment und der Tooltip-Test der Vorlage mit gekürzten Texten (Einzelheiten unter „Neu“).
