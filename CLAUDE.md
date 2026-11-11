@@ -84,8 +84,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   und vorhandener Code dafür kommt in beiden Apps jetzt heraus, „bevor sich noch mehr ansammelt“. Stabil werden die
   Link-Adressen, „wenn die Apps auch sonst ihre endgültige Form erreicht haben“. Ersetzt die frühere Regel, dass
   Link-Adressen und Namen im Speicher von Anfang an stabil bleiben. Derzeit sind alle Apps in Entwicklung (11.11.2026).
-  Aus dem Review des PR #127: Der Lernstand ist ausgenommen, weil Thomas' Antworten das „Link Feature“ betreffen und
-  der Lernstand der Studierenden sonst verloren ginge (offene Frage an Thomas in #126); geänderte Bedeutung heisst
+  Auch der Lernstand (Quiz, Experimente) darf verloren gehen (Thomas, 11.11.2026: „Zum jetzigen Zeitpunkt kann der
+  Lernstand noch verloren gehen.“). Aus dem Review des PR #127: geänderte Bedeutung heisst
   neuer Schlüssel, geändertes Format neue Version, damit nichts umgedeutet wird (Leitfaden 5.2); ein Bruch des
   Link-Formats zählt als MINOR, weil die Apps sonst bei jedem Umbau eine neue Hauptversion bräuchten; Links zwischen
   den Apps liegen in getrennten Repos und lassen sich nicht im selben PR anpassen.

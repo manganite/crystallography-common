@@ -24,7 +24,7 @@ cd vorlagen/app && python3 -m http.server 8000
    |---|---|---|
    | `Muster-App` | Titel in allen Seiten, Manifest, README, CITATION, Werkzeuge | Name der App |
    | `muster-app` | Adressen in README, CITATION, `tools/skript-pdf.mjs`, `.github/ISSUE_TEMPLATE/config.yml` | Name des Repositories |
-   | `muster-quiz` | `js/quiz-kapitel.js`, `tests/common.test.mjs` | Präfix für den Speicher des Quiz (danach nie ändern, Leitfaden Abschn. 7) |
+   | `muster-quiz` | `js/quiz-kapitel.js`, `tests/common.test.mjs` | Präfix für den Speicher des Quiz (nicht ohne Grund ändern; Leitfaden Abschn. 7, 8) |
    | `muster-` | `sw.js` (Cache), `js/main.js` (`muster-intro`, `alleEinstellungenZuruecksetzen('muster')`) | eigenes Präfix (nicht ohne Grund ändern; Leitfaden Abschn. 8) |
    | Icons | `icons/` | eigene Icons (gleicher Stil: Motiv der App auf hellem Grund) |
 
