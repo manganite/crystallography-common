@@ -10,5 +10,5 @@ export const KAPITEL = [
   { nr: 2, titel: 'Ein Vertiefungskapitel', kurz: 'Vertiefung', anker: 'kapitel2' },
 ];
 
-/** Präfix der Einträge im Browser (<Präfix>-v1, -entwurf, -lauf). Einmal festlegen, danach nie ändern. */
+/** Präfix der Einträge im Browser (<Präfix>-v1, -entwurf, -lauf). Einmal festlegen, nicht ohne Grund ändern (Leitfaden Abschn. 7, 8). */
 export const SPEICHER = 'muster-quiz';
