@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-11-12
+
+Leitfaden 5.3 zu Tooltips und Experimenten, schmalere Spalte der Gruppenwahl. Für die Apps: Tooltips und Experimente nach Leitfaden 5.3 durchsehen; sonst nichts anzupassen.
+
 ### Geändert
 
 - **Leitfaden 5.3, Tooltips und Experimente** (Thomas, 12.11.2026): Tooltips nennen kurz die Funktion oder eine nötige Angabe, sonst nur, was nicht zu sehen ist; keine Wiederholung von Beschriftung oder Aufbau, keine Begründungen des Features. Jedes Experiment steht für sich und knüpft nicht an ein anderes an. Für die Apps: Tooltips und Experimente danach durchsehen.
@@ -333,7 +337,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.19.0
 [0.18.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.18.0
 [0.17.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.17.0
 [0.16.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.16.0
