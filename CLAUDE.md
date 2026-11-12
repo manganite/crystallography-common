@@ -138,7 +138,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
 - **Tooltips: Abdeckung, Länge, Gerät** (Thomas, 8. und 9.11.2026, #114, Leitfaden Abschn. 5.3): Thomas fand zu einem
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
-  Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, Export-Knöpfe mit Text und die Köpfe
+  Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, das Export-Menü (bis #130 Export-Knöpfe mit Text) und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
   Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
   Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
@@ -183,6 +183,25 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Startzustand sicher; Thomas zog diese Lösung vor. Gelöscht wird nach Präfix statt nach einer Liste, damit ein
   neuer Eintrag nicht vergessen werden kann (Befund des Reviews); das Präfix trennt die Apps, die auf
   manganite.github.io denselben Speicher teilen. Feste ID `reset-alles` für Tooltips und die Hilfeseite (#24).
+- **Seitenleiste und Tafel** (Thomas, 12.11.2026, #130, Leitfaden Abschn. 4, 5.1, 5.2, 5.3): Anlass war die Bewertung
+  von plane-groups v1.3.0 („Im Moment muss man relativ viel scrollen, es gibt teilweise sehr lange Erklärtexte für recht
+  wenig Funktionen. Was ist in der Seitenleiste, was ist im Fenster?“). Gemessen am Laptop (1440 × 900): Seitenleiste
+  963 px („Ebenengruppen“), 1515 px („Gitter und Basis“), 1799 px („Muster entwerfen“) bei etwa 880 px Platz. Ursachen:
+  Handlungen auf der Zeichnung verstreut über Seitenleiste und Tafel, Anleitungstexte doppelt zu Tooltip und ⓘ,
+  Eigenschaften, die ein Objekt nicht hat, gesperrt mit langer Begründung. Entschieden: der Grundsatz (Seitenleiste sagt,
+  was da ist; Tafel trägt, was man auf der Zeichnung tut), fehlende statt gesperrter Eigenschaften (gesperrt mit Grund
+  passt auf einen Schalter, der ruht und wieder wirken kann; eine Eigenschaft, die das Objekt nicht hat, ruht nicht),
+  Export als ein Knopf mit Menü, damit der Kopf der Tafel einzeilig bleibt. Beschriftung „Export“ mit den Einträgen
+  „Kopieren (PNG)“, „SVG-Datei speichern“, „PNG-Datei speichern“ (Thomas); die Einträge sagen damit selbst, was sie tun,
+  und brauchen keinen Tooltip. Knöpfe als Symbol, wo Text nicht passt (Thomas: für die meisten Werkzeuge gibt es
+  etablierte Symbole, Stift, Radiergummi, Plus, Mauszeiger); Name im `aria-label`, Erklärung im Tooltip. Ein Baustein in
+  `seite.js` (Muster „Menu Button“ der WAI-ARIA Authoring Practices), weil beide Apps exportieren und Tastatur, Fokus und
+  Schliessen sonst je App anders würden; `herunterladen` und `inZwischenablage` kamen mit, weil beide Apps sie gleich
+  hatten. Rückmeldung zusätzlich als Statusmeldung, weil ein Screenreader die Änderung des Namens eines fokussierten
+  Knopfs nicht zuverlässig ansagt (Review des PR #133). Eingeführt beim Umsetzen, noch von Thomas zu bestätigen: Einrasten
+  ist ein Schalter, Rückgängig, Löschen und Entfernen sind Handlungen (so in #130 d); Handlungen sind gesperrt, solange es
+  nichts zu tun gibt, ohne Grund, weil er aus der Zeichnung folgt. Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet mit
+  `overflow: hidden` ab (Befund im Browser an der Vorlage). Nicht ersetzt ist die Prüfung mit Studierenden (#117).
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,
   nicht auf Werkzeuge, die sich wie eine Auswahl ausschliessen: Ein gesperrtes, aber gewähltes Zeichenwerkzeug

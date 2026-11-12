@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Testseite für tests/browser/export.test.mjs: Export als Knopf mit Menü (exportMenue, js/seite.js; #130) -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Test Export-Menü</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<main>
+  <figure class="panel" style="width: 520px; margin: 20px">
+    <div class="panel-head">
+      <span class="t">Tafel</span>
+      <div class="tools" role="group" aria-label="Ansicht"><button type="button" class="sym" id="lupe" aria-pressed="false" aria-label="Lupe"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6" fill="none" stroke="currentColor"/></svg></button></div>
+      <div class="tools export"><button type="button" class="exportknopf" id="export">Export</button></div>
+    </div>
+    <svg viewBox="0 0 100 100" width="520" height="300"></svg>
+  </figure>
+  <div class="tools export" style="display: inline-block; margin: 20px"><button type="button" class="exportknopf" id="export2">Zweites</button></div>
+  <button type="button" id="danach">Danach</button>
+</main>
+<script type="module">
+  import { exportMenue } from '/js/seite.js';
+  window.aufrufe = [];
+  window.exportMenue = exportMenue; // für den Test eines zweiten Aufrufs
+  exportMenue(/** @type {HTMLButtonElement} */ (document.getElementById('export')), [
+    { text: 'Kopieren (PNG)', tun: () => { window.aufrufe.push('kopieren'); return Promise.resolve(); }, erfolg: 'Kopiert' },
+    { text: 'SVG-Datei speichern', tun: () => { window.aufrufe.push('svg'); } },
+    { text: 'PNG-Datei speichern', tun: () => { window.aufrufe.push('png'); return Promise.reject(new Error('nein')); } },
+    { text: 'Wirft', tun: () => { throw new Error('sofort'); } },
+  ]);
+  exportMenue(/** @type {HTMLButtonElement} */ (document.getElementById('export2')), [
+    { text: 'Nur einer', tun: () => { window.aufrufe.push('zweites'); } },
+  ]);
+  document.body.dataset.bereit = '1';
+</script>
+</body>
+</html>
