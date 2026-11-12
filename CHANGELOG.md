@@ -6,10 +6,13 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-11-12
+
+Entwicklung vor Stabilität im Leitfaden (#126); `CHROMIUM_PFAD` für alle Werkzeuge, auch das Skript-PDF (#125); CI ohne apt (#128). Für die Apps: `KONTRASTE_CHROME` in eigenen Werkzeugen durch `CHROMIUM_PFAD` ersetzen (plane-groups `tools/entwurf-pruefen.mjs`); sonst ohne Anpassung übernehmbar.
+
 ### Geändert
 
 - **Leitfaden 5.2, 7, 8, 9, 10: Entwicklung vor Stabilität** (Entscheidung Thomas, #126): Solange eine App in Entwicklung ist, dürfen sich Link-Adressen und Speicher ohne Umrechnung ändern; Code zum Umrechnen alter Links und Speicherstände wird entfernt. Geänderte Bedeutung heisst neuer Schlüssel, geändertes Format neue Version; Bruch des Link-Formats als MINOR mit Hinweis im CHANGELOG. Das gilt auch für den Lernstand (Quiz, Experimente). Links und Anker, die eine andere App nutzt, nur mit PR dort und abgestimmten Releases. Stabil werden Link-Adressen und Speicher erst, wenn die App ihre endgültige Form erreicht hat; die `CLAUDE.md` der App vermerkt den Stand. READMEs der Vorlage entsprechend. Für die Apps: Stand in der `CLAUDE.md` vermerken, Umrechnungen alter Links und Speicherstände entfernen (eigene PRs).
-
 - **Umgebungsvariable `CHROMIUM_PFAD` statt `KONTRASTE_CHROME`** (#125): Der Pfad eines vorhandenen Chromium gilt jetzt für alle Werkzeuge (Kontraste, Hilfebilder, Skript-PDF, Browsertests) und heisst deshalb neutral. Der alte Name gilt nicht mehr, ohne Warnung. Für die Apps: eigene Werkzeuge mit der Variable (in plane-groups `tools/entwurf-pruefen.mjs`) im PR der Übernahme umstellen.
 
 ### Behoben
@@ -312,7 +315,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.16.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.17.0
 [0.16.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.16.0
 [0.15.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.1
 [0.15.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.0
