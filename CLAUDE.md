@@ -139,7 +139,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
   Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, Export-Knöpfe mit Text und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
-  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Der Test sieht nur
+  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
+  Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
+  sollen nur die Funktion oder eine nötige Angabe nennen. Ebenso setzte ein Experiment das Ende eines anderen voraus und war allein
+  unverständlich; jedes steht deshalb für sich (Leitfaden Abschn. 5.3). Der Test sieht nur
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
   Browsertest je App (offen, #114). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
   des PR #120). Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten Gerät (`data-zeiger`, `data-touch` an

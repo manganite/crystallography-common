@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Leitfaden 5.3, Tooltips und Experimente** (Thomas, 12.11.2026): Tooltips nennen kurz die Funktion oder eine nötige Angabe, sonst nur, was nicht zu sehen ist; keine Wiederholung von Beschriftung oder Aufbau, keine Begründungen des Features. Jedes Experiment steht für sich und knüpft nicht an ein anderes an. Für die Apps: Tooltips und Experimente danach durchsehen.
+
 ## [0.17.0] - 2026-11-12
 
 Entwicklung vor Stabilität im Leitfaden (#126); `CHROMIUM_PFAD` für alle Werkzeuge, auch das Skript-PDF (#125); CI ohne apt (#128). Für die Apps: `KONTRASTE_CHROME` in eigenen Werkzeugen durch `CHROMIUM_PFAD` ersetzen (plane-groups `tools/entwurf-pruefen.mjs`); sonst ohne Anpassung übernehmbar.
