@@ -147,7 +147,7 @@ function init() {
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText().replace('<svg ', '<svg width="520" height="520" '));
   });
   exportMenue(knopf('export-a'), [
-    { text: 'Kopieren (PNG)', tun: () => inZwischenablage(png()), erfolg: 'Kopiert' },
+    { text: 'Kopieren (PNG)', tun: () => inZwischenablage(png), erfolg: 'Kopiert' },
     { text: 'SVG-Datei speichern', tun: () => herunterladen(new Blob([svgText()], { type: 'image/svg+xml' }), 'tafel-a.svg') },
     { text: 'PNG-Datei speichern', tun: async () => herunterladen(await png(), 'tafel-a.png') },
   ]);

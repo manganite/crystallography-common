@@ -85,6 +85,9 @@ test('Maus: öffnen, Eintrag wählen, Rückmeldung im Knopf; Klick ausserhalb sc
   await p.click('text=Kopieren (PNG)');
   assert.deepEqual(await aufrufe(p), ['kopieren']);
   await p.waitForFunction(() => document.getElementById('export')?.textContent === 'Kopiert');
+  // Name des Knopfs bleibt, die Rückmeldung steht auch in der Statusmeldung (Screenreader)
+  assert.deepEqual(await p.evaluate(() => [document.getElementById('export')?.getAttribute('aria-label'),
+    document.querySelector('#export-menue + [role="status"]')?.textContent]), ['Export', 'Kopiert']);
   const z = await zustand(p);
   assert.equal(z.offen, false);
   assert.equal(z.expanded, 'false');
@@ -138,7 +141,7 @@ test('Tastatur: Pfeile, Pos1, Ende, Enter, Esc, Tab', async () => {
   await p.keyboard.press('Tab');
   z = await zustand(p);
   assert.equal(z.offen, false);
-  assert.equal(z.fokus, 'Danach');
+  assert.equal(z.fokus, 'Zweites', 'nächstes Bedienelement');
   assert.deepEqual(await aufrufe(p), ['svg']);
   await schliessen(p);
 });
@@ -180,5 +183,33 @@ test('Knopf am Anfang einer Zeile: Menü linksbündig, innerhalb der Tafel', asy
   await p.click('#export');
   assert.equal((await lage()).innen, true, 'Knopf am Zeilenanfang');
   assert.equal(await p.evaluate(() => document.getElementById('export-menue')?.classList.contains('links')), true);
+  await schliessen(p);
+});
+
+test('Zwei Menüs auf einer Seite, Shift+Tab, Klick auf ein anderes Bedienelement', async () => {
+  const p = await seite();
+  const offen = () => p.evaluate(() => ['export-menue', 'export2-menue'].map((id) => !document.getElementById(id)?.hidden));
+  await p.click('#export');
+  assert.deepEqual(await offen(), [true, false]);
+  await p.click('#export2');
+  assert.deepEqual(await offen(), [false, true], 'das andere schliesst');
+  await p.keyboard.press('Enter');
+  assert.deepEqual(await aufrufe(p), ['zweites']);
+  // Shift+Tab im Menü: schliesst, Fokus auf dem Knopf
+  await p.focus('#export');
+  await p.keyboard.press('ArrowDown');
+  await p.keyboard.press('Shift+Tab');
+  assert.deepEqual(await offen(), [false, false]);
+  assert.equal(await p.evaluate(() => document.activeElement?.id), 'export');
+  // Klick auf ein anderes Bedienelement schliesst
+  await p.click('#export');
+  await p.click('#lupe');
+  assert.deepEqual(await offen(), [false, false]);
+  // ein zweites Menü für denselben Knopf und ein leeres sind Fehler
+  assert.match(await p.evaluate(() => {
+    const { exportMenue } = /** @type {{ exportMenue: typeof import('../../js/seite.js').exportMenue }} */ (/** @type {unknown} */ (window));
+    const k = /** @type {HTMLButtonElement} */ (document.getElementById('export'));
+    try { exportMenue(k, [{ text: 'x', tun: () => {} }]); return 'kein Fehler'; } catch (e) { return String(e); }
+  }), /hat schon ein Menü/);
   await schliessen(p);
 });

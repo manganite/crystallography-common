@@ -137,7 +137,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Vor jedem Schreiben wird neu gelesen, damit zwei offene Tabs einander nichts überschreiben.
 - **Tooltips: Abdeckung, Länge, Gerät** (Thomas, 8. und 9.11.2026, #114, Leitfaden Abschn. 5.3): Thomas fand zu einem
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
-  Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, Export-Knöpfe mit Text (seit #130 das Export-Menü) und die Köpfe
+  Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, das Export-Menü (bis #130 Export-Knöpfe mit Text) und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
   Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Der Test sieht nur
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
@@ -194,7 +194,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   etablierte Symbole, Stift, Radiergummi, Plus, Mauszeiger); Name im `aria-label`, Erklärung im Tooltip. Ein Baustein in
   `seite.js` (Muster „Menu Button“ der WAI-ARIA Authoring Practices), weil beide Apps exportieren und Tastatur, Fokus und
   Schliessen sonst je App anders würden; `herunterladen` und `inZwischenablage` kamen mit, weil beide Apps sie gleich
-  hatten. Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet mit
+  hatten. Rückmeldung zusätzlich als Statusmeldung, weil ein Screenreader die Änderung des Namens eines fokussierten
+  Knopfs nicht zuverlässig ansagt (Review des PR #133). Eingeführt beim Umsetzen, noch von Thomas zu bestätigen: Einrasten
+  ist ein Schalter, Rückgängig, Löschen und Entfernen sind Handlungen (so in #130 d); Handlungen sind gesperrt, solange es
+  nichts zu tun gibt, ohne Grund, weil er aus der Zeichnung folgt. Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet mit
   `overflow: hidden` ab (Befund im Browser an der Vorlage). Nicht ersetzt ist die Prüfung mit Studierenden (#117).
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,

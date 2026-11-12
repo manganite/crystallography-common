@@ -134,13 +134,19 @@ export function offline({ datei = 'sw.js', lokal = false, neuLaden = false } = {
  * Practices): Der Knopf (in einem Element .tools.export) öffnet ein Menü mit den Einträgen, z. B. Kopieren, SVG, PNG.
  * Tastatur: Enter, Leertaste oder Pfeil ab öffnen auf dem ersten Eintrag, Pfeil auf auf dem letzten; im Menü Pfeile
  * (mit Umlauf), Pos1 und Ende; Esc schliesst und gibt den Fokus dem Knopf zurück, Tab schliesst. Ein Klick ausserhalb
- * schliesst ebenso. Rückmeldung („Kopiert“, „Nicht möglich“) kurz im Text des Knopfs, weil das Menü dann zu ist.
- * @param {HTMLButtonElement} knopf Knopf mit id; das Menü entsteht als nächstes Geschwister (id: <knopf-id>-menue)
- * @param {ExportEintrag[]} eintraege
+ * schliesst ebenso. Rückmeldung („Kopiert“, „Nicht möglich“) kurz im Text des Knopfs, weil das Menü dann zu ist, und
+ * für Screenreader in einer Statusmeldung; der Name des Knopfs (aria-label) bleibt dabei die Beschriftung.
+ * Einmal je Knopf aufrufen (das Menü lebt so lange wie die Seite). Das Menü hängt unter dem Knopf in der Tafel, die mit
+ * overflow: hidden abschneidet: für wenige Einträge gedacht, wie die drei des Bildexports.
+ * @param {HTMLButtonElement} knopf Knopf mit id und nur Text als Inhalt (die Rückmeldung ersetzt ihn kurz); das Menü
+ *   entsteht als nächstes Geschwister (id: <knopf-id>-menue)
+ * @param {ExportEintrag[]} eintraege mindestens einer
  * @returns {{ menue: HTMLElement, schliessen: () => void }}
  */
 export function exportMenue(knopf, eintraege) {
   if (!knopf.id) throw new Error('exportMenue: der Knopf braucht eine id');
+  if (knopf.hasAttribute('aria-controls')) throw new Error(`exportMenue: #${knopf.id} hat schon ein Menü`);
+  if (!eintraege.length) throw new Error('exportMenue: keine Einträge');
   const menue = document.createElement('div');
   menue.className = 'exportmenue';
   menue.id = `${knopf.id}-menue`;
@@ -156,19 +162,24 @@ export function exportMenue(knopf, eintraege) {
     return b;
   });
   menue.append(...punkte);
-  knopf.after(menue);
+  const status = document.createElement('span');
+  status.className = 'sr';
+  status.setAttribute('role', 'status');
+  knopf.after(menue, status);
   knopf.setAttribute('aria-haspopup', 'menu');
   knopf.setAttribute('aria-controls', menue.id);
   knopf.setAttribute('aria-expanded', 'false');
 
   const beschriftung = knopf.textContent ?? '';
+  knopf.setAttribute('aria-label', beschriftung);
   /** @type {ReturnType<typeof setTimeout> | undefined} */
   let uhr;
-  /** Rückmeldung im Text des Knopfs, nach 1,6 s wieder die Beschriftung. @param {string} text */
+  /** Rückmeldung im Text des Knopfs und als Statusmeldung, nach 1,6 s wieder die Beschriftung. @param {string} text */
   const melden = (text) => {
     clearTimeout(uhr);
     knopf.textContent = text;
-    uhr = setTimeout(() => { knopf.textContent = beschriftung; }, 1600);
+    status.textContent = text;
+    uhr = setTimeout(() => { knopf.textContent = beschriftung; status.textContent = ''; }, 1600);
   };
   const offen = () => !menue.hidden;
   /** @param {number} i */
@@ -202,7 +213,7 @@ export function exportMenue(knopf, eintraege) {
     /** @type {Record<string, number>} */
     const ziel = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: -1 };
     if (e.key in ziel) { e.preventDefault(); fokus(ziel[e.key]); }
-    else if (e.key === 'Escape') { e.preventDefault(); schliessen(); knopf.focus(); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); schliessen(); knopf.focus(); }
     else if (e.key === 'Tab') schliessen();
   });
   // Fokus verlässt Knopf und Menü (z. B. Klick oder Tippen anderswo): schliessen
@@ -237,12 +248,14 @@ export function herunterladen(blob, name) {
 }
 
 /**
- * PNG in die Zwischenablage (Bildexport; fügt sich in Folien als Bild ein). Das PNG als Promise übergeben und den
- * Aufruf noch in der Klick-Behandlung machen: Safari verlangt das.
- * @param {Promise<Blob>} png
+ * PNG in die Zwischenablage (Bildexport; fügt sich in Folien als Bild ein). Aufruf noch in der Klick-Behandlung: Safari
+ * verlangt das, und das PNG geht deshalb als Promise an ClipboardItem. png erzeugt es erst, wenn die Zwischenablage da
+ * ist (sonst bliebe ein Fehler beim Erzeugen unbehandelt).
+ * @param {() => Promise<Blob>} png
  */
 export function inZwischenablage(png) {
-  return navigator.clipboard.write([new ClipboardItem({ 'image/png': png })]);
+  if (!navigator.clipboard?.write || typeof ClipboardItem === 'undefined') return Promise.reject(new Error('keine Zwischenablage für Bilder'));
+  return navigator.clipboard.write([new ClipboardItem({ 'image/png': png() })]);
 }
 
 // ------------------------------------------------------------------ Moduswahl als Tabs
