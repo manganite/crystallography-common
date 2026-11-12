@@ -95,7 +95,7 @@ Ohne Abhängigkeiten; Tests mit Node 22:
 node --test tests/*.test.mjs
 ```
 
-Browsertests (`tests/browser/`, CI-Job `browser`) prüfen, was nur im Browser prüfbar ist, z. B. Tooltips bei Maus, Tastatur und Touchscreen; sie brauchen Playwright mit Chromium (Pakete wie unten, dazu einmal `npx playwright install chromium`; mit `KONTRASTE_CHROME=<Pfad>` ein vorhandener Chrome):
+Browsertests (`tests/browser/`, CI-Job `browser`) prüfen, was nur im Browser prüfbar ist, z. B. Tooltips bei Maus, Tastatur und Touchscreen; sie brauchen Playwright mit Chromium (Pakete wie unten, dazu einmal `npx playwright install chromium`; mit `CHROMIUM_PFAD=<Pfad>` ein vorhandener Chrome):
 
 ```bash
 node --test tests/browser/*.test.mjs
@@ -111,7 +111,7 @@ npx eslint .                  # ohne die Vorlage
 (cd vorlagen/app && ../../node_modules/.bin/eslint .)
 ```
 
-Kontraste der gerenderten Seiten (Leitfaden Abschn. 5.4) im Arbeitsordner mit den Apps messen, hell und dunkel; braucht Playwright mit Chromium (mit `KONTRASTE_CHROME=<Pfad>` ein vorhandener Chrome):
+Kontraste der gerenderten Seiten (Leitfaden Abschn. 5.4) im Arbeitsordner mit den Apps messen, hell und dunkel; braucht Playwright mit Chromium (mit `CHROMIUM_PFAD=<Pfad>` ein vorhandener Chrome):
 
 ```bash
 node tools/kontraste.mjs                      # App, Skript und Quiz jeder App daneben
