@@ -9,7 +9,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 ### Geändert
 
 - **Leitfaden 5.3, Tooltips und Experimente** (Thomas, 12.11.2026): Tooltips nennen kurz die Funktion oder eine nötige Angabe, sonst nur, was nicht zu sehen ist; keine Wiederholung von Beschriftung oder Aufbau, keine Begründungen des Features. Jedes Experiment steht für sich und knüpft nicht an ein anderes an. Für die Apps: Tooltips und Experimente danach durchsehen.
-- **Gruppenwahl:** Die Spalte mit den Namen der Kristallsysteme (`.sysrow`) ist 70 statt 86 px breit, damit mehr Knöpfe in eine Zeile passen (#130). In stereography („Punktgruppen“, „Kristallformen“) wird die Seitenleiste am Laptop (1440 × 900) 67 px kürzer (1194 → 1127 px); kein Name bricht um (der längste ohne Trennstelle, „schiefwinklig“, ist 69 px breit).
+- **Gruppenwahl:** Die Spalte mit den Namen der Kristallsysteme (`.sysrow`) ist 78 statt 86 px breit, damit mehr Knöpfe in eine Zeile passen (#130). In stereography stehen die Knöpfe von „Tetragonal“ und „Hexagonal“ in zwei statt drei Zeilen; die Seitenleiste wird am Laptop (1440 × 900) und auf dem iPad 67 px kürzer (Kristallformen 1194 → 1127 px). In plane-groups ändert sich nichts. Kein Name bricht zusätzlich um: Der längste ohne Trennstelle, „schiefwinklig“, ist 69 px breit, mit der Ersatzschrift DejaVu Sans 76 px; „Ortho­rhombisch“ bricht wie bisher an der Trennstelle.
 
 ## [0.18.0] - 2026-11-12
 
