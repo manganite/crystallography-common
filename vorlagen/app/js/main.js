@@ -3,7 +3,7 @@
 
 import { hmHTML } from '../lib/common/js/format.js';
 import { initHelp } from '../lib/common/js/help.js';
-import { offline, alleEinstellungenZuruecksetzen, $, eingabe, abschnitt, grafik, element, elemente, modusTabs } from '../lib/common/js/seite.js';
+import { offline, alleEinstellungenZuruecksetzen, $, eingabe, knopf, abschnitt, grafik, element, elemente, modusTabs, exportMenue, herunterladen, inZwischenablage } from '../lib/common/js/seite.js';
 import { ablaufKarte } from '../lib/common/js/ablauf.js';
 import { experimentAusAdresse } from '../lib/common/js/hilfe-seite.js';
 import { TIPS, SECTIONS, LABELS, ABLAEUFE, ERSTE_SCHRITTE } from './hilfetexte.js';
@@ -130,6 +130,27 @@ function init() {
   // Von der Hilfeseite: „In der App ausprobieren“ startet ein Experiment (index.html?experiment=<id>#…)
   experimentAusAdresse(experimente, ABLAEUFE.map((a) => a.id), aktionen.experimente);
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
+  // Lupe als Schalter mit Symbol (Leitfaden Abschn. 5.1): Name im aria-label, Erklärung im Tooltip
+  $('v-lupe').addEventListener('click', () => $('v-lupe').setAttribute('aria-pressed', String($('v-lupe').getAttribute('aria-pressed') !== 'true')));
+  // Export als ein Knopf mit Menü (Leitfaden Abschn. 4 und 5.1). In einer App: immer in den hellen Farben, Hintergrund
+  // durchsichtig (hier der Einfachheit halber das Bild, wie es gerade gezeichnet ist)
+  const svgText = () => new XMLSerializer().serializeToString(grafik('bild-a'));
+  const png = () => new Promise((/** @type {(b: Blob) => void} */ fertig, fehler) => {
+    const img = new Image();
+    img.onload = () => {
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = 1040;
+      cv.getContext('2d')?.drawImage(img, 0, 0, 1040, 1040);
+      cv.toBlob((b) => (b ? fertig(b) : fehler(new Error('PNG fehlgeschlagen'))), 'image/png');
+    };
+    img.onerror = fehler;
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgText().replace('<svg ', '<svg width="520" height="520" '));
+  });
+  exportMenue(knopf('export-a'), [
+    { text: 'Kopieren (PNG)', tun: () => inZwischenablage(png), erfolg: 'Kopiert' },
+    { text: 'SVG-Datei speichern', tun: () => herunterladen(new Blob([svgText()], { type: 'image/svg+xml' }), 'tafel-a.svg') },
+    { text: 'PNG-Datei speichern', tun: async () => herunterladen(await png(), 'tafel-a.png') },
+  ]);
   // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
   $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));
   initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });

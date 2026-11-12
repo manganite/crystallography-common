@@ -6,6 +6,15 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Neu
+
+- **Export als ein Knopf mit Menü** (`exportMenue` in `js/seite.js`, Stile in `css/app.css`; #130, Leitfaden 4 und 5.1; Entscheidung Thomas, 12.11.2026): Ein Knopf „Export ▾“ je Tafel öffnet ein Menü mit den Einträgen der App (z. B. „Kopieren (PNG)“, „SVG-Datei speichern“, „PNG-Datei speichern“), damit der Kopf der Tafel einzeilig bleibt. Zugänglich nach dem Muster „Menu Button“ (WAI-ARIA): `aria-haspopup`, `aria-expanded`, `aria-controls`, Einträge als `menuitem`; Pfeiltasten, Pos1, Ende, Esc, Tab; Klick ausserhalb schliesst; Einträge auf Touch-Geräten mindestens 40 px hoch. Ohne Platz links (Knopf am Zeilenanfang) öffnet das Menü linksbündig. Rückmeldung („Kopiert“, „Nicht möglich“) kurz im Knopf. Rückmeldung auch als Statusmeldung für Screenreader. Dazu `herunterladen(blob, name)` und `inZwischenablage(png)` (`png` liefert das PNG als Promise; Safari: Aufruf in der Klick-Behandlung), die beide Apps bisher je selbst hatten. Browsertest `tests/browser/export.test.mjs`.
+- **Knöpfe als Symbol in der Werkzeugleiste** (`.tools button.sym`, #130, Leitfaden 5.1): Symbol 18 px, auf Touch-Geräten (auch nach dem Tippen auf einem Laptop mit Touchscreen) mindestens 40 × 40 px; ebenso die Einträge des Export-Menüs; Name im `aria-label`, Erklärung im Tooltip.
+
+### Geändert
+
+- **Leitfaden 5.1, 5.2, 5.3, 4: Seitenleiste und Tafel** (Entscheidung Thomas, 12.11.2026, #130): Die Seitenleiste sagt, was da ist; die Tafel trägt, was man auf der Zeichnung tut (Werkzeuge, Rückgängig, Löschen, Einrasten, Lupe). Anleitungen gehören in Tooltip, ⓘ und Legende, nicht in die Seitenleiste. Eigenschaften, die das gewählte Objekt nicht hat, fehlen, statt gesperrt zu sein; „gesperrt mit Grund“ bleibt für Schalter, die gerade ruhen. Export als ein Knopf mit Menü; Ausnahme für Tooltips jetzt „Export-Menü“ statt „Export-Knöpfe mit Text“, Knöpfe als Symbol immer mit Tooltip und `aria-label`. Vorlage: Export-Menü und Lupe als Symbol in Tafel A, Test der Tooltips mit `export-a` unter den Ausnahmen. Für die Apps: Export-Knöpfe durch `exportMenue` ersetzen (eigene `download`/`laden`, `flash`/`melden` und Kopieren entfallen), `ohne` im Test der Tooltips anpassen, Seitenleiste nach dem Grundsatz prüfen.
+
 ## [0.17.0] - 2026-11-12
 
 Entwicklung vor Stabilität im Leitfaden (#126); `CHROMIUM_PFAD` für alle Werkzeuge, auch das Skript-PDF (#125); CI ohne apt (#128). Für die Apps: `KONTRASTE_CHROME` in eigenen Werkzeugen durch `CHROMIUM_PFAD` ersetzen (plane-groups `tools/entwurf-pruefen.mjs`); sonst ohne Anpassung übernehmbar.

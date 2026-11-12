@@ -58,5 +58,5 @@ test('Tooltips: jedes Bedienelement mit id hat einen, kurz (pruefeTooltips, Leit
   const { pruefeTooltips } = await import('../lib/common/js/help.js');
   const { TIPS } = await import('../js/hilfetexte.js');
   // Ausnahmen: selbsterklärende Links, Schliessen „×“, Export-Knöpfe mit Text (in einer App z. B. svg-a, png-a)
-  assert.deepEqual(pruefeTooltips(read('index.html'), TIPS, { ohne: ['help-open', 'intro-close'] }), []);
+  assert.deepEqual(pruefeTooltips(read('index.html'), TIPS, { ohne: ['help-open', 'intro-close', 'export-a'] }), []);
 });
