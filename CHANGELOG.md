@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-11-12
+
+Seitenleiste und Tafel (#130): Grundsatz im Leitfaden, Export als ein Knopf mit Menü, Knöpfe als Symbol. Für die Apps: Export-Knöpfe durch `exportMenue` ersetzen, die ID des Knopfs in `ohne` des Tooltip-Tests, Seitenleiste nach dem Grundsatz prüfen (Einzelheiten unter „Geändert“).
+
 ### Neu
 
 - **Export als ein Knopf mit Menü** (`exportMenue` in `js/seite.js`, Stile in `css/app.css`; #130, Leitfaden 4 und 5.1; Entscheidung Thomas, 12.11.2026): Ein Knopf „Export ▾“ je Tafel öffnet ein Menü mit den Einträgen der App (z. B. „Kopieren (PNG)“, „SVG-Datei speichern“, „PNG-Datei speichern“), damit der Kopf der Tafel einzeilig bleibt. Zugänglich nach dem Muster „Menu Button“ (WAI-ARIA): `aria-haspopup`, `aria-expanded`, `aria-controls`, Einträge als `menuitem`; Pfeiltasten, Pos1, Ende, Esc, Tab; Klick ausserhalb schliesst; Einträge auf Touch-Geräten mindestens 40 px hoch. Ohne Platz links (Knopf am Zeilenanfang) öffnet das Menü linksbündig. Rückmeldung („Kopiert“, „Nicht möglich“) kurz im Knopf. Rückmeldung auch als Statusmeldung für Screenreader. Dazu `herunterladen(blob, name)` und `inZwischenablage(png)` (`png` liefert das PNG als Promise; Safari: Aufruf in der Klick-Behandlung), die beide Apps bisher je selbst hatten. Browsertest `tests/browser/export.test.mjs`.
@@ -324,7 +328,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.18.0
 [0.17.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.17.0
 [0.16.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.16.0
 [0.15.1]: https://github.com/manganite/crystallography-common/releases/tag/v0.15.1
