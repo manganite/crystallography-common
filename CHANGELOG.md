@@ -12,6 +12,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Behoben
 
+- **`tools/skript-pdf.mjs` mit vorhandenem Chromium** (#125): Wie `kontraste.mjs` und `hilfe-bilder.mjs` nimmt das Werkzeug jetzt den Pfad eines vorhandenen Chromium aus der Umgebungsvariable (oder der neuen Option `chrome`); so entsteht `skript.pdf` auch dort, wo Playwright seinen eigenen Browser nicht laden kann (Cloud-Sitzung). Die Variable heisst jetzt neutral `CHROMIUM_PFAD` statt `KONTRASTE_CHROME`, weil sie nicht mehr nur die Kontraste betrifft; der alte Name gilt nicht mehr. Für die Apps: eigene Werkzeuge mit der Variable (in plane-groups `tools/entwurf-pruefen.mjs`) im PR der Übernahme umstellen.
 - **CI ohne apt** (#128): Der Browser für die Tests wird ohne `--with-deps` installiert, also ohne Systempakete über `apt`; am 11.11.2026 scheiterten die Jobs mehrfach, weil der Runner die Paketquellen von Ubuntu nicht erreichte. Ebenso in den Workflows der Vorlage (`ci.yml`, `deploy.yml`, `release.yml`). Für die Apps: dieselbe Änderung in ihren Workflows.
 
 ## [0.16.0] - 2026-11-09

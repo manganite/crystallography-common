@@ -1,7 +1,7 @@
 // Tooltips im Browser (js/help.js, #114): Maus, Tastatur, Touchscreen und der Wechsel zwischen ihnen, auch auf einem
 // Gerät, dessen Browser den Touchscreen als primäres Zeigegerät meldet (pointer: coarse, z. B. Laptop mit Touchscreen
 // unter Windows). Läuft in der CI im Job „browser“; lokal: node --test tests/browser/*.test.mjs (Playwright mit Chromium, mit
-// KONTRASTE_CHROME=<Pfad> ein vorhandener Chrome).
+// CHROMIUM_PFAD=<Pfad> ein vorhandener Chrome).
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { dirname, join } from 'node:path';
@@ -21,7 +21,7 @@ let url = '';
 before(async () => {
   srv = await server(ROOT);
   url = `http://127.0.0.1:${/** @type {import('node:net').AddressInfo} */ (srv.address()).port}/tests/browser/help.html`;
-  const chrome = process.env.KONTRASTE_CHROME;
+  const chrome = process.env.CHROMIUM_PFAD;
   // volles Chromium im neuen Headless-Modus: chromium-headless-shell (Vorgabe) übernimmt die Emulation von pointer:
   // coarse nicht, die Voraussetzung des dritten Tests (in der CI festgestellt)
   browser = await chromium.launch(chrome ? { executablePath: chrome } : { channel: 'chromium' });
