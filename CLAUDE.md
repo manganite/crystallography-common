@@ -201,8 +201,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Knopfs nicht zuverlässig ansagt (Review des PR #133). Einrasten ist ein Schalter, Rückgängig, Löschen und
   Entfernen sind Handlungen (so in #130 d); Handlungen sind gesperrt, solange es nichts zu tun gibt, ohne Grund, weil er
   aus der Zeichnung folgt (beim Umsetzen eingeführt, von Thomas bestätigt 12.11.2026: „die Werkzeugleiste nicht unnötig
-  aufblasen“; ein Grund unter jedem Knopf hätte sie verlängert, ein immer freier Knopf ohne Wirkung verwirrt). Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet mit
-  `overflow: hidden` ab (Befund im Browser an der Vorlage). Nicht ersetzt ist die Prüfung mit Studierenden (#117).
+  aufblasen“; dazu beim Umsetzen: ein Grund zu jedem Knopf hätte Legende bzw. Tafel verlängert, ein immer freier Knopf
+  ohne Wirkung verwirrt). Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet
+  mit `overflow: hidden` ab (Befund im Browser an der Vorlage). Nicht ersetzt ist die Prüfung mit Studierenden (#117).
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,
   nicht auf Werkzeuge, die sich wie eine Auswahl ausschliessen: Ein gesperrtes, aber gewähltes Zeichenwerkzeug
