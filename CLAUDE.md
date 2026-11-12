@@ -198,9 +198,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   `seite.js` (Muster „Menu Button“ der WAI-ARIA Authoring Practices), weil beide Apps exportieren und Tastatur, Fokus und
   Schliessen sonst je App anders würden; `herunterladen` und `inZwischenablage` kamen mit, weil beide Apps sie gleich
   hatten. Rückmeldung zusätzlich als Statusmeldung, weil ein Screenreader die Änderung des Namens eines fokussierten
-  Knopfs nicht zuverlässig ansagt (Review des PR #133). Eingeführt beim Umsetzen, noch von Thomas zu bestätigen: Einrasten
-  ist ein Schalter, Rückgängig, Löschen und Entfernen sind Handlungen (so in #130 d); Handlungen sind gesperrt, solange es
-  nichts zu tun gibt, ohne Grund, weil er aus der Zeichnung folgt. Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet mit
+  Knopfs nicht zuverlässig ansagt (Review des PR #133). Einrasten ist ein Schalter, Rückgängig, Löschen und
+  Entfernen sind Handlungen (so in #130 d); Handlungen sind gesperrt, solange es nichts zu tun gibt, ohne Grund, weil er
+  aus der Zeichnung folgt (beim Umsetzen eingeführt, von Thomas bestätigt 12.11.2026: „die Werkzeugleiste nicht unnötig
+  aufblasen“; ein Grund unter jedem Knopf hätte sie verlängert, ein immer freier Knopf ohne Wirkung verwirrt). Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet mit
   `overflow: hidden` ab (Befund im Browser an der Vorlage). Nicht ersetzt ist die Prüfung mit Studierenden (#117).
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,
