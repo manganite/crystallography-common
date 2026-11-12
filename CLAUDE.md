@@ -126,7 +126,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   nicht eine zweite Führung baut.
   Zuerst ersetzten die Experimente die Erste Schritte; Thomas fand sie dafür zu schade („als kurze
   Kennenlernübung beim Einstieg eigentlich verschwendet“). Deshalb stehen sie in einem eigenen Abschnitt, und
-  die Erste Schritte bleiben kurze Bedienschritte mit derselben Mechanik.
+  die Erste Schritte bleiben kurze Bedienschritte mit derselben Mechanik. Jedes Experiment steht für sich (Thomas, 12.11.2026): In
+  plane-groups setzte eines das Ende eines anderen voraus und war allein unverständlich; die Liste lässt jede Reihenfolge zu.
 - **Stand der Experimente wie im Quiz** (7.11.2026, #91): Thomas entschied, dass sich die Experimente wie die
   Quizfragen verhalten. Gespeichert mit demselben Aufbau wie der Fortschritt im Quiz (`vermerken` aus
   `quiz-core.js`), damit später auch erzeugte Experimente (#92) unter `<generator>:<parameter>` zählen. Richtig
@@ -139,7 +140,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
   Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, das Export-Menü (bis #130 Export-Knöpfe mit Text) und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
-  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Der Test sieht nur
+  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
+  Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
+  sollen nur die Funktion oder eine nötige Angabe nennen. Der Test sieht nur
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
   Browsertest je App (offen, #114). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
   des PR #120). Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten Gerät (`data-zeiger`, `data-touch` an
