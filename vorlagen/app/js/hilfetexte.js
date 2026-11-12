@@ -7,7 +7,7 @@
 /**
  * Tooltip-Texte je Element-ID, je ein kurzer Satz (Leitfaden Abschn. 5.3; höchstens TIP_MAX Zeichen, geprüft in
  * tests/common.test.mjs). Jedes Bedienelement hat einen, ausser selbsterklärenden Links, Schliessen „×“,
- * Export-Knöpfen mit Text und Köpfen einklappbarer Abschnitte. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile.
+ * dem Export-Menü und Köpfen einklappbarer Abschnitte; Knöpfe als Symbol brauchen ihn besonders. Bei Eingabefeldern erscheint der Tooltip an der ganzen Zeile.
  * @type {Record<string, string>}
  */
 export const TIPS = {
@@ -21,6 +21,7 @@ export const TIPS = {
   'lat-ba': 'Verhältnis der Gitterkonstanten b/a.',
   'v-farben': 'Symmetrieelemente in der Farbe ihrer Blickrichtung zeichnen (Positionen im Hermann-Mauguin-Symbol).',
   'v-achsen': 'Gitterachsen a und b einblenden.',
+  'v-lupe': 'Ausschnitt von Tafel A vergrössern (Beispiel für einen Schalter als Symbol).',
   'v-wahl': 'Beispiel für ein Auswahlfeld.',
   'reset-alles': 'Alle Einstellungen löschen und die App neu starten; Quiz und Experimente behalten ihren Stand.',
 };
