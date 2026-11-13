@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-11-13
+
+ⓘ auf allen Geräten (#140), Leitfaden 5.1 und 5.2 geschärft (plane-groups#162). Für die Apps: Texte zum ⓘ und Bilder der Hilfeseite nachführen (Einzelheiten unter „Geändert“).
+
 ### Geändert
 
 - **ⓘ auf allen Geräten** (`js/help.js`, `css/app.css`, Leitfaden 5.3; Entscheidung Thomas, 12.11.2026, #140): Das ⓘ an den Abschnittsköpfen erscheint jetzt auch mit Maus oder Trackpad, damit die Einleitungen der Abschnitte nicht vom Gerät abhängen. Es bricht nie allein in eine neue Zeile (vorher in stereography unter „Symmetrie und allgemeine Lage“): In einer `summary` steht es fest am letzten Wort (`.nobr`), in einer Kartenüberschrift (`h2`) wie bisher rechts. Trefferfläche nach dem zuletzt benutzten Gerät: mit der Maus 28 px, mit Touch wie bisher 40 px. Das ⓘ hat selbst einen Tooltip. Der Titel einer `summary` steht dafür in `.sumtitel` in `.sumlabel`, `.sumhint` daneben; `data-touch` an `<html>` entfällt. Browsertest erweitert; in der Vorlage nennt die Karte „Erste Schritte“ mit der Maus auch das ⓘ. Für die Apps: Texte, die das ⓘ nur für Touch erwähnen (z. B. `.only-fine` in „Erste Schritte“), und Einleitungen im ⓘ (`intro`), die auf Touch formuliert sind („antippen“), anpassen; Bilder der Hilfeseite neu erzeugen (Abschnittsköpfe zeigen jetzt das ⓘ); Hinweistexte der Seitenleiste können ins ⓘ (Leitfaden 5.1).
@@ -342,7 +346,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.20.0
 [0.19.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.19.0
 [0.18.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.18.0
 [0.17.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.17.0
