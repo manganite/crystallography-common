@@ -6,6 +6,11 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **ⓘ auf allen Geräten** (`js/help.js`, `css/app.css`, Leitfaden 5.3; Entscheidung Thomas, 12.11.2026, #140): Das ⓘ an den Abschnittsköpfen erscheint jetzt auch mit Maus oder Trackpad, damit die Einleitungen der Abschnitte nicht vom Gerät abhängen. Es bricht nie allein in eine neue Zeile (vorher in stereography unter „Symmetrie und allgemeine Lage“): In einer `summary` steht es fest am letzten Wort (`.nobr`), in einer Kartenüberschrift (`h2`) wie bisher rechts. Trefferfläche nach dem zuletzt benutzten Gerät: mit der Maus 28 px, mit Touch wie bisher 40 px. Das ⓘ hat selbst einen Tooltip. Der Titel einer `summary` steht dafür in `.sumtitel` in `.sumlabel`, `.sumhint` daneben; `data-touch` an `<html>` entfällt. Browsertest erweitert; in der Vorlage nennt die Karte „Erste Schritte“ mit der Maus auch das ⓘ. Für die Apps: Texte, die das ⓘ nur für Touch erwähnen (z. B. `.only-fine` in „Erste Schritte“), und Einleitungen im ⓘ (`intro`), die auf Touch formuliert sind („antippen“), anpassen; Bilder der Hilfeseite neu erzeugen (Abschnittsköpfe zeigen jetzt das ⓘ); Hinweistexte der Seitenleiste können ins ⓘ (Leitfaden 5.1).
+- **Leitfaden 5.1 und 5.2** (Entscheidungen Thomas, 13.11.2026, plane-groups#162): Zur Tafel gehören auch Erklärabläufe (Auswahl im Kopf, Leiste zum Durchschalten unter der Zeichnung), Übergänge in einen anderen Modus (beim Ergebnis, meist in den Kenndaten) sowie Zoom und Verschieben der Ansicht. Zoom einer Tafel: Mausrad, Zwei-Finger-Geste, + und − für die Tastatur, kein Regler. Unter einem gesperrten Element nur der Grund in einem Halbsatz, Erklärungen im ⓘ. Für die Apps: plane-groups#162; in stereography fehlen + / − im 3D-Fenster (stereography#144).
+
 ## [0.19.0] - 2026-11-12
 
 Leitfaden 5.3 zu Tooltips und Experimenten, schmalere Spalte der Gruppenwahl. Für die Apps: Tooltips und Experimente nach Leitfaden 5.3 durchsehen; sonst nichts anzupassen.

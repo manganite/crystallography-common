@@ -1,6 +1,6 @@
-// Tooltips im Browser (js/help.js, #114): Maus, Tastatur, Touchscreen und der Wechsel zwischen ihnen, auch auf einem
-// Gerät, dessen Browser den Touchscreen als primäres Zeigegerät meldet (pointer: coarse, z. B. Laptop mit Touchscreen
-// unter Windows). Läuft in der CI im Job „browser“; lokal: node --test tests/browser/*.test.mjs (Playwright mit Chromium, mit
+// Tooltips und ⓘ im Browser (js/help.js, #114, #140): Maus, Tastatur, Touchscreen und der Wechsel zwischen ihnen, auch auf
+// einem Gerät, dessen Browser den Touchscreen als primäres Zeigegerät meldet (pointer: coarse, z. B. Laptop mit
+// Touchscreen unter Windows); das ⓘ auf allen Geräten, ohne allein umzubrechen. Läuft in der CI im Job „browser“; lokal: node --test tests/browser/*.test.mjs (Playwright mit Chromium, mit
 // CHROMIUM_PFAD=<Pfad> ein vorhandener Chrome).
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -59,11 +59,22 @@ const ueberfahren = async (p, sel) => { const m = await mitte(p, sel); await p.m
 /** Warten, bis der Tooltip erscheint (Verzögerung 450 ms). @param {Page} p */
 const tipAbwarten = (p) => p.waitForFunction(() => document.getElementById('tip')?.hidden === false, null, { timeout: 3000 });
 
-test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, kein ⓘ', async () => {
+/** Breite des ersten ⓘ. @param {Page} p */
+const infoBreite = async (p) => Math.round((await p.locator('.infobtn').first().boundingBox())?.width ?? 0);
+
+test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, ⓘ mit kleiner Trefferfläche (#140)', async () => {
   const p = await seite();
   assert.equal(await sichtbar(p, '#fein'), true);
   assert.equal(await sichtbar(p, '#grob'), false);
-  assert.equal(await sichtbar(p, '.infobtn'), false);
+  assert.equal(await sichtbar(p, '#h-a .infobtn'), true);
+  assert.equal(await infoBreite(p), 28);
+  // das ⓘ hat selbst einen Tooltip (Leitfaden 5.3)
+  await ueberfahren(p, '#sect-lang .infobtn');
+  await tipAbwarten(p);
+  assert.match(String(await tip(p)), /Erklärungen zu diesem Abschnitt/);
+  // mit der Maus aufklappen: Einleitung und Tooltips des Abschnitts
+  await p.click('#sect-lang .infobtn');
+  assert.match(await p.locator('#sect-lang .helpbox').innerText(), /Einleitung des Abschnitts\.[\s\S]*Tooltip 2\./);
   await ueberfahren(p, '#knopf');
   await tipAbwarten(p);
   assert.equal(await tip(p), 'Tooltip des Knopfs.');
@@ -73,7 +84,7 @@ test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, kein ⓘ',
 
 test('Tastatur: Tooltip beim Fokus, auch nach Tippen auf den Touchscreen', async () => {
   const p = await seite({ hasTouch: true });
-  // mit Touchscreen ist das ⓘ sichtbar und kommt in der Reihenfolge vor dem Knopf
+  // das ⓘ kommt in der Reihenfolge vor dem Knopf
   for (let i = 0; i < 4 && await p.evaluate(() => document.activeElement?.id) !== 'knopf'; i++) await p.keyboard.press('Tab');
   assert.equal(await p.evaluate(() => document.activeElement?.id), 'knopf');
   assert.equal(await tip(p), 'Tooltip des Knopfs.');
@@ -95,30 +106,67 @@ test('Touchscreen als primäres Zeigegerät (pointer: coarse): Tippen ohne, Maus
   assert.equal(await tip(p), null);
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'touch');
   // dieselbe Seite mit einer Maus: Tooltip und Texte für die Maus, obwohl der Browser pointer: coarse meldet
+  assert.equal(await infoBreite(p), 40);
   await ueberfahren(p, '#feld');
   await tipAbwarten(p);
   assert.equal(await tip(p), 'Tooltip des Felds.');
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'maus');
   assert.equal(await sichtbar(p, '#fein'), true);
   assert.equal(await sichtbar(p, '#grob'), false);
+  assert.equal(await infoBreite(p), 28, 'mit der Maus kleines ⓘ, obwohl pointer: coarse');
   await schliessen(p);
 });
 
-test('Laptop mit Touchscreen, der hover: hover meldet: nach dem Tippen Texte für Touch und ⓘ', async () => {
+test('Laptop mit Touchscreen, der hover: hover meldet: nach dem Tippen Texte für Touch und grosses ⓘ', async () => {
   // Die Emulation von Chromium meldet mit Touchscreen immer hover: none; deshalb eine Seite ohne Touchscreen und ein
   // Zeigerereignis vom Typ touch, wie es ein solcher Laptop beim Tippen auslöst.
   const p = await seite();
   assert.equal(await p.evaluate(() => matchMedia('(hover: hover)').matches), true, 'Voraussetzung des Tests');
-  assert.equal(await sichtbar(p, '.infobtn'), false);
   await p.dispatchEvent('#h-a', 'pointerdown', { pointerType: 'touch', bubbles: true });
-  assert.equal(await sichtbar(p, '.infobtn'), true);
+  assert.equal(await infoBreite(p), 40);
   assert.equal(await sichtbar(p, '#grob'), true);
   assert.equal(await sichtbar(p, '#fein'), false);
-  // mit der Maus danach: Texte für die Maus, das ⓘ bleibt und klappt die Erklärungen auf
-  await p.click('.infobtn');
+  // mit der Maus danach: Texte für die Maus, das ⓘ wieder klein, es klappt die Erklärungen auf
+  await p.click('#h-a .infobtn');
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'maus');
   assert.equal(await sichtbar(p, '#fein'), true);
-  assert.equal(await sichtbar(p, '.infobtn'), true);
+  assert.equal(await infoBreite(p), 28);
   assert.match(await p.locator('.helpbox').innerText(), /Tooltip des Knopfs/);
   await schliessen(p);
+});
+
+test('ⓘ bricht nie allein in eine neue Zeile, mit Maus und Touch (#140)', async () => {
+  for (const o of [{}, { hasTouch: true, isMobile: true }]) {
+    const p = await seite(o);
+    const r = await p.evaluate(() => [...document.querySelectorAll('details.sect > summary')].map((s) => {
+      const btn = /** @type {Element} */ (s.querySelector('.infobtn'));
+      const b = btn.getBoundingClientRect();
+      // Zeile des letzten Zeichens vor dem ⓘ
+      const wort = /** @type {Node} */ (btn.previousSibling);
+      const rg = document.createRange();
+      rg.selectNodeContents(wort);
+      const z = [...rg.getClientRects()].at(-1);
+      return {
+        titel: s.querySelector('.sumtitel')?.textContent,
+        hinweis: s.querySelector('.sumlabel > .sumhint')?.textContent,
+        zeilen: (() => {
+          const t = document.createRange();
+          t.selectNodeContents(/** @type {Node} */ (s.querySelector('.sumtitel')));
+          return new Set([...t.getClientRects()].map((q) => Math.round(q.bottom))).size;
+        })(),
+        gleicheZeile: !!z && b.top + b.height / 2 > z.top && b.top + b.height / 2 < z.bottom,
+        symbol: wort instanceof Element ? wort.id : '',
+      };
+    }));
+    assert.equal(r.length, 2);
+    for (const x of r) assert.equal(x.gleicheZeile, true, `ⓘ in eigener Zeile: ${x.titel}`);
+    // Titel unverändert (das ⓘ hat keinen Text ausser „i“), Hinweis ausserhalb des Titels
+    assert.equal(r[0].titel, 'Symmetrie und allgemeine Lagei');
+    assert.equal(r[0].hinweis, 'Gerüst, Objekt');
+    assert.ok(r[0].zeilen >= 2, 'Voraussetzung: der Titel bricht um');
+    // endet der Titel mit einem Element, bleibt es beim ⓘ
+    assert.equal(r[1].symbol, 'symbol');
+    assert.ok(r[1].zeilen >= 2, 'Voraussetzung: auch dieser Titel bricht um');
+    await schliessen(p);
+  }
 });

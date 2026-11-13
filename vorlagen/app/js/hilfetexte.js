@@ -1,4 +1,4 @@
-// Texte der Hilfen: Tooltips (Laptop) und ⓘ-Erklärungen je Abschnitt (Touch-Geräte).
+// Texte der Hilfen: Tooltips (Laptop) und ⓘ-Erklärungen je Abschnitt (alle Geräte).
 // Die Mechanik steht in lib/common/js/help.js. Begriffe wie im Skript.
 
 /** @import { Abschnitt } from '../lib/common/js/help.js' */
