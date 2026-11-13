@@ -60,7 +60,7 @@ const ueberfahren = async (p, sel) => { const m = await mitte(p, sel); await p.m
 const tipAbwarten = (p) => p.waitForFunction(() => document.getElementById('tip')?.hidden === false, null, { timeout: 3000 });
 
 /** Breite des ersten ⓘ. @param {Page} p */
-const infoBreite = async (p) => (await p.locator('.infobtn').first().boundingBox())?.width;
+const infoBreite = async (p) => Math.round((await p.locator('.infobtn').first().boundingBox())?.width ?? 0);
 
 test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, ⓘ mit kleiner Trefferfläche (#140)', async () => {
   const p = await seite();
@@ -68,6 +68,10 @@ test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, ⓘ mit kl
   assert.equal(await sichtbar(p, '#grob'), false);
   assert.equal(await sichtbar(p, '#h-a .infobtn'), true);
   assert.equal(await infoBreite(p), 28);
+  // das ⓘ hat selbst einen Tooltip (Leitfaden 5.3)
+  await ueberfahren(p, '#sect-lang .infobtn');
+  await tipAbwarten(p);
+  assert.match(String(await tip(p)), /Erklärungen zu diesem Abschnitt/);
   // mit der Maus aufklappen: Einleitung und Tooltips des Abschnitts
   await p.click('#sect-lang .infobtn');
   assert.match(await p.locator('#sect-lang .helpbox').innerText(), /Einleitung des Abschnitts\.[\s\S]*Tooltip 2\./);
@@ -80,7 +84,7 @@ test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, ⓘ mit kl
 
 test('Tastatur: Tooltip beim Fokus, auch nach Tippen auf den Touchscreen', async () => {
   const p = await seite({ hasTouch: true });
-  // mit Touchscreen ist das ⓘ sichtbar und kommt in der Reihenfolge vor dem Knopf
+  // das ⓘ kommt in der Reihenfolge vor dem Knopf
   for (let i = 0; i < 4 && await p.evaluate(() => document.activeElement?.id) !== 'knopf'; i++) await p.keyboard.press('Tab');
   assert.equal(await p.evaluate(() => document.activeElement?.id), 'knopf');
   assert.equal(await tip(p), 'Tooltip des Knopfs.');
@@ -102,12 +106,14 @@ test('Touchscreen als primäres Zeigegerät (pointer: coarse): Tippen ohne, Maus
   assert.equal(await tip(p), null);
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'touch');
   // dieselbe Seite mit einer Maus: Tooltip und Texte für die Maus, obwohl der Browser pointer: coarse meldet
+  assert.equal(await infoBreite(p), 40);
   await ueberfahren(p, '#feld');
   await tipAbwarten(p);
   assert.equal(await tip(p), 'Tooltip des Felds.');
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'maus');
   assert.equal(await sichtbar(p, '#fein'), true);
   assert.equal(await sichtbar(p, '#grob'), false);
+  assert.equal(await infoBreite(p), 28, 'mit der Maus kleines ⓘ, obwohl pointer: coarse');
   await schliessen(p);
 });
 
@@ -160,6 +166,7 @@ test('ⓘ bricht nie allein in eine neue Zeile, mit Maus und Touch (#140)', asyn
     assert.ok(r[0].zeilen >= 2, 'Voraussetzung: der Titel bricht um');
     // endet der Titel mit einem Element, bleibt es beim ⓘ
     assert.equal(r[1].symbol, 'symbol');
+    assert.ok(r[1].zeilen >= 2, 'Voraussetzung: auch dieser Titel bricht um');
     await schliessen(p);
   }
 });

@@ -152,9 +152,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   sollen nicht vom Gerät abhängen. Bedingung (Thomas): Das ⓘ bricht nicht allein in eine neue Zeile (in stereography
   1.15.0 rutschte es unter „Symmetrie und allgemeine Lage“). Gelöst, indem es mit dem letzten Wort zusammengehalten
   wird (`.nobr`), weil sich das unabhängig von Breite und Schrift hält; mit der Maus ist die Trefferfläche zudem 28 statt
-  40 px (WCAG 2.5.8: 24 px), damit der Titel seltener umbricht. Gemessen in beiden Apps (alle Modi, 1440, 1024, 768,
-  390 px, mit und ohne Touch): vorher brach das ⓘ an jenem Titel in allen Ansichten ausser dem Telefon um, nachher
-  nirgends. `data-touch` (ⓘ ab dem ersten Tippen) entfiel damit. Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
+  40 px (WCAG 2.5.8: 24 px), damit der Titel seltener umbricht, nach dem zuletzt benutzten Gerät wie die Texte.
+  Gemessen in beiden Apps (alle Modi, 1440, 1024, 768, 390 px, mit und ohne Touch): vorher brach das ⓘ an jenem Titel
+  in allen Ansichten ausser dem Telefon um, nachher nirgends. `data-touch` (ⓘ ab dem ersten Tippen) entfiel damit.
+  Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
   von Chromium meldet mit Touchscreen immer `hover: none`, der Fall „Touchscreen und `hover: hover`“ wird deshalb mit
   einem Zeigerereignis vom Typ `touch` geprüft.
 - **Experimente nach Kapiteln gliedern** (Thomas, 9.11.2026, #107, Leitfaden Abschn. 5.3): Mit 8–12 Experimenten je
@@ -213,8 +214,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   nur die grundlegenden Einstellungen, die aktiven Funktionen in den Tafeln oder nahe daran; in stereography war das
   schon gelöst, in plane-groups gingen die Erklärungen (Hauptfunktionen eines Modus) als eingeklappte Abschnitte unter.
   Deshalb gehören Erklärabläufe, Übergänge zwischen Modi sowie Zoom und Verschieben in die Tafel. Zoom mit Rad und
-  Zwei-Finger-Geste wie im 3D-Fenster von stereography, dazu + / − für die Tastatur (Thomas); ein Regler entfällt, damit
-  es einen Weg gibt.
+  Zwei-Finger-Geste wie im 3D-Fenster von stereography, dazu + / − für die Tastatur (Thomas; im 3D-Fenster fehlen sie
+  noch, stereography#144); ein Regler entfällt, damit es einen Weg gibt.
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,
   nicht auf Werkzeuge, die sich wie eine Auswahl ausschliessen: Ein gesperrtes, aber gewähltes Zeichenwerkzeug

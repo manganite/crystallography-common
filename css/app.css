@@ -192,7 +192,7 @@ a.helpbtn { display: inline-grid; place-items: center; text-decoration: none; }
 .tip[hidden] { display: none; }
 .tip .ov { text-decoration: overline; }
 /* Trefferfläche mit der Maus 28 px (WCAG 2.5.8: 24 px), auf Touch-Geräten 40 px (Leitfaden 5.2); die negativen
-   Ränder halten die Zeile so hoch wie ohne ⓘ */
+   Ränder halten die Zeile etwa so hoch wie ohne ⓘ (einige px höher) */
 .infobtn {
   display: inline-grid; place-items: center; flex: none; width: 28px; height: 28px; margin: -4px -3px -4px 1px;
   padding: 0; border: 0; background: transparent; cursor: pointer; color: var(--accent); vertical-align: middle;
@@ -205,6 +205,8 @@ a.helpbtn { display: inline-grid; place-items: center; text-decoration: none; }
 @media (pointer: coarse) { .infobtn { width: 40px; height: 40px; margin: -10px -8px -10px 2px; } }
 /* wie .tools button.sym: nach dem Tippen auch auf einem Laptop, der pointer: fine meldet (data-zeiger, help.js) */
 :root[data-zeiger="touch"] .infobtn { width: 40px; height: 40px; margin: -10px -8px -10px 2px; }
+/* und umgekehrt mit der Maus auf einem Gerät, das pointer: coarse meldet (Laptop mit Touchscreen unter Windows) */
+:root[data-zeiger="maus"] .infobtn { width: 28px; height: 28px; margin: -4px -3px -4px 1px; }
 /* ⓘ fest am letzten Wort des Titels (anheften in help.js): bricht nie allein in eine neue Zeile (#140) */
 .nobr { white-space: nowrap; }
 .card h2 { display: flex; align-items: center; justify-content: space-between; }

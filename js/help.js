@@ -1,7 +1,7 @@
 // Hilfen: Tooltips (Laptop: Maus oder Tastaturfokus) und ⓘ-Erklärungen je Abschnitt (alle Geräte, #140).
 // Die Texte liefert die App (initHelp); hier steht nur die Mechanik. Stile in css/app.css (.tip, .infobtn, .helpbox).
 // Das zuletzt benutzte Zeigegerät steht als `data-zeiger` (maus | touch) an <html>; danach richten sich die Texte für
-// Maus und Touch (.only-fine, .only-coarse), auch im ⓘ, und die Grösse des ⓘ. Ein Stift zählt als Touch (kein Tooltip,
+// Maus und Touch (.only-fine, .only-coarse), auch im ⓘ, und die Grösse des ⓘ (28 px mit der Maus, 40 px mit Touch). Ein Stift zählt als Touch (kein Tooltip,
 // Texte „antippen“). pruefeTooltips() ist für die Tests der App.
 
 import { esc } from './format.js';
@@ -195,7 +195,8 @@ function buildHelpBox(sec) {
 /**
  * Hängt das ⓘ an das letzte Wort eines Titels, in einem Element, das nicht umbricht (`.nobr`): Bricht der Titel um,
  * steht das ⓘ mit dem letzten Wort in der neuen Zeile, nie allein (Bedingung Thomas, #140). Endet der Titel mit einem
- * Element (z. B. einem Symbol), wird dieses mit dem ⓘ zusammengehalten.
+ * Element (z. B. einem Symbol), wird dieses als Ganzes mit dem ⓘ zusammengehalten; der Titel einer `summary` steht
+ * deshalb als Text darin, nicht ganz in einem Element (sonst bräche er nicht mehr um).
  * @param {HTMLElement} titel
  * @param {HTMLElement} btn
  */
@@ -203,7 +204,8 @@ function anheften(titel, btn) {
   const nobr = document.createElement('span');
   nobr.className = 'nobr';
   let letzter = titel.lastChild;
-  while (letzter && letzter.nodeType === Node.TEXT_NODE && !letzter.textContent?.trim()) {
+  // Leerraum und Kommentare am Ende überspringen
+  while (letzter && (letzter.nodeType === Node.COMMENT_NODE || (letzter.nodeType === Node.TEXT_NODE && !letzter.textContent?.trim()))) {
     const davor = letzter.previousSibling;
     letzter.remove();
     letzter = davor;
@@ -281,6 +283,7 @@ export function initHelp({ tips = {}, sections = [], labels = {} } = {}) {
     btn.className = 'infobtn';
     btn.setAttribute('aria-expanded', 'false');
     btn.setAttribute('aria-label', 'Erklärungen zu diesem Abschnitt');
+    setTip(btn, 'Erklärungen zu diesem Abschnitt ein- und ausklappen.');
     btn.innerHTML = '<span aria-hidden="true">i</span>';
     /** @type {HTMLElement | null} */
     let box = null;
