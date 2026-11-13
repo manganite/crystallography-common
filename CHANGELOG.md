@@ -6,6 +6,11 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **ⓘ auf allen Geräten** (`js/help.js`, `css/app.css`; Entscheidung Thomas, 12.11.2026, #140): Das ⓘ an den Abschnittsköpfen erscheint jetzt auch mit Maus oder Trackpad, damit die Einleitungen der Abschnitte nicht vom Gerät abhängen. Es steht fest am letzten Wort der Überschrift (`.nobr`) und bricht nie allein in eine neue Zeile (vorher in stereography unter „Symmetrie und allgemeine Lage“). Trefferfläche mit der Maus 28 px, auf Touch-Geräten wie bisher 40 px. Der Titel einer `summary` steht dafür in `.sumtitel` in `.sumlabel`, `.sumhint` daneben; `data-touch` an `<html>` entfällt. Browsertest erweitert; in der Vorlage nennt die Karte „Erste Schritte“ mit der Maus auch das ⓘ. Für die Apps: Texte, die das ⓘ nur für Touch erwähnen (z. B. `.only-fine` in „Erste Schritte“), anpassen; die Einleitungen im ⓘ (`intro`) sind jetzt für alle sichtbar, Hinweistexte der Seitenleiste können dorthin (Leitfaden 5.1).
+- **Leitfaden 5.1, 5.2, 5.3** (Entscheidungen Thomas, 12. und 13.11.2026, #140, plane-groups#162): Zur Tafel gehören auch Erklärabläufe (Auswahl im Kopf, Leiste zum Durchschalten unter der Zeichnung), Übergänge in einen anderen Modus (beim Ergebnis, meist in den Kenndaten) sowie Zoom und Verschieben der Ansicht. Zoom einer Tafel: Mausrad, Zwei-Finger-Geste, + und − für die Tastatur, kein Regler. Unter einem gesperrten Element nur der Grund in einem Halbsatz, Erklärungen im ⓘ. Für die Apps: Seitenleiste danach prüfen (plane-groups#162).
+
 ## [0.19.0] - 2026-11-12
 
 Leitfaden 5.3 zu Tooltips und Experimenten, schmalere Spalte der Gruppenwahl. Für die Apps: Tooltips und Experimente nach Leitfaden 5.3 durchsehen; sonst nichts anzupassen.

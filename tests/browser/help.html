@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Testseite für tests/browser/help.test.mjs: Tooltips, Texte für Maus und Touch, ⓘ (js/help.js, #114) -->
+<!-- Testseite für tests/browser/help.test.mjs: Tooltips, Texte für Maus und Touch, ⓘ (js/help.js, #114, #140) -->
 <html lang="de">
 <head>
 <meta charset="utf-8">
@@ -15,10 +15,28 @@
     <input id="feld" type="text" aria-label="Feld">
     <p><span class="only-fine" id="fein">Tooltips erklären jedes Bedienelement.</span><span class="only-coarse" id="grob">Das ⓘ erklärt die Bedienelemente.</span></p>
   </section>
+  <!-- schmal wie die Seitenleiste, Titel so lang, dass er umbricht (#140) -->
+  <section class="card" style="width: 270px">
+    <details class="sect" id="sect-lang">
+      <summary>Symmetrie und allgemeine Lage<span class="sumhint">Gerüst, Objekt</span></summary>
+      <button id="knopf2" type="button">Knopf 2</button>
+    </details>
+    <details class="sect" id="sect-symbol">
+      <summary>Ein ziemlich langer Titel mit Symbol <span id="symbol">4/mmm</span></summary>
+      <button id="knopf3" type="button">Knopf 3</button>
+    </details>
+  </section>
 </main>
 <script type="module">
   import { initHelp } from '/js/help.js';
-  initHelp({ tips: { knopf: 'Tooltip des Knopfs.', feld: 'Tooltip des Felds.' }, sections: [{ heading: '#h-a', ids: ['knopf', 'feld'] }] });
+  initHelp({
+    tips: { knopf: 'Tooltip des Knopfs.', feld: 'Tooltip des Felds.', knopf2: 'Tooltip 2.', knopf3: 'Tooltip 3.' },
+    sections: [
+      { heading: '#h-a', ids: ['knopf', 'feld'] },
+      { heading: '#sect-lang > summary', intro: 'Einleitung des Abschnitts.', ids: ['knopf2'] },
+      { heading: '#sect-symbol > summary', ids: ['knopf3'] },
+    ],
+  });
   document.body.dataset.bereit = '1';
 </script>
 </body>

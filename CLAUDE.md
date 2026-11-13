@@ -145,11 +145,16 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   sollen nur die Funktion oder eine nötige Angabe nennen. Der Test sieht nur
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
   Browsertest je App (offen, #114). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
-  des PR #120). Texte für Maus und Touch und das ⓘ folgen dem zuletzt benutzten Gerät (`data-zeiger`, `data-touch` an
-  `<html>`), nicht nur der Media Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte
-  „Erste Schritte“ sagte aber weiter „Das ⓘ … erklärt“ (Review von #116). Das ⓘ bleibt ab dem ersten Tippen sichtbar,
-  weil es sonst mit jeder Mausbewegung verschwände und eine offene Erklärung ohne Knopf zum Schliessen zurückliesse
-  (Befund des Browsertests). Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
+  des PR #120). Texte für Maus und Touch folgen dem zuletzt benutzten Gerät (`data-zeiger` an `<html>`), nicht nur der Media
+  Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter
+  „Das ⓘ … erklärt“ (Review von #116). **Das ⓘ auf allen Geräten** (Thomas, 12.11.2026, #140): Mit der Maus sah man
+  die Einleitungen der Abschnitte nie, und seit #130 stehen dort Texte, die vorher in der Seitenleiste waren; Inhalte
+  sollen nicht vom Gerät abhängen. Bedingung (Thomas): Das ⓘ bricht nicht allein in eine neue Zeile (in stereography
+  1.15.0 rutschte es unter „Symmetrie und allgemeine Lage“). Gelöst, indem es mit dem letzten Wort zusammengehalten
+  wird (`.nobr`), weil sich das unabhängig von Breite und Schrift hält; mit der Maus ist die Trefferfläche zudem 28 statt
+  40 px (WCAG 2.5.8: 24 px), damit der Titel seltener umbricht. Gemessen in beiden Apps (alle Modi, 1440, 1024, 768,
+  390 px, mit und ohne Touch): vorher brach das ⓘ an jenem Titel in allen Ansichten ausser dem Telefon um, nachher
+  nirgends. `data-touch` (ⓘ ab dem ersten Tippen) entfiel damit. Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
   von Chromium meldet mit Touchscreen immer `hover: none`, der Fall „Touchscreen und `hover: hover`“ wird deshalb mit
   einem Zeigerereignis vom Typ `touch` geprüft.
 - **Experimente nach Kapiteln gliedern** (Thomas, 9.11.2026, #107, Leitfaden Abschn. 5.3): Mit 8–12 Experimenten je
@@ -204,6 +209,12 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   aufblasen“; dazu beim Umsetzen: ein Grund zu jedem Knopf hätte Legende bzw. Tafel verlängert, ein immer freier Knopf
   ohne Wirkung verwirrt). Das Menü öffnet linksbündig, wenn rechts ausgerichtet links kein Platz ist: Die Tafel schneidet
   mit `overflow: hidden` ab (Befund im Browser an der Vorlage). Nicht ersetzt ist die Prüfung mit Studierenden (#117).
+  **Geschärft** (Thomas, 13.11.2026, plane-groups#162, nach der Durchsicht von plane-groups 1.4.0): In der Seitenleiste
+  nur die grundlegenden Einstellungen, die aktiven Funktionen in den Tafeln oder nahe daran; in stereography war das
+  schon gelöst, in plane-groups gingen die Erklärungen (Hauptfunktionen eines Modus) als eingeklappte Abschnitte unter.
+  Deshalb gehören Erklärabläufe, Übergänge zwischen Modi sowie Zoom und Verschieben in die Tafel. Zoom mit Rad und
+  Zwei-Finger-Geste wie im 3D-Fenster von stereography, dazu + / − für die Tastatur (Thomas); ein Regler entfällt, damit
+  es einen Weg gibt.
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,
   nicht auf Werkzeuge, die sich wie eine Auswahl ausschliessen: Ein gesperrtes, aber gewähltes Zeichenwerkzeug
