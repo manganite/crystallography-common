@@ -385,8 +385,11 @@ fehlte beim ersten Release von plane-groups) und `vorlagen/README.md`.
 
 ## Literatur
 
-- Quellen liegen in Thomas' Zotero. Zitiert wird mit gedruckten Seitenzahlen. Folien der Vorlesung nur
-  als Massstab für Umfang und Begriffe, nie als Quelle.
+- Quellen liegen in Thomas' Zotero, gesammelt in der Sammlung **Projekte › Crystallography-Apps** (für alle
+  Apps der Familie und symcrys; angelegt 14.11.2026). Eine Quelle, die neu in Skript, Quiz, `CLAUDE.md`
+  oder symcrys zitiert wird, kommt dort hinzu; fehlt sie in Zotero, mit DOI bzw. ISBN importieren und die
+  Metadaten prüfen. Zitiert wird mit gedruckten Seitenzahlen. Folien der Vorlesung nur als Massstab für
+  Umfang und Begriffe, nie als Quelle.
 - PDF-Seite ≠ gedruckte Seite: Hoffmann gedruckt = PDF − 12, Kleber gedruckt = PDF − 16, Conway et al.
   (*The Symmetries of Things*) gedruckt = PDF − 19 (geprüft 5.11.2026). Bei Borchardt-Ott
   schwankt der Abstand (Kap. 5: − 7, Kap. 6: − 6, ab Kap. 7: − 5; geprüft 4.11.2026): Seitenzahl im Kopf der
