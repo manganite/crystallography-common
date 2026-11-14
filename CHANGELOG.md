@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **`CLAUDE.md`, Literatur** (Thomas, 14.11.2026): Die Quellen der Familie liegen in Thomas' Zotero in der Sammlung „Projekte › Crystallography-Apps“; neu zitierte Quellen kommen dort hinzu, Webseiten ohne DOI oder ISBN in raindrop.io. Für die Apps: nichts anzupassen.
+
 ## [0.20.0] - 2026-11-13
 
 ⓘ auf allen Geräten (#140), Leitfaden 5.1 und 5.2 geschärft (plane-groups#162). Für die Apps: Texte zum ⓘ und Bilder der Hilfeseite nachführen (Einzelheiten unter „Geändert“).

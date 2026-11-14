@@ -385,15 +385,20 @@ fehlte beim ersten Release von plane-groups) und `vorlagen/README.md`.
 
 ## Literatur
 
-- Quellen liegen in Thomas' Zotero. Zitiert wird mit gedruckten Seitenzahlen. Folien der Vorlesung nur
-  als Massstab für Umfang und Begriffe, nie als Quelle.
+- Quellen liegen in Thomas' Zotero in der Sammlung **Projekte › Crystallography-Apps** (Thomas,
+  14.11.2026: damit die Literatur aller Repos an einer Stelle zu finden ist; die Sammlung enthält auch die
+  Quellen von symcrys, für das aber dessen eigene `CLAUDE.md` gilt). Eine Quelle, die irgendwo in der Familie
+  neu zitiert wird, kommt dort hinzu; fehlt sie in Zotero, mit DOI bzw. ISBN importieren und Autoren, Jahr,
+  Auflage und Verlag gegen die Titelei prüfen. Webseiten ohne DOI oder ISBN (z. B. webmineral, Online-Lexika)
+  gehören nicht in Zotero, sondern in Thomas' raindrop.io. Zitiert wird mit gedruckten Seitenzahlen. Folien
+  der Vorlesung nur als Massstab für Umfang und Begriffe, nie als Quelle.
 - PDF-Seite ≠ gedruckte Seite: Hoffmann gedruckt = PDF − 12, Kleber gedruckt = PDF − 16, Conway et al.
   (*The Symmetries of Things*) gedruckt = PDF − 19 (geprüft 5.11.2026). Bei Borchardt-Ott
   schwankt der Abstand (Kap. 5: − 7, Kap. 6: − 6, ab Kap. 7: − 5; geprüft 4.11.2026): Seitenzahl im Kopf der
   PDF-Seite ablesen.
   Borchardt-Ott Tab. 9.4 und viele Aufgaben liegen nur als Bild vor (Seite als Bild lesen).
-- **Gruppentheorie und Mathematik der Kristallographie** (zur Absicherung von Fragen und Skript, alle in
-  Zotero): Brückler, *Mathematische Grundlagen der Kristallographie* (2019; Normalteiler und
+- **Gruppentheorie und Mathematik der Kristallographie** (zur Absicherung von Fragen und Skript):
+  Brückler, *Mathematische Grundlagen der Kristallographie* (2019; Normalteiler und
   Faktorgruppe *G*_K/*B*_K, Def. 4.28, S. 146); Rosebrock, *Anschauliche Gruppentheorie* (2020;
   Nebenklassen und Satz von Lagrange, Abschn. 3.2, S. 41–42); Wipf, *Symmetrien in der Physik* (2023);
   Wagner, *Gruppentheoretische Methoden in der Physik* (1998, in Zotero ohne PDF); Glosauer,
