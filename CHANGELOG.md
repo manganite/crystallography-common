@@ -8,6 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
+- **Experimente nach Kapiteln nur bei mindestens 2 je Kapitel im Schnitt** (`js/ablauf.js`, `js/hilfe-seite.js`, Leitfaden 5.3; Entscheidung Thomas, 15.11.2026): `nachKapitel` gliedert ab 6 Experimenten eines Modus nur noch, wenn im Schnitt mindestens `SCHNITT_AB` = 2 auf eine Gruppe kommen (Kapitel mit Einträgen, dazu „Weitere“); sonst bleibt die Liste flach in der Reihenfolge der Daten, in App und Hilfeseite gleich. `pruefeAblaeufe` meldet mit `kapitel` neu auch Daten eines Modus, die nicht in der Reihenfolge der Kapitel stehen, damit die Nummern flach und gegliedert gleich sind. Für die Apps: die Experimente in den Daten je Modus nach den Kapiteln des Skripts ordnen; `kapitel` bleibt ab 6 Experimenten je Modus Pflicht.
 - **`CLAUDE.md`, Literatur** (Thomas, 14.11.2026): Die Quellen der Familie liegen in Thomas' Zotero in der Sammlung „Projekte › Crystallography-Apps“; neu zitierte Quellen kommen dort hinzu, Webseiten ohne DOI oder ISBN in raindrop.io. Für die Apps: nichts anzupassen.
 
 ## [0.20.0] - 2026-11-13
