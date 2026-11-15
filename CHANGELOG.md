@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Abschnittsnummern und Verweise im Skript** (`js/skript-kern.js`, `css/skript.css`, Leitfaden Abschn. 6; Entscheidung Thomas, #85): `abschnitte()` schreibt Kapitel und laufende Nummer in die Überschriften der Abschnitte und ins Inhaltsverzeichnis (auch im PDF und in dessen Lesezeichen) und macht Verweise wie „Abschnitt 4.5“ oder „Abschn. 4.5“ zu Links, ein einzelner Verweis mit dem Titel des Abschnitts („Abschnitt 4.5 „Titel““), eine Liste mit dem Titel als Tooltip; Zitate anderer Werke, Links und `.quellen` bleiben Text. Für die Tests der Apps `pruefeAbschnittsverweise(html)` (Verweis ohne Abschnitt, Verweis im Satz eines zitierten Werks) und `skriptGliederung(html)`. Für die Apps: `abschnitte()` in `js/skript.js` vor `inhaltsverzeichnis()` aufrufen und einen Test mit `pruefeAbschnittsverweise` ergänzen (Muster in der Vorlage, `tests/skript.test.mjs`).
+
 ## [0.22.0] - 2026-11-15
 
 Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `experimentAusAdresse` umstellen (Experimente statt Kennungen, Optionen statt Funktion); `js/hilfe-daten.js` um die neuen Teile ergänzen, `hilfe` in `SECTIONS` und `hilfeModus` in `initHelp`, im Test `verweise` an `pruefeHilfe`; Bilder neu erzeugen und mit `lib/common/js/hilfe-gemeinsam.js` in die Offline-Liste von `sw.js` aufnehmen.

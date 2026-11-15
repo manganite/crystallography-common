@@ -253,6 +253,15 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   auch Bausteine ohne ID treffen (z. B. `header.top` im Übersichtsbild); `pruefeHilfe` prüft dann nur die IDs, die es gibt.
   Nicht jetzt (Thomas): Hinweise in der App bei Änderungen im Bild, Fachbegriffe in zwei Tiefen (#100), Hinweise für
   Lehrende. Offen: #114.
+- **Abschnittsnummern im Skript** (Thomas, 6.11.2026, #85, Leitfaden Abschn. 6): Die Texte verwiesen ständig auf
+  „Abschnitt 4.5“, die Abschnitte trugen aber keine sichtbare Nummer. Entschieden ist „beides“: Nummern sichtbar und
+  Verweise als Links. Die Nummern entstehen beim Laden aus der Reihenfolge, damit ein neuer Abschnitt sie nicht von Hand
+  verschiebt, und die Verweise werden per Muster erkannt, damit die Texte unverändert bleiben. Beim Umsetzen: Zitate
+  anderer Werke erkennt das Muster an ihrer Zitierform (Komma davor, Seitenangabe danach), nicht an einer Liste von
+  Autoren, weil sie so ohne Markierung im Text auskommen; die Liste der Autoren dient nur dem Test als Warnung.
+  **Nummer und Titel** (Thomas, 15.11.2026): stereography verwies im Text mit Titeln, plane-groups mit Nummern; beide
+  Skripte nennen jetzt Nummer und Titel. Den Titel setzt `abschnitte()` beim Laden dazu, statt ihn in den Text zu
+  schreiben (Wahl beim Umsetzen): So veraltet er nicht, wenn ein Abschnitt umbenannt wird, und die Quelle bleibt kurz.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären
