@@ -158,6 +158,15 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
   von Chromium meldet mit Touchscreen immer `hover: none`, der Fall „Touchscreen und `hover: hover`“ wird deshalb mit
   einem Zeigerereignis vom Typ `touch` geprüft.
+- **Touch-Ziele nach dem zuletzt benutzten Gerät** (Thomas, 15.11.2026, #135, Leitfaden Abschn. 5.2): Die 40 px galten
+  nur bei `pointer: coarse`; ein Laptop mit Touchscreen meldet meist das Touchpad (`pointer: fine`), die Ziele blieben
+  beim Tippen klein. Zur Wahl standen „ab dem ersten Tippen grösser“ und „nach dem zuletzt benutzten Gerät“; gewählt ist
+  Letzteres wie bei Texten und ⓘ, obwohl das Layout bei jedem Wechsel springt. Umgesetzt über Variablen (`--ziel`, ungültig
+  ohne Touch), damit jede Regel nur einmal steht statt in Media Query und Attributselektor. Gemessen (beide Apps, alle Modi,
+  1440, 1024, 768, 390 px): Mit Touch auf `pointer: fine` gleicht das Layout jetzt dem auf `pointer: coarse` (Seitenleiste
+  z. B. stereography „Punktgruppen“ 921 → 1199 px), mit der Maus auf `pointer: coarse` dem mit Maus; kein waagrechtes
+  Scrollen (PR zu #135). Review: Nach dem Tippen verschiebt sich das Layout, und Chromium meldet unter dem ruhenden
+  Mauszeiger ein `pointerover` vom Typ `mouse`; `help.js` wechselt das Gerät deshalb nur bei `pointerdown` und `pointermove`.
 - **Experimente nach Kapiteln gliedern** (Thomas, 9.11.2026, #107, Leitfaden Abschn. 5.3): Mit 8–12 Experimenten je
   Modus (stereography#115, plane-groups#109) wird die flache Liste unübersichtlich; das Quiz gliedert schon nach
   Kapiteln. Schwelle 6 je Modus (gezählt wird, was die Liste eines Modus zeigt, nicht die ganze App). Das Kapitel steht

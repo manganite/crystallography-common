@@ -59,6 +59,8 @@ const ueberfahren = async (p, sel) => { const m = await mitte(p, sel); await p.m
 /** Warten, bis der Tooltip erscheint (Verzögerung 450 ms). @param {Page} p */
 const tipAbwarten = (p) => p.waitForFunction(() => document.getElementById('tip')?.hidden === false, null, { timeout: 3000 });
 
+/** Höhe eines Touch-Ziels (#135). @param {Page} p */
+const zielHoehe = async (p) => Math.round((await p.locator('#linkknopf').boundingBox())?.height ?? 0);
 /** Breite des ersten ⓘ. @param {Page} p */
 const infoBreite = async (p) => Math.round((await p.locator('.infobtn').first().boundingBox())?.width ?? 0);
 
@@ -120,6 +122,7 @@ test('Touchscreen als primäres Zeigegerät (pointer: coarse): Tippen ohne, Maus
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'touch');
   // dieselbe Seite mit einer Maus: Tooltip und Texte für die Maus, obwohl der Browser pointer: coarse meldet
   assert.equal(await infoBreite(p), 40);
+  assert.ok(await zielHoehe(p) >= 40, 'Touch-Ziel 40 px');
   await ueberfahren(p, '#feld');
   await tipAbwarten(p);
   assert.equal(await tip(p), 'Tooltip des Felds.');
@@ -127,6 +130,7 @@ test('Touchscreen als primäres Zeigegerät (pointer: coarse): Tippen ohne, Maus
   assert.equal(await sichtbar(p, '#fein'), true);
   assert.equal(await sichtbar(p, '#grob'), false);
   assert.equal(await infoBreite(p), 28, 'mit der Maus kleines ⓘ, obwohl pointer: coarse');
+  assert.ok(await zielHoehe(p) < 40, 'mit der Maus kleine Ziele, obwohl pointer: coarse (#135)');
   await schliessen(p);
 });
 
@@ -135,8 +139,10 @@ test('Laptop mit Touchscreen, der hover: hover meldet: nach dem Tippen Texte fü
   // Zeigerereignis vom Typ touch, wie es ein solcher Laptop beim Tippen auslöst.
   const p = await seite();
   assert.equal(await p.evaluate(() => matchMedia('(hover: hover)').matches), true, 'Voraussetzung des Tests');
+  assert.ok(await zielHoehe(p) < 40, 'vor dem Tippen Ziele für die Maus');
   await p.dispatchEvent('#h-a', 'pointerdown', { pointerType: 'touch', bubbles: true });
   assert.equal(await infoBreite(p), 40);
+  assert.ok(await zielHoehe(p) >= 40, 'nach dem Tippen Touch-Ziele, obwohl pointer: fine (#135)');
   assert.equal(await sichtbar(p, '#grob'), true);
   assert.equal(await sichtbar(p, '#fein'), false);
   // mit der Maus danach: Texte für die Maus, das ⓘ wieder klein, es klappt die Erklärungen auf
@@ -144,8 +150,36 @@ test('Laptop mit Touchscreen, der hover: hover meldet: nach dem Tippen Texte fü
   assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'maus');
   assert.equal(await sichtbar(p, '#fein'), true);
   assert.equal(await infoBreite(p), 28);
+  assert.ok(await zielHoehe(p) < 40);
   assert.match(await p.locator('.helpbox').innerText(), /Tooltip des Knopfs/);
   await schliessen(p);
+});
+
+test('Tippen bei ruhender Maus: Touch bleibt, auch wenn das Layout unter dem Zeiger wechselt (Review #152)', async () => {
+  // Nach dem Tippen werden die Ziele grösser und das Layout verschiebt sich; Chromium meldet dann unter dem ruhenden
+  // Mauszeiger ein pointerover vom Typ mouse. Das darf nicht auf „maus“ zurückschalten.
+  for (const o of [{}, { hasTouch: true }]) {
+    const p = await seite(o);
+    const r = /** @type {{ x: number, y: number, width: number }} */ (await p.locator('#sect-lang > summary').boundingBox());
+    await p.mouse.move(r.x + r.width / 2, r.y + 2);
+    await p.waitForTimeout(100);
+    const vorher = await p.evaluate(() => document.querySelector('#sect-lang > summary')?.getBoundingClientRect().top);
+    const cdp = await p.context().newCDPSession(p);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 880, y: 590 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await p.waitForTimeout(300);
+    const nachher = await p.evaluate(() => document.querySelector('#sect-lang > summary')?.getBoundingClientRect().top);
+    assert.ok((nachher ?? 0) > (vorher ?? 0), 'Voraussetzung: das Layout hat sich unter dem Zeiger verschoben');
+    assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'touch', JSON.stringify(o));
+    assert.ok(await zielHoehe(p) >= 40);
+    await p.waitForTimeout(600);
+    assert.equal(await tip(p), null, 'kein Tooltip ohne Bewegung der Maus');
+    // bewegt sich die Maus wieder, gilt sie
+    await ueberfahren(p, '#knopf');
+    await tipAbwarten(p);
+    assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'maus');
+    await schliessen(p);
+  }
 });
 
 test('ⓘ bricht nie allein in eine neue Zeile, mit Maus und Touch (#140)', async () => {
