@@ -12,7 +12,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Ausnahmen der Tooltips** (Leitfaden 5.3; Thomas, 15.11.2026, #114): alle Links (auch Begriffe der Kenndaten und Fusszeile) und die Knöpfe der Experimente und Erste Schritte, Liste und laufender Ablauf.
+- **Ausnahmen der Tooltips** (Leitfaden 5.3; Thomas, 15.11.2026, #114): alle Links (auch Begriffe der Kenndaten und Fusszeile) und die Knöpfe der Experimente und Erste Schritte, Liste und laufender Ablauf. Länge: straffen statt Angaben zur Funktion streichen; ein etwas längerer Tooltip ist als Ausnahme erlaubt, die der Test der App nennt (`pruefeTooltips` mit grösserem `max` für diese IDs).
 - **Bilder der Hilfeseite** (`tools/hilfe-bilder.mjs`; Thomas, 15.11.2026, #114): Fehlt links neben einem grossen nummerierten Baustein der Platz (Übersichtsbild), bekommt die Seite für das Bild links Rand und grössere Abstände; die Nummern stehen dann links neben den Bausteinen statt auf der Rahmenlinie. Für die Apps: Bilder neu erzeugen.
 
 ## [0.22.0] - 2026-11-15

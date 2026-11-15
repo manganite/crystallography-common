@@ -140,14 +140,18 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
   Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, das Export-Menü (bis #130 Export-Knöpfe mit Text) und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
-  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
+  Höchstlänge (Thomas). Längere als Ausnahme (Thomas, 15.11.2026, nach dem ersten Entwurf von stereography#156): Beim
+  Kürzen auf 120 Zeichen ging bei einigen Tooltips wesentliche Information zur Funktion verloren; gestrichen wird nur reine
+  Zusatzinformation, die Formulierung wird gestrafft. 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
   Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
   sollen nur die Funktion oder eine nötige Angabe nennen. Der Test sieht nur
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte prüft der Browserlauf
   jeder App mit `fehlendeTooltips` (#114). Dabei zeigten sich ohne Tooltip nur Knöpfe der Experimente, Begriffslinks der
   Kenndaten und Links in Kopf- und Fusszeile; Thomas (15.11.2026) nahm sie als Ausnahmen auf, dazu die Knöpfe eines
   laufenden Ablaufs, weil ihr Text sagt, was sie tun. Tooltips an gesperrten Knöpfen prüft die CI in Chromium und Firefox (Job `browser`)
-  und in WebKit (Job `webkit` auf macOS, weil WebKit auf Ubuntu ohne apt nicht startet, #128). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
+  und in WebKit (Job `webkit` auf macOS, weil WebKit auf Ubuntu ohne apt nicht startet, #128; nicht in der Regel „main
+  schützen“: Thomas wollte ihn dort nur, wenn es den Ablauf stabiler macht, und ein Pflichtjob auf einem zweiten Runner-Typ
+  machte jeden Merge zusätzlich von macOS abhängig; ein rotes Ergebnis wird wie jedes andere behandelt). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
   des PR #120). Texte für Maus und Touch folgen dem zuletzt benutzten Gerät (`data-zeiger` an `<html>`), nicht nur der Media
   Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter
   „Das ⓘ … erklärt“ (Review von #116). **Das ⓘ auf allen Geräten** (Thomas, 12.11.2026, #140): Mit der Maus sah man
