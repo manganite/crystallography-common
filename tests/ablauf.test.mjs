@@ -395,6 +395,12 @@ test('listeHTML: ab 6 Einträgen Titel je Kapitel, Listen damit beschriftet, dur
   // unter der Schwelle oder ohne Kapitel: flach wie bisher
   assert.doesNotMatch(listeHTML(sechs.slice(0, 5), leererFortschritt(), KAP), /ablauf-kapitel|start=|aria-labelledby/);
   assert.doesNotMatch(listeHTML(sechs), /ablauf-kapitel|start=|aria-labelledby/);
+  // breiter Einzug nur bei zweistelligen Nummern (#123), in einer gegliederten Liste für alle Teillisten
+  assert.doesNotMatch(listeHTML([...sechs, gen, ex('g', 1), ex('h', 3)], leererFortschritt(), KAP), /zweistellig/, '9 Einträge');
+  const zehn = listeHTML([...sechs, gen, ex('g', 1), ex('h', 3), ex('i', 3)], leererFortschritt(), KAP);
+  assert.equal(zehn.match(/<ol class="ablauf-liste zweistellig"/g)?.length, 2, 'beide Teillisten breit');
+  assert.doesNotMatch(zehn, /<ol class="ablauf-liste"[ >]/);
+  assert.match(listeHTML(Array.from({ length: 10 }, (_, i) => ex(`f${i}`))), /^(?:(?!<ol).)*<ol class="ablauf-liste zweistellig">/s, 'flach');
   // ab 6, aber im Schnitt unter 2 je Kapitel: flach (6 Einträge in 4 Gruppen)
   const verteilt = [ex('a', 1), ex('b', 2), ex('c', 3), ex('d', 3), ex('e'), ex('f')];
   assert.doesNotMatch(listeHTML(verteilt, leererFortschritt(), KAP), /ablauf-kapitel|start=|aria-labelledby/);

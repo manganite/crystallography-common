@@ -6,6 +6,11 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Touch-Ziele nach dem zuletzt benutzten Gerät** (`css/app.css`, Leitfaden Abschn. 5.2; Entscheidung Thomas, #135): 40 px auch auf einem Laptop mit Touchscreen, der `pointer: fine` meldet, nach dem Tippen; mit der Maus auf einem Gerät mit `pointer: coarse` die Grössen für die Maus. Die Grössen stehen in Variablen (`--ziel`, `--ziel-gross`, `--ziel-kaestchen`, `--ziel-regler`, `--ziel-info-rand`), die nur bei Touch einen Wert haben. Für die Apps: eigene Regeln mit `@media (pointer: coarse)` auf `var(--ziel)` umstellen (z. B. `min-height: var(--ziel)`, mit einem Wert für die Maus `var(--ziel, 36px)`); Regeln mit `:root[data-zeiger="touch"]` für Touch-Ziele entfallen.
+- **Einzug der Experimente** (`js/ablauf.js`, `css/app.css`, #123): breit (1,9em) nur, wenn die Liste eines Modus zweistellige Nummern hat (Klasse `zweistellig`), sonst wieder 1,3em; in einer gegliederten Liste für alle Teillisten.
+
 ## [0.22.0] - 2026-11-15
 
 Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `experimentAusAdresse` umstellen (Experimente statt Kennungen, Optionen statt Funktion); `js/hilfe-daten.js` um die neuen Teile ergänzen, `hilfe` in `SECTIONS` und `hilfeModus` in `initHelp`, im Test `verweise` an `pruefeHilfe`; Bilder neu erzeugen und mit `lib/common/js/hilfe-gemeinsam.js` in die Offline-Liste von `sw.js` aufnehmen.
