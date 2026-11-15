@@ -116,3 +116,199 @@ export function inhaltsverzeichnis() {
   if (det && window.matchMedia('(max-width: 899px)').matches) det.open = false;
   for (const a of links) a.addEventListener('click', () => { if (det && window.matchMedia('(max-width: 899px)').matches) det.open = false; });
 }
+
+// ------------------------------------------------------------------ Abschnittsnummern und Verweise (#85)
+// Jeder Abschnitt (<section> mit <h3> direkt in einem Kapitel mit <h2><span class="nr">) bekommt Kapitel und
+// laufende Nummer, z. B. „8.2“, in der Überschrift und im Inhaltsverzeichnis; Abschnitte, die Vertiefung sind,
+// zählen mit. Verweise im Text wie „Abschnitt 8.2“, „Abschn. 8.2“ oder „Abschnitte 3.3–3.4“ werden Links auf den
+// Abschnitt (Titel als Tooltip). Kein Verweis auf einen eigenen Abschnitt ist:
+// - Text in .quellen und in Links (Querverweise auf das Skript einer anderen App sind schon Links);
+// - eine Nummer mit drei Stufen („Abschn. 2.2.7“, International Tables);
+// - ein Zitat „Werk, Abschn. x.y“ (Komma davor) oder mit Seitenangabe („Abschn. 7.2, S. 104“).
+// Die Tests der Apps prüfen mit pruefeAbschnittsverweise, dass jeder Verweis einen Abschnitt trifft.
+
+const ZAHL = String.raw`\d+\.\d+(?![.\d]*\d)`;
+const VERWEIS = new RegExp(String.raw`(?:Abschnitte?|Abschn\.)\s+${ZAHL}(?:\s*(?:,|und|bis|–|-)\s*${ZAHL})*`, 'g');
+/** Werke, deren Abschnitte ein Skript zitiert; ein Verweis im selben Satz ohne Zitierform wird gemeldet. */
+const WERKE = /Borchardt|Hoffmann|Kleber|Schwarzenbach|Conway|Paufler|Brückler|Rosebrock|Glosauer|Wipf|Wagner|Schattschneider|Grünbaum|ebenda/;
+
+/**
+ * Verweise auf eigene Abschnitte in einem Text, je Nummer ein Treffer. Der erste Treffer eines Verweises beginnt
+ * beim Wort („Abschnitt 4.2“), weitere stehen nur auf ihrer Nummer („und 3.4“). Zitate anderer Werke (Komma davor,
+ * Seitenangabe danach) zählen nicht.
+ * @param {string} text
+ * @returns {{ start: number, ende: number, nummer: string }[]}
+ */
+export function abschnittsverweise(text) {
+  /** @type {{ start: number, ende: number, nummer: string }[]} */
+  const treffer = [];
+  for (const m of text.matchAll(VERWEIS)) {
+    const start = m.index ?? 0;
+    const ende = start + m[0].length;
+    if (/,\s*$/.test(text.slice(Math.max(0, start - 3), start))) continue;
+    if (/^,\s*S\.\s/.test(text.slice(ende, ende + 6))) continue;
+    let erste = true;
+    for (const z of m[0].matchAll(new RegExp(ZAHL, 'g'))) {
+      const s = start + (z.index ?? 0);
+      treffer.push({ start: erste ? start : s, ende: s + z[0].length, nummer: z[0] });
+      erste = false;
+    }
+  }
+  return treffer;
+}
+
+const LEER = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr']);
+const BLOCK = new Set(['p', 'li', 'ul', 'ol', 'dl', 'dt', 'dd', 'div', 'section', 'article', 'figure', 'figcaption',
+  'table', 'caption', 'tr', 'td', 'th', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'nav', 'header', 'footer', 'main', 'aside', 'details', 'summary']);
+/** @type {Record<string, string>} */
+const ENTITAETEN = { nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", ndash: '–', mdash: '—', thinsp: ' ' };
+/** @param {string} s */
+const entschluesseln = (s) => s.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (e, n) => {
+  if (n[0] === '#') return String.fromCodePoint(n[1] === 'x' || n[1] === 'X' ? parseInt(n.slice(2), 16) : Number(n.slice(1)));
+  return ENTITAETEN[n] ?? e;
+});
+
+/**
+ * Gliederung und Text eines Skripts aus dem HTML, ohne Browser (für die Tests der Apps): Nummern der Abschnitte wie
+ * abschnitte() sie vergibt, und der Text des Artikels, in dem Links und .quellen durch Platzhalter ersetzt sind.
+ * @param {string} html
+ * @returns {{ nummern: Map<string, { id: string, titel: string }>, text: string }}
+ */
+export function skriptGliederung(html) {
+  /** @type {Map<string, { id: string, titel: string }>} */
+  const nummern = new Map();
+  /** @type {{ tag: string, klasse: string, id: string, kapitel?: { nr: string, n: number } }[]} */
+  const stapel = [];
+  let text = '';
+  /** @type {{ nr: string, n: number } | null} */
+  let kapitelNr = null; // Kapitel, dessen <h2> gerade gelesen wird
+  let nrText = '';
+  /** @type {{ nummer: string, id: string } | null} */
+  let h3 = null;
+  let h3Text = '';
+  const tok = /<!--[\s\S]*?-->|<(script|style)\b[\s\S]*?<\/\1\s*>|<(\/?)([a-zA-Z][a-zA-Z0-9]*)((?:[^>"']|"[^"]*"|'[^']*')*)>|([^<]+)/g;
+  for (const m of html.matchAll(tok)) {
+    const [, , zu, name, attr = '', roh] = m;
+    if (roh !== undefined) {
+      if (!stapel.some((e) => e.tag === 'article')) continue;
+      const t = entschluesseln(roh);
+      const gesperrt = stapel.some((e) => ['a', 'h1', 'h2', 'h3'].includes(e.tag) || /\bquellen\b/.test(e.klasse));
+      text += gesperrt ? '\u0000'.repeat(t.length) : t;
+      if (stapel.some((e) => e.klasse.split(/\s+/).includes('nr')) && kapitelNr) nrText += t;
+      if (h3) h3Text += t;
+      continue;
+    }
+    if (!name) continue;
+    const tag = name.toLowerCase();
+    if (BLOCK.has(tag)) text += '\n';
+    if (zu) {
+      const i = stapel.map((e) => e.tag).lastIndexOf(tag);
+      if (i < 0) continue;
+      if (tag === 'h2' && kapitelNr) { kapitelNr.nr = nrText.trim(); kapitelNr = null; }
+      if (tag === 'h3' && h3) { nummern.set(h3.nummer, { id: h3.id, titel: h3Text.replace(/\s+/g, ' ').trim() }); h3 = null; }
+      stapel.length = i;
+      continue;
+    }
+    if (LEER.has(tag) || /\/\s*$/.test(attr)) continue;
+    const klasse = attr.match(/\bclass\s*=\s*["']([^"']*)/)?.[1] ?? '';
+    const id = attr.match(/\bid\s*=\s*["']([^"']*)/)?.[1] ?? '';
+    const oben = stapel[stapel.length - 1];
+    /** @type {{ tag: string, klasse: string, id: string, kapitel?: { nr: string, n: number } }} */
+    const eintrag = { tag, klasse, id };
+    if (tag === 'section' && oben?.tag === 'article') eintrag.kapitel = { nr: '', n: 0 };
+    if (tag === 'h2' && oben?.kapitel) { kapitelNr = oben.kapitel; nrText = ''; }
+    if (tag === 'h3' && oben?.tag === 'section') {
+      const kap = stapel[stapel.length - 2]?.kapitel;
+      if (kap?.nr) { h3 = { nummer: `${kap.nr}.${++kap.n}`, id: oben.id }; h3Text = ''; }
+    }
+    stapel.push(eintrag);
+  }
+  return { nummern, text };
+}
+
+/**
+ * Prüfung für die Tests der Apps: Jeder Verweis „Abschnitt x.y“ im Skript zeigt auf einen Abschnitt, den es gibt,
+ * und steht nicht im selben Satz wie ein zitiertes Werk (dort gehört die Zitierform „Werk, Abschn. x.y“ hin).
+ * Rückgabe: Befunde (leer, wenn alles stimmt) und die Zahl der Verweise.
+ * @param {string} html
+ * @returns {{ befunde: string[], verweise: number }}
+ */
+export function pruefeAbschnittsverweise(html) {
+  const { nummern, text } = skriptGliederung(html);
+  /** @type {string[]} */
+  const befunde = [];
+  const treffer = abschnittsverweise(text);
+  for (const t of treffer) {
+    const umfeld = text.slice(Math.max(0, t.start - 40), t.ende + 20).replace(/\s+/g, ' ');
+    if (!nummern.has(t.nummer)) befunde.push(`Abschnitt ${t.nummer} gibt es nicht: „…${umfeld}…“`);
+    const satz = text.slice(0, t.start).split(/[.!?]\s|\n/).pop() ?? '';
+    if (WERKE.test(satz)) befunde.push(`Abschnitt ${t.nummer} im Satz eines zitierten Werks (Zitierform „Werk, Abschn. x.y“?): „…${umfeld}…“`);
+  }
+  return { befunde, verweise: treffer.length };
+}
+
+/**
+ * Abschnittsnummern in Überschriften und Inhaltsverzeichnis schreiben und Verweise im Text verlinken (#85). Vor
+ * inhaltsverzeichnis() aufrufen. Rückgabe: Nummer → Abschnitt.
+ * @returns {Map<string, HTMLElement>}
+ */
+export function abschnitte() {
+  /** @type {Map<string, HTMLElement>} */
+  const nummern = new Map();
+  const artikel = document.querySelector('main article');
+  if (!artikel) return nummern;
+  for (const kap of artikel.querySelectorAll(':scope > section')) {
+    const nr = kap.querySelector(':scope > h2 .nr')?.textContent?.trim();
+    if (!nr) continue;
+    let n = 0;
+    for (const s of kap.querySelectorAll(':scope > section')) {
+      const h = s.querySelector(':scope > h3');
+      if (!(s instanceof HTMLElement) || !h) continue;
+      const nummer = `${nr}.${++n}`;
+      nummern.set(nummer, s);
+      if (h.querySelector(':scope > .nr')) continue;
+      s.dataset.titel = `${nummer} ${(h.textContent ?? '').replace(/\s+/g, ' ').trim()}`;
+      const span = document.createElement('span');
+      span.className = 'nr';
+      span.textContent = nummer;
+      // Leerzeichen nach der Nummer, damit Lesezeichen im PDF und vorgelesener Text „8.2 Titel“ lauten
+      h.prepend(span, ' ');
+      const toc = s.id ? document.querySelector(`.toc a[href="#${CSS.escape(s.id)}"]`) : null;
+      if (toc && !toc.querySelector('.nr')) toc.prepend(span.cloneNode(true), ' ');
+    }
+  }
+  // Text des Artikels am Stück, damit Komma und Seitenangabe über Grenzen von Elementen hinweg erkannt werden
+  /** @type {{ node: Text, start: number }[]} */
+  const teile = [];
+  let text = '';
+  /** @type {Element | null} */
+  let block = null;
+  const w = document.createTreeWalker(artikel, NodeFilter.SHOW_TEXT);
+  for (let node = /** @type {Text | null} */ (w.nextNode()); node; node = /** @type {Text | null} */ (w.nextNode())) {
+    const el = node.parentElement;
+    const b = el?.closest(`${[...BLOCK].join(',')}`) ?? null;
+    if (b !== block) { text += '\n'; block = b; }
+    const t = node.data;
+    if (el?.closest('a, .quellen, h1, h2, h3, script, style')) { text += '\u0000'.repeat(t.length); continue; }
+    teile.push({ node, start: text.length });
+    text += t;
+  }
+  const treffer = abschnittsverweise(text);
+  for (let i = teile.length - 1; i >= 0; i--) {
+    const { node, start } = teile[i];
+    const ende = start + node.data.length;
+    for (const t of treffer.filter((x) => x.start >= start && x.ende <= ende).reverse()) {
+      const ziel = nummern.get(t.nummer);
+      if (!ziel) continue;
+      const rest = node.splitText(t.start - start);
+      rest.splitText(t.ende - t.start);
+      const a = document.createElement('a');
+      a.className = 'abschnitt-link';
+      a.href = `#${ziel.id}`;
+      a.title = ziel.dataset.titel ?? '';
+      rest.replaceWith(a);
+      a.append(rest);
+    }
+  }
+  return nummern;
+}
