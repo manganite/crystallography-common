@@ -33,9 +33,11 @@
     tips: { knopf: 'Tooltip des Knopfs.', feld: 'Tooltip des Felds.', knopf2: 'Tooltip 2.', knopf3: 'Tooltip 3.' },
     sections: [
       { heading: '#h-a', ids: ['knopf', 'feld'] },
-      { heading: '#sect-lang > summary', intro: 'Einleitung des Abschnitts.', ids: ['knopf2'] },
+      { heading: '#sect-lang > summary', intro: 'Einleitung des Abschnitts.', ids: ['knopf2'], hilfe: '{modus}-lang' },
       { heading: '#sect-symbol > summary', ids: ['knopf3'] },
     ],
+    // Modus beim Aufklappen (Verweis auf die Hilfeseite, #114); zum Test über data-modus am body umschaltbar
+    hilfeModus: () => document.body.dataset.modus ?? 'a',
   });
   document.body.dataset.bereit = '1';
 </script>

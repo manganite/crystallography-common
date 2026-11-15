@@ -28,9 +28,9 @@ export const TIPS = {
 
 /** ⓘ-Erklärungen: je Abschnitt ein Einleitungssatz und die Elemente, deren Texte gezeigt werden. @type {Abschnitt[]} */
 export const SECTIONS = [
-  { heading: '#ctl-gruppe > h2', intro: 'Gruppe antippen: Die Tafeln zeigen ihre Symmetrieelemente.', ids: ['opt-elemente', 'opt-motiv', 'opt-zelle', 'opt-beschr'] },
-  { heading: '#sec-gitter > summary', intro: 'Alles in diesem Abschnitt ändert das Gitter.', ids: ['lat-ba'] },
-  { heading: '#sec-view > summary', ids: ['v-farben', 'v-achsen', 'v-wahl'] },
+  { heading: '#ctl-gruppe > h2', intro: 'Gruppe antippen: Die Tafeln zeigen ihre Symmetrieelemente.', ids: ['opt-elemente', 'opt-motiv', 'opt-zelle', 'opt-beschr'], hilfe: '{modus}-gruppe' },
+  { heading: '#sec-gitter > summary', intro: 'Alles in diesem Abschnitt ändert das Gitter.', ids: ['lat-ba'], hilfe: '{modus}-gitter' },
+  { heading: '#sec-view > summary', ids: ['v-farben', 'v-achsen', 'v-wahl'], hilfe: '{modus}-darstellung' },
 ];
 
 /** Beschriftung in der ⓘ-Erklärung, wo der Text des Elements nicht passt. @type {Record<string, string>} */

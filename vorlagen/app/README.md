@@ -68,6 +68,9 @@ Der Zustand steht lesbar in der Adresse, z. B. `#m=a&g=p4mm`. Geschrieben wird n
 | `m` | Modus | **`a`**, `b` |
 | `g` | Gruppe | Kurzsymbol, z. B. `p4mm` |
 
+Die Hilfeseite startet ein Experiment mit `index.html?experiment=<id>#…` (Kennung wie in `js/hilfetexte.js`); die App
+wechselt in seinen Modus, startet es und entfernt den Parameter wieder aus der Adresse. Er gehört nicht zum Zustand.
+
 ## Konventionen
 
 - Achsen, Blickrichtung, Symbole und Zählweisen, soweit sie von einer Konvention abhängen (mit Quelle). Eigene Festlegungen der App als solche genannt.

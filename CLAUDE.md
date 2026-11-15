@@ -237,7 +237,22 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Experimente leben vom Vermuten, eine Auflösung auf der Hilfeseite verriete sie; auf einem Bild der ganzen App sieht
   man nicht, wohin man tippen soll. Welches Element, sagt `zeige` im Schritt, damit Text und Bild an einem Ort stehen.
   Start eines Experiments per `?experiment=<id>` statt im Hash, damit die Link-Adressen der Apps (Schnittstelle)
-  unberührt bleiben; die App entfernt den Parameter gleich wieder. Weiteres zur Hilfe: #114.
+  unberührt bleiben; die App entfernt den Parameter gleich wieder.
+  **Ausbau zur Anleitung** (Thomas, 15.11.2026, #114, #74 Punkt 5): Die Hilfeseite erklärte nur die Erste Schritte und
+  listete die Experimente; Thomas: „Das ist nicht ausreichend.“ Es fehlten Zweck, Funktionen, Modi, Seitenleiste, Tafeln
+  mit ihren Knöpfen und Kenndaten (Bestand im Kommentar zu #114 vom 15.11.2026). Entschieden auf Rückfrage mit Empfehlung:
+  Gliederung je Modus integriert (Überblick, Bedienkonzepte, je Modus Nachschlagen, Anleitungen, Experimente, Fragen,
+  Technik), weil die Seitenleiste und die Tafeln je Modus verschieden sind und die Reihenfolge vom 9.11. („zuerst
+  Bedienkonzepte, dann je Modus Anleitungen, dann Experimente“) so erhalten bleibt; gemeinsame Texte als Datendatei in
+  common, damit Link, Speicher, offline und die gemeinsamen Bedienkonzepte nicht je App auseinanderlaufen; Bilder mit
+  nummerierten Marken statt eines Rahmens, weil ein Bild eines Bereichs mehrere Elemente erklärt; keine feste Zahl der
+  Anleitungen (Thomas: „Die Zahl ist recht willkürlich. Keine feste Grenze. Wofür es eine Anleitung braucht, soll es eine
+  Anleitung geben.“); Verweis aus jedem ⓘ auf die Hilfeseite. Beim Umsetzen: Anker eines Bereichs `<Modus>-<id>`, damit ein
+  Bereich, der in mehreren Modi gilt (z. B. „Darstellung“ in plane-groups), je Modus vollständig mit eigenem Bild erscheint;
+  der Modus im Verweis aus dem ⓘ deshalb als Platzhalter `{modus}`, eingesetzt beim Aufklappen. Marken eines Bereichs dürfen
+  auch Bausteine ohne ID treffen (z. B. `header.top` im Übersichtsbild); `pruefeHilfe` prüft dann nur die IDs, die es gibt.
+  Nicht jetzt (Thomas): Hinweise in der App bei Änderungen im Bild, Fachbegriffe in zwei Tiefen (#100), Hinweise für
+  Lehrende. Offen: #114.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären
