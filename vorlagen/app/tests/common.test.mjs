@@ -45,11 +45,14 @@ test('Erste Schritte und Lernexperimente: Daten vollständig (pruefeAblaeufe)', 
   assert.deepEqual(pruefeAblaeufe(ERSTE_SCHRITTE, o), []);
 });
 
-test('Hilfeseite: Modi, abgebildete Bedienelemente und Bilder passen zur App (pruefeHilfe)', async () => {
+test('Hilfeseite: Modi, abgebildete Bedienelemente, Bilder und Verweise aus dem ⓘ passen zur App (pruefeHilfe)', async () => {
   const { pruefeHilfe } = await import('../lib/common/js/hilfe-seite.js');
   const { HILFE } = await import('../js/hilfe-daten.js');
+  const { SECTIONS } = await import('../js/hilfetexte.js');
   const dateien = readdirSync(new URL('../hilfe/', import.meta.url));
-  assert.deepEqual(pruefeHilfe(HILFE, { html: read('index.html'), dateien }), []);
+  // verweise: die Ziele der ⓘ (`hilfe` in SECTIONS) stehen auf der Hilfeseite
+  const verweise = SECTIONS.flatMap((s) => (s.hilfe ? [s.hilfe] : []));
+  assert.deepEqual(pruefeHilfe(HILFE, { html: read('index.html'), dateien, verweise }), []);
   // „?“ führt zur Hilfeseite (Leitfaden Abschn. 5.3)
   assert.match(read('index.html'), /<a class="helpbtn" id="help-open" href="hilfe\.html"/);
 });

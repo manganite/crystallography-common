@@ -31,6 +31,8 @@ const PAARE = [
   // gewählte Tabs, Gruppen, Segmente, Tooltip: paper auf ink; gewähltes Werkzeug: paper auf accent
   paar('Text paper auf ink', 'paper', 'ink', SCHWELLE.text),
   paar('Text paper auf accent', 'paper', 'accent', SCHWELLE.text),
+  // Hilfeseite: Nummern der Bereiche (hilfe.css .hilfe-marken)
+  paar('Text paper auf accent2', 'paper', 'accent2', SCHWELLE.text),
   // Quiz: Buchstabe der richtigen bzw. falschen Antwort
   paar('Text paper auf ax2', 'paper', 'ax2', SCHWELLE.text),
   paar('Text paper auf ax6', 'paper', 'ax6', SCHWELLE.text),

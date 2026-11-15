@@ -22,12 +22,13 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `app.css` | Werkbank der App: Anordnung der Tafeln, Seitenleiste mit Karten, Bedienelemente, einklappbare Abschnitte, Tafeln, Legende, Kenndaten, Erste Schritte, Tooltip, ⓘ-Erklärungen, Telefon und Touch |
 | | `skript.css` | Skript: Inhaltsverzeichnis, Lesebreite, Kästen (Lernziele, Merke, Zusammenfassung, Grundlagen, Vertiefung, In der App), Vertiefungskapitel, Abbildungsrahmen, Tabellen, Quellen |
 | | `quiz.css` | Quiz: Auswahl (Stufen, Kapitel, Anzahl), Frage, Antworten, Rückmeldung, Auswertung |
-| | `hilfe.css` | Hilfeseite (nach `skript.css`): Anleitungen mit Bildern der Bedienung, Liste der Experimente |
+| | `hilfe.css` | Hilfeseite (nach `skript.css`): Bereiche mit nummerierten Bildern, Anleitungen mit Bildern der Bedienung, Liste der Experimente, Fragen |
 | `fonts/` | | IBM Plex Sans und Mono, Source Serif 4 (selbst gehostet, SIL Open Font License) |
 | `js/` | `format.js` | Hermann-Mauguin-Symbole und Millersche Indizes mit Querstrich |
 | | `ablauf.js` | Geführte Abläufe: Lernexperimente im Abschnitt „Experimente“ (Frage, Vermutung, Handlung, Beobachtung, Vorher/Nachher, Stand wie im Quiz, erzeugte Varianten) und kurze Erste Schritte (`liste: false`), Verzweigung für die Bestimmung; ab 6 Experimenten je Modus und im Schnitt 2 je Kapitel nach Kapiteln gegliedert (`kapitel`); `pruefeAblaeufe` für die Tests der App |
 | | `help.js` | Mechanik der Hilfen: Tooltips (Laptop), ⓘ-Erklärungen je Abschnitt (alle Geräte); Texte liefert die App |
-| | `hilfe-seite.js` | Hilfeseite: Erste Schritte aller Modi als Anleitungen mit Bildern, Experimente als Liste mit „In der App ausprobieren“ (`?experiment=<id>`, in der App `experimentAusAdresse`), nach Kapiteln wie in der App; `pruefeHilfe` für die Tests der App |
+| | `hilfe-seite.js` | Hilfeseite als Anleitung: Überblick, Bedienkonzepte, je Modus Bereiche zum Nachschlagen, Anleitungen und Experimente (mit „In der App ausprobieren“, `?experiment=<id>`, in der App `experimentAusAdresse`), typische Fragen, Link und Geräte; `pruefeHilfe` und `hilfeAnker` für die Tests der App |
+| | `hilfe-gemeinsam.js` | Gemeinsame Texte der Hilfeseite (Daten): Teile, Familie, Bedienkonzepte, Link, Speicher, offline, Export, Geräte, Tastatur |
 | | `quiz-core.js` | Quiz-Logik ohne Seite: Kandidaten, Ziehen nach Stufen und Vorrang, Mischen, Auswerten, Fortschritt |
 | | `quiz-seite.js` | Quiz-Seite: Auswahl, Fragen mit sofortiger Rückmeldung, Auswertung, Fortschritt im Browser |
 | | `skript-kern.js` | Skript: Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
@@ -38,7 +39,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `check.mjs` | Kopie in einer App gegen ihr Manifest prüfen |
 | | `moodle.mjs` | Quizfragen als Moodle-XML |
 | | `skript-pdf.mjs` | Skript als PDF (A4) mit Playwright |
-| | `hilfe-bilder.mjs` | Bilder der Hilfeseite mit Playwright: Ausschnitt der App je Schritt mit `zeige`, Bedienelement umrahmt (in der App `node tools/common/hilfe-bilder.mjs`) |
+| | `hilfe-bilder.mjs` | Bilder der Hilfeseite mit Playwright: Ausschnitt der App je Schritt einer Anleitung mit `zeige` (Bedienelement umrahmt) und je Bereich zum Nachschlagen (Elemente nummeriert) (in der App `node tools/common/hilfe-bilder.mjs`) |
 | | `kontraste.mjs` | Kontraste der gerenderten Seiten nach WCAG 2.2 messen (unten) |
 | | `server.mjs` | kleiner statischer Webserver für Werkzeuge und Tests; direkt gestartet bedient er den Arbeitsordner wie GitHub Pages |
 | `vorlagen/` | | Ausgangspunkt für eine neue App (Seiten, Service Worker, Workflows, Tests) |

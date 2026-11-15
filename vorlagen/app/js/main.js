@@ -128,7 +128,8 @@ function init() {
   if (!gesehen && !location.hash) intro(true);
   $('intro-close').addEventListener('click', introZu);
   // Von der Hilfeseite: „In der App ausprobieren“ startet ein Experiment (index.html?experiment=<id>#…)
-  experimentAusAdresse(experimente, ABLAEUFE.map((a) => a.id), aktionen.experimente);
+  // (in einer App mit Modi wechselt modusWaehlen vorher in den Modus des Experiments)
+  experimentAusAdresse(experimente, ABLAEUFE, { einstiegSchliessen: () => intro(false), oeffnen: aktionen.experimente });
   $('copy-link').addEventListener('click', () => navigator.clipboard?.writeText(location.href));
   // Lupe als Schalter mit Symbol (Leitfaden Abschn. 5.1): Name im aria-label, Erklärung im Tooltip
   $('v-lupe').addEventListener('click', () => $('v-lupe').setAttribute('aria-pressed', String($('v-lupe').getAttribute('aria-pressed') !== 'true')));
@@ -153,7 +154,7 @@ function init() {
   ]);
   // Alle Einträge „muster-…“ im Speicher des Browsers ausser denen des Quiz (Leitfaden Abschn. 5.2)
   $('reset-alles').addEventListener('click', () => alleEinstellungenZuruecksetzen('muster'));
-  initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS });
+  initHelp({ tips: TIPS, sections: SECTIONS, labels: LABELS, hilfeModus: () => 'a' });
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', alles);
   $('app-version').innerHTML = `<a href="${REPO}">Version ${VERSION}</a>`;
 }

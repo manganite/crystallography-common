@@ -74,7 +74,15 @@ test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, ⓘ mit kl
   assert.match(String(await tip(p)), /Erklärungen zu diesem Abschnitt/);
   // mit der Maus aufklappen: Einleitung und Tooltips des Abschnitts
   await p.click('#sect-lang .infobtn');
-  assert.match(await p.locator('#sect-lang .helpbox').innerText(), /Einleitung des Abschnitts\.[\s\S]*Tooltip 2\./);
+  assert.match(await p.locator('#sect-lang .helpbox').innerText(), /Einleitung des Abschnitts\.[\s\S]*Tooltip 2\.[\s\S]*Mehr in der Hilfe/);
+  // Verweis auf die Hilfeseite mit dem Modus beim Aufklappen (#114); ohne `hilfe` kein Verweis
+  assert.equal(await p.locator('#sect-lang .helpbox .hilfe-verweis a').getAttribute('href'), 'hilfe.html#a-lang');
+  await p.click('#sect-lang .infobtn');
+  await p.evaluate(() => { document.body.dataset.modus = 'b'; });
+  await p.click('#sect-lang .infobtn');
+  assert.equal(await p.locator('#sect-lang .helpbox .hilfe-verweis a').getAttribute('href'), 'hilfe.html#b-lang');
+  await p.click('#h-a .infobtn');
+  assert.equal(await p.locator('#h-a + .helpbox .hilfe-verweis, #h-a ~ .helpbox .hilfe-verweis').count(), 0);
   await ueberfahren(p, '#knopf');
   await tipAbwarten(p);
   assert.equal(await tip(p), 'Tooltip des Knopfs.');

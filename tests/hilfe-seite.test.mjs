@@ -1,7 +1,9 @@
-// Hilfeseite (#24): Bilder je Schritt, Inhalt, Prüfung der Daten, Start eines Experiments aus der Adresse.
+// Hilfeseite (#24, #114): Bilder, Aufbau und Inhalt, gemeinsame Texte, Prüfung der Daten, Start eines Experiments aus der
+// Adresse.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { hilfeBilder, hilfeHTML, hilfeInhalt, pruefeHilfe, experimentAusAdresse, EXPERIMENT_PARAM } from '../js/hilfe-seite.js';
+import { hilfeBilder, hilfeHTML, hilfeInhalt, hilfeAnker, pruefeHilfe, experimentAusAdresse, EXPERIMENT_PARAM } from '../js/hilfe-seite.js';
+import { UEBERBLICK, KONZEPTE, TECHNIK } from '../js/hilfe-gemeinsam.js';
 
 /** @import { HilfeDaten } from '../js/hilfe-seite.js' */
 
@@ -25,13 +27,15 @@ const DATEN = {
 };
 
 test('Bilder: je Schritt mit zeige eines; Adresse = letzter Zustand davor, sonst der Modus', () => {
+  /** @param {string} datei @param {string} adresse @param {string} zeige @param {string} quelle */
+  const b = (datei, adresse, zeige, quelle) => ({ datei, adresse, zeige: [zeige], nummern: false, quelle });
   assert.deepEqual(hilfeBilder(DATEN), [
-    { datei: 'einstieg-a-1.png', adresse: '#m=a', zeige: '#picker', ablauf: 'einstieg-a', nr: 1 },
-    { datei: 'einstieg-a-2.png', adresse: '#m=a&g=p4', zeige: '#sec-view', ablauf: 'einstieg-a', nr: 2 },
+    b('einstieg-a-1.png', '#m=a', '#picker', 'einstieg-a, Schritt 1'),
+    b('einstieg-a-2.png', '#m=a&g=p4', '#sec-view', 'einstieg-a, Schritt 2'),
     // nach einer Aktion: Adresse aus bild, sie gilt auch für die folgenden Schritte
-    { datei: 'einstieg-a-4.png', adresse: '#m=a&g=p6', zeige: '#picker', ablauf: 'einstieg-a', nr: 4 },
-    { datei: 'einstieg-a-5.png', adresse: '#m=a&g=p6', zeige: '#picker', ablauf: 'einstieg-a', nr: 5 },
-    { datei: 'einstieg-b-1.png', adresse: '#m=b', zeige: '#tab-b', ablauf: 'einstieg-b', nr: 1 },
+    b('einstieg-a-4.png', '#m=a&g=p6', '#picker', 'einstieg-a, Schritt 4'),
+    b('einstieg-a-5.png', '#m=a&g=p6', '#picker', 'einstieg-a, Schritt 5'),
+    b('einstieg-b-1.png', '#m=b', '#tab-b', 'einstieg-b, Schritt 1'),
   ]);
 });
 
@@ -102,7 +106,7 @@ test('Prüfung: fehlende Elemente, Bilder, überzählige Bilder, unbekannte Modi
     'Modus d: Adresse muss mit # beginnen',
     'einstieg-a, Schritt 1: Bild einstieg-a-1.png fehlt (node tools/common/hilfe-bilder.mjs)',
     'einstieg-b, Schritt 1: Element #tab-b fehlt in der App',
-    'einstieg-c, Schritt 1: zeige muss mit #id beginnen (.tabs button)',
+    'einstieg-c, Schritt 1: Selektor muss mit #id beginnen (.tabs button)',
     'leer: keine Parameter',
     'überzähliges Bild alt.png',
   ]);
@@ -117,24 +121,139 @@ test('Alternativtext: Querstriche, Symbole und Zeichen wie in der Ansage', () =>
   assert.match(h, /alt="Ausschnitt der App: 4 quer &amp; 4 quer, 2, m wählen, das Bedienelement ist markiert"/);
 });
 
-test('Experiment aus der Adresse: startet bekannte, entfernt den Parameter immer', () => {
+test('Experiment aus der Adresse: wechselt den Modus, schliesst die Erste Schritte, startet; entfernt den Parameter immer', () => {
   const g = /** @type {any} */ (globalThis);
   const alt = { location: g.location, history: g.history };
-  /** @param {string} href */
-  const lauf = (href) => {
+  const experimente = [{ id: 'spiegel', modus: 'b' }, { id: 'ohne' }];
+  /** @param {string} href @param {boolean} [mitOptionen] */
+  const lauf = (href, mitOptionen = true) => {
     /** @type {string[]} */
     const gestartet = [];
     let neu = '';
     g.location = new URL(href);
     g.history = { state: null, replaceState: (/** @type {unknown} */ _s, /** @type {string} */ _t, /** @type {string} */ u) => { neu = u; } };
-    const id = experimentAusAdresse({ starte: (i) => gestartet.push(i) }, ['spiegel'], () => gestartet.push('offen'));
+    const o = { modusWaehlen: (/** @type {string} */ m) => gestartet.push(`modus ${m}`), einstiegSchliessen: () => gestartet.push('einstieg zu'), oeffnen: () => gestartet.push('offen') };
+    const id = experimentAusAdresse({ starte: (i) => gestartet.push(i) }, experimente, mitOptionen ? o : undefined);
     return { id, gestartet, neu };
   };
   try {
-    assert.deepEqual(lauf(`http://x/app/index.html?${EXPERIMENT_PARAM}=spiegel&a=1#m=a`), { id: 'spiegel', gestartet: ['offen', 'spiegel'], neu: '/app/index.html?a=1#m=a' });
+    // in den Modus des Experiments (aus einem anderen Modus beendete der Abgleich der Karte es sonst gleich wieder)
+    assert.deepEqual(lauf(`http://x/app/index.html?${EXPERIMENT_PARAM}=spiegel&a=1#m=a`), { id: 'spiegel', gestartet: ['modus b', 'einstieg zu', 'offen', 'spiegel'], neu: '/app/index.html?a=1#m=a' });
+    // ohne Modus: kein Wechsel; ohne Hash (Erste Schritte erschienen zugleich): sie werden geschlossen
+    assert.deepEqual(lauf(`http://x/index.html?${EXPERIMENT_PARAM}=ohne`), { id: 'ohne', gestartet: ['einstieg zu', 'offen', 'ohne'], neu: '/index.html' });
+    assert.deepEqual(lauf(`http://x/index.html?${EXPERIMENT_PARAM}=ohne`, false), { id: 'ohne', gestartet: ['ohne'], neu: '/index.html' });
     assert.deepEqual(lauf(`http://x/index.html?${EXPERIMENT_PARAM}=unbekannt#m=a`), { id: null, gestartet: [], neu: '/index.html#m=a' });
     assert.deepEqual(lauf('http://x/index.html#m=a'), { id: null, gestartet: [], neu: '' });
   } finally {
     g.location = alt.location; g.history = alt.history;
+  }
+});
+
+/** Daten mit allen Teilen der Anleitung (#114). @type {HilfeDaten} */
+const VOLL = {
+  ...DATEN,
+  zweck: '<p>Zweck der App.</p>',
+  modi: [{ ...DATEN.modi[0], zweck: 'Wozu A.' }, DATEN.modi[1], DATEN.modi[2]],
+  ueberblick: { id: 'aufbau', titel: 'Aufbau', ausschnitt: 'body', eintraege: [{ zeige: 'header.top', name: 'Kopfzeile', text: 'oben' }, { zeige: '#info', name: 'Kenndaten', text: 'unten' }] },
+  konzepte: [{ id: 'einrasten', titel: 'Einrasten', text: '<p>Rastet ein.</p>' }],
+  bereiche: [
+    { id: 'seitenleiste', modus: 'a', titel: 'Seitenleiste', text: '<p>Links.</p>', eintraege: [
+      { id: 'gitter', zeige: '#sec-gitter > summary', name: 'Gitter', text: 'Achsen.' },
+      { zeige: '#picker', name: 'Gruppen', text: 'Wahl.' },
+      { name: 'Hinweis', text: 'ohne Nummer.' },
+    ] },
+    { id: 'darstellung', titel: 'Darstellung', ausschnitt: '#sec-view', eintraege: [{ id: 'farben', zeige: '#v-farben', name: 'Farben', text: 'f.' }] },
+  ],
+  anleitungen: [{ id: 'winkel', modus: 'b', titel: 'Winkel messen', schritte: [{ frage: 'Werkzeug wählen.', handlung: { text: 'x', hash: '#m=b&w=1' }, zeige: '#winkel' }] }],
+  fragen: [{ id: 'gesperrt', frage: 'Warum gesperrt?', antwort: '<p>Darum.</p>', app: '#m=a&g=p2', skript: 'gitter' }],
+  ergaenzungen: { export: '<p>Nur Tafel A.</p>' },
+  ohne: ['familie'],
+  repo: 'manganite/muster',
+};
+
+test('Aufbau: Überblick, Bedienkonzepte, je Modus Bereiche, Anleitungen und Experimente, Fragen, zuletzt Link und Geräte', () => {
+  const h = hilfeHTML(VOLL);
+  const reihe = ['id="ueberblick"', 'id="teile"', 'id="modi"', 'id="aufbau"', 'id="rueckmeldung"', 'id="konzepte"', 'id="konzept-seitenleiste-tafel"',
+    'id="konzept-einrasten"', 'id="modus-a"', 'id="a-seitenleiste"', 'id="a-darstellung"', 'id="einstieg-a"', 'id="experimente-a"', 'id="modus-b"',
+    'id="b-darstellung"', 'id="einstieg-b"', 'id="winkel"', 'id="fragen"', 'id="frage-gesperrt"', 'id="technik"', 'id="technik-link"'];
+  const stellen = reihe.map((x) => h.indexOf(x));
+  assert.ok(stellen.every((x) => x >= 0), reihe.filter((_, i) => stellen[i] < 0).join(', '));
+  assert.deepEqual([...stellen].sort((x, y) => x - y), stellen, 'Reihenfolge der Teile');
+  // Modi mit Zweck und Link auf ihr Kapitel; Zweck auch unter der Überschrift des Modus
+  assert.match(h, /<li><a href="#modus-a"><b>Modus A<\/b><\/a>: Wozu A\.<\/li>/);
+  assert.match(h, /<h2>Modus A<\/h2>\n<p>Wozu A\.<\/p>/);
+  // gemeinsame Texte: alle ausser den ausgelassenen, mit Ergänzung der App
+  for (const t of [...UEBERBLICK, ...KONZEPTE, ...TECHNIK]) {
+    if (t.id === 'familie') assert.doesNotMatch(h, /id="familie"/);
+    else assert.ok(h.includes(t.titel), t.id);
+  }
+  assert.match(h, /id="technik-export">\n<h3>Bilder exportieren<\/h3>[\s\S]*?<p>Nur Tafel A\.<\/p>\n<\/section>/);
+  assert.match(h, /href="https:\/\/github\.com\/manganite\/muster\/issues\/new\/choose"/);
+  // Fragen mit Link in die App und ins Skript
+  assert.match(h, /<h3>Warum gesperrt\?<\/h3>\n<p>Darum\.<\/p>\n<p class="hilfe-links"><a class="to-app" href="index\.html#m=a&amp;g=p2">In der App zeigen<\/a> · <a href="skript\.html#gitter">Im Skript nachlesen<\/a><\/p>/);
+  // Inhaltsverzeichnis in derselben Gliederung
+  const inhalt = hilfeInhalt(VOLL);
+  assert.match(inhalt, /^<ol><li><a href="#ueberblick">Überblick<\/a><ol><li><a href="#teile">/);
+  assert.match(inhalt, /<a href="#modus-a">Modus A<\/a><ol><li><a href="#a-seitenleiste">Seitenleiste<\/a><\/li><li><a href="#a-darstellung">Darstellung<\/a><\/li><li><a href="#einstieg-a">/);
+  assert.match(inhalt, /<a href="#modus-b">Modus B<\/a><ol><li><a href="#b-darstellung">Darstellung<\/a><\/li><li><a href="#einstieg-b">Erste Schritte B<\/a><\/li><li><a href="#winkel">Winkel messen/);
+  assert.match(inhalt, /<a href="#fragen">Typische Fragen<\/a><\/li><li><a href="#technik">/);
+  // ohne neue Daten: Überblick mit gemeinsamen Texten, Konzepte, Modi, Technik
+  assert.match(hilfeHTML(DATEN), /id="ueberblick"[\s\S]*id="konzepte"[\s\S]*id="modus-a"[\s\S]*id="technik"/);
+  assert.doesNotMatch(hilfeHTML(DATEN), /id="modi"|id="fragen"|id="rueckmeldung"/);
+});
+
+test('Bereiche: Bild mit nummerierten Marken je Modus, Liste in derselben Reihenfolge, Anker <Modus>-<id>', () => {
+  const bilder = hilfeBilder(VOLL);
+  assert.deepEqual(bilder.filter((b) => b.nummern), [
+    { datei: 'aufbau.png', adresse: '#m=a', zeige: ['header.top', '#info'], nummern: true, ausschnitt: 'body', quelle: 'aufbau' },
+    { datei: 'a-seitenleiste.png', adresse: '#m=a', zeige: ['#sec-gitter > summary', '#picker'], nummern: true, quelle: 'a-seitenleiste' },
+    // ohne Modus: in jedem Modus, je mit eigenem Bild in dessen Zustand
+    { datei: 'a-darstellung.png', adresse: '#m=a', zeige: ['#v-farben'], nummern: true, ausschnitt: '#sec-view', quelle: 'a-darstellung' },
+    { datei: 'b-darstellung.png', adresse: '#m=b', zeige: ['#v-farben'], nummern: true, ausschnitt: '#sec-view', quelle: 'b-darstellung' },
+    { datei: 'c-darstellung.png', adresse: '#m=c', zeige: ['#v-farben'], nummern: true, ausschnitt: '#sec-view', quelle: 'c-darstellung' },
+  ]);
+  // weitere Anleitungen haben Bilder wie die Erste Schritte
+  assert.ok(bilder.some((b) => b.datei === 'winkel-1.png' && b.adresse === '#m=b' && !b.nummern));
+  const h = hilfeHTML(VOLL);
+  assert.match(h, /<section class="hilfe-bereich" id="a-seitenleiste">\n<h3>Seitenleiste<\/h3>\n<p>Links\.<\/p>\n<figure class="hilfe-bild"><img src="hilfe\/a-seitenleiste\.png" alt="Ausschnitt der App: Seitenleiste, die Bedienelemente nummeriert wie in der Liste darunter"/);
+  assert.match(h, /<ol class="hilfe-marken">\n<li id="a-gitter"><b>Gitter<\/b>: Achsen\.<\/li>\n<li><b>Gruppen<\/b>: Wahl\.<\/li>\n<\/ol>\n<ul class="hilfe-weitere">\n<li><b>Hinweis<\/b>: ohne Nummer\.<\/li>/);
+  // ein Modus, der nur einen gemeinsamen Bereich hat, erscheint (wie in der App: der Bereich gilt dort)
+  assert.match(h, /id="modus-c"[\s\S]*id="c-farben"/);
+  // Anker in der Reihenfolge der Seite
+  const anker = hilfeAnker(VOLL);
+  assert.ok(anker.indexOf('a-gitter') > anker.indexOf('a-seitenleiste') && anker.indexOf('a-gitter') < anker.indexOf('a-darstellung'));
+});
+
+test('Prüfung der Anleitung: doppelte Anker und Bilder, gemeinsame Texte, Adressen der Fragen, Verweise aus dem ⓘ', () => {
+  const html = '<div id="picker"></div><details id="sec-view"><input id="v-farben"></details><button id="tab-b"></button><details id="sec-gitter"></details><div id="info"></div><b id="winkel"></b>';
+  const dateien = hilfeBilder(VOLL).map((b) => b.datei);
+  assert.deepEqual(pruefeHilfe(VOLL, { html, dateien, verweise: ['{modus}-gitter', '{modus}-farben', 'konzept-einrasten', 'technik-link'] }), []);
+  const f = pruefeHilfe({
+    ...VOLL,
+    fragen: [...(VOLL.fragen ?? []), { id: 'x', frage: 'X', antwort: '', app: 'm=a' }],
+    konzepte: [{ id: 'einrasten', titel: 'E', text: '' }, { id: 'einrasten', titel: 'E2', text: '' }],
+    bereiche: [...(VOLL.bereiche ?? []), { id: 'neu', modus: 'z', titel: 'Neu', eintraege: [{ zeige: '#fehlt', name: 'F', text: '' }] }],
+    ergaenzungen: { unbekannt: '', export: '' }, ohne: ['familie', 'export'],
+  }, { html, dateien, verweise: ['{modus}-fehlt', 'fehlt'] });
+  assert.deepEqual(f, [
+    'neu: unbekannter Modus z',
+    'Frage x: Adresse muss mit # beginnen',
+    'Anker konzept-einrasten doppelt',
+    'kein gemeinsamer Text unbekannt (ergaenzungen, ohne)',
+    'export: ergänzt und ausgelassen',
+    'Verweis auf #{modus}-fehlt: kein solcher Anker auf der Hilfeseite',
+    'Verweis auf #fehlt: kein solcher Anker auf der Hilfeseite',
+  ]);
+  // Marken eines Bereichs: Element mit ID fehlt; Bild fehlt; ein Bereich eines unbekannten Modus hat kein Bild
+  const g = pruefeHilfe(VOLL, { html: html.replace('<div id="info"></div>', ''), dateien: dateien.filter((d) => d !== 'a-seitenleiste.png') });
+  assert.deepEqual(g, ['aufbau: Element #info fehlt in der App', 'a-seitenleiste: Bild a-seitenleiste.png fehlt (node tools/common/hilfe-bilder.mjs)']);
+});
+
+test('Gemeinsame Texte: eindeutige Kennungen, Titel und Text, keine Verweise auf Vorlesung oder Folien', () => {
+  const alle = [...UEBERBLICK, ...KONZEPTE, ...TECHNIK];
+  assert.equal(new Set(alle.map((t) => t.id)).size, alle.length);
+  for (const t of alle) {
+    assert.ok(t.titel && t.text.trim().startsWith('<p>'), t.id);
+    assert.doesNotMatch(t.text, /Vorlesung|Folien? \d|ß/, t.id);
   }
 });
