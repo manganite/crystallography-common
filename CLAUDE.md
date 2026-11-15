@@ -336,7 +336,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Cloud-Sitzung Thomas von Hand, weil dort der Tag-Push scheitert; in Claude Code lokal Claude Code,
   erst nach Thomas' Freigabe des Release und dem Merge des Release-PR. Vorher prüfen, dass
   `origin/main` der Release-PR ist (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit davor),
-  danach, dass `release.yml` (in Apps auch `deploy.yml`) grün ist.
+  danach, dass `release.yml` (in Apps auch `deploy.yml`) grün ist (scheitert der Deploy beim Laden des Artefakts: README der App, „Versionen und Releases“, #142).
 - **Commits und Tags mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den
   Push sonst ab (GH007). Deshalb in jedem Klon auf Thomas' Computer einmal
   `git config user.email 6277652+manganite@users.noreply.github.com` (lokal gesetzt 4.11.2026). Nicht in
