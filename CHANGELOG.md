@@ -6,7 +6,14 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.23.0] - 2026-11-15
+
+Abschnittsnummern und Verweise im Skript (#85), Touch-Ziele nach dem zuletzt benutzten Gerät (#135), Tooltips im Browser prüfen und längere als genannte Ausnahme (#114), Einzug der Experimente (#123), Ablauf bei gescheitertem Deploy (#142). Für die Apps: in `js/skript.js` `abschnitte()` vor `inhaltsverzeichnis()` aufrufen und im Test `pruefeAbschnittsverweise` prüfen; eigene Regeln mit `@media (pointer: coarse)` für Touch-Ziele durch `var(--ziel)` usw. ersetzen; im Browserlauf je Modus `fehlendeTooltips` aufrufen, im Test `pruefeTooltips` mit `laenger`; den Absatz zum gescheiterten Deploy ins README übernehmen; Bilder der Hilfeseite neu erzeugen.
+
 ### Hinzugefügt
+
+- **Abschnittsnummern und Verweise im Skript** (`js/skript-kern.js`, `css/skript.css`, Leitfaden Abschn. 6; Entscheidung Thomas, #85): `abschnitte()` schreibt Kapitel und laufende Nummer in die Überschriften der Abschnitte und ins Inhaltsverzeichnis (auch im PDF und in dessen Lesezeichen) und macht Verweise wie „Abschnitt 4.5“ oder „Abschn. 4.5“ zu Links, ein einzelner Verweis mit dem Titel des Abschnitts („Abschnitt 4.5 „Titel““), eine Liste mit dem Titel als Tooltip; Zitate anderer Werke, Links und `.quellen` bleiben Text. Für die Tests der Apps `pruefeAbschnittsverweise(html)` (Verweis ohne Abschnitt, Verweis im Satz eines zitierten Werks) und `skriptGliederung(html)`. Für die Apps: `abschnitte()` in `js/skript.js` vor `inhaltsverzeichnis()` aufrufen und einen Test mit `pruefeAbschnittsverweise` ergänzen (Muster in der Vorlage, `tests/skript.test.mjs`).
+- **Tooltips im Browser prüfen** (`tools/tooltips-pruefen.mjs`, #114): `fehlendeTooltips(page, { ohne })` meldet sichtbare Bedienelemente ohne Tooltip, auch ohne `id` und im Code erzeugte; Ausnahmen in `AUSNAHMEN`. Browsertests: der Helfer, Tooltips an gesperrten Knöpfen in Chromium und Firefox (Job `browser`) und WebKit (neuer Job `webkit` auf macOS), das Bildwerkzeug an der Vorlage. Für die Apps: im Browserlauf je Modus `fehlendeTooltips` aufrufen.
 
 ### Geändert
 
@@ -383,7 +390,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.22.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.23.0...HEAD
+[0.23.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.23.0
 [0.22.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.22.0
 [0.21.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.21.0
 [0.20.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.20.0

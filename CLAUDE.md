@@ -239,8 +239,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   nur die grundlegenden Einstellungen, die aktiven Funktionen in den Tafeln oder nahe daran; in stereography war das
   schon gelöst, in plane-groups gingen die Erklärungen (Hauptfunktionen eines Modus) als eingeklappte Abschnitte unter.
   Deshalb gehören Erklärabläufe, Übergänge zwischen Modi sowie Zoom und Verschieben in die Tafel. Zoom mit Rad und
-  Zwei-Finger-Geste wie im 3D-Fenster von stereography, dazu + / − für die Tastatur (Thomas; im 3D-Fenster fehlen sie
-  noch, stereography#144); ein Regler entfällt, damit es einen Weg gibt.
+  Zwei-Finger-Geste wie im 3D-Fenster von stereography, dazu + / − für die Tastatur (Thomas; im 3D-Fenster von stereography seit
+  stereography#144); ein Regler entfällt, damit es einen Weg gibt.
 - **Werkzeuge abwählen, Schalter sperren** (5.11.2026, Leitfaden Abschn. 5.2): Anlass ist plane-groups
   (Entscheidung „Erklärungen im Symmetriegerüst“). Die Regel „gesperrt, nicht abgewählt“ passt auf Schalter,
   nicht auf Werkzeuge, die sich wie eine Auswahl ausschliessen: Ein gesperrtes, aber gewähltes Zeichenwerkzeug
