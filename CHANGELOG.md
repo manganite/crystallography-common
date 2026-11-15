@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [0.21.0] - 2026-11-15
 
-Experimente nach Kapiteln nur bei mindestens 2 je Kapitel im Schnitt; Literatur in einer Zotero-Sammlung. Für die Apps: Experimente je Modus in der Reihenfolge der Kapitel ordnen (Einzelheiten unter „Geändert“).
+Experimente nach Kapiteln nur bei mindestens 2 je Kapitel im Schnitt (neuer Export `SCHNITT_AB`); Literatur in einer Zotero-Sammlung. Für die Apps: nichts anzupassen, die Reihenfolge der Experimente nach Kapiteln erfüllen beide schon; flach werden „Kristallformen“ (stereography) und „Gitter und Basis“ (plane-groups).
 
 ### Geändert
 
