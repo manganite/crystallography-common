@@ -40,6 +40,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `moodle.mjs` | Quizfragen als Moodle-XML |
 | | `skript-pdf.mjs` | Skript als PDF (A4) mit Playwright |
 | | `hilfe-bilder.mjs` | Bilder der Hilfeseite mit Playwright: Ausschnitt der App je Schritt einer Anleitung mit `zeige` (Bedienelement umrahmt) und je Bereich zum Nachschlagen (Elemente nummeriert) (in der App `node tools/common/hilfe-bilder.mjs`) |
+| | `tooltips-pruefen.mjs` | Für die Browserläufe der Apps: sichtbare Bedienelemente ohne Tooltip, auch ohne `id` und im Code erzeugte (`fehlendeTooltips`, Ausnahmen nach Leitfaden 5.3) |
 | | `kontraste.mjs` | Kontraste der gerenderten Seiten nach WCAG 2.2 messen (unten) |
 | | `server.mjs` | kleiner statischer Webserver für Werkzeuge und Tests; direkt gestartet bedient er den Arbeitsordner wie GitHub Pages |
 | `vorlagen/` | | Ausgangspunkt für eine neue App (Seiten, Service Worker, Workflows, Tests) |

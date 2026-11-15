@@ -26,11 +26,17 @@
       <button id="knopf3" type="button">Knopf 3</button>
     </details>
   </section>
+  <!-- Tooltips im Browser (tools/tooltips-pruefen.mjs, #114): gesperrt, ohne id, im Code erzeugt, ohne Tooltip, Ausnahmen -->
+  <section class="card" id="tipprobe">
+    <div class="seg"><button type="button" id="gesperrt" disabled>Gesperrt</button><button type="button" data-art="a">Ohne id</button><button type="button" data-art="b">Fehlt</button></div>
+    <a href="#tipprobe">Ein Link</a>
+    <div class="ablauf-inhalt"><button type="button" class="linkbtn">Experiment</button></div>
+  </section>
 </main>
 <script type="module">
   import { initHelp } from '/js/help.js';
   initHelp({
-    tips: { knopf: 'Tooltip des Knopfs.', feld: 'Tooltip des Felds.', knopf2: 'Tooltip 2.', knopf3: 'Tooltip 3.' },
+    tips: { knopf: 'Tooltip des Knopfs.', feld: 'Tooltip des Felds.', knopf2: 'Tooltip 2.', knopf3: 'Tooltip 3.', gesperrt: 'Tooltip des gesperrten Knopfs.' },
     sections: [
       { heading: '#h-a', ids: ['knopf', 'feld'] },
       { heading: '#sect-lang > summary', intro: 'Einleitung des Abschnitts.', ids: ['knopf2'], hilfe: '{modus}-lang' },
@@ -39,6 +45,9 @@
     // Modus beim Aufklappen (Verweis auf die Hilfeseite, #114); zum Test über data-modus am body umschaltbar
     hilfeModus: () => document.body.dataset.modus ?? 'a',
   });
+  // im Code erzeugtes Bedienelement mit Tooltip (setTip)
+  const { setTip } = await import('/js/help.js');
+  setTip(document.querySelector('[data-art="a"]'), 'Tooltip ohne id.');
   document.body.dataset.bereit = '1';
 </script>
 </body>

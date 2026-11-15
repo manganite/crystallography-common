@@ -85,5 +85,8 @@ jobs:
           npm install --no-save playwright@1.52.0
           # ohne --with-deps: kein apt (Ausfall der Ubuntu-Paketquellen 11.11.2026, #128); die Bibliotheken sind auf dem Runner
           npx playwright install chromium
+          # Firefox und WebKit nur für den Test der Tooltips an gesperrten Knöpfen (#114); fehlt einer oder startet er ohne
+          # Bibliotheken nicht, überspringt der Test ihn mit Grund
+          npx playwright install firefox webkit || true
       - name: Browsertests
         run: node --test tests/browser/*.test.mjs

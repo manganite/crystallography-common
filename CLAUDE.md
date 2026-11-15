@@ -143,8 +143,11 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
   Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
   sollen nur die Funktion oder eine nötige Angabe nennen. Der Test sieht nur
-  Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
-  Browsertest je App (offen, #114). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
+  Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte prüft der Browserlauf
+  jeder App mit `fehlendeTooltips` (#114). Dabei zeigten sich ohne Tooltip nur Knöpfe der Experimente, Begriffslinks der
+  Kenndaten und Links in Kopf- und Fusszeile; Thomas (15.11.2026) nahm sie als Ausnahmen auf, dazu die Knöpfe eines
+  laufenden Ablaufs, weil ihr Text sagt, was sie tun. Tooltips an gesperrten Knöpfen prüft die CI in Chromium und, soweit
+  sie starten, in Firefox und WebKit. `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
   des PR #120). Texte für Maus und Touch folgen dem zuletzt benutzten Gerät (`data-zeiger` an `<html>`), nicht nur der Media
   Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter
   „Das ⓘ … erklärt“ (Review von #116). **Das ⓘ auf allen Geräten** (Thomas, 12.11.2026, #140): Mit der Maus sah man
@@ -252,7 +255,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   der Modus im Verweis aus dem ⓘ deshalb als Platzhalter `{modus}`, eingesetzt beim Aufklappen. Marken eines Bereichs dürfen
   auch Bausteine ohne ID treffen (z. B. `header.top` im Übersichtsbild); `pruefeHilfe` prüft dann nur die IDs, die es gibt.
   Nicht jetzt (Thomas): Hinweise in der App bei Änderungen im Bild, Fachbegriffe in zwei Tiefen (#100), Hinweise für
-  Lehrende. Offen: #114.
+  Lehrende. Nummern im Übersichtsbild (Thomas, 15.11.2026, Wahl unter „auf der Rahmenlinie lassen“, „innen in die Ecke“
+  und „Rand dazugeben“): Sie lagen auf der oberen Rahmenlinie, weil links neben den Bausteinen kein Platz war; jetzt
+  bekommt die Seite für solche Bilder links Rand und grössere Abstände. Ein Browsertest des Werkzeugs an der Vorlage
+  läuft in der CI (Übersicht ohne Notlösung, `vorher`).
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären

@@ -6,6 +6,15 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Tooltips im Browser prüfen** (`tools/tooltips-pruefen.mjs`, #114): `fehlendeTooltips(page, { ohne })` meldet sichtbare Bedienelemente ohne Tooltip, auch ohne `id` und im Code erzeugte; Ausnahmen in `AUSNAHMEN`. Browsertests: der Helfer, Tooltips an gesperrten Knöpfen in Chromium, Firefox und WebKit (soweit sie starten; die CI installiert beide), das Bildwerkzeug an der Vorlage. Für die Apps: im Browserlauf je Modus `fehlendeTooltips` aufrufen.
+
+### Geändert
+
+- **Ausnahmen der Tooltips** (Leitfaden 5.3; Thomas, 15.11.2026, #114): alle Links (auch Begriffe der Kenndaten und Fusszeile) und die Knöpfe der Experimente und Erste Schritte, Liste und laufender Ablauf.
+- **Bilder der Hilfeseite** (`tools/hilfe-bilder.mjs`; Thomas, 15.11.2026, #114): Fehlt links neben einem grossen nummerierten Baustein der Platz (Übersichtsbild), bekommt die Seite für das Bild links Rand und grössere Abstände; die Nummern stehen dann links neben den Bausteinen statt auf der Rahmenlinie. Für die Apps: Bilder neu erzeugen.
+
 ## [0.22.0] - 2026-11-15
 
 Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `experimentAusAdresse` umstellen (Experimente statt Kennungen, Optionen statt Funktion); `js/hilfe-daten.js` um die neuen Teile ergänzen, `hilfe` in `SECTIONS` und `hilfeModus` in `initHelp`, im Test `verweise` an `pruefeHilfe`; Bilder neu erzeugen und mit `lib/common/js/hilfe-gemeinsam.js` in die Offline-Liste von `sw.js` aufnehmen.
