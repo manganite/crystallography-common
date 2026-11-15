@@ -16,6 +16,7 @@ test('abschnittsverweise: Formen eines Verweises', () => {
   assert.deepEqual(texte('Abschnitte 3.3–3.4'), ['Abschnitte 3.3', '3.4']);
   assert.deepEqual(texte('Abschnitte 2.5 und 3.4, Kapitel 5'), ['Abschnitte 2.5', '3.4']);
   assert.deepEqual(texte('Abschnitte 2.5, 3.1 und 10.12'), ['Abschnitte 2.5', '3.1', '10.12']);
+  assert.deepEqual(abschnittsverweise('Abschnitt 4.2 und Abschnitte 1.1–1.2').map((x) => x.einzeln), [true, false, false]);
   assert.deepEqual(texte('des Abschnitts 3.1 und in den Abschnitten 3.1 und 3.2'), ['Abschnitts 3.1', 'Abschnitten 3.1', '3.2']);
 });
 
@@ -41,7 +42,7 @@ const HTML = `<!doctype html><html><body>
   <div class="quellen"><ul><li>Hoffmann (2016), Abschn. 4.2</li><li>Kleber Abschnitt 5.5</li></ul></div>
 </section>
 <section id="k2"><h2><span class="nr">2</span>Zwei</h2>
-  <section id="c"><h3>Dritter</h3><p>Hoffmann zeigt das anders (Abschnitt 2.1).</p></section>
+  <section id="c"><h3>Dritter</h3><p>Hoffmann zeigt das anders (Abschnitt 2.1). Doppelt: Abschnitt 1.1 „Erster &amp; bester“.</p></section>
   <section class=x><h3>Ohne id</h3><p>Wie in Abschnitt <b>1.1</b>.</p></section>
 </section>
 </article></main></body></html>`;
@@ -50,18 +51,20 @@ test('skriptGliederung: Nummern je Kapitel, Vertiefungen zählen mit', () => {
   const { nummern: n, text } = skriptGliederung(HTML);
   assert.deepEqual([...n].map(([k, v]) => `${k} ${v.id} ${v.titel}`), ['1.1 a Erster & bester', '1.2 b Zweiter', '2.1 c Dritter', '2.2  Ohne id']);
   assert.ok(!text.includes('7.7') && !text.includes('4.2') && !text.includes('5.5'), 'Links und Quellen sind gesperrt');
-  assert.equal(text.match(/Abschnitt 1\.1/g), null, 'Text in SVG ist gesperrt');
+  assert.equal(text.match(/Abschnitt 1\.1/g)?.length, 1, 'Text in SVG ist gesperrt (nur der Verweis in Abschnitt 2.1 zählt)');
 });
 
 test('pruefeAbschnittsverweise: fehlender Abschnitt und Verweis im Satz eines Werks', () => {
   const { befunde, verweise } = pruefeAbschnittsverweise(HTML);
-  assert.equal(verweise, 5);
+  assert.equal(verweise, 6);
   assert.deepEqual(befunde.map((b) => b.replace(/:.*/, '')), [
     'Abschnitt 2.2 „Ohne id“ hat keine id; Verweise darauf werden kein Link',
     'Verweis auf Abschnitt 1.1 über eine Elementgrenze (Wort und Nummer im selben Text schreiben)',
     'Abschnitt 9.9 gibt es nicht',
     'Abschnitt 1.3 gibt es nicht',
     'Abschnitt 2.1 im Satz eines zitierten Werks (Zitierform „Werk, Abschn. x.y“?)',
+    'Abschnitt 1.1',
   ]);
+  assert.match(befunde[5], /Titel steht schon im Text/);
   assert.ok(befunde.every((b) => !b.includes('\u0000') && !b.includes('\u0001')), 'keine Steuerzeichen in den Befunden');
 });

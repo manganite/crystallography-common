@@ -259,6 +259,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   verschiebt, und die Verweise werden per Muster erkannt, damit die Texte unverändert bleiben. Beim Umsetzen: Zitate
   anderer Werke erkennt das Muster an ihrer Zitierform (Komma davor, Seitenangabe danach), nicht an einer Liste von
   Autoren, weil sie so ohne Markierung im Text auskommen; die Liste der Autoren dient nur dem Test als Warnung.
+  **Nummer und Titel** (Thomas, 15.11.2026): stereography verwies im Text mit Titeln, plane-groups mit Nummern; beide
+  Skripte nennen jetzt Nummer und Titel. Den Titel setzt `abschnitte()` beim Laden dazu, statt ihn in den Text zu
+  schreiben (Wahl beim Umsetzen): So veraltet er nicht, wenn ein Abschnitt umbenannt wird, und die Quelle bleibt kurz.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären

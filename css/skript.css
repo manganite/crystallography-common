@@ -26,7 +26,6 @@ article h1, article h2, article h3 { font-family: var(--font-display); font-weig
 article h2 { font-size: 1.7rem; margin: 0 0 14px; }
 article > section + section { margin-top: 64px; }
 article :is(h2, h3) .nr { color: var(--muted); margin-right: 0.3em; }
-.abschnitt-link { white-space: nowrap; }
 /* Abschnittsnummern (abschnitte() in js/skript-kern.js): Abstand kommt vom Leerzeichen nach der Nummer */
 article h3 .nr, .toc ol ol .nr { margin-right: 0; }
 article h3 { font-size: 1.22rem; margin: 34px 0 8px; }

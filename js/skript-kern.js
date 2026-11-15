@@ -121,8 +121,10 @@ export function inhaltsverzeichnis() {
 // Jeder Abschnitt (<section> mit <h3> direkt in einem Kapitel mit <h2><span class="nr">) bekommt Kapitel und
 // laufende Nummer, z. B. „8.2“, in der Überschrift und im Inhaltsverzeichnis; Abschnitte, die Vertiefung sind,
 // zählen mit. Verweise im Text wie „Abschnitt 8.2“, „Abschn. 8.2“ oder „Abschnitte 3.3–3.4“ werden Links auf den
-// Abschnitt (Titel als Tooltip), auch gebeugt („des Abschnitts 3.1“, „in den Abschnitten 3.1 und 3.2“). Nummer und Wort
-// stehen im selben Textknoten (nicht „Abschnitt <b>4.5</b>“). Kein Verweis auf einen eigenen Abschnitt ist:
+// Abschnitt, auch gebeugt („des Abschnitts 3.1“, „in den Abschnitten 3.1 und 3.2“). Nummer und Wort
+// stehen im selben Textknoten (nicht „Abschnitt <b>4.5</b>“). Ein einzelner Verweis bekommt den Titel des Abschnitts
+// dazu („Abschnitt 4.5 „Titel““, Thomas, 15.11.2026), damit er auch ohne Nachschlagen verständlich ist und der Titel im
+// Text nie veraltet; in Listen („Abschnitte 3.3–3.4“) steht er als Tooltip. Kein Verweis auf einen eigenen Abschnitt ist:
 // - Text in .quellen, in Abbildungen (SVG) und in Links (Querverweise auf das Skript einer anderen App sind schon Links);
 // - eine Nummer mit drei Stufen („Abschn. 2.2.7“, International Tables);
 // - ein Zitat „Werk, Abschn. x.y“ (Komma davor) oder mit Seitenangabe („Abschn. 7.2, S. 104“).
@@ -139,25 +141,24 @@ const OHNE_GRENZE = new RegExp(GRENZE, 'g');
 
 /**
  * Verweise auf eigene Abschnitte in einem Text, je Nummer ein Treffer. Der erste Treffer eines Verweises beginnt
- * beim Wort („Abschnitt 4.2“), weitere stehen nur auf ihrer Nummer („und 3.4“). Zitate anderer Werke (Komma davor,
- * Seitenangabe danach) zählen nicht.
+ * beim Wort („Abschnitt 4.2“), weitere stehen nur auf ihrer Nummer („und 3.4“); `einzeln` heisst: ein Verweis mit nur
+ * einer Nummer. Zitate anderer Werke (Komma davor, Seitenangabe danach) zählen nicht.
  * @param {string} text
- * @returns {{ start: number, ende: number, nummer: string }[]}
+ * @returns {{ start: number, ende: number, nummer: string, einzeln: boolean }[]}
  */
 export function abschnittsverweise(text) {
-  /** @type {{ start: number, ende: number, nummer: string }[]} */
+  /** @type {{ start: number, ende: number, nummer: string, einzeln: boolean }[]} */
   const treffer = [];
   for (const m of text.matchAll(VERWEIS)) {
     const start = m.index ?? 0;
     const ende = start + m[0].length;
     if (/,\s*$/.test(text.slice(Math.max(0, start - 20), start).replace(OHNE_GRENZE, ''))) continue;
     if (/^,\s*S\.\s/.test(text.slice(ende, ende + 20).replace(OHNE_GRENZE, ''))) continue;
-    let erste = true;
-    for (const z of m[0].matchAll(new RegExp(ZAHL, 'g'))) {
+    const zahlen = [...m[0].matchAll(new RegExp(ZAHL, 'g'))];
+    zahlen.forEach((z, i) => {
       const s = start + (z.index ?? 0);
-      treffer.push({ start: erste ? start : s, ende: s + z[0].length, nummer: z[0] });
-      erste = false;
-    }
+      treffer.push({ start: i ? s : start, ende: s + z[0].length, nummer: z[0], einzeln: zahlen.length === 1 });
+    });
   }
   return treffer;
 }
@@ -251,6 +252,8 @@ export function pruefeAbschnittsverweise(html) {
   for (const t of treffer) {
     const umfeld = text.slice(Math.max(0, t.start - 40), t.ende + 20).replaceAll('\u0000', '').replaceAll(GRENZE, '').replace(/\s+/g, ' ');
     if (!nummern.has(t.nummer)) befunde.push(`Abschnitt ${t.nummer} gibt es nicht: „…${umfeld}…“`);
+    // den Titel setzt abschnitte() selbst dazu; von Hand geschrieben stünde er doppelt
+    else if (t.einzeln && /^\s*[„"]/.test(text.slice(t.ende, t.ende + 3).replace(OHNE_GRENZE, ''))) befunde.push(`Abschnitt ${t.nummer}: Titel steht schon im Text (setzt das Skript selbst dazu): „…${umfeld}…“`);
     const satz = text.slice(0, t.start).split(/[.!?]\s|\n/).pop() ?? '';
     if (WERKE.test(satz)) befunde.push(`Abschnitt ${t.nummer} im Satz eines zitierten Werks (Zitierform „Werk, Abschn. x.y“?): „…${umfeld}…“`);
   }
@@ -277,7 +280,7 @@ export function abschnitte() {
       const nummer = `${nr}.${++n}`;
       nummern.set(nummer, s);
       if (h.querySelector(':scope > .nr')) continue;
-      s.dataset.titel = `${nummer} ${(h.textContent ?? '').replace(/\s+/g, ' ').trim()}`;
+      s.dataset.titel = (h.textContent ?? '').replace(/\s+/g, ' ').trim();
       const span = document.createElement('span');
       span.className = 'nr';
       span.textContent = nummer;
@@ -316,9 +319,12 @@ export function abschnitte() {
       const a = document.createElement('a');
       a.className = 'abschnitt-link';
       a.href = `#${ziel.id}`;
-      a.title = ziel.dataset.titel ?? '';
+      // Wort und Nummer nicht trennen; der Titel danach darf umbrechen
+      rest.data = rest.data.replace(/\s+(?=\d)/, '\u00a0');
       rest.replaceWith(a);
       a.append(rest);
+      if (t.einzeln) a.append(` „${ziel.dataset.titel ?? ''}“`);
+      else a.title = `${t.nummer} ${ziel.dataset.titel ?? ''}`;
     }
   }
   return nummern;

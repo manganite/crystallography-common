@@ -36,7 +36,7 @@ test('abschnitte: Nummern und Links', async () => {
     anzahl: /** @type {any} */ (window).anzahl,
     h3: [...document.querySelectorAll('article h3')].map((h) => h.textContent),
     toc: [...document.querySelectorAll('.toc ol ol a')].map((a) => a.textContent),
-    links: [...document.querySelectorAll('a.abschnitt-link')].map((a) => `${a.textContent}|${a.getAttribute('href')}|${a.getAttribute('title')}`),
+    links: [...document.querySelectorAll('a.abschnitt-link')].map((a) => `${a.textContent?.replace(/\u00a0/g, ' ')}|${a.getAttribute('href')}|${a.getAttribute('title')}`),
     p1: document.getElementById('p1')?.textContent,
     p2: document.getElementById('p2')?.textContent,
     quelle: document.querySelector('#q a'),
@@ -45,14 +45,14 @@ test('abschnitte: Nummern und Links', async () => {
   assert.deepEqual(r.h3, ['1.1 Erster', '1.2 Zweiter', '2.1 Dritter'], 'Nummern einmal, auch nach zweitem Aufruf');
   assert.deepEqual(r.toc, ['1.1 Erster', '1.2 Zweiter', '2.1 Dritter']);
   assert.deepEqual(r.links, [
-    'Abschnitt 1.2|#b|1.2 Zweiter',
+    'Abschnitt 1.2 „Zweiter“|#b|null',
     'Abschnitte 1.1|#a|1.1 Erster',
     '2.1|#c|2.1 Dritter',
-    'Abschn. 1.2|#b|1.2 Zweiter',
-    'Abschnitts 2.1|#c|2.1 Dritter',
+    'Abschn. 1.2 „Zweiter“|#b|null',
+    'Abschnitts 2.1 „Dritter“|#c|null',
   ]);
   assert.equal(await p.locator('svg a, #p3 b a').count(), 0, 'kein Link in SVG und über eine Elementgrenze');
-  assert.equal(r.p1, 'Siehe Abschnitt 1.2 und Skript, Abschnitt 1.1; Abschnitte 1.1–2.1, auch Werk, Abschn. 1.1.', 'Text unverändert');
+  assert.equal(r.p1?.replace(/\u00a0/g, ' '), 'Siehe Abschnitt 1.2 „Zweiter“ und Skript, Abschnitt 1.1; Abschnitte 1.1–2.1, auch Werk, Abschn. 1.1.', 'Titel nur beim einzelnen Verweis, sonst Text unverändert');
   assert.match(r.p2 ?? '', /\(Abschnitt 9\.9\)/);
   assert.equal(r.quelle, null, 'Quellen bleiben Text');
   // ein Link führt zum Abschnitt
