@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Abschnittsnummern und Verweise im Skript** (`js/skript-kern.js`, `css/skript.css`, Leitfaden Abschn. 6; Entscheidung Thomas, #85): `abschnitte()` schreibt Kapitel und laufende Nummer in die Überschriften der Abschnitte und ins Inhaltsverzeichnis (auch im PDF und in dessen Lesezeichen) und macht Verweise wie „Abschnitt 4.5“ oder „Abschn. 4.5“ zu Links, ein einzelner Verweis mit dem Titel des Abschnitts („Abschnitt 4.5 „Titel““), eine Liste mit dem Titel als Tooltip; Zitate anderer Werke, Links und `.quellen` bleiben Text. Für die Tests der Apps `pruefeAbschnittsverweise(html)` (Verweis ohne Abschnitt, Verweis im Satz eines zitierten Werks) und `skriptGliederung(html)`. Für die Apps: `abschnitte()` in `js/skript.js` vor `inhaltsverzeichnis()` aufrufen und einen Test mit `pruefeAbschnittsverweise` ergänzen (Muster in der Vorlage, `tests/skript.test.mjs`).
+
 ### Geändert
 
 - **Touch-Ziele nach dem zuletzt benutzten Gerät** (`css/app.css`, Leitfaden Abschn. 5.2; Entscheidung Thomas, #135): 40 px auch auf einem Laptop mit Touchscreen, der `pointer: fine` meldet, nach dem Tippen; mit der Maus auf einem Gerät mit `pointer: coarse` die Grössen für die Maus. Die Grössen stehen in Variablen (`--ziel`, `--ziel-gross`, `--ziel-kaestchen`, `--ziel-regler`, `--ziel-info-rand`), die nur bei Touch einen Wert haben. Für die Apps: eigene Regeln mit `@media (pointer: coarse)` auf `var(--ziel)` umstellen (z. B. `min-height: var(--ziel)`; hat das Element mit der Maus eine eigene Grösse, als Ersatzwert in derselben Deklaration, `var(--ziel, 36px)`, weil die ungültige Deklaration sonst auch die frühere Regel ersetzt); Regeln mit `:root[data-zeiger="touch"]` für Touch-Ziele entfallen.
