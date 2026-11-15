@@ -146,8 +146,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte prüft der Browserlauf
   jeder App mit `fehlendeTooltips` (#114). Dabei zeigten sich ohne Tooltip nur Knöpfe der Experimente, Begriffslinks der
   Kenndaten und Links in Kopf- und Fusszeile; Thomas (15.11.2026) nahm sie als Ausnahmen auf, dazu die Knöpfe eines
-  laufenden Ablaufs, weil ihr Text sagt, was sie tun. Tooltips an gesperrten Knöpfen prüft die CI in Chromium und, soweit
-  sie starten, in Firefox und WebKit. `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
+  laufenden Ablaufs, weil ihr Text sagt, was sie tun. Tooltips an gesperrten Knöpfen prüft die CI in Chromium und Firefox (Job `browser`)
+  und in WebKit (Job `webkit` auf macOS, weil WebKit auf Ubuntu ohne apt nicht startet, #128). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
   des PR #120). Texte für Maus und Touch folgen dem zuletzt benutzten Gerät (`data-zeiger` an `<html>`), nicht nur der Media
   Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter
   „Das ⓘ … erklärt“ (Review von #116). **Das ⓘ auf allen Geräten** (Thomas, 12.11.2026, #140): Mit der Maus sah man

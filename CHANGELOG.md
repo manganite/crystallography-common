@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **Tooltips im Browser prüfen** (`tools/tooltips-pruefen.mjs`, #114): `fehlendeTooltips(page, { ohne })` meldet sichtbare Bedienelemente ohne Tooltip, auch ohne `id` und im Code erzeugte; Ausnahmen in `AUSNAHMEN`. Browsertests: der Helfer, Tooltips an gesperrten Knöpfen in Chromium, Firefox und WebKit (soweit sie starten; die CI installiert beide), das Bildwerkzeug an der Vorlage. Für die Apps: im Browserlauf je Modus `fehlendeTooltips` aufrufen.
+- **Tooltips im Browser prüfen** (`tools/tooltips-pruefen.mjs`, #114): `fehlendeTooltips(page, { ohne })` meldet sichtbare Bedienelemente ohne Tooltip, auch ohne `id` und im Code erzeugte; Ausnahmen in `AUSNAHMEN`. Browsertests: der Helfer, Tooltips an gesperrten Knöpfen in Chromium und Firefox (Job `browser`) und WebKit (neuer Job `webkit` auf macOS), das Bildwerkzeug an der Vorlage. Für die Apps: im Browserlauf je Modus `fehlendeTooltips` aufrufen.
 
 ### Geändert
 

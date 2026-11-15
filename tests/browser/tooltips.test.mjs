@@ -1,6 +1,7 @@
 // Tooltips im Browser (#114): der Prüfhelfer für die Apps (tools/tooltips-pruefen.mjs) und Tooltips an gesperrten
-// Knöpfen in Chromium, Firefox und WebKit (Safari), soweit diese Browser installiert sind (in der CI im Job „browser“;
-// ein Browser, der sich nicht starten lässt, wird mit Grund übersprungen). Lokal: node --test tests/browser/*.test.mjs.
+// Knöpfen in Chromium, Firefox und WebKit (Safari), soweit diese Browser installiert sind; ein Browser, der sich nicht
+// starten lässt, wird mit Grund übersprungen. In der CI: Chromium und Firefox im Job „browser“ (Ubuntu), WebKit im Job
+// „webkit“ (macOS, dort startet WebKit ohne Pakete aus apt). Lokal: node --test tests/browser/*.test.mjs.
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { dirname, join } from 'node:path';
@@ -43,7 +44,7 @@ for (const [name, art] of /** @type {const} */ ([['Chromium', chromium], ['Firef
     /** @type {import('playwright').Browser} */
     let b;
     try { b = await starten(art); } catch (e) {
-      t.skip(`${name} lässt sich nicht starten: ${String(e).split('\n')[0]}`);
+      t.skip(`${name} lässt sich nicht starten: ${String(e).split('\n').slice(0, 4).join(' ')}`);
       return;
     }
     try {

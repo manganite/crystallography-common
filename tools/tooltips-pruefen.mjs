@@ -7,12 +7,13 @@
 //   const fehlend = await fehlendeTooltips(page, { ohne: ['#mein-knopf'] });
 //
 // Ausnahmen nach Leitfaden Abschn. 5.3 (AUSNAHMEN): Links (sie sagen mit ihrem Text, wohin sie führen), Köpfe
-// einklappbarer Abschnitte, Schliessen „×“ der Erste Schritte, Export-Menü, Knöpfe der Experimente und Erste Schritte
+// einklappbarer Abschnitte, Schliessen „×“ (Knopf mit aria-label „… schliessen“), Export-Menü, Knöpfe der Experimente und Erste Schritte
 // (Liste und laufender Ablauf; ihr Text sagt, was sie tun). Ein Element gilt als erklärt, wenn es selbst oder ein
 // Element um es herum `data-tip` trägt (so findet help.js den Tooltip, bei Eingaben z. B. die Zeile `.check`).
+// `ohne` nennt weitere Ausnahmen der App als CSS-Selektoren (anders als bei pruefeTooltips, das IDs nimmt).
 
 /** Selektoren der Ausnahmen; ein Element in einem solchen Element ist ebenfalls ausgenommen. */
-export const AUSNAHMEN = ['a[href]', 'summary', '.intro-x', '.exportknopf', '.exportmenue', '.ablauf-inhalt'];
+export const AUSNAHMEN = ['a[href]', 'summary', '.intro-x', 'button[aria-label$="schliessen"]', '.exportknopf', '.exportmenue', '.ablauf-inhalt'];
 
 /**
  * Sichtbare Bedienelemente ohne Tooltip, als kurze Beschreibung („button#id „Text““).
