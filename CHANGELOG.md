@@ -8,21 +8,20 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [0.22.0] - 2026-11-15
 
-Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `hilfe-daten.js` um die neuen Felder ergänzen, `experimentAusAdresse` mit den neuen Optionen aufrufen, `initHelp({ hilfeModus })` und `hilfe` in den Abschnitten setzen, Bilder neu erzeugen (Einzelheiten unter „Hinzugefügt“ und „Geändert“).
+Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `experimentAusAdresse` umstellen (Experimente statt Kennungen, Optionen statt Funktion); `js/hilfe-daten.js` um die neuen Teile ergänzen, `hilfe` in `SECTIONS` und `hilfeModus` in `initHelp`, im Test `verweise` an `pruefeHilfe`; Bilder neu erzeugen und mit `lib/common/js/hilfe-gemeinsam.js` in die Offline-Liste von `sw.js` aufnehmen.
 
 ### Hinzugefügt
 
 - **Gemeinsame Texte der Hilfeseite** (`js/hilfe-gemeinsam.js`, #114): Teile der App, die Familie, gemeinsame Bedienkonzepte (Seitenleiste und Tafeln, Abschnitte und ⓘ, Werkzeuge, Schalter und Handlungen, gesperrte Bedienelemente, Zeichen und Farben, Erste Schritte und Experimente) sowie Link, Speicher, Zurücksetzen, offline, Export, Geräte, Tastatur. Die App ergänzt sie (`ergaenzungen`) oder lässt einen weg (`ohne`).
-- **Verweis aus dem ⓘ auf die Hilfeseite** (`js/help.js`, #114): Ein Abschnitt mit `hilfe` endet mit „Mehr in der Hilfe“; `{modus}` darin ersetzt `initHelp({ hilfeModus })` beim Aufklappen.
+- **Verweis aus dem ⓘ auf die Hilfeseite** (`js/help.js`, `css/app.css`, #114): Ein Abschnitt mit `hilfe` endet mit „Mehr in der Hilfe“; `{modus}` darin ersetzt `initHelp({ hilfeModus })` beim Aufklappen.
 
 ### Geändert
 
 - **Hilfeseite als Anleitung** (`js/hilfe-seite.js`, `css/hilfe.css`, Leitfaden 5.3; Entscheidungen Thomas, 15.11.2026, #114): Gliederung Überblick, Bedienkonzepte, je Modus Nachschlagen (Bereiche mit nummerierten Bildern), Anleitungen und Experimente, typische Fragen, Link und Geräte. `HilfeDaten` neu mit `zweck`, `modi[].zweck`, `ueberblick`, `konzepte`, `bereiche`, `anleitungen`, `fragen`, `ergaenzungen`, `ohne`, `repo`, `skript`; alle optional. `hilfeAnker` liefert die Anker der Seite; `pruefeHilfe` prüft zusätzlich doppelte Anker und Bilder, die gemeinsamen Texte, Adressen der Fragen und die Ziele der ⓘ (`verweise`). `HilfeBild` hat jetzt `zeige` als Liste, `nummern`, `ausschnitt`, `quelle` und `vorher`; ein `Schritt` hat neu `vorher` (Typ `BildHandlung` in `js/ablauf.js`), `pruefeHilfe` prüft es. Leitfaden 5.3: keine feste Zahl der Anleitungen mehr.
 - **Bilder der Hilfeseite** (`tools/hilfe-bilder.mjs`): nummerierte Marken für Bereiche, Ausschnitt per Selektor; ein Ausschnitt, der höher als das Fenster ist oder einen eigenen Scrollbereich hat, wird ganz abgebildet (vorher begann er bei hohen Tafeln mitten in der Tafel, #114). Nummern überdecken keine andere Marke; `vorher` eines Schritts stellt per Klick und Ziehen einen Zustand her, der nicht in der Adresse steht (gewähltes Werkzeug, Striche). Findet eine Nummer keinen freien Platz, meldet das Werkzeug es.
 - **`experimentAusAdresse`** (`js/hilfe-seite.js`, #114): nimmt die Experimente (Kennung und Modus) statt der Kennungen und Optionen `{ modusWaehlen, einstiegSchliessen, oeffnen }` statt einer Funktion. Ein Experiment aus einem anderen Modus startet so im richtigen Modus (vorher beendete der Abgleich der Karte es gleich wieder), und ohne Hash erscheinen die Erste Schritte nicht zugleich.
+- **`CLAUDE.md` und Leitfaden** (#114): Entscheidung „Ausbau zur Anleitung“ mit Gründen; Leitfaden Abschn. 10: eine neue App kommt auch in den Text „Die App-Familie“ von `js/hilfe-gemeinsam.js`.
 - **Vorlage:** Muster der neuen Daten der Hilfeseite, Verweise aus dem ⓘ, `hilfe.html` im Test auf Verweise zur Vorlesung, `?experiment=` im README.
-
-Für die Apps: Aufruf von `experimentAusAdresse` umstellen; `js/hilfe-daten.js` um die neuen Teile ergänzen, `hilfe` in `SECTIONS` und `hilfeModus` in `initHelp`, im Test `verweise` an `pruefeHilfe`; Bilder neu erzeugen und in die Offline-Liste aufnehmen, dazu `lib/common/js/hilfe-gemeinsam.js`.
 
 ## [0.21.0] - 2026-11-15
 
