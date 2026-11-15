@@ -30,9 +30,11 @@ test('Farben der Symmetrie sind vorhanden (gleiche Bedeutung in allen Apps)', ()
 });
 
 test('Stylesheets verwenden nur definierte Variablen', () => {
-  const definiert = new Set([...Object.keys(hell), 'ovt', 'dc', 'zc']);
-  for (const f of readdirSync(new URL('../css/', import.meta.url))) {
-    const text = readFileSync(new URL(`../css/${f}`, import.meta.url), 'utf8');
+  const dateien = readdirSync(new URL('../css/', import.meta.url)).map((f) => [f, readFileSync(new URL(`../css/${f}`, import.meta.url), 'utf8')]);
+  // Farben aus base.css und Variablen, die ein Stylesheet selbst setzt (z. B. --ziel in app.css, #135)
+  const eigene = dateien.flatMap(([, text]) => [...text.matchAll(/(?:^|[{;\s])--([\w-]+)\s*:/g)].map((m) => m[1]));
+  const definiert = new Set([...Object.keys(hell), ...eigene, 'ovt', 'dc', 'zc']);
+  for (const [f, text] of dateien) {
     for (const m of text.matchAll(/var\(--([\w-]+)/g)) {
       // --ovt, --dc, --zc setzen die Seiten bzw. Elemente selbst (mit Rückfallwert)
       assert.ok(definiert.has(m[1]) || /var\(--[\w-]+,/.test(m[0] + text.slice(m.index + m[0].length, m.index + m[0].length + 1)), `${f}: --${m[1]}`);

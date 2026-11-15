@@ -1,7 +1,7 @@
-// Skript der Muster-App: zeichnet die Abbildungen mit dem Code der App. Inhaltsverzeichnis, App-Links,
-// Querstriche und Nachladen kommen aus lib/common/js/skript-kern.js.
+// Skript der Muster-App: zeichnet die Abbildungen mit dem Code der App. Abschnittsnummern und Verweise,
+// Inhaltsverzeichnis, App-Links, Querstriche und Nachladen kommen aus lib/common/js/skript-kern.js.
 
-import { appLink, inhaltsverzeichnis, querstriche } from '../lib/common/js/skript-kern.js';
+import { abschnitte, appLink, inhaltsverzeichnis, querstriche } from '../lib/common/js/skript-kern.js';
 import { versionEintragen, offline, $, elemente, element, eingabe } from '../lib/common/js/seite.js';
 import { VERSION } from './version.js';
 
@@ -35,6 +35,7 @@ function abbildungen() {
 versionEintragen(VERSION);
 abbildungen();
 regler.addEventListener('input', zeichneRegler);
+abschnitte();
 inhaltsverzeichnis();
 document.fonts.ready.then(querstriche);
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { abbildungen(); querstriche(); });

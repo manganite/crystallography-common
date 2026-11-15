@@ -166,6 +166,15 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Browsertests laufen in der CI von common im eigenen Job `browser` (Thomas); die Emulation
   von Chromium meldet mit Touchscreen immer `hover: none`, der Fall „Touchscreen und `hover: hover`“ wird deshalb mit
   einem Zeigerereignis vom Typ `touch` geprüft.
+- **Touch-Ziele nach dem zuletzt benutzten Gerät** (Thomas, 15.11.2026, #135, Leitfaden Abschn. 5.2): Die 40 px galten
+  nur bei `pointer: coarse`; ein Laptop mit Touchscreen meldet meist das Touchpad (`pointer: fine`), die Ziele blieben
+  beim Tippen klein. Zur Wahl standen „ab dem ersten Tippen grösser“ und „nach dem zuletzt benutzten Gerät“; gewählt ist
+  Letzteres wie bei Texten und ⓘ, obwohl das Layout bei jedem Wechsel springt. Umgesetzt über Variablen (`--ziel`, ungültig
+  ohne Touch), damit jede Regel nur einmal steht statt in Media Query und Attributselektor. Gemessen (beide Apps, alle Modi,
+  1440, 1024, 768, 390 px): Mit Touch auf `pointer: fine` gleicht das Layout jetzt dem auf `pointer: coarse` (Seitenleiste
+  z. B. stereography „Punktgruppen“ 921 → 1199 px), mit der Maus auf `pointer: coarse` dem mit Maus; kein waagrechtes
+  Scrollen (PR zu #135). Review: Nach dem Tippen verschiebt sich das Layout, und Chromium meldet unter dem ruhenden
+  Mauszeiger ein `pointerover` vom Typ `mouse`; `help.js` wechselt das Gerät deshalb nur bei `pointerdown` und `pointermove`.
 - **Experimente nach Kapiteln gliedern** (Thomas, 9.11.2026, #107, Leitfaden Abschn. 5.3): Mit 8–12 Experimenten je
   Modus (stereography#115, plane-groups#109) wird die flache Liste unübersichtlich; das Quiz gliedert schon nach
   Kapiteln. Schwelle 6 je Modus (gezählt wird, was die Liste eines Modus zeigt, nicht die ganze App). Das Kapitel steht
@@ -263,7 +272,16 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Lehrende. Nummern im Übersichtsbild (Thomas, 15.11.2026, Wahl unter „auf der Rahmenlinie lassen“, „innen in die Ecke“
   und „Rand dazugeben“): Sie lagen auf der oberen Rahmenlinie, weil links neben den Bausteinen kein Platz war; jetzt
   bekommt die Seite für solche Bilder links Rand und grössere Abstände. Ein Browsertest des Werkzeugs an der Vorlage
-  läuft in der CI (Übersicht ohne Notlösung, `vorher`).
+  läuft in der CI (Übersicht ohne Notlösung, `vorher`). Offen: #114.
+- **Abschnittsnummern im Skript** (Thomas, 6.11.2026, #85, Leitfaden Abschn. 6): Die Texte verwiesen ständig auf
+  „Abschnitt 4.5“, die Abschnitte trugen aber keine sichtbare Nummer. Entschieden ist „beides“: Nummern sichtbar und
+  Verweise als Links. Die Nummern entstehen beim Laden aus der Reihenfolge, damit ein neuer Abschnitt sie nicht von Hand
+  verschiebt, und die Verweise werden per Muster erkannt, damit die Texte unverändert bleiben. Beim Umsetzen: Zitate
+  anderer Werke erkennt das Muster an ihrer Zitierform (Komma davor, Seitenangabe danach), nicht an einer Liste von
+  Autoren, weil sie so ohne Markierung im Text auskommen; die Liste der Autoren dient nur dem Test als Warnung.
+  **Nummer und Titel** (Thomas, 15.11.2026): stereography verwies im Text mit Titeln, plane-groups mit Nummern; beide
+  Skripte nennen jetzt Nummer und Titel. Den Titel setzt `abschnitte()` beim Laden dazu, statt ihn in den Text zu
+  schreiben (Wahl beim Umsetzen): So veraltet er nicht, wenn ein Abschnitt umbenannt wird, und die Quelle bleibt kurz.
 - **Kennzeichnung der Typen in Datendateien** (4.11.2026, Leitfaden Abschn. 9): Ein Literal wird erst durch
   eine Typangabe zum gekennzeichneten Typ (z. B. `Normale`, `Grad`). Je Tabelle einmal bleiben die Einträge
   ohne Code lesbar und änderbar, was die Regel „Daten getrennt vom Code“ bezweckt. Die Alternativen wären
@@ -329,7 +347,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Cloud-Sitzung Thomas von Hand, weil dort der Tag-Push scheitert; in Claude Code lokal Claude Code,
   erst nach Thomas' Freigabe des Release und dem Merge des Release-PR. Vorher prüfen, dass
   `origin/main` der Release-PR ist (der erste Tag v1.4.0 der Stereo-App zeigte auf den Commit davor),
-  danach, dass `release.yml` (in Apps auch `deploy.yml`) grün ist.
+  danach, dass `release.yml` (in Apps auch `deploy.yml`) grün ist (scheitert der Deploy beim Laden des Artefakts: README der App, „Versionen und Releases“, #142).
 - **Commits und Tags mit der Noreply-Adresse:** global steht Thomas' private Adresse, GitHub lehnt den
   Push sonst ab (GH007). Deshalb in jedem Klon auf Thomas' Computer einmal
   `git config user.email 6277652+manganite@users.noreply.github.com` (lokal gesetzt 4.11.2026). Nicht in

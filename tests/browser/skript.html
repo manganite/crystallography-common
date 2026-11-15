@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Testseite für tests/browser/skript.test.mjs: Abschnittsnummern und Verweise (abschnitte, js/skript-kern.js; #85) -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Test Skript</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/skript.css">
+</head>
+<body>
+<div class="page">
+<nav class="toc" aria-label="Inhalt"><div class="card"><details open><summary>Inhalt</summary><ol>
+  <li><a href="#k1"><span class="nr">1</span>Eins</a><ol><li><a href="#a">Erster</a></li><li><a href="#b">Zweiter</a></li></ol></li>
+  <li><a href="#k2"><span class="nr">2</span>Zwei</a><ol><li><a href="#c">Dritter</a></li></ol></li>
+</ol></details></div></nav>
+<main><article>
+<section id="k1"><h2><span class="nr">1</span>Eins</h2>
+  <p id="p1">Siehe Abschnitt 1.2 und <a href="https://example.org/skript.html#y">Skript, Abschnitt 1.1</a>; Abschnitte 1.1–2.1, auch <i>Werk</i>, Abschn. 1.1.</p>
+  <section id="a"><h3>Erster</h3><p id="p2">Zurück zu Abschn.&nbsp;1.2, nicht 9.9 (Abschnitt 9.9) und nicht (Abschn. 1.1, S. 12).</p></section>
+  <section id="b" data-level="vertiefung"><h3>Zweiter</h3><p id="p3">Über eine Grenze: Abschnitt <b>1.1</b>; gebeugt: des Abschnitts 2.1.</p>
+    <figure><svg viewBox="0 0 100 20"><text x="1" y="12">Abschnitt 1.1</text></svg></figure></section>
+  <div class="quellen"><ul><li id="q">Hoffmann (2016), Abschnitt 1.1</li></ul></div>
+</section>
+<section id="k2"><h2><span class="nr">2</span>Zwei</h2>
+  <section id="c"><h3>Dritter</h3><p>Text.</p></section>
+</section>
+</article></main>
+</div>
+<script type="module">
+  import { abschnitte } from '/js/skript-kern.js';
+  window.anzahl = abschnitte().size;
+  abschnitte(); // ein zweiter Aufruf ändert nichts
+  document.body.dataset.bereit = '';
+</script>
+</body>
+</html>

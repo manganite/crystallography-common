@@ -31,7 +31,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `hilfe-gemeinsam.js` | Gemeinsame Texte der Hilfeseite (Daten): Teile, Familie, Bedienkonzepte, Link, Speicher, offline, Export, Geräte, Tastatur |
 | | `quiz-core.js` | Quiz-Logik ohne Seite: Kandidaten, Ziehen nach Stufen und Vorrang, Mischen, Auswerten, Fortschritt |
 | | `quiz-seite.js` | Quiz-Seite: Auswahl, Fragen mit sofortiger Rückmeldung, Auswertung, Fortschritt im Browser |
-| | `skript-kern.js` | Skript: Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
+| | `skript-kern.js` | Skript: Abschnittsnummern und Verweise als Links (`abschnitte`, für die Tests `pruefeAbschnittsverweise`), Inhaltsverzeichnis mit Kennzeichnung der Vertiefungen, „In der App öffnen“, Nachladen beim Hineinscrollen, Querstriche in SVG-Text |
 | | `seite.js` | Elemente der Seite mit Prüfung der Art (nach ID `$`, `eingabe`, `auswahl`, `knopf`, `abschnitt`, `grafik`, `nachId`; nach Selektor `element`, `elemente`), Versionsnummer eintragen, „Alle Einstellungen zurücksetzen“ (`alleEinstellungenZuruecksetzen`, Präfix der App), Offline-Betrieb (Service Worker), Bildexport als Knopf mit Menü (`exportMenue`, mit `herunterladen` und `inZwischenablage`) |
 | | `version.js` | Version dieses Repositories |
 | | `typen.js` | Gemeinsame Typen für die Typprüfung, ohne Laufzeitcode: Vektoren, Matrizen und gekennzeichnete Typen (Richtung/Normale, Grad/Bogenmass, fraktional/kartesisch). Die Typen des Quiz stehen in `quiz-core.js`. |
@@ -83,7 +83,7 @@ Das Werkzeug warnt, wenn der Stand kein Release-Tag ist oder ungespeicherte Änd
 ```js
 import { initHelp } from '../lib/common/js/help.js';
 import { initQuiz } from '../lib/common/js/quiz-seite.js';
-import { appLink, nachladen, querstriche, inhaltsverzeichnis } from '../lib/common/js/skript-kern.js';
+import { abschnitte, appLink, nachladen, querstriche, inhaltsverzeichnis } from '../lib/common/js/skript-kern.js';
 import { versionEintragen, offline } from '../lib/common/js/seite.js';
 ```
 
