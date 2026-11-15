@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Vorlage, README** (#142): Unter „Versionen und Releases“ steht, was zu tun ist, wenn der Deploy mit „Fetching artifact metadata failed“ scheitert (neuer Lauf per `workflow_dispatch` auf den Tag statt „Re-run failed jobs“). Die Apps übernehmen den Absatz in ihr README.
+
 ## [0.22.0] - 2026-11-15
 
 Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `experimentAusAdresse` umstellen (Experimente statt Kennungen, Optionen statt Funktion); `js/hilfe-daten.js` um die neuen Teile ergänzen, `hilfe` in `SECTIONS` und `hilfeModus` in `initHelp`, im Test `verweise` an `pruefeHilfe`; Bilder neu erzeugen und mit `lib/common/js/hilfe-gemeinsam.js` in die Offline-Liste von `sw.js` aufnehmen.
