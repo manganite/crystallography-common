@@ -81,6 +81,11 @@ test('Laptop mit Maus: Tooltip beim Überfahren, Texte für die Maus, ⓘ mit kl
   await p.evaluate(() => { document.body.dataset.modus = 'b'; });
   await p.click('#sect-lang .infobtn');
   assert.equal(await p.locator('#sect-lang .helpbox .hilfe-verweis a').getAttribute('href'), 'hilfe.html#b-lang');
+  // ohne Modus auf den Anfang der Hilfeseite statt auf einen Anker „-lang“, den es nicht gibt
+  await p.click('#sect-lang .infobtn');
+  await p.evaluate(() => { document.body.dataset.modus = ''; });
+  await p.click('#sect-lang .infobtn');
+  assert.equal(await p.locator('#sect-lang .helpbox .hilfe-verweis a').getAttribute('href'), 'hilfe.html');
   await p.click('#h-a .infobtn');
   assert.equal(await p.locator('#h-a + .helpbox .hilfe-verweis, #h-a ~ .helpbox .hilfe-verweis').count(), 0);
   await ueberfahren(p, '#knopf');

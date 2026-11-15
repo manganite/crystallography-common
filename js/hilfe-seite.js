@@ -16,7 +16,7 @@ import { UEBERBLICK, KONZEPTE, TECHNIK } from './hilfe-gemeinsam.js';
 
 /**
  * Modus der App: Kennung wie in `Ablauf.modus`, Name wie auf dem Tab, Link-Adresse, die ihn wählt (z. B. `#m=form`),
- * zweck: wozu er dient (HTML, ein bis zwei Sätze).
+ * zweck: wozu er dient (HTML ohne Blockelemente, ein bis zwei Sätze; die Seite setzt ihn in ein `<p>` bzw. `<li>`).
  * @typedef {{ id: string, name: string, hash: string, zweck?: string }} HilfeModus
  */
 /** Abschnitt mit Text (HTML): Bedienkonzept oder gemeinsamer Text. @typedef {{ id: string, titel: string, text: string }} HilfeText */
@@ -28,7 +28,7 @@ import { UEBERBLICK, KONZEPTE, TECHNIK } from './hilfe-gemeinsam.js';
  */
 /**
  * Bereich zum Nachschlagen (Seitenleiste, Tafel, Kenndaten) in einem Modus; ohne `modus` in jedem Modus, je mit eigenem
- * Bild. Anker auf der Seite `<Modus>-<id>`. Das Bild zeigt den Ausschnitt `ausschnitt` (Selektor; ohne: der Baustein um
+ * Bild. text: Einleitung (HTML mit Absätzen `<p>`); Name und Text eines Eintrags ohne Blockelemente. Anker auf der Seite `<Modus>-<id>`. Das Bild zeigt den Ausschnitt `ausschnitt` (Selektor; ohne: der Baustein um
  * die Marken, z. B. Karte oder Tafel) im Zustand `adresse` (ohne: die Adresse des Modus), die Einträge mit `zeige`
  * nummeriert in ihrer Reihenfolge.
  * @typedef {{ id: string, modus?: string, titel: string, text?: string, ausschnitt?: string, adresse?: string,
@@ -39,7 +39,7 @@ import { UEBERBLICK, KONZEPTE, TECHNIK } from './hilfe-gemeinsam.js';
  * @typedef {{ id: string, frage: string, antwort: string, app?: string, skript?: string }} HilfeFrage
  */
 /**
- * Daten der Hilfeseite. modi: Modi der App; zweck: Zweck der App (HTML); ueberblick: Bereich „Aufbau der App“ (Bild der
+ * Daten der Hilfeseite. modi: Modi der App; zweck: Zweck der App (HTML mit Absätzen `<p>`); ueberblick: Bereich „Aufbau der App“ (Bild der
  * ganzen App, Anker `aufbau`); konzepte: Bedienkonzepte der App (nach den gemeinsamen); bereiche: zum Nachschlagen je
  * Modus; ersteSchritte und anleitungen: Anleitungen je Modus (gleicher Typ, die Erste Schritte auch als Karte in der
  * App, die anleitungen nur hier); experimente: wie in der App; fragen: typische Fragen. ergaenzungen: HTML, das an einen
@@ -117,7 +117,7 @@ const ersterSchritt = (e) => {
 };
 
 /** Bild als HTML. @param {string} src @param {string} alt */
-const bildHTML = (src, alt) => `<figure class="hilfe-bild"><img src="${attr(src)}" alt="${attr(alt)}" loading="lazy"></figure>`;
+const bildHTML = (src, alt) => `<figure class="hilfe-bild"><img src="${attr(src)}" alt="${attr(alt)}"></figure>`;
 
 /**
  * Gemeinsamer Text mit Ergänzung der App, als Abschnitt mit Überschrift (h3) und Anker `<praefix><id>`.
@@ -336,10 +336,20 @@ export function hilfeSeite(ziel, d, inhalt) {
     const setzen = () => { if (img.naturalWidth) img.style.width = `${img.naturalWidth / 2}px`; };
     if (img.complete) setzen(); else img.addEventListener('load', setzen, { once: true });
   }
-  // Sprung an einen Anker, nachdem der Inhalt steht (ein fehlerhafter Anker wird übergangen)
+  // Sprung an einen Anker, nachdem der Inhalt steht (ein fehlerhafter Anker wird übergangen). Die Bilder haben ihre Höhe
+  // erst nach dem Laden; der Sprung wird deshalb wiederholt, bis alle geladen sind, solange man nicht selbst scrollt (die
+  // Verweise aus dem ⓘ führen tief in die Seite; Safari hält die Lage beim Nachladen nicht)
   let anker = location.hash.slice(1);
   try { anker = decodeURIComponent(anker); } catch { /* wie geschrieben */ }
-  if (anker) document.getElementById(anker)?.scrollIntoView();
+  const sprung = anker ? document.getElementById(anker) : null;
+  if (sprung) {
+    sprung.scrollIntoView();
+    let selbst = false;
+    const stopp = () => { selbst = true; };
+    for (const ev of ['wheel', 'touchstart', 'keydown', 'mousedown']) addEventListener(ev, stopp, { once: true, passive: true });
+    const offen = [...ziel.querySelectorAll('.hilfe-bild img')].filter((i) => i instanceof HTMLImageElement && !i.complete);
+    for (const img of offen) img.addEventListener('load', () => { if (!selbst) sprung.scrollIntoView(); }, { once: true });
+  }
 }
 
 /**

@@ -192,8 +192,11 @@ function buildHelpBox(sec) {
     const lab = cfg.labels[id] || esc((a.querySelector('label') || a).textContent.trim().replace(/\s+/g, ' ').replace(/\d[\d.,]*\s*°?$/, '').trim());
     return `<dt>${lab}</dt><dd>${cfg.tips[id]}</dd>`;
   }).join('');
-  // Verweis auf die Hilfeseite (#114), mit dem Modus in diesem Moment
-  const mehr = sec.hilfe ? `<p class="hilfe-verweis"><a href="hilfe.html#${esc(encodeURIComponent(sec.hilfe.replace('{modus}', cfg.hilfeModus())))}">Mehr in der Hilfe</a></p>` : '';
+  // Verweis auf die Hilfeseite (#114), mit dem Modus in diesem Moment; ohne Modus auf den Anfang der Seite statt auf
+  // einen Anker, den es nicht gibt
+  const modus = cfg.hilfeModus();
+  const anker = sec.hilfe && (!sec.hilfe.includes('{modus}') || modus) ? `#${encodeURIComponent(sec.hilfe.replace('{modus}', modus))}` : '';
+  const mehr = sec.hilfe ? `<p class="hilfe-verweis"><a href="${esc(`hilfe.html${anker}`)}">Mehr in der Hilfe</a></p>` : '';
   box.innerHTML = `${sec.intro ? `<p>${sec.intro}</p>` : ''}${rows ? `<dl>${rows}</dl>` : ''}${mehr}`;
   return box;
 }

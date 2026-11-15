@@ -160,7 +160,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 2. Dateien aus `vorlagen/` übernehmen und die Platzhalter ersetzen (siehe `vorlagen/README.md`).
 3. `node tools/sync.mjs <neue App>` von einem Release-Tag dieses Repositories.
 4. Konzept der App als Dokument festhalten (Inhalte, Modi, Link-Adressen, Kapitel des Skripts), dann App, Skript und Quiz in dieser Reihenfolge.
-5. Die neue App in die Tabelle im README dieses Repositories und in die Verzahnung (Abschnitt 8) aufnehmen.
+5. Die neue App in die Tabelle im README dieses Repositories, in die Verzahnung (Abschnitt 8) und in den Text „Die App-Familie“ der Hilfeseite (`js/hilfe-gemeinsam.js`) aufnehmen.
 6. `CLAUDE.md` nach dem Muster der bestehenden Apps anlegen (`.github/pull_request_template.md` kommt mit der Vorlage); die `CLAUDE.md` bindet die `CLAUDE.md` dieses Repositories mit `@../crystallography-common/CLAUDE.md` ein (so lädt Claude Code beide). Sie vermerkt, ob die App in Entwicklung ist oder ihre Link-Adressen stabil sind (Abschnitt 8).
 7. `tools/quiz-quelle.mjs` nach dem Muster der bestehenden Apps anlegen (Fragen für die gemeinsame Fragenliste, `fragenliste/extract.mjs`) und die App dort in die Liste der Ordner aufnehmen.
 8. GitHub Pages: unter Settings → Environments → github-pages eine Tag-Regel `v*.*.*` anlegen, sonst scheitert der Deploy aus Tags. Die übrigen Einstellungen und der Auftritt nach Abschnitt 9; in der Regel „main schützen“ die Prüfungen `test`, `typen`, `lint` und `pdf`; dazu das Label `inhalt` für die Vorlage „Fachlicher Hinweis“.

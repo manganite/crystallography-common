@@ -50,7 +50,8 @@ test('Hilfeseite: Modi, abgebildete Bedienelemente, Bilder und Verweise aus dem 
   const { HILFE } = await import('../js/hilfe-daten.js');
   const { SECTIONS } = await import('../js/hilfetexte.js');
   const dateien = readdirSync(new URL('../hilfe/', import.meta.url));
-  // verweise: die Ziele der ⓘ (`hilfe` in SECTIONS) stehen auf der Hilfeseite
+  // jede ⓘ-Erklärung verweist auf die Hilfeseite (Leitfaden 5.3), und die Ziele (`hilfe` in SECTIONS) stehen dort
+  assert.deepEqual(SECTIONS.filter((s) => !s.hilfe).map((s) => s.heading), []);
   const verweise = SECTIONS.flatMap((s) => (s.hilfe ? [s.hilfe] : []));
   assert.deepEqual(pruefeHilfe(HILFE, { html: read('index.html'), dateien, verweise }), []);
   // „?“ führt zur Hilfeseite (Leitfaden Abschn. 5.3)

@@ -6,7 +6,7 @@
 
 /** @import { HilfeText } from './hilfe-seite.js' */
 
-/** Überblick: Teile der App und die Familie, nach dem Zweck der App. @type {readonly HilfeText[]} */
+/** Überblick: Teile der App und die Familie (eine neue App ergänzt sich dort, Leitfaden Abschn. 10), nach dem Zweck der App. @type {readonly HilfeText[]} */
 export const UEBERBLICK = [
   {
     id: 'teile',
@@ -20,8 +20,8 @@ export const UEBERBLICK = [
   {
     id: 'familie',
     titel: 'Die App-Familie',
-    text: `<p>Die App gehört zu einer Familie von Lern-Apps zur Kristallographie mit derselben Bedienung:
-      <a href="../stereography/">Stereographische Projektion</a> und <a href="../plane-groups/">Symmetrie in der Ebene</a>.
+    text: `<p>Die App gehört zu einer Familie von Lern-Apps zur Kristallographie mit derselben Bedienung. Bisher sind
+      es <a href="../stereography/">Stereographische Projektion</a> und <a href="../plane-groups/">Symmetrie in der Ebene</a>.
       Wo ein Thema in einer anderen App weitergeht, führt ein Link dorthin, z. B. von einer Ebenengruppe zu ihrer
       Punktgruppe im Stereogramm.</p>`,
   },
@@ -99,8 +99,8 @@ export const TECHNIK = [
   {
     id: 'speicher',
     titel: 'Was die App speichert',
-    text: `<p>Die App merkt sich im Browser die letzte Ansicht, offene Abschnitte und den Stand von Quiz und
-      Experimenten. Nichts davon verlässt das Gerät; es gibt kein Konto. Ein anderer Browser oder ein anderes Gerät
+    text: `<p>Die App merkt sich im Browser die letzte Ansicht, je nach App weitere Einstellungen der Seite und den
+      Stand von Quiz und Experimenten. Nichts davon verlässt das Gerät; es gibt kein Konto. Ein anderer Browser oder ein anderes Gerät
       beginnt leer. Ändert sich in der Entwicklung das Format, geht der gespeicherte Stand verloren.</p>`,
   },
   {

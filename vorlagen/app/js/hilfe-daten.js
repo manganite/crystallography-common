@@ -59,6 +59,8 @@ export const HILFE = {
     { id: 'gesperrt', frage: 'Warum ist „Beschriftung“ gesperrt?', antwort: '<p>Sie gilt dem Motiv in allgemeiner Lage; ohne Motiv gibt es nichts zu beschriften. Der Grund steht unter dem Schalter.</p>', app: '#g=p2' },
   ],
   ergaenzungen: { export: '<p>In der Muster-App exportiert nur Tafel A.</p>' },
+  // die Vorlage gehört nicht zur Familie; ihre relativen Links auf die Apps führten ins Leere
+  ohne: ['familie'],
   repo: 'manganite/crystallography-common',
   kapitel: KAPITEL,
 };

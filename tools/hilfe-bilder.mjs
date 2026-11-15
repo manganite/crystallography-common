@@ -96,6 +96,7 @@ export async function hilfeBilderErzeugen({ root, daten, chrome = process.env.CH
           return { hoehe: Math.ceil(hoehe + 40) };
         }, { zeige: b.zeige, ausschnitt: b.ausschnitt ?? null, baustein: BAUSTEIN });
         if ('fehlt' in vorbereitet) throw new Error(`kein Element ${vorbereitet.fehlt} unter ${b.adresse}`);
+        if (vorbereitet.hoehe > HOEHE_MAX) fehler.push(`${b.quelle}: Ausschnitt ${vorbereitet.hoehe} px hoch, abgeschnitten bei ${HOEHE_MAX} px`);
         if (vorbereitet.hoehe > HOEHE) {
           await page.setViewportSize({ width: BREITE, height: Math.min(HOEHE_MAX, vorbereitet.hoehe) });
           await page.waitForTimeout(100);
