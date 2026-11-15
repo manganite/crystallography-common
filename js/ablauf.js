@@ -5,7 +5,8 @@
 // Die Abläufe selbst sind Daten der App (Leitfaden Abschn. 9); Texte dürfen einfaches HTML enthalten (<i>, <b>,
 // <sub>), sie stammen aus der App und nicht aus Eingaben. pruefeAblaeufe() hilft den Tests der App.
 // Der Stand der Experimente wird wie der Fortschritt im Quiz gespeichert (#91, gleicher Aufbau wie in quiz-core.js).
-// Ab GLIEDERN_AB Experimenten je Modus gliedert die Liste sie nach den Kapiteln des Skripts, wie im Quiz (#107).
+// Ab GLIEDERN_AB Experimenten je Modus gliedert die Liste sie nach den Kapiteln des Skripts, wie im Quiz (#107), sofern
+// im Schnitt mindestens SCHNITT_AB Experimente auf ein Kapitel kommen.
 
 import { leererFortschritt, fortschrittAus, vermerken, vorrang } from './quiz-core.js';
 
@@ -54,11 +55,19 @@ import { leererFortschritt, fortschrittAus, vermerken, vorrang } from './quiz-co
 
 /** Ab so vielen Experimenten eines Modus gliedert die Liste nach Kapiteln (Entscheidung Thomas, 9.11.2026, #107). */
 export const GLIEDERN_AB = 6;
+/**
+ * Gegliedert wird nur, wenn im Schnitt mindestens so viele Experimente auf eine Gruppe kommen (Entscheidung Thomas,
+ * 15.11.2026): Viele Kapitel mit je einem Eintrag gliedern nichts. Gruppen zählen wie in nachKapitel (je Kapitel mit
+ * Einträgen, dazu „Weitere“).
+ */
+export const SCHNITT_AB = 2;
 
 /**
  * Experimente eines Modus in Gruppen nach Kapitel (Liste in der App und auf der Hilfeseite): ab GLIEDERN_AB Einträgen
  * und mit Kapiteln je Kapitel eine Gruppe, in der Reihenfolge der Kapitel und darin der Daten; Einträge ohne bekanntes
- * Kapitel zuletzt in einer Gruppe ohne Kapitel („Weitere“). Sonst eine Gruppe ohne Kapitel mit allen Einträgen.
+ * Kapitel zuletzt in einer Gruppe ohne Kapitel („Weitere“). Kämen im Schnitt weniger als SCHNITT_AB Einträge auf eine
+ * Gruppe, oder fehlen Kapitel bzw. Einträge, eine Gruppe ohne Kapitel mit allen Einträgen in der Reihenfolge der Daten
+ * (die App ordnet sie nach den Kapiteln des Skripts).
  * @template {Experiment} T
  * @param {T[]} liste @param {readonly Kapitel[]} [kapitel]
  * @returns {{ kapitel: Kapitel | null, eintraege: T[] }[]}
@@ -67,7 +76,8 @@ export function nachKapitel(liste, kapitel) {
   if (!kapitel?.length || liste.length < GLIEDERN_AB) return [{ kapitel: null, eintraege: liste }];
   const gruppen = kapitel.map((k) => ({ kapitel: k, eintraege: liste.filter((a) => a.kapitel === k.nr) })).filter((g) => g.eintraege.length);
   const rest = liste.filter((a) => !kapitel.some((k) => k.nr === a.kapitel));
-  return rest.length ? [...gruppen, { kapitel: null, eintraege: rest }] : gruppen;
+  const alle = rest.length ? [...gruppen, { kapitel: null, eintraege: rest }] : gruppen;
+  return liste.length < SCHNITT_AB * alle.length ? [{ kapitel: null, eintraege: liste }] : alle;
 }
 /**
  * Titel einer Gruppe (HTML): Nummer und Kurztitel wie in der Auswahl des Quiz, für Screenreader mit „Kapitel“ davor,
@@ -249,8 +259,8 @@ export function waehleParameter(a, stand, zufall = Math.random, ausser) {
 /**
  * HTML der Liste der Abläufe eines Modus (Knöpfe data-ablauf). Nach dem Stand (Fortschritt, Schlüssel = id):
  * zuletzt richtig ✓, durchgespielt ○, je mit Text für Screenreader (nicht nur über Farbe); darunter die Übersicht
- * und „Stand löschen“ (data-loeschen), sobald etwas durchgespielt ist. Mit kapitel ab GLIEDERN_AB Einträgen nach
- * Kapiteln gegliedert (nachKapitel): je Gruppe ein Titel und eine Liste, durchgehend nummeriert (#107). Der Titel ist
+ * und „Stand löschen“ (data-loeschen), sobald etwas durchgespielt ist. Mit kapitel nach Kapiteln gegliedert, wie
+ * nachKapitel() entscheidet (ab GLIEDERN_AB Einträgen, im Schnitt SCHNITT_AB je Kapitel): je Gruppe ein Titel und eine Liste, durchgehend nummeriert (#107). Der Titel ist
  * keine Überschrift, sondern beschriftet die Liste (aria-labelledby, wie `.group-title`): Die Karte „Experimente“ hat
  * nur ein `<summary>`, keine Überschrift, unter die sie sich einordnen liesse.
  * @param {Experiment[]} liste @param {Fortschritt} [stand] @param {readonly Kapitel[]} [kapitel]
@@ -389,7 +399,7 @@ export function schrittHTML(st, { skriptUrl, liste = true } = {}) {
  * - liste: false für einen geführten Einstieg (Erste Schritte): je Modus ein Ablauf, ohne Liste und ohne Stand; nach
  *   „Fertig“ beginnt er wieder von vorn (beiAbschluss schliesst z. B. die Karte).
  * - kapitel: Kapitel des Skripts wie im Quiz (`KAPITEL` der App); ab GLIEDERN_AB Experimenten eines Modus gliedert die
- *   Liste nach ihnen (#107). Ohne Angabe bleibt sie flach.
+ *   Liste nach ihnen, sofern im Schnitt SCHNITT_AB auf ein Kapitel kommen (#107). Ohne Angabe bleibt sie flach.
  * @param {HTMLElement} el
  * @param {Experiment[]} ablaeufe
  * @param {{ anwenden: (hash: string) => void, adresse: () => string, aktionen?: Record<string, () => void>,

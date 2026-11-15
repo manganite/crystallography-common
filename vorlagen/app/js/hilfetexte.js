@@ -58,7 +58,8 @@ export const ERSTE_SCHRITTE = [
  * je Schritt Frage, Vermutung, Handlung (Link-Adresse oder Aktion der App), Beobachtung, Erklärung. Ein Ablauf mit
  * params und make wird erzeugt (#92): je Parameter eine Aufgabe, am Ende „Neue Aufgabe“. In einer App prüft ein
  * Test die Aussage für jeden Parameter gegen ihre Daten; die Reihenfolge der Antworten wechselt mit dem Parameter.
- * kapitel: Nummer im Skript wie im Quiz (js/quiz-kapitel.js); ab 6 Experimenten je Modus gliedert die Liste danach (#107).
+ * kapitel: Nummer im Skript wie im Quiz (js/quiz-kapitel.js); ab 6 Experimenten je Modus gliedert die Liste danach, wenn im
+ * Schnitt mindestens 2 auf ein Kapitel kommen (#107).
  * @type {(Ablauf | Erzeugt)[]}
  */
 export const ABLAEUFE = [

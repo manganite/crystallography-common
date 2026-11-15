@@ -1,7 +1,7 @@
 // Geführte Abläufe (js/ablauf.js, #87): Prüfung der Daten, Verzweigung und das HTML eines Schritts.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { pruefeAblaeufe, nachKapitel, kapitelTitel, GLIEDERN_AB, naechster, neuerStand, schrittHTML, listeHTML, ansage, ablaufKarte, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
+import { pruefeAblaeufe, nachKapitel, kapitelTitel, GLIEDERN_AB, SCHNITT_AB, naechster, neuerStand, schrittHTML, listeHTML, ansage, ablaufKarte, ergebnis, standLesen, standSchreiben, variante, waehleParameter, eintrag, schluessel, zuletzt } from '../js/ablauf.js';
 import { leererFortschritt, vermerken, fortschrittAus } from '../js/quiz-core.js';
 import { hmHTML, hklHTML } from '../js/format.js';
 
@@ -357,6 +357,22 @@ test('nachKapitel: Schwelle 6, Reihenfolge der Kapitel, ohne Kapitel zuletzt', (
   assert.deepEqual(g.map((x) => [x.kapitel?.nr ?? null, x.eintraege.map((e) => e.id)]), [[1, ['b', 'e']], [3, ['a', 'd']], [null, ['c', 'f']]]);
   assert.equal(kapitelTitel(KAP[1]), '<span class="sr">Kapitel </span>2 Zwei');
   assert.equal(kapitelTitel(null), 'Weitere');
+});
+
+test('nachKapitel: nur gegliedert, wenn im Schnitt mindestens 2 Einträge auf eine Gruppe kommen (Thomas, 15.11.2026)', () => {
+  assert.equal(SCHNITT_AB, 2);
+  const K5 = [1, 2, 3, 4, 5].map((nr) => ({ nr, titel: `K${nr}`, kurz: `K${nr}`, anker: `k${nr}` }));
+  // 7 Einträge in 4 Kapiteln: 1,75 im Schnitt, also flach in der Reihenfolge der Daten
+  const sieben = [ex('a', 1), ex('b', 1), ex('c', 2), ex('d', 3), ex('e', 4), ex('f', 4), ex('g', 4)];
+  assert.deepEqual(nachKapitel(sieben, K5), [{ kapitel: null, eintraege: sieben }]);
+  // 8 Einträge in 4 Kapiteln: genau 2, also gegliedert, auch mit einem Kapitel zu einem Eintrag
+  const acht = [...sieben, ex('h', 2)];
+  assert.deepEqual(nachKapitel(acht, K5).map((x) => [x.kapitel?.nr, x.eintraege.length]), [[1, 2], [2, 2], [3, 1], [4, 3]]);
+  // „Weitere“ zählt als Gruppe: 6 Einträge in 2 Kapiteln und „Weitere“ (2 im Schnitt) gegliedert, mit 3 Kapiteln dazu nicht
+  const sechs = [ex('a', 1), ex('b', 1), ex('c', 2), ex('d', 2), ex('e'), ex('f')];
+  assert.equal(nachKapitel(sechs, K5).length, 3);
+  const verteilt = [ex('a', 1), ex('b', 2), ex('c', 3), ex('d', 4), ex('e'), ex('f')];
+  assert.deepEqual(nachKapitel(verteilt, K5), [{ kapitel: null, eintraege: verteilt }]);
 });
 
 test('listeHTML: ab 6 Einträgen Titel je Kapitel, Listen damit beschriftet, durchgehend nummeriert', () => {
