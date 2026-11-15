@@ -140,11 +140,19 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
   Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, das Export-Menü (bis #130 Export-Knöpfe mit Text) und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
-  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
+  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Längere als Ausnahme (Thomas, 15.11.2026, nach dem ersten Entwurf von stereography#156): Beim Kürzen auf 120
+  Zeichen ging bei einigen Tooltips wesentliche Information zur Funktion verloren; gestrichen wird nur reine
+  Zusatzinformation, die Formulierung wird gestrafft. Die Ausnahmen nennt die App in `laenger`, damit sie geprüft und nicht
+  stillschweigend länger werden; 160 Zeichen fassen zwei kurze Halbsätze mehr (Wahl beim Umsetzen). Inhalt (Thomas, 12.11.2026, nach der
   Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
   sollen nur die Funktion oder eine nötige Angabe nennen. Der Test sieht nur
-  Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte bräuchten einen
-  Browsertest je App (offen, #114). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
+  Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte prüft der Browserlauf
+  jeder App mit `fehlendeTooltips` (#114). Dabei zeigten sich ohne Tooltip nur Knöpfe der Experimente, Begriffslinks der
+  Kenndaten und Links in Kopf- und Fusszeile; Thomas (15.11.2026) nahm sie als Ausnahmen auf, dazu die Knöpfe eines
+  laufenden Ablaufs, weil ihr Text sagt, was sie tun. Tooltips an gesperrten Knöpfen prüft die CI in Chromium und Firefox (Job `browser`)
+  und in WebKit (Job `webkit` auf macOS, weil WebKit auf Ubuntu ohne apt nicht startet, #128; nicht in der Regel „main
+  schützen“: Thomas wollte ihn dort nur, wenn es den Ablauf stabiler macht, und ein Pflichtjob auf einem zweiten Runner-Typ
+  machte jeden Merge zusätzlich von macOS abhängig; ein rotes Ergebnis wird wie jedes andere behandelt). `title` neben einem Tooltip meldet er, weil der Browser sonst zwei zeigt (Review
   des PR #120). Texte für Maus und Touch folgen dem zuletzt benutzten Gerät (`data-zeiger` an `<html>`), nicht nur der Media
   Query: Nach #116 erschienen Tooltips auf einem Laptop mit Touchscreen, die Karte „Erste Schritte“ sagte aber weiter
   „Das ⓘ … erklärt“ (Review von #116). **Das ⓘ auf allen Geräten** (Thomas, 12.11.2026, #140): Mit der Maus sah man
@@ -261,7 +269,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   der Modus im Verweis aus dem ⓘ deshalb als Platzhalter `{modus}`, eingesetzt beim Aufklappen. Marken eines Bereichs dürfen
   auch Bausteine ohne ID treffen (z. B. `header.top` im Übersichtsbild); `pruefeHilfe` prüft dann nur die IDs, die es gibt.
   Nicht jetzt (Thomas): Hinweise in der App bei Änderungen im Bild, Fachbegriffe in zwei Tiefen (#100), Hinweise für
-  Lehrende. Offen: #114.
+  Lehrende. Nummern im Übersichtsbild (Thomas, 15.11.2026, Wahl unter „auf der Rahmenlinie lassen“, „innen in die Ecke“
+  und „Rand dazugeben“): Sie lagen auf der oberen Rahmenlinie, weil links neben den Bausteinen kein Platz war; jetzt
+  bekommt die Seite für solche Bilder links Rand und grössere Abstände. Ein Browsertest des Werkzeugs an der Vorlage
+  läuft in der CI (Übersicht ohne Notlösung, `vorher`). Offen: #114.
 - **Abschnittsnummern im Skript** (Thomas, 6.11.2026, #85, Leitfaden Abschn. 6): Die Texte verwiesen ständig auf
   „Abschnitt 4.5“, die Abschnitte trugen aber keine sichtbare Nummer. Entschieden ist „beides“: Nummern sichtbar und
   Verweise als Links. Die Nummern entstehen beim Laden aus der Reihenfolge, damit ein neuer Abschnitt sie nicht von Hand
@@ -312,7 +323,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 
 ## Git, PRs und Releases
 
-- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in common auch `browser`, in Apps auch `pdf`)
+- Jede Änderung auf einem eigenen Branch, dann PR nach `main`. CI (`test`, `typen`, `lint`, in common auch `browser` und `webkit`, in Apps auch `pdf`)
   abwarten, das Review (nächster Punkt) einholen, Befunde prüfen und beantworten, dann Bericht an Thomas.
 - **Review durch einen unabhängigen Agenten:** Vor dem Bericht prüft ein eigener Agent, der die Arbeit nicht
   kennt, den Diff des PR: Fehler, Randfälle, Widersprüche zu `CLAUDE.md` und `LEITFADEN.md`, fachliche

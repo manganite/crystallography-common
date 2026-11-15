@@ -85,5 +85,25 @@ jobs:
           npm install --no-save playwright@1.52.0
           # ohne --with-deps: kein apt (Ausfall der Ubuntu-Paketquellen 11.11.2026, #128); die Bibliotheken sind auf dem Runner
           npx playwright install chromium
+          # Firefox für den Test der Tooltips an gesperrten Knöpfen (#114); WebKit startet hier ohne apt nicht (Job „webkit“)
+          npx playwright install firefox
       - name: Browsertests
         run: node --test tests/browser/*.test.mjs
+
+  # WebKit (Safari) nur für den Test der Tooltips an gesperrten Knöpfen (#114): Auf Ubuntu fehlen ohne apt die
+  # Bibliotheken (#128), auf macOS braucht WebKit keine Pakete. Chromium und Firefox prüft der Job „browser“.
+  webkit:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.52.0
+          npx playwright install webkit
+      - name: Tooltips an gesperrten Knöpfen in WebKit
+        run: node --test --test-name-pattern="WebKit" tests/browser/tooltips.test.mjs

@@ -38,6 +38,13 @@ test('pruefeTooltips: Höchstlänge ohne Auszeichnung, Entitäten als ein Zeiche
   const tips = { 'angle-btn': genau, lat: zuLang, gruppe: 'x', notiz: 'x' };
   assert.deepEqual(pruefeTooltips(HTML, tips, { ohne: ['help-open', 'intro-close'] }), ['lat: Tooltip mit 121 Zeichen, länger als 120']);
   assert.deepEqual(pruefeTooltips(HTML, tips, { ohne: ['help-open', 'intro-close'], max: 200 }), []);
+  assert.deepEqual(pruefeTooltips(HTML, tips, { ohne: ['help-open', 'intro-close'], laenger: ['lat'] }), []);
+  assert.deepEqual(pruefeTooltips(HTML, tips, { ohne: ['help-open', 'intro-close'], laenger: ['lat', 'gruppe', 'fehlt'] }), [
+    'gruppe: Ausnahme der Länge, aber nur 1 Zeichen (aus „laenger“ streichen)',
+    'fehlt: Ausnahme der Länge ohne Tooltip',
+  ]);
+  const lang = { ...tips, lat: 'x'.repeat(161) };
+  assert.deepEqual(pruefeTooltips(HTML, lang, { ohne: ['help-open', 'intro-close'], laenger: ['lat'] }), ['lat: Tooltip mit 161 Zeichen, länger als 160']);
 });
 
 test('pruefeTooltips: title neben einem Tooltip, Ausnahmen dürfen eines haben', () => {
