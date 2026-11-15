@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-11-15
+
+Hilfeseite als Anleitung zur Bedienung (#114): Überblick, Bedienkonzepte, je Modus Nachschlagen mit nummerierten Bildern, Anleitungen, Experimente, typische Fragen, Technik; gemeinsame Texte in `js/hilfe-gemeinsam.js`; Verweise aus dem ⓘ. Für die Apps: `hilfe-daten.js` um die neuen Felder ergänzen, `experimentAusAdresse` mit den neuen Optionen aufrufen, `initHelp({ hilfeModus })` und `hilfe` in den Abschnitten setzen, Bilder neu erzeugen (Einzelheiten unter „Hinzugefügt“ und „Geändert“).
+
 ### Hinzugefügt
 
 - **Gemeinsame Texte der Hilfeseite** (`js/hilfe-gemeinsam.js`, #114): Teile der App, die Familie, gemeinsame Bedienkonzepte (Seitenleiste und Tafeln, Abschnitte und ⓘ, Werkzeuge, Schalter und Handlungen, gesperrte Bedienelemente, Zeichen und Farben, Erste Schritte und Experimente) sowie Link, Speicher, Zurücksetzen, offline, Export, Geräte, Tastatur. Die App ergänzt sie (`ergaenzungen`) oder lässt einen weg (`ohne`).
@@ -369,7 +373,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.21.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.22.0...HEAD
+[0.22.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.22.0
 [0.21.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.21.0
 [0.20.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.20.0
 [0.19.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.19.0
