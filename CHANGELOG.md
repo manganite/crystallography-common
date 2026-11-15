@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-11-15
+
+Experimente nach Kapiteln nur bei mindestens 2 je Kapitel im Schnitt; Literatur in einer Zotero-Sammlung. Für die Apps: Experimente je Modus in der Reihenfolge der Kapitel ordnen (Einzelheiten unter „Geändert“).
+
 ### Geändert
 
 - **Experimente nach Kapiteln nur bei mindestens 2 je Kapitel im Schnitt** (`js/ablauf.js`, `js/hilfe-seite.js`, Leitfaden 5.3; Entscheidung Thomas, 15.11.2026): `nachKapitel` gliedert ab 6 Experimenten eines Modus nur noch, wenn im Schnitt mindestens `SCHNITT_AB` = 2 auf eine Gruppe kommen (Kapitel mit Einträgen, dazu „Weitere“); sonst bleibt die Liste flach in der Reihenfolge der Daten, in App und Hilfeseite gleich. `pruefeAblaeufe` meldet mit `kapitel` neu auch Daten eines Modus, die nicht in der Reihenfolge der Kapitel stehen, damit die Nummern flach und gegliedert gleich sind. Für die Apps: die Experimente in den Daten je Modus nach den Kapiteln des Skripts ordnen; `kapitel` bleibt ab 6 Experimenten je Modus Pflicht.
@@ -351,7 +355,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.20.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.21.0...HEAD
+[0.21.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.21.0
 [0.20.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.20.0
 [0.19.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.19.0
 [0.18.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.18.0
