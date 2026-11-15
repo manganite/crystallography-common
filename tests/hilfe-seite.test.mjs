@@ -95,7 +95,7 @@ test('Experimente nach Kapiteln wie in der App (#107): ab 6 je Modus und im Schn
 });
 
 test('Prüfung: fehlende Elemente, Bilder, überzählige Bilder, unbekannte Modi', () => {
-  const html = '<div id="picker"></div><details id="sec-view"></details><button id="tab-b"></button>';
+  const html = '<div id="picker"></div><details id="sec-view"></details><button id="tab-b"></button><button id="werkzeug"></button><svg id="bild"></svg>';
   const dateien = ['einstieg-a-1.png', 'einstieg-a-2.png', 'einstieg-a-4.png', 'einstieg-a-5.png', 'einstieg-b-1.png'];
   assert.deepEqual(pruefeHilfe(DATEN, { html, dateien }), []);
   const leer = { id: 'leer', titel: 'Leer', params: () => [], make: () => [] };
@@ -226,7 +226,7 @@ test('Bereiche: Bild mit nummerierten Marken je Modus, Liste in derselben Reihen
 });
 
 test('Prüfung der Anleitung: doppelte Anker und Bilder, gemeinsame Texte, Adressen der Fragen, Verweise aus dem ⓘ', () => {
-  const html = '<div id="picker"></div><details id="sec-view"><input id="v-farben"></details><button id="tab-b"></button><details id="sec-gitter"></details><div id="info"></div><b id="winkel"></b>';
+  const html = '<div id="picker"></div><details id="sec-view"><input id="v-farben"></details><button id="tab-b"></button><button id="werkzeug"></button><svg id="bild"></svg><details id="sec-gitter"></details><div id="info"></div><b id="winkel"></b>';
   const dateien = hilfeBilder(VOLL).map((b) => b.datei);
   assert.deepEqual(pruefeHilfe(VOLL, { html, dateien, verweise: ['{modus}-gitter', '{modus}-farben', 'konzept-einrasten', 'technik-link'] }), []);
   const f = pruefeHilfe({
@@ -256,5 +256,23 @@ test('Gemeinsame Texte: eindeutige Kennungen, Titel und Text, keine Verweise auf
   for (const t of alle) {
     assert.ok(t.titel && t.text.trim().startsWith('<p>'), t.id);
     assert.doesNotMatch(t.text, /Vorlesung|Folien? \d|ß/, t.id);
+  }
+});
+
+test('pruefeHilfe: vorher mit #id, mindestens zwei Punkte in [0, 1], nur mit zeige und nicht in Experimenten', () => {
+  const html = '<div id="picker"></div><div id="sec-view"></div><div id="tab-b"></div><div id="bild"></div>';
+  /** @type {import('../js/hilfe-seite.js').HilfeDaten} */
+  const d = {
+    modi: [{ id: 'a', name: 'A', hash: '#m=a' }],
+    ersteSchritte: [{ id: 'e', modus: 'a', titel: 'E', schritte: [
+      { frage: '1', vorher: [{ klick: '.ohne-id' }, { ziehen: '#bild', punkte: [[0.5, 0.5]] }], zeige: '#picker' },
+      { frage: '2', vorher: [{ ziehen: '#fehlt', punkte: [[0, 0], [1.2, 0.5]] }], zeige: '#picker' },
+      { frage: '3', vorher: [{ klick: '#picker' }] },
+    ] }],
+    experimente: [{ id: 'x', modus: 'a', titel: 'X', schritte: [{ frage: '?', vorher: [{ klick: '#picker' }] }] }],
+  };
+  const f = pruefeHilfe(d, { html, dateien: ['e-1.png', 'e-2.png'] });
+  for (const teil of ['Selektor muss mit #id beginnen (.ohne-id)', 'mindestens zwei Punkte', 'Element #fehlt fehlt', 'Punkte zwischen 0 und 1', 'Schritt 3: vorher ohne zeige', 'x: vorher gilt nur in Anleitungen']) {
+    assert.ok(f.some((m) => m.includes(teil)), `${teil} fehlt in ${f.join(' | ')}`);
   }
 });
