@@ -272,7 +272,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Lehrende. Nummern im Übersichtsbild (Thomas, 15.11.2026, Wahl unter „auf der Rahmenlinie lassen“, „innen in die Ecke“
   und „Rand dazugeben“): Sie lagen auf der oberen Rahmenlinie, weil links neben den Bausteinen kein Platz war; jetzt
   bekommt die Seite für solche Bilder links Rand und grössere Abstände. Ein Browsertest des Werkzeugs an der Vorlage
-  läuft in der CI (Übersicht ohne Notlösung, `vorher`). Offen: #114.
+  läuft in der CI (Übersicht ohne Notlösung, `vorher`). #114 ist erledigt (16.11.2026); nicht Beauftragtes steht in #158 und #100.
 - **Abschnittsnummern im Skript** (Thomas, 6.11.2026, #85, Leitfaden Abschn. 6): Die Texte verwiesen ständig auf
   „Abschnitt 4.5“, die Abschnitte trugen aber keine sichtbare Nummer. Entschieden ist „beides“: Nummern sichtbar und
   Verweise als Links. Die Nummern entstehen beim Laden aus der Reihenfolge, damit ein neuer Abschnitt sie nicht von Hand
