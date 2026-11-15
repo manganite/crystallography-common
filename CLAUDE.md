@@ -140,9 +140,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Knopf („Winkel“) keine Hilfe; die Apps seien zu komplex für Lücken. Jedes Bedienelement bekommt deshalb einen
   Tooltip, Ausnahmen nur für selbsterklärende Links, Schliessen „×“, das Export-Menü (bis #130 Export-Knöpfe mit Text) und die Köpfe
   einklappbarer Abschnitte, die `.sumhint` schon erklärt (Thomas). „Ein Satz“ ist Richtwert, der Test prüft nur eine
-  Höchstlänge (Thomas). Längere als Ausnahme (Thomas, 15.11.2026, nach dem ersten Entwurf von stereography#156): Beim
-  Kürzen auf 120 Zeichen ging bei einigen Tooltips wesentliche Information zur Funktion verloren; gestrichen wird nur reine
-  Zusatzinformation, die Formulierung wird gestrafft. 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Inhalt (Thomas, 12.11.2026, nach der
+  Höchstlänge (Thomas). 120 Zeichen fassen einen kurzen Satz; die längsten Texte hatten gut 300. Längere als Ausnahme (Thomas, 15.11.2026, nach dem ersten Entwurf von stereography#156): Beim Kürzen auf 120
+  Zeichen ging bei einigen Tooltips wesentliche Information zur Funktion verloren; gestrichen wird nur reine
+  Zusatzinformation, die Formulierung wird gestrafft. Die Ausnahmen nennt die App in `laenger`, damit sie geprüft und nicht
+  stillschweigend länger werden; 160 Zeichen fassen zwei kurze Halbsätze mehr (Wahl beim Umsetzen). Inhalt (Thomas, 12.11.2026, nach der
   Durchsicht von plane-groups 1.3.0): Tooltips wiederholten Beschriftungen und Begründungen aus der Planung (Extrembeispiel Lupe); sie
   sollen nur die Funktion oder eine nötige Angabe nennen. Der Test sieht nur
   Elemente mit `id` in `index.html`; Elemente ohne `id` (z. B. Segmentknöpfe) und im Code erzeugte prüft der Browserlauf

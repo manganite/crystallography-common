@@ -26,6 +26,8 @@ import { esc } from './format.js';
  * Entscheidung Thomas, 9.11.2026, #114); geprüft wird nur die Länge, Ausführlicheres gehört ins ⓘ und auf die Hilfeseite.
  */
 export const TIP_MAX = 120;
+/** Höchstlänge eines Tooltips, den die App als Ausnahme nennt (`laenger` in `pruefeTooltips`, Leitfaden 5.3). */
+export const TIP_MAX_AUSNAHME = 160;
 
 /**
  * Tags, die als Bedienelement einen Tooltip brauchen (mit id; input ausser type="hidden"). Attributwerte in
@@ -45,13 +47,15 @@ const attribut = (attrs, name) => {
  * damit die Liste nicht veraltet. Ein Element mit Tooltip hat kein `title` (der Browser zeigte sonst zwei). Kein Tooltip
  * ist länger als `max` Zeichen (ohne Auszeichnung; Entitäten und Zeichen mit Querstrich als eines). Elemente ohne id,
  * Elemente in Kommentaren und solche, die die App erst im Code erzeugt (`setTip`), sieht diese Prüfung nicht.
+ * Ausnahmen der Länge (Leitfaden 5.3) nennt `laenger`: Sie dürfen bis `TIP_MAX_AUSNAHME` Zeichen haben und müssen länger
+ * als `max` sein, damit die Liste nicht veraltet.
  * Rückgabe: Liste der Fehler (leer, wenn alles stimmt).
  * @param {string} html Inhalt von index.html
  * @param {Record<string, string>} tips Texte der Tooltips je id (TIPS der App)
- * @param {{ ohne?: string[], max?: number }} [o]
+ * @param {{ ohne?: string[], max?: number, laenger?: string[] }} [o]
  * @returns {string[]}
  */
-export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
+export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX, laenger = [] } = {}) {
   /** @type {string[]} */
   const f = [];
   /** @type {Set<string>} */
@@ -74,8 +78,11 @@ export function pruefeTooltips(html, tips, { ohne = [], max = TIP_MAX } = {}) {
     let t = text;
     for (let alt = ''; alt !== t;) { alt = t; t = t.replace(/<[^<>]*>/g, ''); }
     const n = [...t.replace(/[<>]/g, '').replace(/&(?:#\d+|#x[0-9a-f]+|[a-z][a-z0-9]*);/gi, '_').replace(/\p{M}/gu, '')].length;
-    if (n > max) f.push(`${id}: Tooltip mit ${n} Zeichen, länger als ${max}`);
+    const grenze = laenger.includes(id) ? TIP_MAX_AUSNAHME : max;
+    if (n > grenze) f.push(`${id}: Tooltip mit ${n} Zeichen, länger als ${grenze}`);
+    else if (laenger.includes(id) && n <= max) f.push(`${id}: Ausnahme der Länge, aber nur ${n} Zeichen (aus „laenger“ streichen)`);
   }
+  for (const id of laenger) if (!(id in tips)) f.push(`${id}: Ausnahme der Länge ohne Tooltip`);
   return f;
 }
 
