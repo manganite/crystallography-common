@@ -15,7 +15,7 @@ const DATEN = {
       { frage: '<b>Gruppe wählen.</b>', handlung: { text: '<i>p</i>4 wählen', hash: '#m=a&g=p4' }, zeige: '#picker' },
       { frage: 'Darstellung ändern.', handlung: { text: 'öffnen', aktion: 'darstellung' }, zeige: '#sec-view' },
       { frage: 'Ohne Bild.' },
-      { frage: 'Nach einer Aktion.', bild: '#m=a&g=p6', zeige: '#picker' },
+      { frage: 'Nach einer Aktion.', bild: '#m=a&g=p6', vorher: [{ klick: '#werkzeug' }, { ziehen: '#bild', punkte: [[0.2, 0.2], [0.8, 0.5]] }], zeige: '#picker' },
       { frage: 'Danach.', zeige: '#picker' },
     ] },
     { id: 'einstieg-b', modus: 'b', titel: 'Erste Schritte B', schritte: [{ frage: 'B', zeige: '#tab-b' }] },
@@ -26,14 +26,15 @@ const DATEN = {
   ],
 };
 
-test('Bilder: je Schritt mit zeige eines; Adresse = letzter Zustand davor, sonst der Modus', () => {
+test('Bilder: je Schritt mit zeige eines; Adresse = letzter Zustand davor, sonst der Modus; vorher nur im eigenen Bild', () => {
   /** @param {string} datei @param {string} adresse @param {string} zeige @param {string} quelle */
   const b = (datei, adresse, zeige, quelle) => ({ datei, adresse, zeige: [zeige], nummern: false, quelle });
   assert.deepEqual(hilfeBilder(DATEN), [
     b('einstieg-a-1.png', '#m=a', '#picker', 'einstieg-a, Schritt 1'),
     b('einstieg-a-2.png', '#m=a&g=p4', '#sec-view', 'einstieg-a, Schritt 2'),
     // nach einer Aktion: Adresse aus bild, sie gilt auch für die folgenden Schritte
-    b('einstieg-a-4.png', '#m=a&g=p6', '#picker', 'einstieg-a, Schritt 4'),
+    // vorher gilt nur für das Bild seines Schritts
+    { ...b('einstieg-a-4.png', '#m=a&g=p6', '#picker', 'einstieg-a, Schritt 4'), vorher: [{ klick: '#werkzeug' }, { ziehen: '#bild', punkte: [[0.2, 0.2], [0.8, 0.5]] }] },
     b('einstieg-a-5.png', '#m=a&g=p6', '#picker', 'einstieg-a, Schritt 5'),
     b('einstieg-b-1.png', '#m=b', '#tab-b', 'einstieg-b, Schritt 1'),
   ]);
