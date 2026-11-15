@@ -155,6 +155,33 @@ test('Laptop mit Touchscreen, der hover: hover meldet: nach dem Tippen Texte fü
   await schliessen(p);
 });
 
+test('Tippen bei ruhender Maus: Touch bleibt, auch wenn das Layout unter dem Zeiger wechselt (Review #152)', async () => {
+  // Nach dem Tippen werden die Ziele grösser und das Layout verschiebt sich; Chromium meldet dann unter dem ruhenden
+  // Mauszeiger ein pointerover vom Typ mouse. Das darf nicht auf „maus“ zurückschalten.
+  for (const o of [{}, { hasTouch: true }]) {
+    const p = await seite(o);
+    const r = /** @type {{ x: number, y: number, width: number }} */ (await p.locator('#sect-lang > summary').boundingBox());
+    await p.mouse.move(r.x + r.width / 2, r.y + 2);
+    await p.waitForTimeout(100);
+    const vorher = await p.evaluate(() => document.querySelector('#sect-lang > summary')?.getBoundingClientRect().top);
+    const cdp = await p.context().newCDPSession(p);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 880, y: 590 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await p.waitForTimeout(300);
+    const nachher = await p.evaluate(() => document.querySelector('#sect-lang > summary')?.getBoundingClientRect().top);
+    assert.ok((nachher ?? 0) > (vorher ?? 0), 'Voraussetzung: das Layout hat sich unter dem Zeiger verschoben');
+    assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'touch', JSON.stringify(o));
+    assert.ok(await zielHoehe(p) >= 40);
+    await p.waitForTimeout(600);
+    assert.equal(await tip(p), null, 'kein Tooltip ohne Bewegung der Maus');
+    // bewegt sich die Maus wieder, gilt sie
+    await ueberfahren(p, '#knopf');
+    await tipAbwarten(p);
+    assert.equal(await p.evaluate(() => document.documentElement.dataset.zeiger), 'maus');
+    await schliessen(p);
+  }
+});
+
 test('ⓘ bricht nie allein in eine neue Zeile, mit Maus und Touch (#140)', async () => {
   for (const o of [{}, { hasTouch: true, isMobile: true }]) {
     const p = await seite(o);

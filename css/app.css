@@ -101,8 +101,10 @@ select { width: 100%; padding: 8px 10px; border: 1px solid var(--field); border-
    Gerät (data-zeiger an <html>, help.js), vor dem ersten Ereignis nach dem primären Zeigegerät (Media Query); so auch auf
    einem Laptop mit Touchscreen, der pointer: fine meldet, und umgekehrt mit der Maus (#135). Die Grössen stehen in
    Variablen, die nur bei Touch einen Wert haben: Ohne Touch ist var(--ziel) ungültig, die Eigenschaft bleibt dann auf
-   ihrem Anfangswert (z. B. min-height: auto); var(--ziel, 28px) nimmt den Wert für die Maus. Eine App setzt eigene
-   Touch-Ziele ebenso mit var(--ziel), nicht mit @media (pointer: coarse). */
+   ihrem Anfangswert (z. B. min-height: auto); var(--ziel, 28px) nimmt den Wert für die Maus. Achtung: Die ungültige
+   Deklaration ersetzt auch eine frühere Regel für dieselbe Eigenschaft; hat das Element mit der Maus eine eigene Grösse,
+   gehört sie deshalb als Ersatzwert in dieselbe Deklaration. Eine App setzt eigene Touch-Ziele ebenso mit var(--ziel),
+   nicht mit @media (pointer: coarse). */
 :root { --ziel: initial; --ziel-gross: initial; --ziel-kaestchen: initial; --ziel-regler: initial; --ziel-info-rand: initial; }
 @media (pointer: coarse) {
   :root { --ziel: 40px; --ziel-gross: 44px; --ziel-kaestchen: 20px; --ziel-regler: 32px; --ziel-info-rand: -10px -8px -10px 2px; }

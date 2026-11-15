@@ -165,7 +165,8 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   ohne Touch), damit jede Regel nur einmal steht statt in Media Query und Attributselektor. Gemessen (beide Apps, alle Modi,
   1440, 1024, 768, 390 px): Mit Touch auf `pointer: fine` gleicht das Layout jetzt dem auf `pointer: coarse` (Seitenleiste
   z. B. stereography „Punktgruppen“ 921 → 1199 px), mit der Maus auf `pointer: coarse` dem mit Maus; kein waagrechtes
-  Scrollen (PR zu #135).
+  Scrollen (PR zu #135). Review: Nach dem Tippen verschiebt sich das Layout, und Chromium meldet unter dem ruhenden
+  Mauszeiger ein `pointerover` vom Typ `mouse`; `help.js` wechselt das Gerät deshalb nur bei `pointerdown` und `pointermove`.
 - **Experimente nach Kapiteln gliedern** (Thomas, 9.11.2026, #107, Leitfaden Abschn. 5.3): Mit 8–12 Experimenten je
   Modus (stereography#115, plane-groups#109) wird die flache Liste unübersichtlich; das Quiz gliedert schon nach
   Kapiteln. Schwelle 6 je Modus (gezählt wird, was die Liste eines Modus zeigt, nicht die ganze App). Das Kapitel steht
