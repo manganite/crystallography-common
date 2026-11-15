@@ -1,8 +1,11 @@
 // Hilfen: Tooltips (Laptop: Maus oder Tastaturfokus) und ⓘ-Erklärungen je Abschnitt (alle Geräte, #140).
 // Die Texte liefert die App (initHelp); hier steht nur die Mechanik. Stile in css/app.css (.tip, .infobtn, .helpbox).
 // Das zuletzt benutzte Zeigegerät steht als `data-zeiger` (maus | touch) an <html>; danach richten sich die Texte für
-// Maus und Touch (.only-fine, .only-coarse), auch im ⓘ, und die Grösse des ⓘ (28 px mit der Maus, 40 px mit Touch). Ein Stift zählt als Touch (kein Tooltip,
-// Texte „antippen“). pruefeTooltips() ist für die Tests der App.
+// Maus und Touch (.only-fine, .only-coarse), auch im ⓘ, und die Touch-Ziele (--ziel in css/app.css, #135), etwa das ⓘ
+// mit 28 px für die Maus und 40 px für Touch. Ein Stift zählt als Touch (kein Tooltip, Texte „antippen“). Das Gerät
+// wechselt nur bei pointerdown und pointermove, nicht bei pointerover: Ändert sich nach einem Tippen das Layout, meldet
+// der Browser unter dem ruhenden Mauszeiger von sich aus ein pointerover vom Typ mouse (Review von #152).
+// pruefeTooltips() ist für die Tests der App.
 
 import { esc } from './format.js';
 
@@ -89,6 +92,8 @@ let tipFor = null;
 let tipDesc = null;
 /** @type {ReturnType<typeof setTimeout> | undefined} */
 let showTimer;
+/** Element, dessen Tooltip nach der Verzögerung erscheinen soll. @type {MitTip | null} */
+let geplant = null;
 // Ob Tooltips erscheinen, entscheidet das zuletzt benutzte Gerät, nicht das primäre Zeigegerät des Browsers
 // (Media Query): Laptops mit Touchscreen melden unter Windows oft `pointer: coarse`, auch mit angeschlossener Maus
 // (#114). Maus: Tooltip beim Überfahren; Tastatur: beim Fokus; Tippen auf dem Touchscreen: keiner.
@@ -169,6 +174,7 @@ export function showTipAt(html, x, y) {
 
 export function hideTip() {
   clearTimeout(showTimer);
+  geplant = null;
   if (!tipEl) return;
   tipEl.hidden = true;
   if (tipDesc) tipDesc.removeAttribute('aria-describedby');
@@ -253,22 +259,24 @@ export function initHelp({ tips = {}, sections = [], labels = {}, hilfeModus = (
   /** @param {PointerEvent} e */
   const geraet = (e) => {
     maus = e.pointerType === 'mouse';
-    // für CSS (.only-fine, .only-coarse, Grösse des ⓘ): nur bei einem Wechsel schreiben
+    // für CSS (.only-fine, .only-coarse, Touch-Ziele): nur bei einem Wechsel schreiben
     const zeiger = maus ? 'maus' : 'touch';
     const d = document.documentElement.dataset;
     if (d.zeiger !== zeiger) d.zeiger = zeiger;
   };
   document.addEventListener('pointerdown', (e) => { geraet(e); tastatur = false; }, true);
   document.addEventListener('keydown', () => { tastatur = true; }, true);
-  document.addEventListener('pointermove', geraet, true);
-  document.addEventListener('pointerover', (e) => {
-    geraet(e);
-    if (!maus) return;
-    const el = tipVon(e.target);
-    if (el === tipFor) return;
+  /** Tooltip eines Elements nach der Verzögerung zeigen, wenn er nicht schon steht oder geplant ist. @param {MitTip | null} el */
+  const planen = (el) => {
+    if (el === tipFor || el === geplant) return;
     hideTip();
-    if (el) showTimer = setTimeout(() => showFor(el), 450);
-  });
+    if (!el) return;
+    geplant = el;
+    showTimer = setTimeout(() => { geplant = null; showFor(el); }, 450);
+  };
+  document.addEventListener('pointermove', (e) => { geraet(e); if (maus) planen(tipVon(e.target)); }, true);
+  // kein Wechsel des Geräts hier (oben); nach einem Tippen erscheint ein Tooltip erst, wenn die Maus sich bewegt
+  document.addEventListener('pointerover', (e) => { if (e.pointerType === 'mouse' && maus) planen(tipVon(e.target)); });
   document.addEventListener('pointerout', (e) => {
     const el = tipVon(e.target);
     if (el && !el.contains(/** @type {Node | null} */ (e.relatedTarget))) hideTip();
