@@ -121,16 +121,21 @@ export function inhaltsverzeichnis() {
 // Jeder Abschnitt (<section> mit <h3> direkt in einem Kapitel mit <h2><span class="nr">) bekommt Kapitel und
 // laufende Nummer, z. B. „8.2“, in der Überschrift und im Inhaltsverzeichnis; Abschnitte, die Vertiefung sind,
 // zählen mit. Verweise im Text wie „Abschnitt 8.2“, „Abschn. 8.2“ oder „Abschnitte 3.3–3.4“ werden Links auf den
-// Abschnitt (Titel als Tooltip). Kein Verweis auf einen eigenen Abschnitt ist:
-// - Text in .quellen und in Links (Querverweise auf das Skript einer anderen App sind schon Links);
+// Abschnitt (Titel als Tooltip), auch gebeugt („des Abschnitts 3.1“, „in den Abschnitten 3.1 und 3.2“). Nummer und Wort
+// stehen im selben Textknoten (nicht „Abschnitt <b>4.5</b>“). Kein Verweis auf einen eigenen Abschnitt ist:
+// - Text in .quellen, in Abbildungen (SVG) und in Links (Querverweise auf das Skript einer anderen App sind schon Links);
 // - eine Nummer mit drei Stufen („Abschn. 2.2.7“, International Tables);
 // - ein Zitat „Werk, Abschn. x.y“ (Komma davor) oder mit Seitenangabe („Abschn. 7.2, S. 104“).
 // Die Tests der Apps prüfen mit pruefeAbschnittsverweise, dass jeder Verweis einen Abschnitt trifft.
 
 const ZAHL = String.raw`\d+\.\d+(?![.\d]*\d)`;
-const VERWEIS = new RegExp(String.raw`(?:Abschnitte?|Abschn\.)\s+${ZAHL}(?:\s*(?:,|und|bis|–|-)\s*${ZAHL})*`, 'g');
+const VERWEIS = new RegExp(String.raw`(?:Abschnitt(?:e|en|s)?|Abschn\.)\s+${ZAHL}(?:\s*(?:,|und|bis|–|-)\s*${ZAHL})*`, 'g');
 /** Werke, deren Abschnitte ein Skript zitiert; ein Verweis im selben Satz ohne Zitierform wird gemeldet. */
 const WERKE = /Borchardt|Hoffmann|Kleber|Schwarzenbach|Conway|Paufler|Brückler|Rosebrock|Glosauer|Wipf|Wagner|Schattschneider|Grünbaum|ebenda/;
+
+/** Grenze zwischen zwei Textknoten bzw. Elementen im Text, den abschnitte() und skriptGliederung() bilden. */
+const GRENZE = '\u0001';
+const OHNE_GRENZE = new RegExp(GRENZE, 'g');
 
 /**
  * Verweise auf eigene Abschnitte in einem Text, je Nummer ein Treffer. Der erste Treffer eines Verweises beginnt
@@ -145,8 +150,8 @@ export function abschnittsverweise(text) {
   for (const m of text.matchAll(VERWEIS)) {
     const start = m.index ?? 0;
     const ende = start + m[0].length;
-    if (/,\s*$/.test(text.slice(Math.max(0, start - 3), start))) continue;
-    if (/^,\s*S\.\s/.test(text.slice(ende, ende + 6))) continue;
+    if (/,\s*$/.test(text.slice(Math.max(0, start - 20), start).replace(OHNE_GRENZE, ''))) continue;
+    if (/^,\s*S\.\s/.test(text.slice(ende, ende + 20).replace(OHNE_GRENZE, ''))) continue;
     let erste = true;
     for (const z of m[0].matchAll(new RegExp(ZAHL, 'g'))) {
       const s = start + (z.index ?? 0);
@@ -192,7 +197,7 @@ export function skriptGliederung(html) {
     if (roh !== undefined) {
       if (!stapel.some((e) => e.tag === 'article')) continue;
       const t = entschluesseln(roh);
-      const gesperrt = stapel.some((e) => ['a', 'h1', 'h2', 'h3'].includes(e.tag) || /\bquellen\b/.test(e.klasse));
+      const gesperrt = stapel.some((e) => ['a', 'h1', 'h2', 'h3', 'svg'].includes(e.tag) || /\bquellen\b/.test(e.klasse));
       text += gesperrt ? '\u0000'.repeat(t.length) : t;
       if (stapel.some((e) => e.klasse.split(/\s+/).includes('nr')) && kapitelNr) nrText += t;
       if (h3) h3Text += t;
@@ -200,7 +205,7 @@ export function skriptGliederung(html) {
     }
     if (!name) continue;
     const tag = name.toLowerCase();
-    if (BLOCK.has(tag)) text += '\n';
+    text += BLOCK.has(tag) ? '\n' : GRENZE;
     if (zu) {
       const i = stapel.map((e) => e.tag).lastIndexOf(tag);
       if (i < 0) continue;
@@ -210,8 +215,8 @@ export function skriptGliederung(html) {
       continue;
     }
     if (LEER.has(tag) || /\/\s*$/.test(attr)) continue;
-    const klasse = attr.match(/\bclass\s*=\s*["']([^"']*)/)?.[1] ?? '';
-    const id = attr.match(/\bid\s*=\s*["']([^"']*)/)?.[1] ?? '';
+    const klasse = attr.match(/(?:^|\s)class\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/)?.slice(1).find((x) => x !== undefined) ?? '';
+    const id = attr.match(/(?:^|\s)id\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/)?.slice(1).find((x) => x !== undefined) ?? '';
     const oben = stapel[stapel.length - 1];
     /** @type {{ tag: string, klasse: string, id: string, kapitel?: { nr: string, n: number } }} */
     const eintrag = { tag, klasse, id };
@@ -237,9 +242,14 @@ export function pruefeAbschnittsverweise(html) {
   const { nummern, text } = skriptGliederung(html);
   /** @type {string[]} */
   const befunde = [];
+  for (const [nummer, { id, titel }] of nummern) if (!id) befunde.push(`Abschnitt ${nummer} „${titel}“ hat keine id; Verweise darauf werden kein Link`);
   const treffer = abschnittsverweise(text);
+  // Verweise, die über eine Elementgrenze reichen („Abschnitt <b>4.5</b>“), verlinkt abschnitte() nicht
+  const ohne = abschnittsverweise(text.replace(OHNE_GRENZE, '')).map((t) => t.nummer);
+  for (const t of treffer) ohne.splice(ohne.indexOf(t.nummer), 1);
+  for (const n of ohne) befunde.push(`Verweis auf Abschnitt ${n} über eine Elementgrenze (Wort und Nummer im selben Text schreiben)`);
   for (const t of treffer) {
-    const umfeld = text.slice(Math.max(0, t.start - 40), t.ende + 20).replace(/\s+/g, ' ');
+    const umfeld = text.slice(Math.max(0, t.start - 40), t.ende + 20).replaceAll('\u0000', '').replaceAll(GRENZE, '').replace(/\s+/g, ' ');
     if (!nummern.has(t.nummer)) befunde.push(`Abschnitt ${t.nummer} gibt es nicht: „…${umfeld}…“`);
     const satz = text.slice(0, t.start).split(/[.!?]\s|\n/).pop() ?? '';
     if (WERKE.test(satz)) befunde.push(`Abschnitt ${t.nummer} im Satz eines zitierten Werks (Zitierform „Werk, Abschn. x.y“?): „…${umfeld}…“`);
@@ -287,9 +297,10 @@ export function abschnitte() {
   for (let node = /** @type {Text | null} */ (w.nextNode()); node; node = /** @type {Text | null} */ (w.nextNode())) {
     const el = node.parentElement;
     const b = el?.closest(`${[...BLOCK].join(',')}`) ?? null;
-    if (b !== block) { text += '\n'; block = b; }
+    text += b !== block ? '\n' : GRENZE;
+    block = b;
     const t = node.data;
-    if (el?.closest('a, .quellen, h1, h2, h3, script, style')) { text += '\u0000'.repeat(t.length); continue; }
+    if (el?.closest('a, .quellen, h1, h2, h3, svg, script, style')) { text += '\u0000'.repeat(t.length); continue; }
     teile.push({ node, start: text.length });
     text += t;
   }
@@ -297,9 +308,9 @@ export function abschnitte() {
   for (let i = teile.length - 1; i >= 0; i--) {
     const { node, start } = teile[i];
     const ende = start + node.data.length;
-    for (const t of treffer.filter((x) => x.start >= start && x.ende <= ende).reverse()) {
+    for (const t of treffer.filter((x) => x.start >= start && x.ende <= ende).reverse()) { // Treffer liegen nie über einer Grenze
       const ziel = nummern.get(t.nummer);
-      if (!ziel) continue;
+      if (!ziel?.id) continue;
       const rest = node.splitText(t.start - start);
       rest.splitText(t.ende - t.start);
       const a = document.createElement('a');

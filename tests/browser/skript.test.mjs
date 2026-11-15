@@ -49,7 +49,9 @@ test('abschnitte: Nummern und Links', async () => {
     'Abschnitte 1.1|#a|1.1 Erster',
     '2.1|#c|2.1 Dritter',
     'Abschn. 1.2|#b|1.2 Zweiter',
+    'Abschnitts 2.1|#c|2.1 Dritter',
   ]);
+  assert.equal(await p.locator('svg a, #p3 b a').count(), 0, 'kein Link in SVG und über eine Elementgrenze');
   assert.equal(r.p1, 'Siehe Abschnitt 1.2 und Skript, Abschnitt 1.1; Abschnitte 1.1–2.1, auch Werk, Abschn. 1.1.', 'Text unverändert');
   assert.match(r.p2 ?? '', /\(Abschnitt 9\.9\)/);
   assert.equal(r.quelle, null, 'Quellen bleiben Text');
