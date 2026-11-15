@@ -174,10 +174,12 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   jedem Modus (vorher nur im ersten).
   **Nur bei mindestens 2 je Kapitel im Schnitt** (Thomas, 15.11.2026, beim Ausbau der Experimente, #74 Punkt 4a): Eine
   thematische Gliederung ist nur sinnvoll, wenn im Schnitt mindestens 2–3 Experimente auf ein Thema kommen, nicht bei
-  vielen Kapiteln mit je einem Eintrag (gezählt nach dem Ausbau: in stereography „Kristallformen“ 10 in 6 Kapiteln, in
-  plane-groups „Gitter und Basis“ 8 in 5). Die Alternative, Experimente so zu wählen oder Kapiteln zuzuordnen, dass jeder
+  vielen Kapiteln mit je einem Eintrag (gezählt für den geplanten Ausbau, stereography#115 und plane-groups#109: in
+  stereography „Kristallformen“ 10 in 6 Kapiteln, in plane-groups „Gitter und Basis“ 8 in 5). Die Alternative, Experimente so zu wählen oder Kapiteln zuzuordnen, dass jeder
   Modus die Schwelle erreicht, hätte sie in Kapitel geschoben, in denen sie nicht vor allem üben. Schwelle 2 (`SCHNITT_AB`);
-  2,5 hätte bei den damaligen Modi dasselbe ergeben. „Weitere“ zählt als Gruppe.
+  2,5 hätte bei den damaligen Modi dasselbe ergeben. „Weitere“ zählt als Gruppe. Weil eine flache
+  Liste in der Reihenfolge der Daten steht, prüft `pruefeAblaeufe` diese Reihenfolge (Review des PR #146): So bleiben die
+  Nummern gleich, wenn eine Liste beim Ausbau von flach zu gegliedert wechselt.
 - **Erzeugte Experimente wie die Generatoren im Quiz** (7.11.2026, Thomas, #92): damit Studierende immer wieder
   neue Aufgaben derselben Art lösen. Gleiche Form wie im Quiz (`params`, `make`), gleicher Vorrang bei der Wahl und
   Stand unter `<id>:<parameter>`, damit beides gleich funktioniert und geprüft wird (`params`/`make` statt der

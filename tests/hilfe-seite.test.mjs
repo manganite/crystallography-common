@@ -55,7 +55,7 @@ test('Inhalt: Anleitungen mit Bildern und Links, Experimente als Liste, leere Mo
   assert.match(hilfeHTML({ ...DATEN, app: 'app.html', bilder: 'bilder/' }), /src="bilder\/einstieg-a-1\.png"[\s\S]*href="app\.html#m=a&amp;g=p4"/);
 });
 
-test('Experimente nach Kapiteln wie in der App (#107): ab 6 je Modus, sonst eine Liste ohne Überschrift', () => {
+test('Experimente nach Kapiteln wie in der App (#107): ab 6 je Modus und im Schnitt 2 je Kapitel, sonst eine Liste ohne Überschrift', () => {
   const kapitel = [{ nr: 1, titel: 'Eins', kurz: 'Eins', anker: 'k1' }, { nr: 2, titel: 'Zwei', kurz: 'Zwei', anker: 'k2' }];
   /** @param {string} id @param {number} [k] */
   const ex = (id, k) => ({ id, modus: 'a', ...(k === undefined ? {} : { kapitel: k }), titel: `T-${id}`, schritte: [{ frage: `F-${id}` }] });
@@ -75,6 +75,14 @@ test('Experimente nach Kapiteln wie in der App (#107): ab 6 je Modus, sonst eine
   assert.deepEqual([...teilB.matchAll(/<b>T-(\w+)<\/b>/g)].map((m) => m[1]), ['v', 'w', 'z', 'x', 'y', 'alle']);
   assert.match(b, /id="experimente-a"[\s\S]*T-alle[\s\S]*id="experimente-b"/, 'auch im ersten Modus');
   assert.match(hilfeInhalt({ ...DATEN, experimente: [ohneModus] }), /href="#experimente-b"/);
+  // ab 6, aber im Schnitt unter 2 je Gruppe (Kapitel 1, 2, „Weitere“ und ein drittes): flach, in der Reihenfolge der Daten
+  const kapitel3 = [...kapitel, { nr: 3, titel: 'Drei', kurz: 'Drei', anker: 'k3' }];
+  const verteilt = [ex('p', 1), ex('q', 2), ex('r', 3), ex('s', 3), ex('t'), ex('u')];
+  const teilV = hilfeHTML({ ...DATEN, experimente: verteilt, kapitel: kapitel3 });
+  const v = teilV.slice(teilV.indexOf('id="experimente-a"'), teilV.indexOf('id="experimente-b"'));
+  assert.doesNotMatch(v, /<h4>/);
+  assert.equal(v.match(/<ul class="hilfe-liste">/g)?.length, 1);
+  assert.deepEqual([...v.matchAll(/<b>T-(\w)<\/b>/g)].map((m) => m[1]), ['p', 'q', 'r', 's', 't', 'u']);
   // unter der Schwelle (DATEN: zwei Experimente) wie bisher
   const flach = hilfeHTML({ ...DATEN, kapitel });
   assert.doesNotMatch(flach, /<h4>/);

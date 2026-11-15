@@ -66,8 +66,9 @@ export const SCHNITT_AB = 2;
  * Experimente eines Modus in Gruppen nach Kapitel (Liste in der App und auf der Hilfeseite): ab GLIEDERN_AB Einträgen
  * und mit Kapiteln je Kapitel eine Gruppe, in der Reihenfolge der Kapitel und darin der Daten; Einträge ohne bekanntes
  * Kapitel zuletzt in einer Gruppe ohne Kapitel („Weitere“). Kämen im Schnitt weniger als SCHNITT_AB Einträge auf eine
- * Gruppe, oder fehlen Kapitel bzw. Einträge, eine Gruppe ohne Kapitel mit allen Einträgen in der Reihenfolge der Daten
- * (die App ordnet sie nach den Kapiteln des Skripts).
+ * Gruppe, oder fehlen Kapitel bzw. Einträge, eine Gruppe ohne Kapitel mit allen Einträgen in der Reihenfolge der Daten.
+ * Die Daten einer App stehen deshalb je Modus in der Reihenfolge der Kapitel (pruefeAblaeufe prüft es), damit die
+ * Nummern gleich bleiben, ob die Liste flach oder gegliedert ist.
  * @template {Experiment} T
  * @param {T[]} liste @param {readonly Kapitel[]} [kapitel]
  * @returns {{ kapitel: Kapitel | null, eintraege: T[] }[]}
@@ -115,8 +116,9 @@ export function naechster(a, i, antwort) {
  * Prüft Abläufe auf Fehler in den Daten, für die Tests der App. hashGueltig: Prüffunktion der App für eine
  * Link-Adresse (z. B. Rundlauf durch die Prüffunktion des Zustands), aktionen: Namen der Aktionen der App,
  * modi: Modi der App, anker: Anker im Skript, kapitel: Nummern der Kapitel (je ohne Angabe nicht geprüft). Mit
- * kapitel (`KAPITEL` der App) meldet sie unbekannte Kapitel und, in einem Modus mit mindestens GLIEDERN_AB Experimenten,
- * fehlende (#107).
+ * kapitel (`KAPITEL` der App) meldet sie unbekannte Kapitel, in einem Modus mit mindestens GLIEDERN_AB Experimenten
+ * fehlende (#107), und Daten eines Modus, die nicht in der Reihenfolge der Kapitel stehen: Eine flache Liste zeigt sie
+ * in der Reihenfolge der Daten, und die Nummern sollen gleich bleiben, wenn sie später gegliedert wird.
  * Rückgabe: Liste der Fehler (leer, wenn alles stimmt).
  * @param {Experiment[]} ablaeufe
  * @param {{ hashGueltig?: (hash: string) => boolean, aktionen?: string[], modi?: string[], anker?: string[], kapitel?: readonly Kapitel[] }} [o]
@@ -153,8 +155,12 @@ export function pruefeAblaeufe(ablaeufe, { hashGueltig = () => true, aktionen = 
     for (const m of alle.length ? alle : [undefined]) {
       const imModus = ablaeufe.filter((a) => a.modus === undefined || a.modus === m);
       if (imModus.length >= GLIEDERN_AB) for (const a of imModus) if (a.kapitel === undefined) ohne.add(a.id);
+      // Reihenfolge: je bekanntem Kapitel seine Stelle in kapitel, nie kleiner als beim Eintrag davor
+      const stellen = imModus.map((a) => ({ id: a.id, i: kapitel.findIndex((k) => k.nr === a.kapitel) })).filter((x) => x.i >= 0);
+      const falsch = stellen.findIndex((x, j) => j > 0 && x.i < stellen[j - 1].i);
+      if (falsch > 0) f.push(`Modus ${m ?? '(ohne)'}: ${stellen[falsch].id} steht nach ${stellen[falsch - 1].id}, nicht in der Reihenfolge der Kapitel`);
     }
-    for (const id of ohne) f.push(`${id}: Kapitel fehlt (ab ${GLIEDERN_AB} Experimenten je Modus nach Kapiteln gegliedert)`);
+    for (const id of ohne) f.push(`${id}: Kapitel fehlt (ab ${GLIEDERN_AB} Experimenten je Modus Pflicht)`);
   }
   for (const a of konkret) {
     if (!a.schritte.length) { f.push(`${a.id}: keine Schritte`); continue; }
