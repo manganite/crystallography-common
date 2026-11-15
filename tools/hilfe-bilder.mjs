@@ -143,21 +143,21 @@ export async function hilfeBilderErzeugen({ root, daten, chrome = process.env.CH
           if (nummern) els.forEach((_, i) => {
             const r = rects[i];
             // Nummer: Lagen der Reihe nach probieren, die erste, die keine andere Marke und keine Nummer überdeckt.
-            // Grosse Elemente (z. B. Tafel): auf der oberen Rahmenlinie nahe der linken, dann der rechten Ecke, sonst links
-            // davor; breite (z. B. Überschrift eines Abschnitts): links davor; sonst darüber, darunter, links, rechts;
+            // Grosse Elemente (z. B. Tafel): links davor nahe der oberen Ecke, sonst auf der oberen Rahmenlinie nahe der
+            // linken, dann der rechten Ecke (dort kann die Nummer eine Überschrift darüber streifen); breite (z. B. Überschrift eines Abschnitts): links davor; sonst darüber, darunter, links, rechts;
             // zuletzt innen in der Ecke oben links.
             const d = 20, h = d / 2;
             const gross = r.width > 140 && r.height > 80, breit = r.width > 140;
             /** @param {number} x @param {number} y @returns {[number, number]} */
             const p2 = (x, y) => [x, y];
-            const lagen = gross ? [p2(r.left + 10 + h, r.top - 4), p2(r.right - 10 - h, r.top - 4), p2(r.left - 6 - h, r.top + 10 + h)]
+            const lagen = gross ? [p2(r.left - 6 - h, r.top + 10 + h), p2(r.left + 10 + h, r.top - 4), p2(r.right - 10 - h, r.top - 4)]
               : [...(breit ? [p2(r.left - 6 - h, r.top + r.height / 2)] : []), p2(r.left + r.width / 2, r.top - 2 - h), p2(r.left + r.width / 2, r.bottom + 2 + h),
                 p2(r.left - 6 - h, r.top + r.height / 2), p2(r.right + 6 + h, r.top + r.height / 2)];
             /** @param {[number, number]} p */
             const box = ([x, y]) => ({ left: x - h, top: y - h, right: x + h, bottom: y + h });
             const frei = lagen.find((p) => { const b = box(p); return b.left >= 2 && b.top >= 2 && belegt.every((o, j) => j === i || !schneidet(b, o)); });
             const [x, y] = frei ?? [r.left + h + 2, r.top + h + 2];
-            const cx = Math.max(h + 2, x), cy = Math.max(h + 2, y);
+            const cx = Math.min(innerWidth - h - 2, Math.max(h + 2, x)), cy = Math.max(h + 2, y);
             const n = document.createElement('div');
             n.setAttribute('data-hilfe-marke', '');
             n.textContent = String(i + 1);
