@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Rechenkern symcrys in die Apps übernehmen** (#99; README, „Rechenkern symcrys“): `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | symcrys-Ordner>` kopiert `.js` und `.d.ts` aus `dist/` nach `lib/kern/` mit `lib/kern/MANIFEST.json` und `LICENSE.txt`; `check.mjs` (und damit `tests/common.test.mjs` der App) prüft auch diese Kopie. Leitfaden Abschn. 9 und Vorlage (CodeQL, Offline-Liste ohne `.d.ts` und Manifeste) ergänzt. Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann `lib/kern/MANIFEST.json` in der Prüfung der Offline-Liste auslassen, `lib/kern` in `codeql-config.yml` ergänzen.
+
 ## [0.23.0] - 2026-11-15
 
 Abschnittsnummern und Verweise im Skript (#85), Touch-Ziele nach dem zuletzt benutzten Gerät (#135), Tooltips im Browser prüfen und längere als genannte Ausnahme (#114), Einzug der Experimente (#123), Ablauf bei gescheitertem Deploy (#142). Für die Apps: in `js/skript.js` `abschnitte()` vor `inhaltsverzeichnis()` aufrufen und im Test `pruefeAbschnittsverweise` prüfen; Verweise im Skript, die nur den Titel nennen, auf „Abschnitt x.y“ umstellen (stereography); eigene Regeln mit `@media (pointer: coarse)` für Touch-Ziele durch `var(--ziel)` usw. ersetzen; im Browserlauf je Modus `fehlendeTooltips` aufrufen, Tooltips nach Leitfaden 5.3 straffen und im Test `pruefeTooltips` mit `laenger` aufrufen, wo einer als Ausnahme länger ist; den Absatz zum gescheiterten Deploy ins README übernehmen; Bilder der Hilfeseite neu erzeugen.

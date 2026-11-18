@@ -91,6 +91,7 @@ wechselt in seinen Modus, startet es und entfernt den Parameter wieder aus der A
 | `js/version.js`, `sw.js` | Versionsnummer, Service Worker für den Offline-Betrieb |
 | `manifest.webmanifest`, `icons/` | Favicon und Homescreen-Icons |
 | `lib/common/`, `tools/common/` | Gemeinsame Grundlage aus [crystallography-common](https://github.com/manganite/crystallography-common) als Kopie mit fester Version (`lib/common/MANIFEST.json`): Stile, Schriften, Hilfen, Quiz, Skript-Bausteine, Formatierung, Werkzeuge. Nicht von Hand ändern. |
+| `lib/kern/` | Rechenkern [symcrys](https://github.com/manganite/symcrys) als Kopie mit fester Version (`lib/kern/MANIFEST.json`), falls die App ihn nutzt. Nicht von Hand ändern. |
 | `tests/` | Automatische Tests (Node, ohne Abhängigkeiten) |
 | `tsconfig.json` | Typprüfung mit TypeScript (JSDoc-Typen, kein Build-Schritt) |
 

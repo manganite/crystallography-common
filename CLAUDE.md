@@ -102,6 +102,17 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   birss-app baut künftig auf dem Kern auf, bleibt aber ein eigenes Projekt ausserhalb der Familie
   (festgehalten in deren `STATUS.md`). Bis der Kern steht, bleiben die Berechnungen in den Apps. Offene
   Punkte: #99.
+  **Einbindung** (Thomas, 7.11.2026, #99; umgesetzt 18.11.2026): Kopie von `dist/` eines Release nach `lib/kern/`
+  mit Manifest über `sync.mjs --kern`, wie `lib/common/`, damit die Apps ohne Build-Schritt und offline bleiben;
+  Typprüfung über die `.d.ts`; englische Namen ohne Übersetzungsschicht; keine Abhängigkeit von symcrys zu common
+  oder den Apps. Beim Umsetzen: Quelle ist das Paket aus dem Release von symcrys (`symcrys-X.Y.Z.tgz`, ohne Bauen)
+  oder ein gebauter Checkout; kopiert werden `.js` und `.d.ts`, keine Source-Maps (sie verweisen auf `src/`, das
+  nicht mitkommt), dazu die Lizenz als `LICENSE.txt`, weil die Prüfung der Offline-Liste `.txt` auslässt.
+  **Reihenfolge** (Thomas, 18.11.2026): zuerst stereography auf die Punktgruppen von symcrys (Gruppen, Aufstellungen,
+  Symbole, Eigenschaften, Symmetrieelemente und -richtungen), Lagesymmetrie, Wyckoff-Lagen, Formen und die
+  Kristallgeometrie später; die magnetischen Punktgruppen in symcrys erst danach, weil die Apps sie nicht brauchen.
+  Der hexagonale Rahmen von stereography (b ∥ y) bleibt; ein Modul der App rechnet die Operationen von symcrys
+  (a ∥ x) an einer Stelle um, damit Link-Adressen und Bilder gleich bleiben (Thomas, 18.11.2026).
 - **Ansage von Symbolen** (Thomas, 8.11.2026, #82, Leitfaden Abschn. 4): Der Querstrich wurde als „−“ angesagt, 4̄ also
   „minus vier“, und 222 oder (110) als Zahl. `role="img"` mit `aria-label` statt eines versteckten Texts (`.sr`), weil
   der Moodle-Export ohne das CSS der Familie auskommt (versteckter Text wäre dort sichtbar) und das Kopieren
@@ -395,6 +406,12 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
    auf `main` nachführen). Thomas, 9.11.2026: sonst müsste jede Übernahme warten, weil fast jeder PR eine Zeile
    unter „Unreleased“ ergänzt.
 4. Je App über einen Release-PR veröffentlichen, wenn Thomas das will.
+
+**Rechenkern symcrys übernehmen** (README, „Rechenkern symcrys“): nach einem Release von symcrys (Tag und npm gibt
+Thomas frei) je App ein PR mit `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | ../symcrys>` und den Tests der
+App; im CHANGELOG der App „**Rechenkern** auf symcrys vX.Y.Z: …“ unter „Geändert“. Neue Dateien in `lib/kern/`
+kommen in die Offline-Liste von `sw.js`. Was der App an symcrys fehlt, wird ein Issue in symcrys, nicht eine Rechnung
+in der App.
 
 Bei einem Umbau ohne sichtbare Änderung (z. B. Umzug auf common, Stereo-App v1.11.0) vorher und nachher
 vergleichen: berechnete Stile inkl. `::before`/`::after` und die Lage aller Elemente in allen Ansichten
