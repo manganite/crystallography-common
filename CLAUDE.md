@@ -279,11 +279,10 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Bereich, der in mehreren Modi gilt (z. B. „Darstellung“ in plane-groups), je Modus vollständig mit eigenem Bild erscheint;
   der Modus im Verweis aus dem ⓘ deshalb als Platzhalter `{modus}`, eingesetzt beim Aufklappen. Marken eines Bereichs dürfen
   auch Bausteine ohne ID treffen (z. B. `header.top` im Übersichtsbild); `pruefeHilfe` prüft dann nur die IDs, die es gibt.
-  Nicht jetzt (Thomas): Hinweise in der App bei Änderungen im Bild, Fachbegriffe in zwei Tiefen (#100), Hinweise für
-  Lehrende. Nummern im Übersichtsbild (Thomas, 15.11.2026, Wahl unter „auf der Rahmenlinie lassen“, „innen in die Ecke“
+  Nicht jetzt (Thomas): Hinweise in der App und für Lehrende (#158), Fachbegriffe in zwei Tiefen (#100). Nummern im Übersichtsbild (Thomas, 15.11.2026, Wahl unter „auf der Rahmenlinie lassen“, „innen in die Ecke“
   und „Rand dazugeben“): Sie lagen auf der oberen Rahmenlinie, weil links neben den Bausteinen kein Platz war; jetzt
   bekommt die Seite für solche Bilder links Rand und grössere Abstände. Ein Browsertest des Werkzeugs an der Vorlage
-  läuft in der CI (Übersicht ohne Notlösung, `vorher`). Offen: #114.
+  läuft in der CI (Übersicht ohne Notlösung, `vorher`).
 - **Abschnittsnummern im Skript** (Thomas, 6.11.2026, #85, Leitfaden Abschn. 6): Die Texte verwiesen ständig auf
   „Abschnitt 4.5“, die Abschnitte trugen aber keine sichtbare Nummer. Entschieden ist „beides“: Nummern sichtbar und
   Verweise als Links. Die Nummern entstehen beim Laden aus der Reihenfolge, damit ein neuer Abschnitt sie nicht von Hand
