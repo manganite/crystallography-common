@@ -35,8 +35,8 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | | `seite.js` | Elemente der Seite mit Prüfung der Art (nach ID `$`, `eingabe`, `auswahl`, `knopf`, `abschnitt`, `grafik`, `nachId`; nach Selektor `element`, `elemente`), Versionsnummer eintragen, „Alle Einstellungen zurücksetzen“ (`alleEinstellungenZuruecksetzen`, Präfix der App), Offline-Betrieb (Service Worker), Bildexport als Knopf mit Menü (`exportMenue`, mit `herunterladen` und `inZwischenablage`) |
 | | `version.js` | Version dieses Repositories |
 | | `typen.js` | Gemeinsame Typen für die Typprüfung, ohne Laufzeitcode: Vektoren, Matrizen und gekennzeichnete Typen (Richtung/Normale, Grad/Bogenmass, fraktional/kartesisch). Die Typen des Quiz stehen in `quiz-core.js`. |
-| `tools/` | `sync.mjs` | Kopie mit fester Version in eine App übernehmen |
-| | `check.mjs` | Kopie in einer App gegen ihr Manifest prüfen |
+| `tools/` | `sync.mjs` | Kopie mit fester Version in eine App übernehmen; mit `--kern` den Rechenkern symcrys (unten) |
+| | `check.mjs` | Kopien in einer App gegen ihr Manifest prüfen (`lib/common/`, `tools/common/`, `lib/kern/`) |
 | | `moodle.mjs` | Quizfragen als Moodle-XML |
 | | `skript-pdf.mjs` | Skript als PDF (A4) mit Playwright |
 | | `hilfe-bilder.mjs` | Bilder der Hilfeseite mit Playwright: Ausschnitt der App je Schritt einer Anleitung mit `zeige` (Bedienelement umrahmt) und je Bereich zum Nachschlagen (Elemente nummeriert) (in der App `node tools/common/hilfe-bilder.mjs`) |
@@ -47,7 +47,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | `fragenliste/` | `extract.mjs`, `vorlage.html` | Gemeinsame Fragenliste aller Apps (Artifact in claude.ai): Fragen aus `tools/quiz-quelle.mjs` jeder App, Prüfung der Entwürfe, Rückmeldungen. Wird nicht in die Apps kopiert. |
 | (oberste Ebene) | `kristallographie.code-workspace` | VS-Code-Arbeitsbereich mit allen Repositories der Familie |
 
-Nicht hier, sondern in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Grösse der Darstellung in den Tafeln (und eine abweichende Anordnung), Texte der Hilfen, Fragen und Kapitel.
+Nicht hier: die Berechnungen (Gruppen, Gitter, Formen), die in den Rechenkern [symcrys](https://github.com/manganite/symcrys) gehören (bis zur Umstellung noch in den Apps), und in den Apps alles weitere Fachliche, die Abbildungen, die Grösse der Darstellung in den Tafeln (und eine abweichende Anordnung), Texte der Hilfen, Fragen und Kapitel.
 
 ## Einbinden in eine App
 
@@ -71,6 +71,29 @@ node --test tests/*.test.mjs                 # u. a. tests/common.test.mjs prüf
 
 Das Werkzeug warnt, wenn der Stand kein Release-Tag ist oder ungespeicherte Änderungen hat. Die Kopie in der App wird nie von Hand geändert; `tests/common.test.mjs` schlägt sonst fehl. Änderungen gehören in dieses Repository.
 
+### Rechenkern symcrys
+
+Die Berechnungen (Gruppen, Aufstellungen, Symbole, Eigenschaften, Symmetrieelemente) liegen im eigenen Projekt [symcrys](https://github.com/manganite/symcrys), englisch und in TypeScript (#99). Eine App bindet es wie die gemeinsamen Dateien als **Kopie mit fester Version** ein:
+
+- `lib/kern/` mit den JavaScript-Dateien und Typen (`.js`, `.d.ts`) aus `dist/` eines Release von symcrys und dessen Lizenz (`LICENSE.txt`); wird mit der App veröffentlicht, die `.js` hält der Service Worker offline vor, die `.d.ts` braucht nur die Typprüfung
+- `lib/kern/MANIFEST.json` mit Version, Tag, Herkunft und einer Prüfsumme je Datei
+
+```bash
+cd stereography
+node tools/common/sync.mjs --kern ../symcrys-0.2.0.tgz   # Paket aus dem Release von symcrys auf GitHub
+# oder aus einem Checkout:  cd ../symcrys && git checkout v0.2.0 && npm ci && npm run build && cd ../stereography
+#                           node tools/common/sync.mjs --kern ../symcrys
+node --test tests/*.test.mjs                 # tests/common.test.mjs prüft auch diese Kopie
+```
+
+```js
+import { operations, symmetryDirections } from '../lib/kern/index.js';
+```
+
+Massgebend ist das Paket aus dem Release von symcrys auf GitHub; das Manifest hält seine Prüfsumme fest (`paketSha256`), ein Checkout dient zum Ausprobieren. `--kern` kennt `tools/common/sync.mjs` erst ab der Version von common, die es einführt (CHANGELOG); vorher zuerst common übernehmen. Die Verweise auf Source-Maps am Ende der Dateien entfernt das Werkzeug, weil die Maps nicht mitkommen.
+
+Die App ruft symcrys mit seinen englischen Namen auf, ohne Übersetzungsschicht; die Typprüfung (`checkJs`) liest die `.d.ts` neben `index.js`. Das Werkzeug warnt bei einem Checkout, der nicht der Release-Tag ist, ungespeicherte Änderungen hat oder dessen `dist/` aus einer anderen Version gebaut ist. symcrys kennt weder dieses Repository noch die Apps.
+
 ### Seiten einer App
 
 ```html
@@ -91,7 +114,7 @@ Eine neue App beginnt mit den Dateien aus [`vorlagen/`](vorlagen/README.md).
 
 ## Entwicklung
 
-Ohne Abhängigkeiten; Tests mit Node 22:
+Ohne Abhängigkeiten; Tests mit Node 22 (die Tests von `sync.mjs` brauchen `tar`, wie es Linux, macOS und Windows mitbringen):
 
 ```bash
 node --test tests/*.test.mjs

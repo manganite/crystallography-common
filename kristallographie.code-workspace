@@ -7,9 +7,10 @@
     { "path": "../plane-groups" }
   ],
   "settings": {
-    // Kopien des gemeinsamen Codes in den Apps nur über tools/sync.mjs ändern, nie von Hand
+    // Kopien des gemeinsamen Codes und von symcrys in den Apps nur über tools/sync.mjs ändern, nie von Hand
     "files.readonlyInclude": {
       "**/lib/common/**": true,
+      "**/lib/kern/**": true,
       "**/tools/common/**": true
     },
     // erzeugte Dateien nicht durchsuchen

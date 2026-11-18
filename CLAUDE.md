@@ -100,8 +100,19 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Datei. TypeScript, weil birss-app es schon ist und eine Bibliothek ihre Typen mitliefert. common und die
   Apps bleiben ohne `.ts` und ohne Build-Schritt; sie binden das nach JavaScript übersetzte Ergebnis ein.
   birss-app baut künftig auf dem Kern auf, bleibt aber ein eigenes Projekt ausserhalb der Familie
-  (festgehalten in deren `STATUS.md`). Bis der Kern steht, bleiben die Berechnungen in den Apps. Offene
-  Punkte: #99.
+  (festgehalten in deren `STATUS.md`). Die Apps stellen ihre Berechnungen schrittweise auf den Kern um; bis eine
+  Berechnung dort steht, bleibt sie in der App (Reihenfolge: #74, Punkt 7). Offene Punkte: #99.
+  **Einbindung** (Thomas, 7.11.2026, #99; umgesetzt 18.11.2026): Kopie von `dist/` eines Release nach `lib/kern/`
+  mit Manifest über `sync.mjs --kern`, wie `lib/common/`, damit die Apps ohne Build-Schritt und offline bleiben;
+  Typprüfung über die `.d.ts`; englische Namen ohne Übersetzungsschicht; keine Abhängigkeit von symcrys zu common
+  oder den Apps. Beim Umsetzen: Quelle ist das Paket aus dem Release von symcrys (`symcrys-X.Y.Z.tgz`, ohne Bauen)
+  oder ein gebauter Checkout; kopiert werden `.js` und `.d.ts`, keine Source-Maps (sie verweisen auf `src/`, das
+  nicht mitkommt; ihre Verweise am Dateiende entfernt `sync.mjs`, sonst meldeten Browser und Editor fehlende
+  Dateien), dazu die Lizenz als `LICENSE.txt`, weil die Prüfung der Offline-Liste `.txt` auslässt. Massgebend ist das
+  Paket aus dem Release; das Manifest nennt bei einem Paket keinen Tag, sondern seine Prüfsumme, weil ein Paket aus
+  `main` gleich heisst wie das des Release (Review des PR #160). Umrechnungen zwischen dem kartesischen Rahmen von
+  symcrys und dem einer App (z. B. stereography, hexagonal b ∥ y) gelten als Darstellung und bleiben in der App;
+  die Entscheidung steht in deren `CLAUDE.md`.
 - **Ansage von Symbolen** (Thomas, 8.11.2026, #82, Leitfaden Abschn. 4): Der Querstrich wurde als „−“ angesagt, 4̄ also
   „minus vier“, und 222 oder (110) als Zahl. `role="img"` mit `aria-label` statt eines versteckten Texts (`.sr`), weil
   der Moodle-Export ohne das CSS der Familie auskommt (versteckter Text wäre dort sichtbar) und das Kopieren
@@ -395,6 +406,13 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
    auf `main` nachführen). Thomas, 9.11.2026: sonst müsste jede Übernahme warten, weil fast jeder PR eine Zeile
    unter „Unreleased“ ergänzt.
 4. Je App über einen Release-PR veröffentlichen, wenn Thomas das will.
+
+**Rechenkern symcrys übernehmen** (README, „Rechenkern symcrys“): nach einem Release von symcrys (Tag und npm gibt
+Thomas frei) je App ein PR mit `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | ../symcrys>` und den Tests der
+App; im CHANGELOG der App „**Rechenkern** auf symcrys vX.Y.Z: …“ unter „Geändert“. Neue `.js` in `lib/kern/` kommen
+in die Offline-Liste von `sw.js`, entfallene heraus; `.d.ts`, `MANIFEST.json` und `LICENSE.txt` nicht. Die App braucht
+dafür eine Version von common mit `--kern` (CHANGELOG). Was der App an symcrys fehlt, wird ein Issue in symcrys, nicht eine Rechnung
+in der App.
 
 Bei einem Umbau ohne sichtbare Änderung (z. B. Umzug auf common, Stereo-App v1.11.0) vorher und nachher
 vergleichen: berechnete Stile inkl. `::before`/`::after` und die Lage aller Elemente in allen Ansichten
