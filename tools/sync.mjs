@@ -13,8 +13,10 @@
 //   node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz>   (Paket aus dem Release auf GitHub)
 //   node tools/common/sync.mjs --kern ../symcrys            (Checkout eines Tags, mit npm run build gebaut)
 //
-// Kopiert die JavaScript-Dateien und Typen (.js, .d.ts) aus dist/ nach <App>/lib/kern/, dazu die Lizenz als
-// LICENSE.txt; lib/kern/MANIFEST.json hält Version, Herkunft und Prüfsummen fest, check.mjs prüft auch diese Kopie.
+// Kopiert die JavaScript-Dateien und Typen (.js, .d.ts) aus dist/ nach <App>/lib/kern/, ohne die Verweise auf
+// Source-Maps, dazu die Lizenz als LICENSE.txt; lib/kern/MANIFEST.json hält Version, Herkunft und Prüfsummen fest,
+// check.mjs prüft auch diese Kopie. Massgebend ist das Paket aus dem Release von symcrys auf GitHub; seine Prüfsumme
+// steht im Manifest. Erst ab dieser Version von common kennt tools/common/sync.mjs die Option --kern.
 
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -93,6 +95,12 @@ export const KERN = 'lib/kern';
 export const KERN_MANIFEST = 'lib/kern/MANIFEST.json';
 /** Was aus dist/ von symcrys in die App kommt: der Code und seine Typen (Source-Maps nicht, src/ fehlt dort). */
 export const istKerndatei = (/** @type {string} */ p) => p.endsWith('.js') || p.endsWith('.d.ts');
+/**
+ * Inhalt einer Datei von symcrys ohne den Verweis auf ihre Source-Map (letzte Zeile `//# sourceMappingURL=…`),
+ * weil die Maps nicht mitkommen; sonst meldeten Browser und Editor eine fehlende Datei.
+ * @param {string} text
+ */
+export const ohneSourceMap = (text) => text.replace(/\n\/\/# sourceMappingURL=[^\n]*\n?$/, '\n');
 
 /**
  * symcrys in eine App übernehmen: aus einem Paket `symcrys-X.Y.Z.tgz` (Release auf GitHub, `npm pack`) oder aus
@@ -110,7 +118,8 @@ export function syncKern(quelle, app) {
   if (paket) {
     if (!existsSync(quelle)) throw new Error(`${quelle} fehlt`);
     tmp = mkdtempSync(join(tmpdir(), 'symcrys-'));
-    execFileSync('tar', ['-xzf', quelle, '-C', tmp], { stdio: 'ignore' });
+    // relativ zum Ordner des Pakets: GNU tar (z. B. aus Git for Windows) liest „C:…“ sonst als Rechnernamen
+    execFileSync('tar', ['-xzf', basename(quelle), '-C', tmp], { cwd: dirname(quelle), stdio: ['ignore', 'ignore', 'inherit'] });
     wurzel = join(tmp, 'package'); // npm pack legt alles unter package/ ab
   }
   try {
@@ -120,13 +129,19 @@ export function syncKern(quelle, app) {
     const pkg = JSON.parse(readFileSync(pkgDatei, 'utf8'));
     if (pkg.name !== 'symcrys') throw new Error(`${quelle} ist nicht symcrys (Paket ${pkg.name})`);
     const dist = join(wurzel, 'dist');
-    if (!existsSync(join(dist, 'index.js'))) throw new Error(`${dist}/index.js fehlt (im Checkout erst npm run build)`);
+    // alles prüfen, bevor die alte Kopie gelöscht wird
+    for (const f of [join(dist, 'index.js'), join(dist, 'version.js'), join(wurzel, 'LICENSE')]) {
+      if (!existsSync(f)) throw new Error(`${f} fehlt${f.endsWith('.js') && !paket ? ' (im Checkout erst npm run build)' : ''}`);
+    }
     const warn = [];
-    // dist/version.js nennt die Version, aus der dist gebaut wurde; sie muss zu package.json passen
+    // dist/version.js nennt die Version, aus der dist gebaut wurde. Sie ändert sich nur mit einem Release, ein
+    // veralteter Build fällt so also nur über Versionen hinweg auf; massgebend ist deshalb das Paket des Release.
     const gebaut = readFileSync(join(dist, 'version.js'), 'utf8').match(/VERSION = '([^']+)'/)?.[1];
     if (gebaut !== pkg.version) warn.push(`dist/ ist aus Version ${gebaut ?? '?'} gebaut, package.json nennt ${pkg.version}: neu bauen.`);
     const commit = paket ? null : git(wurzel, 'rev-parse', 'HEAD');
-    const tag = paket ? `v${pkg.version}` : git(wurzel, 'describe', '--tags', '--exact-match');
+    // Ein Paket nennt keinen Tag: npm pack aus main heisst gleich wie das des Release. Die Prüfsumme im Manifest
+    // lässt sich mit dem Paket im Release auf GitHub vergleichen.
+    const tag = paket ? null : git(wurzel, 'describe', '--tags', '--exact-match');
     if (!paket) {
       if (tag !== `v${pkg.version}`) warn.push(`Stand ist nicht der Release-Tag v${pkg.version} (Tag: ${tag ?? 'keiner'}).`);
       if (commit && git(wurzel, 'status', '--porcelain') !== '') warn.push('symcrys hat ungespeicherte Änderungen.');
@@ -139,11 +154,19 @@ export function syncKern(quelle, app) {
     for (const p of dateien(dist).filter(istKerndatei)) {
       const z = join(ziel, relative(dist, p));
       mkdirSync(dirname(z), { recursive: true });
-      cpSync(p, z);
+      writeFileSync(z, ohneSourceMap(readFileSync(p, 'utf8')));
     }
     cpSync(join(wurzel, 'LICENSE'), join(ziel, 'LICENSE.txt'));
     for (const p of dateien(ziel)) files[relative(app, p).split('\\').join('/')] = sha(p);
-    const manifest = { name: 'symcrys', version: pkg.version, tag, commit, quelle: paket ? basename(quelle) : 'Checkout', files };
+    const manifest = {
+      name: 'symcrys',
+      version: pkg.version,
+      tag,
+      commit,
+      quelle: paket ? basename(quelle) : 'Checkout',
+      ...(paket ? { paketSha256: sha(quelle) } : {}),
+      files,
+    };
     writeFileSync(join(app, KERN_MANIFEST), JSON.stringify(manifest, null, 2) + '\n');
     return { manifest, warn };
   } finally {

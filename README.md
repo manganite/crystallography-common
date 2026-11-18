@@ -47,7 +47,7 @@ Wie die Apps aussehen und sich verhalten sollen, steht im **[Leitfaden](LEITFADE
 | `fragenliste/` | `extract.mjs`, `vorlage.html` | Gemeinsame Fragenliste aller Apps (Artifact in claude.ai): Fragen aus `tools/quiz-quelle.mjs` jeder App, Prüfung der Entwürfe, Rückmeldungen. Wird nicht in die Apps kopiert. |
 | (oberste Ebene) | `kristallographie.code-workspace` | VS-Code-Arbeitsbereich mit allen Repositories der Familie |
 
-Nicht hier, sondern im Rechenkern [symcrys](https://github.com/manganite/symcrys) bzw. in den Apps: alles Fachliche (Gruppen, Gitter, Formen), die Abbildungen, die Grösse der Darstellung in den Tafeln (und eine abweichende Anordnung), Texte der Hilfen, Fragen und Kapitel.
+Nicht hier: die Berechnungen (Gruppen, Gitter, Formen), die in den Rechenkern [symcrys](https://github.com/manganite/symcrys) gehören (bis zur Umstellung noch in den Apps), und in den Apps alles weitere Fachliche, die Abbildungen, die Grösse der Darstellung in den Tafeln (und eine abweichende Anordnung), Texte der Hilfen, Fragen und Kapitel.
 
 ## Einbinden in eine App
 
@@ -90,7 +90,9 @@ node --test tests/*.test.mjs                 # tests/common.test.mjs prüft auch
 import { operations, symmetryDirections } from '../lib/kern/index.js';
 ```
 
-Die App ruft symcrys mit seinen englischen Namen auf, ohne Übersetzungsschicht; die Typprüfung (`checkJs`) liest die `.d.ts` neben `index.js`. Source-Maps kommen nicht mit, weil `src/` von symcrys nicht kopiert wird. Das Werkzeug warnt bei einem Checkout, der nicht der Release-Tag ist, ungespeicherte Änderungen hat oder dessen `dist/` aus einer anderen Version gebaut ist. symcrys kennt weder dieses Repository noch die Apps.
+Massgebend ist das Paket aus dem Release von symcrys auf GitHub; das Manifest hält seine Prüfsumme fest (`paketSha256`), ein Checkout dient zum Ausprobieren. `--kern` kennt `tools/common/sync.mjs` erst ab der Version von common, die es einführt (CHANGELOG); vorher zuerst common übernehmen. Die Verweise auf Source-Maps am Ende der Dateien entfernt das Werkzeug, weil die Maps nicht mitkommen.
+
+Die App ruft symcrys mit seinen englischen Namen auf, ohne Übersetzungsschicht; die Typprüfung (`checkJs`) liest die `.d.ts` neben `index.js`. Das Werkzeug warnt bei einem Checkout, der nicht der Release-Tag ist, ungespeicherte Änderungen hat oder dessen `dist/` aus einer anderen Version gebaut ist. symcrys kennt weder dieses Repository noch die Apps.
 
 ### Seiten einer App
 
@@ -112,7 +114,7 @@ Eine neue App beginnt mit den Dateien aus [`vorlagen/`](vorlagen/README.md).
 
 ## Entwicklung
 
-Ohne Abhängigkeiten; Tests mit Node 22:
+Ohne Abhängigkeiten; Tests mit Node 22 (die Tests von `sync.mjs` brauchen `tar`, wie es Linux, macOS und Windows mitbringen):
 
 ```bash
 node --test tests/*.test.mjs

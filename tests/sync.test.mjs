@@ -1,8 +1,9 @@
 // Übernahme in eine App: Kopie, Manifest, Prüfung erkennt Änderungen.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { mkdtempSync, mkdirSync, writeFileSync, appendFileSync, readFileSync, rmSync, existsSync, cpSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -97,10 +98,14 @@ test('syncKern nimmt das Paket symcrys-X.Y.Z.tgz und prüft Name und gebaute Ver
     const tgz = join(dir, 'symcrys-0.3.0.tgz');
     execFileSync('tar', ['-czf', tgz, '-C', dir, 'package']);
     const { manifest, warn } = syncKern(tgz, app);
-    assert.deepEqual([manifest.version, manifest.tag, manifest.quelle], ['0.3.0', 'v0.3.0', 'symcrys-0.3.0.tgz']);
+    // ein Paket nennt keinen Tag (npm pack aus main heisst gleich); dafür die Prüfsumme des Pakets
+    assert.deepEqual([manifest.version, manifest.tag, manifest.quelle], ['0.3.0', null, 'symcrys-0.3.0.tgz']);
+    assert.equal(manifest.paketSha256, createHash('sha256').update(readFileSync(tgz)).digest('hex'));
     assert.deepEqual(warn, []);
     assert.ok(existsSync(join(app, 'lib/kern/pointGroups/a.js')));
     assert.ok(!existsSync(join(app, 'lib/kern/index.js.map')));
+    // ohne Verweis auf die Source-Map, die nicht mitkommt
+    assert.equal(readFileSync(join(app, 'lib/kern/index.js'), 'utf8'), "export * from './pointGroups/a.js';\n");
     assert.ok(syncKern(falsch.pkg, app).warn.some((w) => w.includes('aus Version 0.2.0 gebaut')));
     writeFileSync(join(pkg, 'package.json'), JSON.stringify({ name: 'anderes', version: '1.0.0' }));
     assert.throws(() => syncKern(pkg, app), /nicht symcrys/);
@@ -108,5 +113,41 @@ test('syncKern nimmt das Paket symcrys-X.Y.Z.tgz und prüft Name und gebaute Ver
     rmSync(app, { recursive: true, force: true });
     rmSync(dir, { recursive: true, force: true });
     rmSync(falsch.dir, { recursive: true, force: true });
+  }
+});
+
+test('syncKern löscht die alte Kopie erst, wenn die Quelle vollständig ist; sync() lässt lib/kern stehen', () => {
+  const app = mkdtempSync(join(tmpdir(), 'app-'));
+  const { dir, pkg } = symcrysAttrappe();
+  try {
+    writeFileSync(join(app, 'index.html'), '<!doctype html>');
+    syncKern(pkg, app);
+    rmSync(join(pkg, 'LICENSE'));
+    assert.throws(() => syncKern(pkg, app), /LICENSE fehlt/);
+    assert.ok(existsSync(join(app, KERN_MANIFEST))); // alte Kopie unberührt
+    sync(ROOT, app);
+    assert.ok(existsSync(join(app, KERN_MANIFEST)));
+    assert.deepEqual(pruefen(app), []);
+  } finally {
+    rmSync(app, { recursive: true, force: true });
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('Aufruf --kern: im Ordner der App aus tools/common/, nicht im gemeinsamen Repository', () => {
+  const app = mkdtempSync(join(tmpdir(), 'app-'));
+  const { dir, pkg } = symcrysAttrappe();
+  try {
+    writeFileSync(join(app, 'index.html'), '<!doctype html>');
+    cpSync(join(ROOT, 'tools'), join(app, 'tools/common'), { recursive: true });
+    const inApp = spawnSync(process.execPath, [join(app, 'tools/common/sync.mjs'), '--kern', pkg], { encoding: 'utf8' });
+    assert.equal(inApp.status, 0, inApp.stderr);
+    assert.match(inApp.stdout, /symcrys 0\.2\.0 \(Checkout\) nach lib\/kern/);
+    assert.ok(existsSync(join(app, KERN_MANIFEST)));
+    const imCommon = spawnSync(process.execPath, [join(ROOT, 'tools/sync.mjs'), '--kern', pkg], { encoding: 'utf8' });
+    assert.equal(imCommon.status, 2);
+  } finally {
+    rmSync(app, { recursive: true, force: true });
+    rmSync(dir, { recursive: true, force: true });
   }
 });

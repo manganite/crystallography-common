@@ -18,22 +18,15 @@ import { TEILE, MANIFEST, KERN, KERN_MANIFEST, dateien } from './sync.mjs';
 export function pruefen(app) {
   const p = join(app, MANIFEST);
   if (!existsSync(p)) return [`${MANIFEST} fehlt`, ...pruefenKern(app)];
-  /** @type {{ files: Record<string, string> }} */
-  const m = JSON.parse(readFileSync(p, 'utf8'));
   /** @type {string[]} */
   const fehler = [];
-  /** @type {Set<string>} */
-  const da = new Set();
+  /** @type {string[]} */
+  const da = [];
   for (const t of TEILE) {
     if (!existsSync(join(app, t.ziel))) { fehler.push(`Ordner fehlt: ${t.ziel}`); continue; }
-    for (const f of dateien(join(app, t.ziel))) da.add(relative(app, f).split('\\').join('/'));
+    da.push(...dateien(join(app, t.ziel)));
   }
-  for (const [f, h] of Object.entries(m.files)) {
-    if (!da.has(f)) { fehler.push(`fehlt: ${f}`); continue; }
-    if (createHash('sha256').update(readFileSync(join(app, f))).digest('hex') !== h) fehler.push(`verändert: ${f}`);
-  }
-  for (const f of da) if (!(f in m.files) && f !== MANIFEST) fehler.push(`nicht im Manifest: ${f}`);
-  return [...fehler, ...pruefenKern(app)];
+  return [...fehler, ...gegenManifest(app, MANIFEST, da), ...pruefenKern(app)];
 }
 
 /**
@@ -42,19 +35,29 @@ export function pruefen(app) {
  * @returns {string[]}
  */
 export function pruefenKern(app) {
-  const p = join(app, KERN_MANIFEST);
   if (!existsSync(join(app, KERN))) return [];
-  if (!existsSync(p)) return [`${KERN_MANIFEST} fehlt`];
+  if (!existsSync(join(app, KERN_MANIFEST))) return [`${KERN_MANIFEST} fehlt`];
+  return gegenManifest(app, KERN_MANIFEST, dateien(join(app, KERN)));
+}
+
+/**
+ * Vergleicht vorhandene Dateien mit einem Manifest: fehlende, veränderte und nicht aufgeführte.
+ * @param {string} app
+ * @param {string} manifest Pfad des Manifests in der App
+ * @param {string[]} vorhanden Pfade der vorhandenen Dateien
+ * @returns {string[]}
+ */
+function gegenManifest(app, manifest, vorhanden) {
   /** @type {{ files: Record<string, string> }} */
-  const m = JSON.parse(readFileSync(p, 'utf8'));
-  const da = new Set(dateien(join(app, KERN)).map((f) => relative(app, f).split('\\').join('/')));
+  const m = JSON.parse(readFileSync(join(app, manifest), 'utf8'));
+  const da = new Set(vorhanden.map((f) => relative(app, f).split('\\').join('/')));
   /** @type {string[]} */
   const fehler = [];
   for (const [f, h] of Object.entries(m.files)) {
     if (!da.has(f)) { fehler.push(`fehlt: ${f}`); continue; }
     if (createHash('sha256').update(readFileSync(join(app, f))).digest('hex') !== h) fehler.push(`verändert: ${f}`);
   }
-  for (const f of da) if (!(f in m.files) && f !== KERN_MANIFEST) fehler.push(`nicht im Manifest: ${f}`);
+  for (const f of da) if (!(f in m.files) && f !== manifest) fehler.push(`nicht im Manifest: ${f}`);
   return fehler;
 }
 

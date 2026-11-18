@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **Rechenkern symcrys in die Apps übernehmen** (#99; README, „Rechenkern symcrys“): `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | symcrys-Ordner>` kopiert `.js` und `.d.ts` aus `dist/` nach `lib/kern/` mit `lib/kern/MANIFEST.json` und `LICENSE.txt`; `check.mjs` (und damit `tests/common.test.mjs` der App) prüft auch diese Kopie. Leitfaden Abschn. 9 und Vorlage (CodeQL, Offline-Liste ohne `.d.ts` und Manifeste) ergänzt. Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann `lib/kern/MANIFEST.json` in der Prüfung der Offline-Liste auslassen, `lib/kern` in `codeql-config.yml` ergänzen.
+- **Rechenkern symcrys in die Apps übernehmen** (#99; README, „Rechenkern symcrys“): `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | symcrys-Ordner>` kopiert `.js` und `.d.ts` aus `dist/` ohne Verweise auf Source-Maps nach `lib/kern/`, mit `lib/kern/MANIFEST.json` (bei einem Paket mit dessen Prüfsumme) und `LICENSE.txt`; `check.mjs` (und damit `tests/common.test.mjs` der App) prüft auch diese Kopie, `eslint-basis.mjs` lässt sie aus. Leitfaden Abschn. 9 und Vorlage (CodeQL, Offline-Liste ohne `.d.ts` und Manifeste) ergänzt. Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann in der Prüfung der Offline-Liste `.d.ts` und `lib/kern/MANIFEST.json` auslassen (wie in `vorlagen/app/tests/release.test.mjs`) und `lib/kern` in `codeql-config.yml` ergänzen.
 
 ## [0.23.0] - 2026-11-15
 
