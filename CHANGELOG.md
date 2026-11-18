@@ -6,9 +6,13 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.24.0] - 2026-11-18
+
+Rechenkern symcrys in die Apps übernehmen (#99). Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann in der Prüfung der Offline-Liste `.d.ts` und `lib/kern/MANIFEST.json` auslassen, `lib/kern` in `codeql-config.yml` ergänzen und die Zeile `lib/kern/` in die Tabelle „Aufbau“ des README übernehmen.
+
 ### Hinzugefügt
 
-- **Rechenkern symcrys in die Apps übernehmen** (#99; README, „Rechenkern symcrys“): `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | symcrys-Ordner>` kopiert `.js` und `.d.ts` aus `dist/` ohne Verweise auf Source-Maps nach `lib/kern/`, mit `lib/kern/MANIFEST.json` (bei einem Paket mit dessen Prüfsumme) und `LICENSE.txt`; `check.mjs` (und damit `tests/common.test.mjs` der App) prüft auch diese Kopie, `eslint-basis.mjs` lässt sie aus. Leitfaden Abschn. 9 und Vorlage (CodeQL, Offline-Liste ohne `.d.ts` und Manifeste) ergänzt. Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann in der Prüfung der Offline-Liste `.d.ts` und `lib/kern/MANIFEST.json` auslassen (wie in `vorlagen/app/tests/release.test.mjs`) und `lib/kern` in `codeql-config.yml` ergänzen.
+- **Rechenkern symcrys in die Apps übernehmen** (#99; README, „Rechenkern symcrys“): `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | symcrys-Ordner>` kopiert `.js` und `.d.ts` aus `dist/` ohne Verweise auf Source-Maps nach `lib/kern/`, mit `lib/kern/MANIFEST.json` (bei einem Paket mit dessen Prüfsumme) und `LICENSE.txt`; `check.mjs` (und damit `tests/common.test.mjs` der App) prüft auch diese Kopie, `eslint-basis.mjs` lässt sie aus. Leitfaden Abschn. 9, `CLAUDE.md` (Entscheidung „Einbindung“ und Ablauf „Rechenkern symcrys übernehmen“), Arbeitsbereich (`lib/kern` schreibgeschützt) und Vorlage (CodeQL, Offline-Liste ohne `.d.ts` und Manifeste, Zeile `lib/kern/` in der Tabelle „Aufbau“ des README) ergänzt. Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann in der Prüfung der Offline-Liste `.d.ts` und `lib/kern/MANIFEST.json` auslassen (wie in `vorlagen/app/tests/release.test.mjs`) und `lib/kern` in `codeql-config.yml` ergänzen und die Zeile `lib/kern/` in die Tabelle „Aufbau“ des README übernehmen.
 
 ## [0.23.0] - 2026-11-15
 
@@ -394,7 +398,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.23.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.24.0...HEAD
+[0.24.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.24.0
 [0.23.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.23.0
 [0.22.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.22.0
 [0.21.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.21.0

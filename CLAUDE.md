@@ -411,7 +411,7 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
 Thomas frei) je App ein PR mit `node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz | ../symcrys>` und den Tests der
 App; im CHANGELOG der App „**Rechenkern** auf symcrys vX.Y.Z: …“ unter „Geändert“. Neue `.js` in `lib/kern/` kommen
 in die Offline-Liste von `sw.js`, entfallene heraus; `.d.ts`, `MANIFEST.json` und `LICENSE.txt` nicht. Die App braucht
-dafür eine Version von common mit `--kern` (CHANGELOG). Was der App an symcrys fehlt, wird ein Issue in symcrys, nicht eine Rechnung
+dafür common ab v0.24.0. Was der App an symcrys fehlt, wird ein Issue in symcrys, nicht eine Rechnung
 in der App.
 
 Bei einem Umbau ohne sichtbare Änderung (z. B. Umzug auf common, Stereo-App v1.11.0) vorher und nachher

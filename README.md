@@ -63,7 +63,7 @@ So bleibt jede App eigenständig veröffentlichbar und offline nutzbar. Eine Än
 
 ```bash
 cd crystallography-common
-git fetch --tags && git checkout v0.23.0     # gewünschter Release-Tag
+git fetch --tags && git checkout v0.24.0     # gewünschter Release-Tag
 cd ../stereography
 node tools/common/sync.mjs ../crystallography-common
 node --test tests/*.test.mjs                 # u. a. tests/common.test.mjs prüft die Kopie
@@ -90,7 +90,7 @@ node --test tests/*.test.mjs                 # tests/common.test.mjs prüft auch
 import { operations, symmetryDirections } from '../lib/kern/index.js';
 ```
 
-Massgebend ist das Paket aus dem Release von symcrys auf GitHub; das Manifest hält seine Prüfsumme fest (`paketSha256`), ein Checkout dient zum Ausprobieren. `--kern` kennt `tools/common/sync.mjs` erst ab der Version von common, die es einführt (CHANGELOG); vorher zuerst common übernehmen. Die Verweise auf Source-Maps am Ende der Dateien entfernt das Werkzeug, weil die Maps nicht mitkommen.
+Massgebend ist das Paket aus dem Release von symcrys auf GitHub; das Manifest hält seine Prüfsumme fest (`paketSha256`), ein Checkout dient zum Ausprobieren. `--kern` kennt `tools/common/sync.mjs` erst ab common v0.24.0; vorher zuerst common übernehmen. Die Verweise auf Source-Maps am Ende der Dateien entfernt das Werkzeug, weil die Maps nicht mitkommen.
 
 Die App ruft symcrys mit seinen englischen Namen auf, ohne Übersetzungsschicht; die Typprüfung (`checkJs`) liest die `.d.ts` neben `index.js`. Das Werkzeug warnt bei einem Checkout, der nicht der Release-Tag ist, ungespeicherte Änderungen hat oder dessen `dist/` aus einer anderen Version gebaut ist. symcrys kennt weder dieses Repository noch die Apps.
 
