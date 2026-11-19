@@ -11,7 +11,9 @@
 // Rechenkern symcrys (#99), im Ordner der App:
 //
 //   node tools/common/sync.mjs --kern <symcrys-X.Y.Z.tgz>   (Paket aus dem Release auf GitHub)
-//   node tools/common/sync.mjs --kern ../symcrys            (Checkout eines Tags, mit npm run build gebaut)
+//   node tools/common/sync.mjs --kern ../symcrys            (Checkout eines Tags, mit npm run build gebaut; das Paket
+//                                                            liegt seit symcrys v0.5.0 in packages/ts, das Werkzeug
+//                                                            nimmt es von dort)
 //
 // Kopiert die JavaScript-Dateien und Typen (.js, .d.ts) aus dist/ nach <App>/lib/kern/, ohne die Verweise auf
 // Source-Maps, dazu die Lizenz als LICENSE.txt; lib/kern/MANIFEST.json hält Version, Herkunft und Prüfsummen fest,
@@ -102,6 +104,15 @@ export const istKerndatei = (/** @type {string} */ p) => p.endsWith('.js') || p.
  */
 export const ohneSourceMap = (text) => text.replace(/\n\/\/# sourceMappingURL=[^\n]*\n?$/, '\n');
 
+/** Ob im Ordner das Paket symcrys liegt (package.json mit dem Namen symcrys). @param {string} ordner */
+const istSymcrysPaket = (ordner) => {
+  try {
+    return JSON.parse(readFileSync(join(ordner, 'package.json'), 'utf8')).name === 'symcrys';
+  } catch {
+    return false;
+  }
+};
+
 /**
  * symcrys in eine App übernehmen: aus einem Paket `symcrys-X.Y.Z.tgz` (Release auf GitHub, `npm pack`) oder aus
  * einem Checkout mit gebautem `dist/`. Gibt das Manifest und Warnungen zurück.
@@ -121,6 +132,9 @@ export function syncKern(quelle, app) {
     // relativ zum Ordner des Pakets: GNU tar (z. B. aus Git for Windows) liest „C:…“ sonst als Rechnernamen
     execFileSync('tar', ['-xzf', basename(quelle), '-C', tmp], { cwd: dirname(quelle), stdio: ['ignore', 'ignore', 'inherit'] });
     wurzel = join(tmp, 'package'); // npm pack legt alles unter package/ ab
+  } else if (existsSync(join(wurzel, 'packages', 'ts', 'package.json')) && !istSymcrysPaket(wurzel)) {
+    // Checkout von symcrys ab v0.5.0: Das Paket liegt in packages/ts (daneben packages/python)
+    wurzel = join(wurzel, 'packages', 'ts');
   }
   try {
     const pkgDatei = join(wurzel, 'package.json');

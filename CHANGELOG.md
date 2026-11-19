@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Geändert
+
+- **Rechenkern aus einem Checkout von symcrys ab v0.5.0:** symcrys legt sein Paket seit v0.5.0 in `packages/ts` ab (daneben `packages/python`); `sync.mjs --kern ../symcrys` nimmt es von dort, statt mit „ist nicht symcrys“ abzubrechen. Das Paket aus dem Release (`symcrys-X.Y.Z.tgz`) hat den gleichen Aufbau wie bisher. README, „Rechenkern symcrys“. Für die Apps: nichts zu tun.
+
 ## [0.24.0] - 2026-11-18
 
 Rechenkern symcrys in die Apps übernehmen (#99). Für die Apps: nichts zu tun, bis eine App symcrys übernimmt; dann in der Prüfung der Offline-Liste `.d.ts` und `lib/kern/MANIFEST.json` auslassen, `lib/kern` in `codeql-config.yml` ergänzen und die Zeile `lib/kern/` in die Tabelle „Aufbau“ des README übernehmen.

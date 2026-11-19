@@ -80,8 +80,8 @@ Die Berechnungen (Gruppen, Aufstellungen, Symbole, Eigenschaften, Symmetrieeleme
 
 ```bash
 cd stereography
-node tools/common/sync.mjs --kern ../symcrys-0.2.0.tgz   # Paket aus dem Release von symcrys auf GitHub
-# oder aus einem Checkout:  cd ../symcrys && git checkout v0.2.0 && npm ci && npm run build && cd ../stereography
+node tools/common/sync.mjs --kern ../symcrys-0.5.0.tgz   # Paket aus dem Release von symcrys auf GitHub
+# oder aus einem Checkout:  cd ../symcrys && git checkout v0.5.0 && npm ci && npm run build && cd ../stereography
 #                           node tools/common/sync.mjs --kern ../symcrys
 node --test tests/*.test.mjs                 # tests/common.test.mjs prüft auch diese Kopie
 ```
@@ -90,7 +90,7 @@ node --test tests/*.test.mjs                 # tests/common.test.mjs prüft auch
 import { operations, symmetryDirections } from '../lib/kern/index.js';
 ```
 
-Massgebend ist das Paket aus dem Release von symcrys auf GitHub; das Manifest hält seine Prüfsumme fest (`paketSha256`), ein Checkout dient zum Ausprobieren. `--kern` kennt `tools/common/sync.mjs` erst ab common v0.24.0; vorher zuerst common übernehmen. Die Verweise auf Source-Maps am Ende der Dateien entfernt das Werkzeug, weil die Maps nicht mitkommen.
+Massgebend ist das Paket aus dem Release von symcrys auf GitHub; das Manifest hält seine Prüfsumme fest (`paketSha256`), ein Checkout dient zum Ausprobieren. `--kern` kennt `tools/common/sync.mjs` erst ab common v0.24.0; vorher zuerst common übernehmen. Die Verweise auf Source-Maps am Ende der Dateien entfernt das Werkzeug, weil die Maps nicht mitkommen. Seit symcrys v0.5.0 liegt das Paket im Checkout in `packages/ts` (daneben `packages/python`); `--kern ../symcrys` nimmt es von dort, `--kern ../symcrys/packages/ts` geht ebenso.
 
 Die App ruft symcrys mit seinen englischen Namen auf, ohne Übersetzungsschicht; die Typprüfung (`checkJs`) liest die `.d.ts` neben `index.js`. Das Werkzeug warnt bei einem Checkout, der nicht der Release-Tag ist, ungespeicherte Änderungen hat oder dessen `dist/` aus einer anderen Version gebaut ist. symcrys kennt weder dieses Repository noch die Apps.
 

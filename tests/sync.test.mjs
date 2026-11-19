@@ -116,6 +116,28 @@ test('syncKern nimmt das Paket symcrys-X.Y.Z.tgz und prüft Name und gebaute Ver
   }
 });
 
+test('syncKern nimmt aus einem Checkout ab symcrys v0.5.0 das Paket in packages/ts', () => {
+  const app = mkdtempSync(join(tmpdir(), 'app-'));
+  const { dir, pkg } = symcrysAttrappe('0.5.0');
+  const repo = mkdtempSync(join(tmpdir(), 'symcrys-repo-'));
+  try {
+    writeFileSync(join(app, 'index.html'), '<!doctype html>');
+    // Aufbau wie im Repository: Wurzel mit eigenem package.json, das Paket in packages/ts
+    writeFileSync(join(repo, 'package.json'), JSON.stringify({ name: 'symcrys-repository', private: true }));
+    mkdirSync(join(repo, 'packages'));
+    cpSync(pkg, join(repo, 'packages', 'ts'), { recursive: true });
+    // ein alter Build in der Wurzel (Aufbau vor v0.5.0) lenkt nicht ab
+    mkdirSync(join(repo, 'dist'));
+    const { manifest } = syncKern(repo, app);
+    assert.deepEqual([manifest.version, manifest.quelle], ['0.5.0', 'Checkout']);
+    assert.ok(existsSync(join(app, 'lib/kern/pointGroups/a.js')));
+  } finally {
+    rmSync(app, { recursive: true, force: true });
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
 test('syncKern löscht die alte Kopie erst, wenn die Quelle vollständig ist; sync() lässt lib/kern stehen', () => {
   const app = mkdtempSync(join(tmpdir(), 'app-'));
   const { dir, pkg } = symcrysAttrappe();
