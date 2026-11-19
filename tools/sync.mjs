@@ -151,7 +151,7 @@ export function syncKern(quelle, app) {
     // dist/version.js nennt die Version, aus der dist gebaut wurde. Sie ändert sich nur mit einem Release, ein
     // veralteter Build fällt so also nur über Versionen hinweg auf; massgebend ist deshalb das Paket des Release.
     const gebaut = readFileSync(join(dist, 'version.js'), 'utf8').match(/VERSION = '([^']+)'/)?.[1];
-    if (gebaut !== pkg.version) warn.push(`dist/ ist aus Version ${gebaut ?? '?'} gebaut, package.json nennt ${pkg.version}: neu bauen.`);
+    if (gebaut !== pkg.version) warn.push(`${paket ? 'dist' : relative(quelle, dist).split('\\').join('/')}/ ist aus Version ${gebaut ?? '?'} gebaut, package.json nennt ${pkg.version}: neu bauen.`);
     const commit = paket ? null : git(wurzel, 'rev-parse', 'HEAD');
     // Ein Paket nennt keinen Tag: npm pack aus main heisst gleich wie das des Release. Die Prüfsumme im Manifest
     // lässt sich mit dem Paket im Release auf GitHub vergleichen.
