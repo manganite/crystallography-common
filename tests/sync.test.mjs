@@ -116,6 +116,42 @@ test('syncKern nimmt das Paket symcrys-X.Y.Z.tgz und prüft Name und gebaute Ver
   }
 });
 
+test('syncKern nimmt aus einem Checkout ab symcrys v0.5.0 das Paket in packages/ts', () => {
+  const app = mkdtempSync(join(tmpdir(), 'app-'));
+  const { dir, pkg } = symcrysAttrappe('0.5.0');
+  const repo = mkdtempSync(join(tmpdir(), 'symcrys-repo-'));
+  try {
+    writeFileSync(join(app, 'index.html'), '<!doctype html>');
+    // Aufbau wie im Repository: Wurzel mit eigenem package.json, das Paket in packages/ts
+    writeFileSync(join(repo, 'package.json'), JSON.stringify({ name: 'symcrys-repository', private: true }));
+    mkdirSync(join(repo, 'packages'));
+    cpSync(pkg, join(repo, 'packages', 'ts'), { recursive: true });
+    // ein alter Build in der Wurzel (Aufbau vor v0.5.0) lenkt nicht ab
+    mkdirSync(join(repo, 'dist'));
+    writeFileSync(join(repo, 'dist', 'version.js'), "export const VERSION = '0.2.0';\n");
+    writeFileSync(join(repo, 'dist', 'index.js'), 'export const ALT = 1;\n');
+    writeFileSync(join(repo, 'LICENSE'), 'MIT License');
+    // Tag und Commit liest das Werkzeug im Unterordner packages/ts
+    const git = (/** @type {string[]} */ ...a) => execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.org', '-c', 'commit.gpgsign=false', '-c', 'tag.gpgsign=false', ...a], { cwd: repo, stdio: 'pipe' }).toString().trim();
+    git('init', '-q');
+    git('add', '-A');
+    git('commit', '-q', '-m', 'v0.5.0');
+    git('tag', 'v0.5.0');
+    const { manifest, warn } = syncKern(repo, app);
+    assert.deepEqual([manifest.version, manifest.quelle, manifest.tag, manifest.commit], ['0.5.0', 'Checkout', 'v0.5.0', git('rev-parse', 'HEAD')]);
+    assert.deepEqual(warn, []);
+    assert.equal(readFileSync(join(app, 'lib/kern/index.js'), 'utf8'), "export * from './pointGroups/a.js';\n");
+    assert.ok(existsSync(join(app, 'lib/kern/pointGroups/a.js')));
+    // ein veralteter Build in packages/ts: Die Warnung nennt den Ordner, den man neu bauen muss
+    writeFileSync(join(repo, 'packages', 'ts', 'dist', 'version.js'), "export const VERSION = '0.4.0';\n");
+    assert.ok(syncKern(repo, app).warn.some((w) => w.startsWith('packages/ts/dist/ ist aus Version 0.4.0 gebaut')));
+  } finally {
+    rmSync(app, { recursive: true, force: true });
+    rmSync(dir, { recursive: true, force: true });
+    rmSync(repo, { recursive: true, force: true });
+  }
+});
+
 test('syncKern löscht die alte Kopie erst, wenn die Quelle vollständig ist; sync() lässt lib/kern stehen', () => {
   const app = mkdtempSync(join(tmpdir(), 'app-'));
   const { dir, pkg } = symcrysAttrappe();
