@@ -62,6 +62,17 @@ Repo-Name, bei den Apps auch Pfad auf GitHub Pages:
   funktionieren).
 - Den Arbeitsordner nicht in einen synchronisierten Ordner legen (iCloud, OneDrive, Dropbox): verträgt
   sich nicht mit Git.
+- **Unter Windows mit WSL** (Thomas' Rechner, Arbeitsordner `~/dev/crystallography`, eingerichtet
+  21.11.2026): Der Arbeitsordner liegt im Linux-Dateisystem von WSL, nicht unter `/mnt/c`. VS Code mit
+  der Erweiterung „WSL“; Fenster aus dem WSL-Terminal mit `code <Ordner>` öffnen (VS Code Insiders:
+  `code-insiders`, bei Thomas als Alias `code`), dann laufen Git, Node und Claude Code in Linux.
+  Erweiterungen, auch Claude Code, im WSL-Fenster installieren. Claude Code unter WSL hat eine eigene
+  Konfiguration und sieht die MCP-Server der Desktop-App nicht. Das Zotero-MCP der Desktop-App ist ein
+  Windows-Programm; Claude Code unter WSL startet es mit
+  `claude mcp add --scope user zotero -e ZOTERO_LOCAL=true -e ZOTERO_EMBEDDING_MODEL=default -e WSLENV=ZOTERO_LOCAL:ZOTERO_EMBEDDING_MODEL -- /mnt/c/Users/<name>/.local/bin/zotero-mcp.exe`
+  (Werte wie in `claude_desktop_config.json` der Desktop-App). Es läuft dann unter Windows und erreicht
+  Zotero dort direkt; `WSLENV` gibt die beiden Variablen an das Windows-Programm weiter, ohne sie sähe es
+  sie nicht.
 - In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/manganite/<name>`), symcrys immer
   (wie in den Anweisungen des claude.ai-Projekts), birss-app, wenn die Aufgabe sie betrifft.
 - Eine Einstiegsseite für die Familie ist geplant (Issue #12); sie käme als weiteres Repo daneben.
