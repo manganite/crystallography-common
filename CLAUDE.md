@@ -62,17 +62,28 @@ Repo-Name, bei den Apps auch Pfad auf GitHub Pages:
   funktionieren).
 - Den Arbeitsordner nicht in einen synchronisierten Ordner legen (iCloud, OneDrive, Dropbox): verträgt
   sich nicht mit Git.
-- **Unter Windows mit WSL** (Thomas' Rechner, Arbeitsordner `~/dev/crystallography`, eingerichtet
-  21.11.2026): Der Arbeitsordner liegt im Linux-Dateisystem von WSL, nicht unter `/mnt/c`. VS Code mit
-  der Erweiterung „WSL“; Fenster aus dem WSL-Terminal mit `code <Ordner>` öffnen (VS Code Insiders:
-  `code-insiders`, bei Thomas als Alias `code`), dann laufen Git, Node und Claude Code in Linux.
-  Erweiterungen, auch Claude Code, im WSL-Fenster installieren. Claude Code unter WSL hat eine eigene
-  Konfiguration und sieht die MCP-Server der Desktop-App nicht. Das Zotero-MCP der Desktop-App ist ein
-  Windows-Programm; Claude Code unter WSL startet es mit
-  `claude mcp add --scope user zotero -e ZOTERO_LOCAL=true -e ZOTERO_EMBEDDING_MODEL=default -e WSLENV=ZOTERO_LOCAL:ZOTERO_EMBEDDING_MODEL -- /mnt/c/Users/<name>/.local/bin/zotero-mcp.exe`
-  (Werte wie in `claude_desktop_config.json` der Desktop-App). Es läuft dann unter Windows und erreicht
-  Zotero dort direkt; `WSLENV` gibt die beiden Variablen an das Windows-Programm weiter, ohne sie sähe es
-  sie nicht.
+- **Unter Windows mit WSL** (auf Thomas' Rechner eingerichtet 21.11.2026): Der Arbeitsordner liegt im
+  Linux-Dateisystem von WSL (z. B. `~/dev/crystallography`), nicht unter `/mnt/c`. VS Code mit der
+  Erweiterung „WSL“; Fenster aus dem WSL-Terminal öffnen, für die Familie mit
+  `code crystallography-common/kristallographie.code-workspace`, für symcrys oder birss-app mit `code .`
+  im Ordner (VS Code Insiders: `code-insiders`, bei Thomas als Alias `code`). Dann laufen Git, Node und
+  Claude Code in Linux; Erweiterungen, auch Claude Code, im WSL-Fenster installieren. Die Klone unter WSL
+  brauchen die Noreply-Adresse („Git, PRs und Releases“).
+- **Zotero für Claude Code unter WSL:** Claude Code unter WSL hat eine eigene Konfiguration und sieht die
+  MCP-Server der Desktop-App nicht. Das Zotero-MCP (`zotero-mcp.exe`, das die Desktop-App über
+  `claude_desktop_config.json` startet) ist ein Windows-Programm. Claude Code unter WSL startet dasselbe
+  Programm, mit Pfad und Werten aus `claude_desktop_config.json` (Pfad mit `/mnt/c/…` geschrieben):
+
+  ```
+  claude mcp add --scope user zotero -e ZOTERO_LOCAL=true -e ZOTERO_EMBEDDING_MODEL=default \
+    -e WSLENV=ZOTERO_LOCAL:ZOTERO_EMBEDDING_MODEL -- /mnt/c/Users/<name>/.local/bin/zotero-mcp.exe
+  ```
+
+  So läuft es unter Windows, wo die lokale Schnittstelle von Zotero (`localhost`) erreichbar ist; ein
+  Linux-Prozess unter WSL 2 sieht sie nicht ohne Weiteres. `WSLENV` gibt die beiden Variablen an das
+  Windows-Programm weiter (es ersetzt ein schon gesetztes `WSLENV`; weitere Variablen in dieselbe Liste).
+  Von Hand eingetragen statt mit `claude mcp add-from-claude-desktop`, damit Pfad und `WSLENV` stimmen.
+  `claude mcp list` zeigte den Server am 21.11.2026 als verbunden.
 - In einer Cloud-Sitzung fehlende Repositories klonen (`https://github.com/manganite/<name>`), symcrys immer
   (wie in den Anweisungen des claude.ai-Projekts), birss-app, wenn die Aufgabe sie betrifft.
 - Eine Einstiegsseite für die Familie ist geplant (Issue #12); sie käme als weiteres Repo daneben.
