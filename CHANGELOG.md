@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Geändert
 
-- **Vorlage des README** (#167): „Versionen und Releases“ sagt, welche Stelle der Version steigt (neue Funktion oder Bruch von Link-Adressen bzw. Speicher: zweite, Korrektur oder Änderung ohne neue Funktion: dritte); die Tabelle „Aufbau“ nennt das Vorschaubild in `icons/`.
+- **Stelle der Version** (#167, Leitfaden Abschn. 9): die zweite nur für eine neue Funktion oder einen Bruch von Link-Adressen, Speicher oder Lernstand; alles andere, auch ein Umbau ohne neue Funktion, die dritte. Die Vorlage des README verweist im Abschnitt „Versionen und Releases“ darauf, und ihre Tabelle „Aufbau“ nennt das Vorschaubild in `icons/`.
 
 ## [0.25.0] - 2026-11-22
 

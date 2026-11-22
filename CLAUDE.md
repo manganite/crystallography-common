@@ -358,9 +358,13 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Beim Umsetzen gewählt (Review des PR): `og:locale` `de_CH` wegen der Schweizer Schreibung (Facebook kennt vielleicht nur
   `de_DE`; `og:locale` ist optional); kein `WebApplication` im JSON-LD, weil Google dafür Preis und Bewertungen verlangt
   und die Search Console die Seite sonst als ungültig meldet; `isPartOf` die deutsche Startseite `/de/`; `name` im JSON-LD
-  gleich dem Titel. Verweise von aussen und die Search Console macht Thomas. Die Releases der Apps damit als PATCH
-  (stereography 1.22.1, plane-groups 1.8.1; Thomas, 22.11.2026), weil keine Funktion dazukam; die Regel für die Stelle
-  der Version steht seither in der Vorlage des README (#167).
+  gleich dem Titel. Verweise von aussen und die Search Console macht Thomas.
+- **Stelle der Version streng nach SemVer** (Thomas, 22.11.2026, #167, Leitfaden Abschn. 9): Anlass waren die Releases zur
+  Auffindbarkeit (stereography 1.22.1, plane-groups 1.8.1), die keine Funktion brachten. Die Regel stand nur im README von
+  stereography, und die Praxis wich davon ab: Umbauten ohne neue Funktion (stereography 1.11.0 Umzug auf common, 1.21.0
+  und 1.22.0 Umzug auf symcrys) waren MINOR. Zur Wahl standen „bisherige Praxis“ (auch grössere Umbauten zweite Stelle) und
+  „streng nach SemVer“; Thomas wählte Letzteres. Im Leitfaden statt in jedem README, weil sie für alle Apps gilt (ein Ort);
+  die README verweisen darauf. Der Bruch von Link-Adressen und Speicher bleibt MINOR (Abschn. 8).
 - **Browser in CI, Deploy und Release ohne apt** (11.11.2026, #128, Thomas einverstanden): `npx playwright install
   chromium` ohne `--with-deps`, weil ein Ausfall der Ubuntu-Paketquellen sonst Prüfungen und Releases verhindert
   (11.11.2026 mehrfach). Die Bibliotheken bringt das Image Ubuntu 24.04 mit; die Zeichen des Skripts ausserhalb der
