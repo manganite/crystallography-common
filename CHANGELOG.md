@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+### Hinzugefügt
+
+- **Auffindbarkeit** (#164; Leitfaden Abschn. 9): Regel für den Kopf jeder Seite (Titel mit den Suchbegriffen, Beschreibung, `canonical`, Open Graph, JSON-LD) und die Prüfung `pruefeKopf(html, { adresse })` in `tools/kopf-pruefen.mjs`; die Vorlage hat die Angaben in allen vier Seiten, `icons/vorschau.png` (Platzhalter, in der Offline-Liste) und den Test in `tests/common.test.mjs`. Für die Apps: im Kopf von `index.html`, `skript.html`, `quiz.html`, `hilfe.html` die Angaben wie in der Vorlage ergänzen, den Titel mit den Suchbegriffen fassen, `docs/social-preview.png` als `icons/vorschau.png` kopieren und in die Offline-Liste aufnehmen, den Test aus `vorlagen/app/tests/common.test.mjs` übernehmen.
+
 ### Geändert
 
 - **Rechenkern aus einem Checkout von symcrys ab v0.5.0:** symcrys legt sein Paket seit v0.5.0 in `packages/ts` ab (daneben `packages/python`); `sync.mjs --kern ../symcrys` nimmt es von dort, statt mit „ist nicht symcrys“ abzubrechen. Die Warnung zu einem veralteten Build nennt den Ordner relativ zur Quelle (`packages/ts/dist/`). Das Paket aus dem Release (`symcrys-X.Y.Z.tgz`) hat den gleichen Aufbau wie bisher (`tools/sync.mjs`, #99; README, „Rechenkern symcrys“). Für die Apps: nichts zu tun; mit common v0.24.0 geht ein Checkout ab symcrys v0.5.0 über `--kern ../symcrys/packages/ts`.

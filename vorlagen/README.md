@@ -22,11 +22,11 @@ cd vorlagen/app && python3 -m http.server 8000
 
    | Platzhalter | Wo | Ersetzen durch |
    |---|---|---|
-   | `Muster-App` | Titel in allen Seiten, Manifest, README, CITATION, Werkzeuge | Name der App |
-   | `muster-app` | Adressen in README, CITATION, `tools/skript-pdf.mjs`, `.github/ISSUE_TEMPLATE/config.yml` | Name des Repositories |
+   | `Muster-App` | Titel in allen Seiten (auch `og:title`, `og:site_name` und `name` im JSON-LD), Manifest, README, CITATION, Werkzeuge | Name der App; im Titel mit den Begriffen, nach denen gesucht wird (Leitfaden Abschn. 9) |
+   | `muster-app` | Adressen in README, CITATION, `tools/skript-pdf.mjs`, `.github/ISSUE_TEMPLATE/config.yml`, im Kopf der vier Seiten (`canonical`, Open Graph, JSON-LD) und in `tests/common.test.mjs` | Name des Repositories |
    | `muster-quiz` | `js/quiz-kapitel.js`, `tests/common.test.mjs` | Präfix für den Speicher des Quiz (nicht ohne Grund ändern; Leitfaden Abschn. 7, 8) |
    | `muster-` | `sw.js` (Cache), `js/main.js` (`muster-intro`, `alleEinstellungenZuruecksetzen('muster')`) | eigenes Präfix (im Cache nicht ändern, weil `sw.js` alte Caches nach dem Präfix löscht; im Speicher nicht ohne Grund, Leitfaden Abschn. 8) |
-   | Icons | `icons/` | eigene Icons (gleicher Stil: Motiv der App auf hellem Grund) |
+   | Icons | `icons/` | eigene Icons (gleicher Stil: Motiv der App auf hellem Grund); `icons/vorschau.png` ist das Bild der Vorschau geteilter Links (`og:image`), dasselbe wie das Vorschaubild des Repositorys (`docs/social-preview.png`, 1280 × 640 px) |
 
 5. Muster ersetzen: `js/main.js` (Logik der App, Bausteine und Klassennamen beibehalten), Grösse der Darstellung im `<style>` von `index.html` (die Anordnung der Tafeln kommt aus `app.css`), `js/hilfetexte.js` (in den Erste Schritten mit `zeige` das Bedienelement für die Bilder der Hilfeseite, in den Experimenten mit `kapitel` das Kapitel des Skripts), Modi in `js/hilfe-daten.js`, Skriptkapitel, Fragen. Bilder der Hilfeseite danach mit `node tools/common/hilfe-bilder.mjs` (braucht Playwright).
 6. Offline-Liste in `sw.js` nachführen, sobald Dateien dazukommen (`tests/release.test.mjs` meldet fehlende).

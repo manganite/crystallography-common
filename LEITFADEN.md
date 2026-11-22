@@ -154,6 +154,14 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
   - **CodeQL** prüft den eigenen Code, nicht Tests, nicht die Kopien der gemeinsamen Dateien und von symcrys (werden in ihren Repositories geprüft) und keinen Fremdcode (z. B. `lib/three.bundle.js`, in `codeql-config.yml` der App ergänzen). Befunde werden behoben oder mit Begründung als Fehlalarm verworfen, nie stillschweigend.
   - **Dateien:** `CITATION.cff` mit Kurzfassung (`abstract`), `SECURITY.md`, Vorlagen für Issues (`.github/ISSUE_TEMPLATE/`: Fehler, fachlicher Hinweis, Vorschlag), Lizenz MIT.
   - **Einstellungen:** Regel „main schützen“ (Änderungen nur über Pull Request, CI-Prüfungen müssen grün sein, kein Force-Push), CodeQL in der erweiterten Einrichtung (`.github/workflows/codeql.yml` und `.github/codeql/codeql-config.yml` aus `vorlagen/app/`; die Standardeinrichtung muss dann aus sein, sonst scheitert der Workflow), Dependabot-Alerts, Secret Scanning mit Push-Schutz, private Meldung von Sicherheitslücken; Wiki und Projects aus (Dokumentation im Repository, Aufgaben in Issues).
+- **Auffindbarkeit** (Thomas, 22.11.2026, #164): Jede Seite (`index.html`, `skript.html`, `quiz.html`, `hilfe.html`) trägt im Kopf, was Suchmaschinen und Vorschauen geteilter Links brauchen; Muster in den Seiten der Vorlage.
+  - **Titel** mit den Begriffen, nach denen gesucht wird, nicht nur dem Namen der App (z. B. „Symmetrie in der Ebene – die 17 Ebenengruppen interaktiv“); Skript, Quiz und Hilfe davor „Skript:“, „Quiz:“, „Hilfe:“. Höchstens 80 Zeichen (`TITEL_MAX`). Der Kurzname für den Homescreen (`application-name`, Manifest) bleibt kurz.
+  - **Beschreibung** (`<meta name="description">`) 50 bis 160 Zeichen.
+  - **Kanonische Adresse** (`<link rel="canonical">`) auf der Live-Seite, für die Startseite der Ordner der App mit Schrägstrich, nicht `index.html`; so zählen Varianten wie `?experiment=…` nicht als eigene Seiten.
+  - **Open Graph:** `og:type` `website`, `og:locale` `de_CH`, `og:site_name` (Name der App), `og:title` und `og:description` gleich Titel und Beschreibung, `og:url` gleich der kanonischen Adresse, `og:image` das Vorschaubild des Repositorys als `icons/vorschau.png` (absolute Adresse; in der Offline-Liste).
+  - **Strukturierte Daten:** ein `<script type="application/ld+json">` (schema.org `LearningResource`, die Startseite zusätzlich `WebApplication`) mit Name, Beschreibung und Adresse wie oben, Sprache `de`, Art, Niveau, Autor, Lizenz und `isPartOf` die Startseite manganite.github.io. Es ist ein Datenblock, kein Skript.
+  - Geprüft mit `pruefeKopf(html, { adresse })` aus `tools/kopf-pruefen.mjs` im Test der App (Vorlage: `tests/common.test.mjs`).
+  - Die Sitemap und `robots.txt` aller Apps liegen im Repository manganite.github.io; eine neue Seite oder App kommt dort in die Sitemap. Das Skript-PDF liegt auf der Live-Seite (`deploy.yml`).
 - **Datenschutz:** keine Daten an Dritte, keine externen Schriften oder Skripte zur Laufzeit.
 
 ## 10. Eine neue App anlegen
@@ -167,6 +175,7 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
 7. `tools/quiz-quelle.mjs` nach dem Muster der bestehenden Apps anlegen (Fragen für die gemeinsame Fragenliste, `fragenliste/extract.mjs`) und die App dort in die Liste der Ordner aufnehmen.
 8. GitHub Pages: unter Settings → Environments → github-pages eine Tag-Regel `v*.*.*` anlegen, sonst scheitert der Deploy aus Tags. Die übrigen Einstellungen und der Auftritt nach Abschnitt 9; in der Regel „main schützen“ die Prüfungen `test`, `typen`, `lint` und `pdf`; dazu das Label `inhalt` für die Vorlage „Fachlicher Hinweis“.
 9. Den Ordner der App in `kristallographie.code-workspace` dieses Repositories ergänzen.
+10. Die App mit ihren Seiten (und dem Skript-PDF) in die Sitemap und die Startseite des Repositorys manganite.github.io aufnehmen (Abschnitt 9, „Auffindbarkeit“).
 
 ## 11. Offene Punkte
 
