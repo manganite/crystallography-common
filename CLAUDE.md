@@ -358,7 +358,9 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   Beim Umsetzen gewählt (Review des PR): `og:locale` `de_CH` wegen der Schweizer Schreibung (Facebook kennt vielleicht nur
   `de_DE`; `og:locale` ist optional); kein `WebApplication` im JSON-LD, weil Google dafür Preis und Bewertungen verlangt
   und die Search Console die Seite sonst als ungültig meldet; `isPartOf` die deutsche Startseite `/de/`; `name` im JSON-LD
-  gleich dem Titel. Verweise von aussen und die Search Console macht Thomas.
+  gleich dem Titel. Verweise von aussen und die Search Console macht Thomas. Die Releases der Apps damit als PATCH
+  (stereography 1.22.1, plane-groups 1.8.1; Thomas, 22.11.2026), weil keine Funktion dazukam; die Regel für die Stelle
+  der Version steht seither in der Vorlage des README (#167).
 - **Browser in CI, Deploy und Release ohne apt** (11.11.2026, #128, Thomas einverstanden): `npx playwright install
   chromium` ohne `--with-deps`, weil ein Ausfall der Ubuntu-Paketquellen sonst Prüfungen und Releases verhindert
   (11.11.2026 mehrfach). Die Bibliotheken bringt das Image Ubuntu 24.04 mit; die Zeichen des Skripts ausserhalb der

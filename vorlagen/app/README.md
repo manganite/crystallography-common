@@ -89,7 +89,7 @@ wechselt in seinen Modus, startet es und entfernt den Parameter wieder aus der A
 | `tools/moodle-export.mjs`, `tools/skript-pdf.mjs` | Moodle-Export und PDF des Skripts |
 | `tools/quiz-quelle.mjs` | Fragen und Bilder für die gemeinsame Fragenliste der Familie (crystallography-common, `fragenliste/`) |
 | `js/version.js`, `sw.js` | Versionsnummer, Service Worker für den Offline-Betrieb |
-| `manifest.webmanifest`, `icons/` | Favicon und Homescreen-Icons |
+| `manifest.webmanifest`, `icons/` | Favicon, Homescreen-Icons und Vorschaubild geteilter Links (`vorschau.png`, Open Graph) |
 | `lib/common/`, `tools/common/` | Gemeinsame Grundlage aus [crystallography-common](https://github.com/manganite/crystallography-common) als Kopie mit fester Version (`lib/common/MANIFEST.json`): Stile, Schriften, Hilfen, Quiz, Skript-Bausteine, Formatierung, Werkzeuge. Nicht von Hand ändern. |
 | `lib/kern/` | Rechenkern [symcrys](https://github.com/manganite/symcrys) als Kopie mit fester Version (`lib/kern/MANIFEST.json`), falls die App ihn nutzt. Nicht von Hand ändern. |
 | `tests/` | Automatische Tests (Node, ohne Abhängigkeiten) |
@@ -130,7 +130,7 @@ Mit diesen Paketen zeigt auch VS Code die Meldungen der Typprüfung in geöffnet
 
 Die App folgt [Semantic Versioning](https://semver.org/lang/de/); Änderungen stehen im [CHANGELOG](CHANGELOG.md). Jede Änderung geht über einen Branch und einen Pull Request nach `main` (`main` ist geschützt; die CI muss grün sein). Die Live-Seite ändert sich nur mit einem Release:
 
-1. Release-PR: Version in `js/version.js`, `sw.js` und `CITATION.cff` (mit `date-released`) erhöhen; in `CHANGELOG.md` die Einträge unter `## [Unreleased]` unter eine neue Überschrift `## [x.y.z] - JJJJ-MM-TT` verschieben und die Links am Ende ergänzen.
+1. Release-PR: Version in `js/version.js`, `sw.js` und `CITATION.cff` (mit `date-released`) erhöhen (neue Funktion oder Bruch von Link-Adressen bzw. Speicher nach `LEITFADEN.md` Abschn. 8: zweite Stelle; Korrektur oder Änderung ohne neue Funktion, z. B. am Kopf der Seiten: dritte Stelle); in `CHANGELOG.md` die Einträge unter `## [Unreleased]` unter eine neue Überschrift `## [x.y.z] - JJJJ-MM-TT` verschieben und die Links am Ende ergänzen.
 2. Nach dem Merge den Tag auf den neuesten Stand von `main` setzen:
    ```bash
    git fetch && git log --oneline -1 origin/main     # ist das der Release-PR?
