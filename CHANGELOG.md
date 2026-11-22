@@ -6,6 +6,10 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [Unreleased]
 
+## [0.25.0] - 2026-11-22
+
+Auffindbarkeit der Apps (#164): Regel, Muster und Prüfung für den Kopf jeder Seite; dazu nimmt `sync.mjs --kern ../symcrys` einen Checkout ab symcrys v0.5.0. Für die Apps: Kopf der vier Seiten wie in der Vorlage, Titel mit den Suchbegriffen, Beschreibungen mit 50 bis 160 Zeichen, `docs/social-preview.png` als `icons/vorschau.png` (in die Offline-Liste), Test aus `vorlagen/app/tests/common.test.mjs` übernehmen; die Titel von stereography und plane-groups stehen in deren `CLAUDE.md`.
+
 ### Hinzugefügt
 
 - **Auffindbarkeit** (#164; Leitfaden Abschn. 9): Regel für den Kopf jeder Seite (Titel mit den Suchbegriffen, Beschreibung, `canonical`, Open Graph, JSON-LD) und die Prüfung `pruefeKopf(html, { adresse })` in `tools/kopf-pruefen.mjs`; die Vorlage hat die Angaben in allen vier Seiten, `icons/vorschau.png` (Platzhalter, in der Offline-Liste) und den Test in `tests/common.test.mjs`. Für die Apps: im Kopf von `index.html`, `skript.html`, `quiz.html`, `hilfe.html` die Angaben wie in der Vorlage ergänzen, den Titel mit den Suchbegriffen fassen, Beschreibungen auf 50 bis 160 Zeichen bringen (heute teils länger), `docs/social-preview.png` als `icons/vorschau.png` kopieren und in die Offline-Liste aufnehmen, den Test aus `vorlagen/app/tests/common.test.mjs` übernehmen.
@@ -406,7 +410,8 @@ Erste Fassung, herausgelöst aus der App „Stereographische Projektion“ (v1.1
 - **Werkzeuge:** `sync.mjs` und `check.mjs` (Kopie mit fester Version in einer App), `moodle.mjs` (Moodle-XML), `skript-pdf.mjs` (Skript als PDF), `server.mjs`.
 - **Vorlagen** für eine neue App, **Leitfaden** für die App-Familie.
 
-[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.24.0...HEAD
+[Unreleased]: https://github.com/manganite/crystallography-common/compare/v0.25.0...HEAD
+[0.25.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.25.0
 [0.24.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.24.0
 [0.23.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.23.0
 [0.22.0]: https://github.com/manganite/crystallography-common/releases/tag/v0.22.0
