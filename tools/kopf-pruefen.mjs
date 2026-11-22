@@ -64,7 +64,12 @@ export function pruefeKopf(html, { adresse }) {
   const befunde = [];
   // Kommentare zählen nicht (zuerst entfernt, damit ein Kommentar mit „</head>“ den Kopf nicht abschneidet);
   // der Kopf endet mit </head> oder, wo es fehlt, mit <body>.
-  const ohneKommentare = html.replace(/<!--[\s\S]*?-->/g, '');
+  // Bis nichts mehr zu entfernen ist, auch ein Kommentar ohne Ende (CodeQL: unvollständige Bereinigung).
+  let ohneKommentare = html;
+  for (let vorher = ''; vorher !== ohneKommentare; ) {
+    vorher = ohneKommentare;
+    ohneKommentare = ohneKommentare.replace(/<!--[\s\S]*?(?:-->|$)/g, '');
+  }
   const kopf = ohneKommentare.split(/<\/head\s*>|<body\b/i)[0] ?? '';
   if (!/<html\b[^>]*\slang\s*=\s*["']?de["'\s>]/i.test(ohneKommentare)) befunde.push('<html lang="de"> fehlt');
 
