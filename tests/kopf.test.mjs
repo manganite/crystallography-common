@@ -51,7 +51,8 @@ test('Reihenfolge und Schreibweise der Attribute, Entitäten und Kommentare stö
       .replace('<meta property="og:locale" content="de_CH">', "<META CONTENT='de_CH' Property='og:locale'>")
       .replace(`<link rel="canonical" href="${ADRESSE}">`, `<link href="${ADRESSE}" rel="canonical">`)
       .replace(`<title>${TITEL}</title>`, '<title>Skript: Muster-App &#38; mehr</title>')
-      .replace('<head>', '<head>\n<!-- <meta name="description" content="auskommentiert"> -->'),
+      .replace('<head>', '<head>\n<!-- <meta name="description" content="auskommentiert"> </head> <body> -->')
+      .replace('rel="canonical"', 'rel="canonical nofollow"'),
   );
   assert.deepEqual(pruefeKopf(html, { adresse: ADRESSE }), []);
   // ein Gedankenstrich als Zeichen im Titel und als Entität in og:title ist derselbe Titel
@@ -62,6 +63,9 @@ test('Reihenfolge und Schreibweise der Attribute, Entitäten und Kommentare stö
       .replace('"name":"Skript: Muster-App & mehr"', '"name":"Skript – Muster"'),
   );
   assert.deepEqual(pruefeKopf(strich, { adresse: ADRESSE }), []);
+  // eine ungültige numerische Entität bleibt stehen, statt die Prüfung abzubrechen
+  const ungueltig = seite((h) => h.replace(`<title>${TITEL}</title>`, '<title>Titel &#99999999;</title>'));
+  assert.ok(pruefeKopf(ungueltig, { adresse: ADRESSE }).some((b) => b.startsWith('og:title')));
 });
 
 test('jede fehlende oder abweichende Angabe gibt einen Befund', () => {

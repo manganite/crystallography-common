@@ -32,7 +32,7 @@ function entitaeten(s) {
   return s.replace(/&(#x[0-9a-f]+|#[0-9]+|[a-z]+);/gi, (ganz, e) => {
     if (e[0] === '#') {
       const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
-      return Number.isFinite(code) ? String.fromCodePoint(code) : ganz;
+      return Number.isInteger(code) && code <= 0x10ffff ? String.fromCodePoint(code) : ganz;
     }
     return BENANNT[e.toLowerCase()] ?? ganz;
   });
@@ -62,9 +62,11 @@ function attribute(tag) {
 export function pruefeKopf(html, { adresse }) {
   /** @type {string[]} */
   const befunde = [];
-  // Der Kopf endet mit </head> oder, wo es fehlt, mit <body>; Kommentare zählen nicht.
-  const kopf = (html.split(/<\/head\s*>|<body\b/i)[0] ?? '').replace(/<!--[\s\S]*?-->/g, '');
-  if (!/<html\b[^>]*\slang\s*=\s*["']?de["'\s>]/i.test(html)) befunde.push('<html lang="de"> fehlt');
+  // Kommentare zählen nicht (zuerst entfernt, damit ein Kommentar mit „</head>“ den Kopf nicht abschneidet);
+  // der Kopf endet mit </head> oder, wo es fehlt, mit <body>.
+  const ohneKommentare = html.replace(/<!--[\s\S]*?-->/g, '');
+  const kopf = ohneKommentare.split(/<\/head\s*>|<body\b/i)[0] ?? '';
+  if (!/<html\b[^>]*\slang\s*=\s*["']?de["'\s>]/i.test(ohneKommentare)) befunde.push('<html lang="de"> fehlt');
 
   const titelTags = [...kopf.matchAll(/<title\b[^>]*>([\s\S]*?)<\/title\s*>/gi)];
   if (titelTags.length > 1) befunde.push(`<title> steht ${titelTags.length}-mal im Kopf`);
@@ -83,7 +85,10 @@ export function pruefeKopf(html, { adresse }) {
    * @param {string} was
    */
   const einer = (liste, schluessel, name, wertattribut, was) => {
-    const treffer = liste.filter((a) => a[schluessel]?.toLowerCase() === name);
+    // rel ist eine Liste von Wörtern (rel="canonical nofollow"), die übrigen Schlüssel ein Wert
+    const passt = (/** @type {string | undefined} */ w) =>
+      schluessel === 'rel' ? (w ?? '').toLowerCase().split(/\s+/).includes(name) : w?.toLowerCase() === name;
+    const treffer = liste.filter((a) => passt(a[schluessel]));
     if (treffer.length > 1) befunde.push(`${was} steht ${treffer.length}-mal im Kopf`);
     return treffer[0]?.[wertattribut];
   };
