@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ## [0.25.0] - 2026-11-22
 
-Auffindbarkeit der Apps (#164): Regel, Muster und Prüfung für den Kopf jeder Seite; dazu nimmt `sync.mjs --kern ../symcrys` einen Checkout ab symcrys v0.5.0. Für die Apps: Kopf der vier Seiten wie in der Vorlage, Titel mit den Suchbegriffen, Beschreibungen mit 50 bis 160 Zeichen, `icons/vorschau.png` in die Offline-Liste, Test aus `vorlagen/app/tests/common.test.mjs` übernehmen.
+Auffindbarkeit der Apps (#164): Regel, Muster und Prüfung für den Kopf jeder Seite; dazu nimmt `sync.mjs --kern ../symcrys` einen Checkout ab symcrys v0.5.0. Für die Apps: Kopf der vier Seiten wie in der Vorlage, Titel mit den Suchbegriffen, Beschreibungen mit 50 bis 160 Zeichen, `docs/social-preview.png` als `icons/vorschau.png` (in die Offline-Liste), Test aus `vorlagen/app/tests/common.test.mjs` übernehmen; die Titel von stereography und plane-groups stehen in deren `CLAUDE.md`.
 
 ### Hinzugefügt
 
