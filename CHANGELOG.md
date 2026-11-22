@@ -8,7 +8,7 @@ Das Format folgt [Keep a Changelog](https://keepachangelog.com/de/1.1.0/), die V
 
 ### Hinzugefügt
 
-- **Auffindbarkeit** (#164; Leitfaden Abschn. 9): Regel für den Kopf jeder Seite (Titel mit den Suchbegriffen, Beschreibung, `canonical`, Open Graph, JSON-LD) und die Prüfung `pruefeKopf(html, { adresse })` in `tools/kopf-pruefen.mjs`; die Vorlage hat die Angaben in allen vier Seiten, `icons/vorschau.png` (Platzhalter, in der Offline-Liste) und den Test in `tests/common.test.mjs`. Für die Apps: im Kopf von `index.html`, `skript.html`, `quiz.html`, `hilfe.html` die Angaben wie in der Vorlage ergänzen, den Titel mit den Suchbegriffen fassen, `docs/social-preview.png` als `icons/vorschau.png` kopieren und in die Offline-Liste aufnehmen, den Test aus `vorlagen/app/tests/common.test.mjs` übernehmen.
+- **Auffindbarkeit** (#164; Leitfaden Abschn. 9): Regel für den Kopf jeder Seite (Titel mit den Suchbegriffen, Beschreibung, `canonical`, Open Graph, JSON-LD) und die Prüfung `pruefeKopf(html, { adresse })` in `tools/kopf-pruefen.mjs`; die Vorlage hat die Angaben in allen vier Seiten, `icons/vorschau.png` (Platzhalter, in der Offline-Liste) und den Test in `tests/common.test.mjs`. Für die Apps: im Kopf von `index.html`, `skript.html`, `quiz.html`, `hilfe.html` die Angaben wie in der Vorlage ergänzen, den Titel mit den Suchbegriffen fassen, Beschreibungen auf 50 bis 160 Zeichen bringen (heute teils länger), `docs/social-preview.png` als `icons/vorschau.png` kopieren und in die Offline-Liste aufnehmen, den Test aus `vorlagen/app/tests/common.test.mjs` übernehmen.
 
 ### Geändert
 

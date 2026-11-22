@@ -158,10 +158,10 @@ Eigene Seite `quiz.html`. Logik in `js/quiz-core.js`, Seite in `js/quiz-seite.js
   - **Titel** mit den Begriffen, nach denen gesucht wird, nicht nur dem Namen der App (z. B. „Symmetrie in der Ebene – die 17 Ebenengruppen interaktiv“); Skript, Quiz und Hilfe davor „Skript:“, „Quiz:“, „Hilfe:“. Höchstens 80 Zeichen (`TITEL_MAX`). Der Kurzname für den Homescreen (`application-name`, Manifest) bleibt kurz.
   - **Beschreibung** (`<meta name="description">`) 50 bis 160 Zeichen.
   - **Kanonische Adresse** (`<link rel="canonical">`) auf der Live-Seite, für die Startseite der Ordner der App mit Schrägstrich, nicht `index.html`; so zählen Varianten wie `?experiment=…` nicht als eigene Seiten.
-  - **Open Graph:** `og:type` `website`, `og:locale` `de_CH`, `og:site_name` (Name der App), `og:title` und `og:description` gleich Titel und Beschreibung, `og:url` gleich der kanonischen Adresse, `og:image` das Vorschaubild des Repositorys als `icons/vorschau.png` (absolute Adresse; in der Offline-Liste).
-  - **Strukturierte Daten:** ein `<script type="application/ld+json">` (schema.org `LearningResource`, die Startseite zusätzlich `WebApplication`) mit Name, Beschreibung und Adresse wie oben, Sprache `de`, Art, Niveau, Autor, Lizenz und `isPartOf` die Startseite manganite.github.io. Es ist ein Datenblock, kein Skript.
-  - Geprüft mit `pruefeKopf(html, { adresse })` aus `tools/kopf-pruefen.mjs` im Test der App (Vorlage: `tests/common.test.mjs`).
-  - Die Sitemap und `robots.txt` aller Apps liegen im Repository manganite.github.io; eine neue Seite oder App kommt dort in die Sitemap. Das Skript-PDF liegt auf der Live-Seite (`deploy.yml`).
+  - **Open Graph:** `og:type` `website`, `og:locale` `de_CH`, `og:site_name` (Name der App, auf allen Seiten gleich), `og:title` und `og:description` gleich Titel und Beschreibung, `og:url` gleich der kanonischen Adresse, `og:image` das Vorschaubild des Repositorys als `icons/vorschau.png` (absolute Adresse; in der Offline-Liste wie alles in `icons/`).
+  - **Strukturierte Daten:** ein `<script type="application/ld+json">` (schema.org `LearningResource`, auch auf der Startseite der App) mit Name, Beschreibung und Adresse wie oben, Sprache `de`, Art (`learningResourceType`), Niveau, Autor, Lizenz und `isPartOf` die deutsche Startseite manganite.github.io/de/. Es ist ein Datenblock, kein Skript. Im Kopf stehen Zeichen wie „–“ selbst, nicht als Entität.
+  - Geprüft mit `pruefeKopf(html, { adresse })` aus `tools/kopf-pruefen.mjs` im Test der App (Vorlage: `tests/common.test.mjs`); nicht geprüft werden der gleiche `og:site_name` auf allen Seiten und der Inhalt der übrigen Felder im JSON-LD.
+  - Die Sitemap und `robots.txt` aller Apps liegen im Repository manganite.github.io; eine neue Seite oder App kommt dort in die Sitemap, auch das Skript-PDF.
 - **Datenschutz:** keine Daten an Dritte, keine externen Schriften oder Skripte zur Laufzeit.
 
 ## 10. Eine neue App anlegen

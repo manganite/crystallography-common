@@ -4,39 +4,52 @@
 // HTML als Text. Aufruf im Test der App, je Seite:
 //
 //   assert.deepEqual(pruefeKopf(html, { adresse: 'https://manganite.github.io/<app>/skript.html' }), []);
+//
+// Attribute dürfen in beliebiger Reihenfolge und Schreibweise stehen; Entitäten werden vor dem Vergleich
+// aufgelöst. Nicht geprüft: dass `og:site_name` auf allen Seiten einer App gleich ist, und der Inhalt der
+// übrigen Felder im JSON-LD (nur, dass sie da sind).
 
 /** Höchstlänge des Titels: Google zeigt etwa 60 Zeichen; was länger ist, wird abgeschnitten, nicht verworfen. */
 export const TITEL_MAX = 80;
 /** Länge der Beschreibung: kürzer sagt zu wenig, länger schneidet Google ab. */
 export const BESCHREIBUNG_MIN = 50;
 export const BESCHREIBUNG_MAX = 160;
-/** Sprache und Region der Seiten (Open Graph). */
+/** Sprache und Region der Seiten (Open Graph; Schweizer Schreibung, Leitfaden Abschn. 3). */
 export const OG_LOCALE = 'de_CH';
+/** Das Vorschaubild geteilter Links, relativ zum Ordner der App. */
+export const VORSCHAUBILD = 'icons/vorschau.png';
+/** Felder, die das JSON-LD jeder Seite ausser Name, Beschreibung, Adresse und Sprache haben muss. */
+export const LD_FELDER = ['learningResourceType', 'educationalLevel', 'author', 'license', 'isPartOf'];
+
+/** @type {Record<string, string>} */
+const BENANNT = { amp: '&', quot: '"', apos: "'", lt: '<', gt: '>', nbsp: ' ', ndash: '–', mdash: '—' };
 
 /**
- * Die Entitäten, die in Attributwerten und im Titel der Seiten vorkommen, als Zeichen.
+ * Entitäten als Zeichen: die benannten, die in Köpfen vorkommen, und alle numerischen.
  * @param {string} s
  */
 function entitaeten(s) {
-  return s
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&amp;/g, '&');
+  return s.replace(/&(#x[0-9a-f]+|#[0-9]+|[a-z]+);/gi, (ganz, e) => {
+    if (e[0] === '#') {
+      const code = e[1] === 'x' || e[1] === 'X' ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+      return Number.isFinite(code) ? String.fromCodePoint(code) : ganz;
+    }
+    return BENANNT[e.toLowerCase()] ?? ganz;
+  });
 }
 
 /**
- * Wert eines Attributs im ersten Element, auf das der Ausdruck passt.
- * @param {string} kopf
- * @param {RegExp} element
- * @param {string} attribut
- * @returns {string | undefined}
+ * Die Attribute eines Tags, Namen klein geschrieben, Werte mit aufgelösten Entitäten.
+ * @param {string} tag
+ * @returns {Record<string, string>}
  */
-function attribut(kopf, element, attribut) {
-  const tag = kopf.match(element)?.[0];
-  const wert = tag?.match(new RegExp(`\\s${attribut}="([^"]*)"`))?.[1];
-  return wert === undefined ? undefined : entitaeten(wert);
+function attribute(tag) {
+  /** @type {Record<string, string>} */
+  const a = {};
+  for (const m of tag.matchAll(/([a-zA-Z_:][\w:.-]*)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'>]+))/g)) {
+    a[m[1].toLowerCase()] = entitaeten(m[2] ?? m[3] ?? m[4] ?? '');
+  }
+  return a;
 }
 
 /**
@@ -49,52 +62,76 @@ function attribut(kopf, element, attribut) {
 export function pruefeKopf(html, { adresse }) {
   /** @type {string[]} */
   const befunde = [];
-  const kopf = html.split(/<\/head>/i)[0] ?? '';
-  if (!/<html[^>]*\slang="de"/.test(html)) befunde.push('<html lang="de"> fehlt');
+  // Der Kopf endet mit </head> oder, wo es fehlt, mit <body>; Kommentare zählen nicht.
+  const kopf = (html.split(/<\/head\s*>|<body\b/i)[0] ?? '').replace(/<!--[\s\S]*?-->/g, '');
+  if (!/<html\b[^>]*\slang\s*=\s*["']?de["'\s>]/i.test(html)) befunde.push('<html lang="de"> fehlt');
 
-  const titel = entitaeten(kopf.match(/<title>([^<]*)<\/title>/)?.[1]?.trim() ?? '');
+  const titelTags = [...kopf.matchAll(/<title\b[^>]*>([\s\S]*?)<\/title\s*>/gi)];
+  if (titelTags.length > 1) befunde.push(`<title> steht ${titelTags.length}-mal im Kopf`);
+  const titel = entitaeten(titelTags[0]?.[1] ?? '').trim();
   if (!titel) befunde.push('<title> fehlt oder ist leer');
   else if (titel.length > TITEL_MAX) befunde.push(`Titel länger als ${TITEL_MAX} Zeichen (${titel.length}): ${titel}`);
 
-  const beschreibung = attribut(kopf, /<meta\s+name="description"[^>]*>/, 'content') ?? '';
+  const metas = [...kopf.matchAll(/<meta\b[^>]*>/gi)].map((m) => attribute(m[0]));
+  const links = [...kopf.matchAll(/<link\b[^>]*>/gi)].map((m) => attribute(m[0]));
+  /**
+   * Der eine Wert eines Elements; mehrere sind ein Befund.
+   * @param {Record<string, string>[]} liste
+   * @param {string} schluessel
+   * @param {string} name
+   * @param {string} wertattribut
+   * @param {string} was
+   */
+  const einer = (liste, schluessel, name, wertattribut, was) => {
+    const treffer = liste.filter((a) => a[schluessel]?.toLowerCase() === name);
+    if (treffer.length > 1) befunde.push(`${was} steht ${treffer.length}-mal im Kopf`);
+    return treffer[0]?.[wertattribut];
+  };
+
+  const beschreibung = (einer(metas, 'name', 'description', 'content', '<meta name="description">') ?? '').trim();
   if (!beschreibung) befunde.push('<meta name="description"> fehlt oder ist leer');
   else if (beschreibung.length < BESCHREIBUNG_MIN || beschreibung.length > BESCHREIBUNG_MAX) {
     befunde.push(`Beschreibung hat ${beschreibung.length} Zeichen, erwartet ${BESCHREIBUNG_MIN} bis ${BESCHREIBUNG_MAX}`);
   }
 
-  const kanonisch = attribut(kopf, /<link\s+rel="canonical"[^>]*>/, 'href');
+  const kanonisch = einer(links, 'rel', 'canonical', 'href', '<link rel="canonical">');
   if (kanonisch !== adresse) befunde.push(`<link rel="canonical"> ist ${kanonisch ?? 'nicht vorhanden'}, erwartet ${adresse}`);
 
   /** @param {string} name */
-  const og = (name) => attribut(kopf, new RegExp(`<meta\\s+property="og:${name}"[^>]*>`), 'content');
-  /** @type {[string, string | undefined][]} */
+  const og = (name) => einer(metas, 'property', `og:${name}`, 'content', `og:${name}`);
+  /** @type {[string, string][]} */
   const erwartet = [
     ['type', 'website'],
     ['locale', OG_LOCALE],
     ['title', titel],
     ['description', beschreibung],
     ['url', adresse],
+    ['image', new URL(VORSCHAUBILD, adresse).href],
   ];
   for (const [name, wert] of erwartet) {
-    if (og(name) !== wert) befunde.push(`og:${name} ist ${og(name) ?? 'nicht vorhanden'}, erwartet ${wert}`);
+    const ist = og(name);
+    if (ist !== wert) befunde.push(`og:${name} ist ${ist ?? 'nicht vorhanden'}, erwartet ${wert}`);
   }
   if (!og('site_name')) befunde.push('og:site_name fehlt');
-  const bild = og('image');
-  if (!bild || !bild.startsWith('https://')) befunde.push(`og:image fehlt oder ist keine absolute Adresse (${bild ?? '–'})`);
 
-  const bloecke = [...kopf.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+  const bloecke = [...kopf.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script\s*>/gi)];
   if (bloecke.length !== 1) befunde.push(`erwartet genau ein <script type="application/ld+json">, gefunden ${bloecke.length}`);
   else {
-    /** @type {any} */
+    /** @type {unknown} */
     let daten;
+    let gueltig = true;
     try {
       daten = JSON.parse(bloecke[0][1]);
     } catch (e) {
+      gueltig = false;
       befunde.push(`JSON-LD ist kein gültiges JSON: ${/** @type {Error} */ (e).message}`);
     }
-    if (daten) {
-      const typen = [daten['@type']].flat();
-      if (daten['@context'] !== 'https://schema.org') befunde.push('JSON-LD: @context ist nicht https://schema.org');
+    if (gueltig && (daten === null || typeof daten !== 'object' || Array.isArray(daten))) {
+      befunde.push('JSON-LD ist kein Objekt');
+    } else if (gueltig) {
+      const ld = /** @type {Record<string, unknown>} */ (daten);
+      const typen = [ld['@type']].flat();
+      if (ld['@context'] !== 'https://schema.org') befunde.push('JSON-LD: @context ist nicht https://schema.org');
       if (!typen.includes('LearningResource')) befunde.push(`JSON-LD: @type enthält nicht LearningResource (${typen.join(', ')})`);
       /** @type {[string, unknown][]} */
       const felder = [
@@ -104,7 +141,10 @@ export function pruefeKopf(html, { adresse }) {
         ['inLanguage', 'de'],
       ];
       for (const [feld, wert] of felder) {
-        if (daten[feld] !== wert) befunde.push(`JSON-LD: ${feld} ist ${JSON.stringify(daten[feld])}, erwartet ${JSON.stringify(wert)}`);
+        if (ld[feld] !== wert) befunde.push(`JSON-LD: ${feld} ist ${JSON.stringify(ld[feld])}, erwartet ${JSON.stringify(wert)}`);
+      }
+      for (const feld of LD_FELDER) {
+        if (ld[feld] === undefined || ld[feld] === '') befunde.push(`JSON-LD: ${feld} fehlt`);
       }
     }
   }

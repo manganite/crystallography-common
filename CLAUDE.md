@@ -353,8 +353,12 @@ Die Regeln selbst stehen im Leitfaden; hier, warum.
   plane-groups gab Thomas frei. `canonical`, weil `?experiment=…` sonst als eigene Seite zählen könnte; Open Graph für die
   Vorschau geteilter Links (Moodle, Chats); JSON-LD zur Einordnung (Rich Results gibt Google für `LearningResource` kaum).
   Geprüft statt nur beschrieben, damit Titel, Open Graph und JSON-LD nicht auseinanderlaufen (sie wiederholen dieselben
-  Texte). Das Vorschaubild als `icons/vorschau.png`, weil `docs/` nicht veröffentlicht wird. Verweise von aussen und die
-  Search Console macht Thomas.
+  Texte). Das Vorschaubild als `icons/vorschau.png`, weil `docs/` nicht veröffentlicht wird; es kommt wie alles in `icons/`
+  in die Offline-Liste (rund 100–150 kB je App), statt dafür eine Ausnahme in den Test der Offline-Liste zu schreiben.
+  Beim Umsetzen gewählt (Review des PR): `og:locale` `de_CH` wegen der Schweizer Schreibung (Facebook kennt vielleicht nur
+  `de_DE`; `og:locale` ist optional); kein `WebApplication` im JSON-LD, weil Google dafür Preis und Bewertungen verlangt
+  und die Search Console die Seite sonst als ungültig meldet; `isPartOf` die deutsche Startseite `/de/`; `name` im JSON-LD
+  gleich dem Titel. Verweise von aussen und die Search Console macht Thomas.
 - **Browser in CI, Deploy und Release ohne apt** (11.11.2026, #128, Thomas einverstanden): `npx playwright install
   chromium` ohne `--with-deps`, weil ein Ausfall der Ubuntu-Paketquellen sonst Prüfungen und Releases verhindert
   (11.11.2026 mehrfach). Die Bibliotheken bringt das Image Ubuntu 24.04 mit; die Zeichen des Skripts ausserhalb der
